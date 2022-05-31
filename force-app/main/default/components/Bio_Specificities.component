@@ -1,0 +1,64 @@
+<apex:component >
+    
+    <!-- <apex:attribute name="scaleName"
+                    type="String"
+                    required="true"
+                    description="The name of the scale"/> -->
+    
+    <apex:attribute name="currentQuote"
+                    type="Quote"
+                    required="true"
+                    description="Current quote we're working on" />
+                    
+    
+    <div id="containerBioEmailText" Style=" page-break-inside:avoid">
+    
+        <div class="contractSection">
+            
+            <apex:outputPanel rendered="{!currentQuote.T_RollUp_BioPercentage__c > 0}">
+                
+                <h1>Spécificités liées à l'offre biopropane</h1><br/>
+                
+                <strong>Définition du biopropane :</strong><br/><br/>
+                
+                Le biopropane est du propane produit à partir de la biomasse (c'est-à-dire, de la fraction biodégradable des produits, déchets et résidus provenant de l'agriculture, ainsi que des déchets industriels et ménagers), la biomasse étant l'une des énergies renouvelables disponibles en France. (article L. 661-1 et L.211-2 du Code de l’énergie). Le biopropane étant destiné à des usages énergétiques autres que le transport est ainsi qualifié de bioliquide.<br/><br/>
+                
+                <strong>Fonctionnement :</strong><br/><br/>
+                
+                Le biopropane étant physiquement impossible à distinguer du propane classique lors de la livraison chez le Client, un système de garantie d’origine et de traçabilité du biopropane a été mis en place sous contrôle et validation d'un organisme de certification professionnel européen (ISCC). En conformité avec les règles européennes, la distribution du biopropane se fait selon le principe de bilan massique.<br/><br/>
+                
+                Lorsque le Client commande une certaine quantité de biopropane, cela signifie que la même quantité de biopropane (selon la proportion contractuellement convenue avec le Client) a été injectée dans le réseau de distribution de Butagaz, quantitée certifiée ISCC-PLUS. Cette certification permet d'attester de l'origine, la tracabilité et du respect des critères de durabilité fixés par l’Union Européenne pour l’usage des bioliquides.<br/><br/>
+                
+                Par la suite, le Client recevra par e-mail ou par courrier le certificat ISCC Plus correspondant à sa commande dans le mois suivant sa livraison de biopropane.<br/><br/>
+                
+                <strong>EXCEPTION :</strong>
+                <br/><br/>
+                Le biopropane est un produit nouveau, avec une filière naissante et dont l'approvisionnement est fragile et soumis à de nombreux aléas.<br/> 
+                Malgré tous les efforts de BUTAGAZ de disposer d'un stock suffisant de biopropane afin de maintenir une distribution satisfaisant les demandes du Client, il pourra arriver que la fourniture de biopropane soit en rupture ou insuffisante pour une période indéfinie. Le Client sera averti au plus tard au moment de  sa commande de l'indisponibilité du biopropane.<br/>
+                En tel cas, la société BUTAGAZ s'engage en remplacement à fournir le CLIENT en propane classique, ceci afin d'éviter tout risque de rupture d'approvisionnement du Client en gaz propane.<br/>
+                Le Client sera bien informé que sa livraison se fera en propane classique et se verra appliquer à sa commande le barème {!currentQuote.Product_Scale__c} du propane classique applicable et en vigueur au jour de sa commande avec sa remise associée, ou le prix fixe si concerné, l’option biopropane n’étant alors pas ajouté au prix du produit.<br/>
+                Il est précisé que cette indisponibilité ou rupture de biopropane n'aura pas d'incidence sur la poursuite du contrat, qui s'exécutera conformément aux dispositions conventionnellement définies.<br/><br/>
+                
+                <strong>En raison de la particularité de l'activité biopropane, le Client comprend et accepte les risques d'indisponibilité du biopropane, notamment que cette indisponibilité ne pourra constituer en aucun cas un motif valable de résiliation anticipée du présent contrat.</strong><br/><br/>
+                
+            </apex:outputPanel>
+            
+            
+            <!-- 20210920 : The business asked to stop displaying this paragraph in case of DOM
+            <apex:outputPanel rendered="{!currentQuote.Market_type__c = 'DOM'}"> 
+                Dans l'objectif de limiter les impacts environnementaux liés à son activité, la société BUTAGAZ compense désormais les émissions de carbone liées à la consommation de gaz propane de tous ses clients particuliers de gaz en citerne, ceci sans aucun surcout pour eux. Cette compensation se fait pour toutes les émissions de carbone sur le cycle de vie du gaz propane, c’est-à-dire, de son extraction, jusqu’à sa distribution et sa combustion, BUTAGAZ finançant des projets de réduction des gaz à effet de serre à hauteur du carbone ainsi émis.<br/>
+                Un Label Compensation Carbone, certifié par des instances officielles internationales, valide cette initiative de compensation de Butagaz : 100% des émissions carbone liées à votre consommation de propane sont compensées par BUTAGAZ.
+            </apex:outputPanel>
+            -->
+            
+            <apex:outputPanel rendered="{!currentQuote.Market_type__c = 'PRO'}">
+                <h1>Compensation Carbone</h1><br/>
+                
+                Dans l’objectif de limiter les impact environnementaux liés à son activité, la société BUTAGAZ compense désormais les émissions de carbone liées à la consommation de gaz propane à certaines conditions. Cette compensation se fait pour toutes les émissions de carbone sur le cycle de vie du gaz propane, c’est-à-dire, de son extraction, jusqu’à sa distribution et sa combustion, BUTAGAZ finançant des projets de réduction des gaz à effet de serre à hauteur du carbone ainsi émis. 
+                Un Label Compensation Carbone, certifié par des instances officielles internationales, valide cette initiative de compensation de Butagaz &#58; 100% des émissions carbone liées à votre consommation de propane sont compensées par BUTAGAZ. »
+            </apex:outputPanel>
+        </div>
+        
+    </div>
+    
+</apex:component>

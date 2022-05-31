@@ -1,0 +1,333 @@
+<apex:page standardcontroller="Account" extensions="ChauffageMgr" lightningStylesheets="false" docType="html-5.0">
+
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+    <style>
+        .header1 .pbSubheader h3{
+            color:black;
+        }
+        .verticalLine {
+            border-left: 2px solid red; padding-left: 2px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $.noConflict();
+
+        function buttonsEnabled(enabled) {
+	        // retrieve all of the buttons or links on the page
+	        // with the css class of btn
+	        var $buttons = jQuery('.btn');
+	        if (enabled === false) {
+	            // add the btnDisabled class to give it the look of being disabled
+	            // add the disabled attribute to actually disable interactability
+	            $buttons.toggleClass('btnDisabled', true).attr('disabled', 'disabled');
+	        } else {
+	            // remove the css class and the disabled attribute
+	            $buttons.toggleClass('btnDisabled', false).attr('disabled', null);
+	        } 
+	    }
+		
+	    function buttonsDisabled() {
+			
+	        buttonsEnabled(false);
+			
+	        // return false to prevent the click from posting the form a second time
+	        return false;
+	    }
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+        function stopStatus(){
+            $dialog.dialog('close');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+    </script>
+
+    
+    <apex:slds />
+    <apex:sectionheader title="{!Account.AccountNumber} - {!Account.Name}" subtitle="Offre chauffage"/>
+    <apex:pageMessages id="mainMsg" showDetail="false" rendered="true"/>
+    
+    <apex:form id="form" rendered="{!showForm}">
+        <!-- This script must be rerendered so the values are refreshed from the controller -->
+        <apex:outputPanel id="runScriptPanel">
+            <script>
+                function callGetTokenStep1IfSuccess(){
+                    console.log("Start callGetTokenStep1IfSuccess");
+                    var hasErrorVar = ctrlHasError;
+                    console.log("hasErrorVar callGetTokenStep1IfSuccess = ".concat(hasErrorVar));
+                    if(hasErrorVar == 'false') {
+                        CallGetTokenStep1_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+
+                function callGetEligibilityIfSuccess(){
+                    console.log("Start callGetEligibilityIfSuccess");
+                    var hasErrorVar = ctrlHasError;
+                    console.log("hasErrorVar callGetEligibilityIfSuccess = ".concat(hasErrorVar));
+                    if(hasErrorVar == 'false') {
+                        CallGetEligibility_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+
+                function callGetBookingTimeSlotsIfSuccess(){
+                    console.log("Start callGetBookingTimeSlotsIfSuccess");
+                    var hasErrorVar = ctrlHasError;
+                    console.log("hasError callGetBookingTimeSlotsIfSuccess = ".concat(hasErrorVar));
+                    //console.log("ctrlSubcontractorName callGetBookingTimeSlotsIfSuccess = ".concat(ctrlSubcontractorName));
+                    if(hasErrorVar == 'false') {
+                        CallGetBookingTimeSlots_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+
+                function callGetTokenStep2IfSuccess(){
+                    console.log("Start callGetTokenStep2IfSuccess");
+                    var hasErrorVar = ctrlHasError;
+                    console.log("hasError callGetTokenStep2IfSuccess = ".concat(hasErrorVar));
+                    if(hasErrorVar == 'false') {
+                        CallGetTokenStep2_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+
+                function callSaveDataIfSuccess(){
+                    console.log("Start callSaveDataIfSuccess");
+                    var hasErrorVar = ctrlHasError;
+                    console.log("hasError callSaveDataIfSuccess = ".concat(hasErrorVar));
+                    if(hasErrorVar == 'false') {
+                        CallSaveData_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+
+                function callPostDataIfSuccess(){
+                    console.log("Start callPostDataIfSuccess");
+                    var hasErrorVar = ctrlHasError;
+                    console.log("hasError callPostDataIfSuccess = ".concat(hasErrorVar));
+                    if(hasErrorVar == 'false') {
+                        CallPostData_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+            </script>
+        </apex:outputPanel>
+        
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+
+        <apex:actionFunction action="{!validatePostalCode}" name="CallValidatePostalCode_JS" oncomplete="callGetTokenStep1IfSuccess();" rerender="hasErrorblock, mainMsg"/>
+        <apex:actionFunction action="{!getAPIToken}" name="CallGetTokenStep1_JS" oncomplete="callGetEligibilityIfSuccess();" rerender="hasErrorblock, mainMsg"/>
+        <apex:actionFunction action="{!getEligibility}" name="CallGetEligibility_JS" oncomplete="callGetBookingTimeSlotsIfSuccess();" rerender="hasErrorblock, mainMsg"/>
+        <apex:actionFunction action="{!getBookingTimeSlots}" name="CallGetBookingTimeSlots_JS" oncomplete="stopStatus();return false;" rerender="hasErrorblock, mainMsg, postalCodePanelDiv, fillResidentInfoPanelDiv, fillInvoiceInfoPanelDiv, projectInfoPanelDiv, chooseTimeslotPanelDiv"/>
+
+        <apex:actionFunction action="{!validateData}" name="CallValidateData_JS" oncomplete="callGetTokenStep2IfSuccess();" rerender="hasErrorblock, mainMsg"/>
+        <apex:actionFunction action="{!getAPIToken}" name="CallGetTokenStep2_JS" oncomplete="callSaveDataIfSuccess();" rerender="hasErrorblock, mainMsg"/>
+        <apex:actionFunction action="{!saveData}" name="CallSaveData_JS" oncomplete="callPostDataIfSuccess();" rerender="hasErrorblock, mainMsg"/>
+        <apex:actionFunction action="{!postData}" name="CallPostData_JS" oncomplete="stopStatus();return false;" rerender="hasErrorblock, mainMsg, saveAndSendButtonsPanel"/>
+
+        
+        <apex:pageblock mode="maindetail" id="ChauffagePageBlock">
+            
+            <apex:outputPanel layout="none" rendered="true" id="mainPanel">
+                
+                <!-- Select Postal Code -->
+                <apex:outputPanel layout="none" rendered="true" id="postalCodePanel">
+                    
+                    <apex:outputPanel id="postalCodePanelDiv">
+                    <apex:pageBlock title="Code postal" id="selectPostalCodeBlock" rendered="{! !isCustomerEligible}">
+                        
+                        <apex:pageblockbuttons location="Top" >
+                            <input name="checkEligibility" class="btn" type="button" value="Vérifier éligibilité" onclick="startStatus();CallValidatePostalCode_JS();buttonsDisabled();return false;"/>
+                            <apex:commandbutton value="{!$Label.pricing_cancel}" action="{!cancel}" status="modalStatus" immediate="true"/>
+                        </apex:pageblockbuttons>
+                        <!-- Enter Postal Code and Product -->
+                        <apex:pageBlockSection showHeader="true">
+                            <apex:inputText label="Code postal du projet" value="{!selectedPostalCode}" required="true" style="width:200px;" styleClass="verticalLine"/>
+                            <apex:inputField value="{!oProject.Product__c}" styleClass="verticalLine"/>
+                            <apex:pageBlockSectionItem rendered="true"/>
+                            <apex:pageBlockSectionItem rendered="true"/>
+                        </apex:pageBlockSection>
+                        
+                    </apex:pageBlock>
+                    </apex:outputPanel>
+
+                    <!-- Resident customer -->
+                    <apex:outputPanel id="fillResidentInfoPanelDiv">
+                    <apex:pageBlock title="Coordonnées de l'occupant" id="fillResidentInfoBlock" rendered="{! isCustomerEligible}">
+                        
+                        <apex:pageblockbuttons location="Top" >
+                            <apex:outputPanel id="saveAndSendButtonsPanel">
+                            <input name="saveAndSend" class="btn" type="button" value="Enregistrer et envoyer les données au partenaire" onclick="startStatus();CallValidateData_JS();buttonsDisabled();return false;" style="display:{!IF(!oProject.Sent_To_External_Partner__c, '', 'none')};"/>
+                            <apex:commandbutton value="{!$Label.pricing_cancel}" action="{!cancel}" rendered="{! !oProject.Sent_To_External_Partner__c}" status="modalStatus" immediate="true"/>
+                            <apex:commandButton value="Accéder au compte" action="{!navigateToAccount}" rendered="{! oProject.Sent_To_External_Partner__c}" status="modalStatus"/>
+                            <apex:commandButton value="Accéder au projet" action="{!navigateToProject}" rendered="{! oProject.Sent_To_External_Partner__c}" status="modalStatus"/>
+                            </apex:outputPanel>
+                        </apex:pageblockbuttons>
+                        
+                        <apex:pageBlockSection title="" collapsible="false" columns="2">
+                            <apex:inputField value="{!oProject.Resident__c}">
+                                <!--<apex:actionsupport event="onchange" rerender="fillInvoiceInfoPanelDiv"/>-->
+                                <apex:actionsupport event="onchange" rerender="renterInfoPanelDivContainer"/>
+                            </apex:inputField>
+                            <!--<apex:inputField value="{!oProject.Client_Type__c}" styleClass="verticalLine">
+                                <apex:actionsupport event="onchange" rerender="renterInfoPanelDivContainer"/>
+                            </apex:inputField>-->
+                        </apex:pageBlockSection>
+
+                        <apex:outputPanel id="renterInfoPanelDivContainer">
+                            <apex:pageBlockSection title="" collapsible="false" columns="2" rendered="{! !oProject.Resident__c}">
+                                <apex:inputField value="{!oProject.Renter_Salutation__c}" styleClass="verticalLine"/>
+                                <apex:pageBlockSectionItem rendered="true"/>
+                                <apex:inputField value="{!oProject.Renter_Last_Name__c}" styleClass="verticalLine"/>
+                                <apex:inputField value="{!oProject.Renter_First_Name__c}" styleClass="verticalLine"/>
+                                <apex:inputField value="{!oProject.Renter_Email__c}" styleClass="verticalLine"/>
+                                <apex:inputField value="{!oProject.Renter_Phone__c}" styleClass="verticalLine"/>
+                            </apex:pageBlockSection>
+                        </apex:outputPanel>
+
+                        <apex:pageBlockSection title="" collapsible="false" columns="2">
+                            <apex:inputField value="{!oProject.Project_Street_Number__c}" styleClass="verticalLine"/>
+                            <apex:inputField value="{!oProject.Project_Street_Type__c}" styleClass="verticalLine"/>
+                            <apex:inputField value="{!oProject.Project_Street_name__c}" styleClass="verticalLine"/>
+                            <!--<apex:inputField value="{!oProject.Project_City_Postal_Code__c}" html-disabled="true"/>-->
+                            <apex:outputText label="Code postal du projet" value="{!selectedPostalCode}" html-disabled="true"/>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                    </apex:outputPanel>
+
+                    <!-- Invoice customer -->
+                    <apex:outputPanel id="fillInvoiceInfoPanelDiv">
+                    <apex:pageBlock title="Coordonnées de facturation" id="fillInvoiceInfoBlock" rendered="{! isCustomerEligible }">
+                        <apex:pageBlockSection title="" collapsible="false" columns="2">
+                            <apex:inputField value="{!oAccountTarget.Salutation}" styleClass="verticalLine"/>
+                            <apex:pageBlockSectionItem rendered="true"/>
+                            <!-- <apex:inputField value="{!oAccountTarget.Name}"/> -->
+                            <apex:inputField value="{!oAccountTarget.LastName}"/>
+                            <apex:inputField value="{!oAccountTarget.FirstName}"/>
+                            <apex:inputField value="{!oAccountTarget.Email__c}" styleClass="verticalLine"/>
+                            <apex:pageBlockSectionItem rendered="true"/>
+                            <apex:inputField value="{!oAccountTarget.Phone}"/>
+                            <apex:inputField value="{!oAccountTarget.Mobile_Phone_Number__c}"/>
+                            <apex:pageBlockSectionItem rendered="true"/>
+                            <apex:pageBlockSectionItem rendered="true"/>
+                            <apex:inputField value="{!oAccountTarget.Street_N__c}" styleClass="verticalLine"/>
+                            <apex:inputField value="{!oAccountTarget.Street_type__c}" styleClass="verticalLine"/>
+                            <apex:inputField value="{!oAccountTarget.Street_name__c}" styleClass="verticalLine"/>
+                            <apex:inputField value="{!oAccountTarget.City_Postal_Code__c}" styleClass="verticalLine"/>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                    </apex:outputPanel>
+
+                    <!-- Enter Project Info -->
+                    <apex:outputPanel id="projectInfoPanelDiv">
+                    <apex:pageBlock title="Informations du projet {! subcontractorName}" id="fillProjectInfoBlock" rendered="{! isCustomerEligible}">
+                        <apex:pageBlockSection title="" collapsible="false" columns="2">
+                            
+                            <!--<apex:outputText label="Produit" value="{!selectedProduct}"/>-->
+                            <!--<apex:selectList label="Article" value="{!selectedProduct}" multiselect="false" size="1" disabled="true">
+                                <apex:selectOptions value="{!Products}" />
+                            </apex:selectList>-->
+                            <apex:inputField value="{!oProject.Product__c}" html-disabled="true"/>
+                            <apex:outputField value="{!oProject.GARANKA_Contract_Type__c}" rendered="{! subcontractorName == 'GARANKA'}"/>
+                            <apex:pageBlockSectionItem rendered="{! subcontractorName != 'GARANKA'}"/>
+
+                            <apex:inputField value="{!oProject.Housing_Type__c}" styleClass="verticalLine">
+                                <apex:actionSupport event="onchange" reRender="outputPriceCode"/>
+                            </apex:inputField>
+                            <apex:inputField value="{!oProject.Housing_Over_2_Years__c}">
+                                <apex:actionSupport event="onchange" reRender="outputPriceCode"/>
+                            </apex:inputField>
+
+                            <apex:inputField value="{!oProject.Device_Type__c}" rendered="{! oProject.Product__c == '11'}"  styleClass="verticalLine"/>
+                            <apex:pageBlockSectionItem rendered="{! oProject.Product__c != '11'}"/> <!-- Add filler in case we don't display the device type -->
+                            <apex:inputField value="{!oProject.Type_of_Technology__c}"  styleClass="verticalLine">
+                                <apex:actionSupport event="onchange" reRender="outputPriceCode"/>
+                            </apex:inputField>
+                            
+                            <apex:inputField value="{!oProject.GARANKA_Device_Brand__c}"  styleClass="verticalLine"/>
+                            <apex:inputField value="{!oProject.Estimated_Age_Of_Device__c}"  styleClass="verticalLine"/>
+
+                            <!--<apex:outputField value="{!oProject.GARANKA_Contract_Type__c}"/>-->
+                            <apex:outputText label="Code prix" value="{!PriceCode}" id="outputPriceCode"/>
+                            <!--
+                            <apex:outputField value="{!oProject.Price}" />
+                            -->
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+
+                    <apex:outputPanel id="chooseTimeslotPanelDiv">
+                    <apex:pageBlock title="Prise de rendez-vous" id="chooseTimeslotBlock" rendered="{! isCustomerEligible && subcontractorName == 'GARANKA'}">
+                        <apex:pageBlockSection title="" collapsible="false" columns="2">
+                            <apex:selectList label="Créneau" value="{!selectedTimeSlot}" multiselect="false" size="1">
+                                <apex:selectOptions value="{!lstTimeSlots}" />
+                            </apex:selectList>
+                        </apex:pageBlockSection>
+                    </apex:pageBlock>
+                    </apex:outputPanel>
+                    </apex:outputPanel>
+
+                </apex:outputPanel>
+                
+            </apex:outputPanel>
+        </apex:pageblock>
+        
+    </apex:form>
+    
+    <!-- Panel used to refresh hasMessages variable from controller through rerendering -->
+    <apex:outPutPanel layout="block" id="hasErrorblock">
+        <script>
+            var ctrlHasError = '{!hasError}';
+            console.log("hasErrorblock ctrlHasError = ".concat(ctrlHasError));
+            //var ctrlSubcontractorName = '{! subcontractorName}';
+        </script>
+    </apex:outPutPanel>
+
+    <!-- Loader -->
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}" style="display:none">
+		<div>
+    		<CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+    		<apex:outputText value="{!$Label.pricing_popup_message_wait}" />
+		</div>
+	</div>
+        
+    <script>
+		var $dialog;
+        jQuery(document).ready(function($) {
+        	$(function() {
+            
+	            $dialog =jQuery("#dialog-modal")
+	                .dialog({
+	                    autoOpen: false,
+	                    height: 150,
+	                    modal: true,
+	                    closeOnEscape: false,
+	                    resizable: false
+	            });
+              
+          	});
+        });
+    </script>
+</apex:page>

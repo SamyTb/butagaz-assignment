@@ -1,0 +1,37 @@
+<apex:component controller="CustSatisfactionEmailTempComp" access="global">
+    <apex:attribute name="currentOrderId" description="identifiant commande" assignTo="{!vOrderId}" type="string"/>
+    <!--<p style="text-align:center;font-style: italic">
+        Merci de nous indiquer une note de satisfaction pour cette commande :
+        <br></br>
+        <small>(1 pas du tout satisfait, 10 tout à fait satisfait)</small>
+    </p>-->
+    
+    <tr>
+        <td colspan="10">
+            <p style="text-align:center;font-style: italic">
+                Merci de nous indiquer une note de satisfaction pour cette commande :
+                <br/>
+                <small>(1 pas du tout satisfait, 10 tout à fait satisfait)</small>
+            </p>
+        </td>
+    </tr>
+    
+    <tr>
+        <apex:repeat value="{!mapCryptageStatisfactionUrl}" var="note" >
+            <td>
+                <apex:outputLink style="color: white;font-weight: bold;text-decoration:none; border: 1px solid; border-color: black;background-color: #44a1dd" value="{!mapCryptageStatisfactionUrl[note]}" id="satisfactionlinkid">&nbsp;&nbsp;{!note}&nbsp;&nbsp;</apex:outputLink>
+                <!--  <apex:outputText style="width: 100%"> {!mapNoteText[note]}</apex:outputText> -->
+            </td>
+        </apex:repeat>
+    </tr>
+
+<!--
+    <tr style="text-align: justify;word-wrap: normal;">
+        <apex:repeat value="{!mapNoteText}" var="note" >
+            <td>
+                <apex:outputText > {!mapNoteText[note]}</apex:outputText>
+            </td>
+        </apex:repeat>
+    </tr> 
+-->
+</apex:component>

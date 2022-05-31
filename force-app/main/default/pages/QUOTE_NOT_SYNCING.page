@@ -1,0 +1,15 @@
+<apex:page >
+  <!-- Begin Default Content REMOVE THIS -->
+  <div id="containerNOPRINT2">
+  
+  
+  
+                          <h1>VOTRE DEVIS N'EST PAS SYNCHRONISE AVEC L'OPPORTUNITE</h1>
+                          <p>Vous ne pouvez pas imprimer un devis ou un contrat tant que le DEVIS n'est pas synchronisé</p>
+  
+  
+  
+  
+  </div>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

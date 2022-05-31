@@ -1,0 +1,126 @@
+<apex:page standardController="Order__c" extensions="VFC01_OrderTaking_Deletion" tabStyle="Order__c" wizard="false" >
+<apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+<apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+<apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+<script type="text/javascript">
+
+        function confirmDelete() {
+            var isDel = confirm("{!$Label.pop_up_message_before_delete_an_order}");
+            if (isDel) return true;
+            return false;
+        }
+        function confirmCancel() {
+            var isCancel = confirm("{!$Label.popup_message_quit}");
+            if (isCancel) return true;
+            return false;
+        }
+        
+
+        function startStatus(){
+        
+            $dialog.dialog('open');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+        
+        function stopStatus(){
+            $dialog.dialog('close');
+            // prevent the default action, e.g., following a link
+            return false;
+        }        
+        
+</script>        
+<apex:sectionHeader title="{!$Label.deletion_order}" subtitle="{!$Label.deletion}"/> 
+<apex:form >
+<apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+<apex:pageBlock title="" id="deletionStep">
+    
+    <apex:pageMessages />  
+    <apex:pageBlockSection rendered="{!renderComponentBefDelete}">
+              <apex:outputText label="{!$Label.current_user}" value="{!userCRM}"/>
+              <apex:pageBlockSectionItem rendered="true"/>
+              <apex:outputField value="{!order.Name}"/>  
+    </apex:pageBlockSection>    
+    <apex:pageBlockSection title="{!$Label.account_section_name}" id="accountSection" rendered="{!renderComponentBefDelete}">
+              <apex:outputField value="{!contract.Account.AccountNumber}"/> 
+              <apex:outputField value="{!contract.Mandataire__r.Name}"/> 
+              <apex:outputField value="{!contract.Account.Name}"/>                  
+              <apex:outputField value="{!contract.Account.Sensible_Client__c}"/> 
+              <!-- <apex:outputField label="Point d\'expédition/MDT" value="{!contract.PTL__r.Code_division__c}" /> -->
+              <apex:outputField value="{!order.Dispatching_point__c}"/>
+              <apex:outputField value="{!contract.PTL__r.Code_division_value__c}" /> 
+              <apex:outputField value="{!order.Command_center__c}"/>
+              <apex:pageBlockSectionItem rendered="true"/>
+              <apex:outputField value="{!contract.Account.Email__c}"/>
+              <apex:outputField value="{!contract.Account.Email_2__c}"/>
+              <apex:outputField value="{!contract.Account.No_E_mail__c}"/>
+    </apex:pageBlockSection>
+                   
+    <apex:pageBlockSection title="PTL" id="ptlSection" rendered="{!renderComponentBefDelete}">
+               <apex:outputField value="{!contract.PTL__r.Name}"/>
+               <apex:outputField value="{!contract.PTL__r.Activity_Domain__r.Name}"/>
+               <apex:outputField value="{!contract.PTL__r.Address__c}"/>
+               <apex:outputField value="{!contract.PTL__r.Code_branche__c}"/>
+               <apex:outputField value="{!contract.PTL__r.Code_branche_value__c}"/>
+               <apex:outputField value="{!contract.Equipement__r.Article__r.Name}"/>
+               <apex:outputField label="{!$Label.product_label}" value="{!contract.Product__r.Name}"/>
+               <apex:outputField value="{!contract.Equipement__r.Capacity_Tank__c}"/>
+               <apex:outputField value="{!contract.PTL__r.Mobile_Phone_Number__c}"/> 
+               <apex:outputField value="{!contract.PTL__r.Phone__c}"/> 
+               <apex:outputField value="{!contract.PTL__r.Work_Phone_Number__c}"/>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="{!$Label.order_section_name}" rendered="{!renderComponentBefDelete}">
+       <apex:outputText value="{!order.Meter_Before_Delivery__c}"/>                   
+       <apex:outputField value="{!order.Breakdown__c}"/>
+       <!-- <apex:outputText label="{!$Label.quantity} {!quantity_uom}" value="{!quantity}"/> -->
+       <apex:outputField value="{!order.Order_Date_and_Time__c}"/> 
+      <apex:outputText value="{!order.Order_Type2__c}"/>
+          
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="{!$Label.delivery_section_name}" rendered="{!renderComponentBefDelete}">
+      <apex:pageBlockSectionItem >
+             <apex:outputLabel value="{!$Label.quantity} {!itemInOrder.Unit__c}"/>
+             <apex:outputText value="{!itemInOrder.Quantity__c}" />
+      </apex:pageBlockSectionItem>              
+      <apex:outputField value="{!order.Earliest_Delivery_Date__c}"/>    
+      <apex:outputField value="{!order.Latest_Delivery_Date__c}"/>
+       <apex:outputField value="{!order.Delivery_Man_Message__c}" style="width: 85%;"/>      
+    </apex:pageBlockSection>
+    
+    
+    <apex:pageBlockButtons > 
+           <apex:commandButton value="{!$Label.annuler_button} {!$Label.the_deletion}" disabled="false" rendered="{!NOT(VdeletionOccured)}" action="{!backButt}" onclick="if(!confirmCancel()) return false;" /> 
+           <apex:commandButton value="{!$Label.delete_button_label}" rendered="{!renderComponentBefDelete}" action="{!deleteButt}"  title="{!$Label.sapcall_delete_message}" reRender="deletionStep" onclick="if(!confirmDelete()) return false;"
+                               status="modalStatus"/>
+           <apex:commandButton value="{!$Label.back_contract_message}" rendered="{!VdeletionOccured}" action="{!backButt}" />
+    </apex:pageBlockButtons>
+</apex:pageBlock>
+</apex:form> 
+<div id="dialog-modal" title="{!$Label.operation_inprogress_message}" style="display:none">
+    <div>
+        <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+        <apex:outputText value="{!$Label.popup_message_wait}" /> 
+    </div>
+</div>
+    
+<script>
+      var $dialog;
+      jQuery(document).ready(function($) {
+            $(function() {
+            
+            $dialog =jQuery("#dialog-modal")
+                .dialog({
+                    autoOpen: false,
+                    height: 150,
+                    modal: true,
+                    closeOnEscape: false,
+                    resizable: false,
+            });
+
+        });
+      });      
+
+ </script>   
+</apex:page>

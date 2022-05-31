@@ -1,0 +1,5 @@
+<apex:page standardController="Inventory_Pricing_Brand__c" extensions="VFC_InventoryPricingBrand01" showHeader="true" sidebar="false" action="{!getIPPage}">
+
+	
+
+</apex:page>

@@ -1,0 +1,74 @@
+<apex:page controller="VFC_Latitude_Testing_01" title="Latitude Testing Chart" >
+
+    <!-- CONTROLS TO LAUNCH TESTS-->
+    <apex:pageBlock title="Controls">
+        <apex:form >
+            <apex:pageBlockTable value="{!lBatchIds}" var="batchId">
+                <apex:column headerValue="Batch ID" value="{!batchId}"/>
+                <apex:column headerValue="Run Dev Flow (Latest)">
+                    <apex:commandLink value="Run latest"  action="{!startLatest}">
+                          <apex:param name="requestedBatchIdCurrent" assignTo="{!requestedBatchIdCurrent}" value="{!batchId}"/>                      
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column headerValue="Run Active Flow (Current)">
+                    <apex:commandLink value="Run active"  action="{!startActive}">
+                          <apex:param name="requestedBatchIdActive" assignTo="{!requestedBatchIdActive}" value="{!batchId}"/>                      
+                    </apex:commandLink>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:form>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Overall test status">
+        <apex:chart height="200" width="300" data="{!failureSuccessChartData}">
+            <apex:pieSeries dataField="data" labelField="name"/>
+            <apex:legend position="left"/>
+        </apex:chart>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Failures by Calculation Type">
+        <apex:chart height="200" width="300" data="{!calculationTypeChartData}">
+            <apex:pieSeries dataField="data" labelField="name"/>
+            <apex:legend position="left"/>
+        </apex:chart>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Overall results">
+        <apex:chart height="300" width="600" data="{!calculationExpectedType}">
+            <apex:legend position="right"/>
+            <apex:axis type="Numeric" position="left" fields="data" title="Failures" minimum="0"/>
+            <apex:axis type="Category" position="bottom" fields="name" title="Latitude Calculation Types">
+                <apex:chartLabel rotate="315" color="#FFFF00"/>
+            </apex:axis>
+            <apex:barSeries title="Failures" orientation="vertical" axis="left" xField="name" yField="data">
+                <apex:chartTips height="20" width="20"/>
+            </apex:barSeries>
+        </apex:chart>
+    </apex:pageBlock>
+    
+    <apex:pageBlock title="Failed Tests">
+        <apex:pageBlockTable value="{!failedQuotes}" var="failedQuote">
+            <apex:column headerValue="Quote ID">
+                <apex:outputLink value="{!URLFOR('/' & failedQuote.id)}">
+                    {!failedQuote.Id}
+                </apex:outputLink>
+            </apex:column>
+            <apex:column headerValue="Quote Name">
+                {!failedQuote.Name}
+            </apex:column>
+            <apex:column headerValue="Analyzed">
+                {!failedQuote.T_LAT_Test_Analyzed__c}
+            </apex:column>
+            <apex:column headerValue="Calculated vs Expected">
+            {!failedQuote.Latitude__c} / {!failedQuote.T_LAT_Test_ExpectedScore__c} - {!failedQuote.Latitude_Level__c} / {!failedQuote.T_LAT_Test_ExpectedLevel__c}
+            </apex:column>
+            <apex:column headerValue="Difference">
+                {!failedQuote.T_LAT_Test_LatitudeDifference__c}
+            </apex:column>
+            <apex:column headerValue="Batch">
+                {!failedQuote.T_LAT_Test_Batch__c}
+            </apex:column>
+        </apex:pageBlockTable>
+    </apex:pageBlock>
+
+</apex:page>

@@ -1,0 +1,14 @@
+<apex:page standardController="Quote" extensions="VFC_SyncQuote" action="{!LaunchSyncQuote}">
+
+<apex:form >
+    <apex:inputHidden value="{!Quote.Id}"/> 
+    <apex:inputHidden value="{!Quote.Opportunity.Id}"/> 
+    <apex:inputHidden value="{!Quote.T_LAT_ApprovalRequested__c}"/> 
+    <apex:pageBlock title="Synchronisation" >
+    <apex:pageMessages />
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!back}" value="Retour"/>
+            </apex:pageBlockButtons>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

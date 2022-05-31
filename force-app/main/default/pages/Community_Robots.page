@@ -1,0 +1,11 @@
+<apex:page contentType="text/plain" showHeader="false">
+User-agent: *
+Disallow: /web2lead
+Disallow: /invoice
+Disallow: /confirmation-sac-granules-offert
+Disallow: /un-arbre-offert
+Disallow: /sac-granules-offert
+Disallow: /je-donne-mon-avis
+Disallow: /contactsupport
+Sitemap: https://granulesbois.butagaz.fr/gdbsitemap
+</apex:page>

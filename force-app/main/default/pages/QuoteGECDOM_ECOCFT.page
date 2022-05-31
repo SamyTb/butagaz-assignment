@@ -1,0 +1,251 @@
+<apex:page showHeader="false" sidebar="false"  standardController="Quote" renderas="pdf"  extensions="VFC_Quotelineitem_01" standardStylesheets="false">
+<!--************************* GEC DOM ACTIVITY DOMAIN**********************************************************************************************************-->      
+<!--************************* GEC DOM ACTIVITY DOMAIN**********************************************************************************************************-->   
+<!--************************* GEC DOM ACTIVITY DOMAIN**********************************************************************************************************-->   
+
+
+
+<div id="containerGECDOM_ECOCFT">
+
+    <div class="footerRight">
+        <p style="display: {!IF(Quote.Action_Commerciale__c!='','','none')}; align: right;">Action Commerciale&nbsp;: {!Quote.Action_Commerciale__r.Name}&nbsp;</p>
+    </div>
+
+    <div class="footer"> 
+
+        <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+        <p >Société par Actions Simplifiée au capital de 195 225 000 --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+    </div>
+      
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+      
+    
+      
+   <div class="header">
+
+        <div class="ClientAddress">
+   
+            <p><Apex:outputField value="{!Quote.Opportunity.Account.Salutation}"/> {!Quote.Opportunity.DO_Name__c}</p>
+            <br/>
+            <p>{!Quote.Opportunity.DO_Street_N__c}&nbsp;<Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/>&nbsp;{!Quote.Opportunity.DO_Street_name__c}</p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}</p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}</p>
+            <br/><p>
+            Date de la Proposition&nbsp;:&nbsp;{!PrettyDate}</p>
+        </div> 
+   </div> 
+   <div class="clear"></div>
+
+    <div class="quoteBody">
+    
+        <div class="contractSection">
+            <!-- <span class="h1_2016">Proposition Commerciale</span> -->
+            
+            <p style="text-align: left;font-size: 12pt;font-weight: bold;">PROPOSITION COMMERCIALE</p>
+            <br/>
+            <p><Apex:outputField value="{!Quote.Opportunity.Account.Salutation}"/> {!Quote.Opportunity.DO_Name__c}</p>
+            <p>{!$Label.GEC_QUOTE} {!Quote.CreatedBy.FirstName} {!Quote.CreatedBy.LastName} {!$Label.GEC_QUOTE_2}&nbsp; (Référence&nbsp;:&nbsp; {!Quote.QuoteNumber})</p> 
+        </div>
+        
+        <div class="contractSection">
+            
+            <p style="text-align: left;font-size: 10pt;font-weight: bold;text-decoration: underline;color: #0070C0;">CONTRAT &amp; SERVICE</p>
+            
+            <p class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Contrat&nbsp;:&nbsp;</strong><apex:outputField value="{!Quote.Pack_Type__c}"/></p>
+            
+            <!-- Option Bio/CC -->
+            <p Style="display: {!IF(Quote.T_RollUp_BioPercentage__c > 0,'','none')}" class="spaceBefore"><strong>Option&nbsp;:&nbsp;</strong>{!TEXT(Quote.T_Rollup_BioPercentage__c)}&nbsp;% biopropane</p>
+			<p Style="display: {!IF(Quote.T_RollUp_CompenseCarbone__c > 0,'','none')}" class="spaceBefore"><strong>Option&nbsp;:&nbsp;</strong>100% Compensé Carbone</p>
+            
+            <!-- 
+            <p class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Consommation estimée&nbsp;:&nbsp;</strong>{!Quote.Sum_PTL_Consumption__c}&nbsp;(en kWh par an)</p>
+            <p class="smallNote">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cette consommation a été estimée en fonction des informations que vous nous avez communiquées.</p>
+            <p class="smallNote">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pour information : si la construction de votre maison pour laquelle vous souhaitez la fourniture de propane est soumise à la règlementation thermique 2012 ou ultérieure (Permis de construire déposé à compter du 1er janvier 2013), l’estimation est effectuée à partir du rapport reçu du bureau d’études thermique et non par notre système d’analyse des consommations.</p>
+            <p Style="display: {!IF(Quote.Derogation_calcul_consommation__c=true,'','none')}" class="smallNote">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Par dérogation, la présente consommation a été estimée selon les informations et facturations antérieures présentées par le client.  Cette consommation ne prend pas en compte les estimations réalisées à partir de notre système d’analyse des consommation et dont le bilan de l’étude vous a  été transmis.</p>
+             -->
+            
+            <p class="spaceBefore" Style="display: {!IF(Quote.Derogation_calcul_consommation__c=false,'','none')}">Consommation estimée pour la première année du Contrat : {!Quote.Sum_PTL_Consumption__c} kWh / an, sur la base des habitudes de consommation et de l’habitation du client tels que déclarés dans le formulaire annexé aux présentes.</p>
+            <p Style="display: {!IF(Quote.Derogation_calcul_consommation__c=true,'','none')}">En accord avec le client, il a été décidé de prendre la consommation estimée lors de la signature, sur la base des informations fournies par le client et des antériorités de consommation du logement. Cette consommation est estimée pour la première année du contrat à {!Quote.Sum_PTL_Consumption__c} kWh / an. Il est expressément rappelé que ces valeurs ne sont que des estimations, et sont donc susceptibles de changer au cours de l’exécution du contrat.</p>
+            <br/>
+            <p Style="display: {!IF(Quote.Opportunity.Project_Type__c='CREA' && Quote.Opportunity.Opportunity_Reason__c='Construction neuve','','none')}">Rappel : si la construction de votre maison pour laquelle vous souhaitez la fourniture de propane est soumise à la règlementation thermique 2012 ou ultérieure (Permis de construire déposé à compter du 1er janvier 2013), l’estimation est effectuée à partir du rapport reçu du bureau d’études thermique et non par notre système d’analyse des consommations.</p>
+            <p Style="display: {!IF(Quote.Opportunity.Project_Type__c='CREA' && Quote.Opportunity.Opportunity_Reason__c='Construction neuve','','none')}"><br/></p>
+            <p Style="display: {!IF(Quote.Opportunity.Project_Type__c='CREA' && Quote.Opportunity.Opportunity_Reason__c='Construction neuve','','none')}">Rappel : à partir de la 2ème année contractuelle, la consommation du CLIENT est ré-estimée sur la base de la consommation réelle de l’année précédente.</p>
+            
+            
+            
+            <!--  <p>Consommation estimée : {!round(Quote.Sum_PTL_Consumption__c/13835,3)} (en tonne par an) soit {!Quote.Sum_PTL_Consumption__c} (en kWh par an)</p> -->
+            
+            <p class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Propriété de(s) la citerne(s)&nbsp;:&nbsp;</strong>Citerne(s) propriété de Butagaz</p>
+            
+            <p class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Mode de livraison&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.Shipping_Condition__c}"/></p>
+            
+            <p class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Adresse de livraison&nbsp;:&nbsp;</strong>{!Quote.Opportunity.Street_number_project__c}&nbsp;{!Quote.Opportunity.Number_extention_project__c}&nbsp;<Apex:outputField value="{!Quote.Opportunity.Street_type_project__c}"/>&nbsp;{!Quote.Opportunity.Street_name_project__c}&nbsp;{!Quote.Opportunity.Project_City_Postal_Code__r.Name}</p>
+            
+            <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Mode de paiement&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.DO_Payment_method__c}"/></p>
+            
+            <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Echelonnement de paiement Pack Ecoconfortique&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.Payment_spread__c}"/></p>
+            <p class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Service(s) inclus&nbsp;:&nbsp;</strong></p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;Contrôle, entretien et maintenance de la citerne de gaz mise à disposition.</p>
+              
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;Livraisons automatiques de gaz.</p>
+              <p>&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;&nbsp;Suivi dans votre Espace Client pour chaque année contractuelle de la consommation réelle de gaz par rapport à la consommation estimée mensuelle.</p>
+            
+        </div>
+        
+        
+        <div class="contractSection" Style="page-break-inside: avoid">
+            
+            <p style="text-align: left;font-size: 10pt;font-weight: bold;text-decoration: underline;color: #0070C0;">DUREE DU CONTRAT</p>
+            
+            <p class="spaceBefore"><strong>Durée du contrat&nbsp;:&nbsp;</strong>{!Quote.Contract_Duration__c} an(s)&nbsp; (en toutes lettres : ____________________________________ )</p>
+            
+            <p class="spaceBefore" >Conformément à l'article 9 des Conditions Générales, la durée du contrat est définie d'un commun accord avec le CLIENT.</p>
+            
+        </div>
+        
+        
+        <div class="contractSection" Style="page-break-inside: avoid">
+            
+            <p style="text-align: left;font-size: 10pt;font-weight: bold;text-decoration: underline;color: #0070C0;">TARIFICATION</p>
+            
+            <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Barème applicable pour le Propane&nbsp;:&nbsp;</strong><apex:outputText value="{!IF(Quote.Product_Scale__c!='ECOCMI', 'GAZPART2', 'GAZPART2')}"/>
+            	{!IF(Quote.T_Rollup_BioPercentage__c > 0, ' Option ' & TEXT(Quote.T_Rollup_BioPercentage__c) & '% biopropane', '')}
+            	{!IF(Quote.T_RollUp_CompenseCarbone__c > 0, ' Option 100% Compensé Carbone', '')}
+            </p>
+            <!-- <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Barème applicable pour l’entretien et frais divers&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.Scale__c}"/></p> -->
+            <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>•&nbsp;&nbsp;&nbsp;Barème applicable pour l’entretien et frais divers&nbsp;:&nbsp;</strong>Services+</p>
+            
+            <apex:pageblock rendered="{!OR(NOT(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c),Quote.DO_Groupement__c='')}"> 
+                <div class="contractSection" Style="page-break-inside: avoid">
+                      <!-- <h2 >Tarification</h2> -->
+                      <table class="ButagazTable">
+                        <tr style="color: #FFFFFF;">
+                          <th style="background-color: #0070C0;"> Article(s)</th>
+                          <th style="background-color: #0070C0;" class="smallWidth">Unité de facturation</th>
+                          <th style="background-color: #0070C0;" class="smallWidth">Quantité</th>
+                          <th style="background-color: #0070C0;" class="smallWidth">Mensualités Ecoconfortique € TTC/mois</th>
+                          <th class="smallWidth" style="display:{!if(Quote.Opportunity.Storage_Modification_Reason__c=='HSSE Raison Btz', 'table-cell', 'none')}; background-color: #0070C0;"></th>
+                          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')}; background-color: #0070C0;">Remise Exceptionnelle EURO TTC</th>
+                          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityOfferedMonths, 'table-cell', 'none')}; background-color: #0070C0;">Mois offert(s)</th>
+                        </tr>
+                        <apex:repeat value="{!Pricing}" var="line">
+                          <tr>
+                            <td class="smallWidth">{!line.pricebookentry.Name}</td>
+                            
+                            <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+                            
+                            <td class="number">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.Quantity)}</td>
+                            
+                            <!--<td class="number;smallWidth"> {!IF(Quote.DO_Payment_method__c='P',ROUND((line.Price_List_TTC__c)/12,2),line.Price_List_TTC__c)}</td> -->
+                            <!-- Mensualité EcoConfortique MLC 20180122 INC1521683-->
+                            <td class="number;smallWidth">
+                               <!--<apex:outputText rendered="{!line.Product_Family__c!='Produit' && line.F_MonthlyPriceDisplay__c==TRUE && line.Price_List_TTC__c!=0}" value="{0, number, 0.00}">-->
+                               <apex:outputText rendered="{!line.Product_Family__c!='Produit' && line.F_Product_Code__c=='SPPABO0017' && line.Price_List_TTC__c!=0}" value="{0, number, 0.00}">
+                                   <apex:param value="{!IF(Quote.DO_Payment_method__c='P',ROUND((line.Price_List_TTC__c)/12,2),line.Price_List_TTC__c)}" />
+                               </apex:outputText>
+                               {!IF(line.F_Rollup_BioPercentage__c > 0, ' - Option ' & TEXT(line.F_Rollup_BioPercentage__c) & '% biopropane', '')}
+                               {!IF(line.Bio_Product__c == 'CC', ' -  Option 100% Compensé Carbone', '')}
+                            </td>
+                            <td class="number;smallWidth" style="display:{!IF(Quote.Opportunity.Storage_Modification_Reason__c=='HSSE Raison Btz', 'table-cell', 'none')};">{!IF(AND(line.PricebookEntry.Product2.Standardized_Form__c == true, line.Only_for_Standardized_Form__c == false),'Offert par Butagaz','')}</td>
+                            <td class="number;smallWidth" style="display:{!IF(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_TTC__c=0,'',TEXT(ROUND(line.RCE_Rebate_TTC__c,2)))}</td>
+                            <td class="number;smallWidth" style="display:{!IF(pricingQuoteVisibilityOfferedMonths, 'table-cell', 'none')};">{!IF(line.Offered_Months__c=0,'',TEXT(line.Offered_Months__c))}</td>
+                          </tr>
+                        </apex:repeat>
+                      </table>
+                      <p class="smallNote" style="display: {!IF(CEM, '', 'none')}">Sauf si des prestations supplémentaires sont nécessaires en cas de difficultés particulières de mise en place (enlévement terres, brise roche, déplacements ultérieures de la citerne,..) facturées selon le barème Services+ en vigueur. Un nouveau devis vous sera établi pour accord.<br/></p>
+                      <p class="smallNote">La mensualité est réévaluée chaque année en fonction de l’évolution de votre consommation à la hausse ou à la baisse et de l’indice Insee des prix à la consommation pendant la durée de votre contrat. </p>
+                      <p class="smallNote">En complément des conditions générales de vente, et de l’ article 6.3 « Le pack écoConfortique », la réévaluation annuelle du prix (Pn) prendra aussi en compte l’évolution de la Taxe Intérieure de Consommation sur les Produits Energétiques (TICPE) ou de toute autre taxe dont Butagaz n’a pas la maitrise.</p>
+                      
+                      <p class="spaceBefore" style="display: {!IF(Quote.Opportunity.Parrain__c!=null,'', 'none')}"><STRONG>Offre Parrainage&nbsp;</STRONG>:</p>
+                      <p style="display: {!IF(Quote.Opportunity.Parrain__c!=null,'', 'none')}">Nom du Parrain&nbsp;:&nbsp;{!Quote.Opportunity.Parrain__r.Name}</p>
+                      <p style="display: {!IF(Quote.Opportunity.Parrainage_Offer_EUR__c!=null,'', 'none')}">Montant de l'avoir gaz sur la première livraison de gaz&nbsp;: {!Quote.Opportunity.Parrainage_Offer_EUR__c} &nbsp; EURO TTC</p>
+                 </div>
+            </apex:pageblock>
+            
+        </div>
+        
+        
+        <br/>
+        
+        <!-- Vos conditions spécifiques -->
+        <apex:pageBlock rendered="{!Quote.Opportunity.Other_specific_conditions__c!=''}">
+              <div class="contractSection" Style="page-break-inside:avoid">
+               <h1>Vos conditions spécifiques</h1>
+        
+               <p>{!Quote.Opportunity.Other_specific_conditions__c}</p>
+              </div>
+        </apex:pageblock>
+        
+        <!-- Bio Specificities -->
+	    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF( (Quote.T_RollUp_BioPercentage__c > 0 || Quote.T_RollUp_CompenseCarbone__c > 0) && Quote.Opportunity.T_Pack__c='ECOCFT' && Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Client_Reenlistment__c='Contract','','none')}">
+	        <c:Bio_Specificities currentQuote="{!Quote}"/>
+	    </apex:outputPanel>
+        
+        <!-- Fiche standardisee -->
+        <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF(Quote.Opportunity.T_Pack__c='ECOCFT' && Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Client_Reenlistment__c='Contract','','none')}">
+            <c:FicheStandardisee currentQuote="{!Quote}" />
+        </apex:outputPanel>
+        
+        <div Style="page-break-inside: avoid">
+    
+             <p style="text-align: left;font-size: 10pt;font-weight: bold;text-decoration: underline;color: #0070C0;">SIGNATURES</p>
+             <br/>
+             <p>Cette proposition commerciale est valable jusqu'au {!PrettyExpirationDate}. Au-delà, la présente proposition sera caduque, et ne pourra en aucun cas engager Butagaz.</p>
+             <p>Si cette proposition retient votre attention et que vous souhaitez en bénéficier, merci de bien vouloir retourner la présente proposition datée et signée au distributeur Butagaz  Butagaz dont les coordonnées figurent ci-dessous.</p>
+           
+             <div class="Signatures">
+    
+                 <div class="clear"></div>
+    
+                     <div class="ButagazSignature">
+                          <p class="nospace">Votre Contact :&nbsp; {!Quote.CreatedBy.Name}</p>
+                          <!--<p class="nospace">E-mail&nbsp;: {!Quote.CreatedBy.Email}</p>-->
+                          <br/>
+                          <!-- <div class="bigSpaceAfter"><p>&nbsp;</p></div> -->
+                          <br/>
+                     <div class="bigSpaceAfter"><p>Signature :</p></div>
+                     
+                      
+                     <div class="ButagazCachet">
+                     <p> Pour Butagaz : votre Distributeur Butagaz:</p>
+                     <br/>
+                       <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                       <br/>
+                     <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                     </div>
+                             
+                 </div>
+                 
+                 <div class="ClientSignature">
+                       <p class="nospace">Nom et prénom du client&nbsp;: {!Quote.Opportunity.DO_Name__c}</p>
+                       <br/>
+                       <p class="SpaceBefore">Date : <apex:outputtext value="__/__/____"/> </p>
+                       <br/>
+                       <p>et Signature (1)&nbsp;:</p>
+                       <br/>
+                       <br/>
+                       <br/>
+                       <br/>
+                       <br/>
+                       <br/>                  
+                       <p> (1) Signature à faire précéder de la mention manuscrite  lu et approuvé</p>
+    
+                 </div> 
+            
+         
+             </div>
+             <div class="clear"><p class="smallNote" Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Un exemplaire de chaque barème susvisé est joint au présent devis.</p>
+             <p class="smallNote"> Le présent document est sans valeur contractuelle et ne peut en aucun cas se substituer à la conclusion d'un contrat de fourniture de gaz propane en citerne avec Butagaz.</p>
+             <p class="smallNote" Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Les tarifs indiqués dans cette proposition sont valables pendant la période de validité du présent devis, sauf modification des barèmes susvisés. </p>
+              
+            </div>  
+            </div>
+            <div class="clear"/>  
+                
+        </div>
+       
+       
+</div>
+
+   
+</apex:page>

@@ -1,0 +1,507 @@
+<apex:page standardcontroller="Account" extensions="VFC_RebateSelector" lightningStylesheets="false" action="{!initializePage}" docType="html-5.0" >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    
+<!-- <apex:page lightningStylesheets="true"> -->
+    
+    <!-- <style>
+        .ct{
+            text-align:center;
+        }
+    </style> -->
+    <!-- <style type="text/css">
+        .bPageBlock .pbTitle {
+            width: 100%;    
+            text-align: center;
+        }
+    </style> -->
+    
+    <style>
+        /* Hide Submit for approval button */
+        input.btn[name="piSubmit"] {
+           display :none;
+        }
+    </style>
+    
+    
+    
+    <script type="text/javascript">
+        $.noConflict();
+        
+        function buttonsEnabled(enabled) {
+            // retrieve all of the buttons or links on the page
+            // with the css class of btn
+            var $buttons = jQuery('.btn');
+            if (enabled === false) {
+                // add the btnDisabled class to give it the look of being disabled
+                // add the disabled attribute to actually disable interactability
+                $buttons.toggleClass('btnDisabled', true).attr('disabled', 'disabled');
+            } else {
+                // remove the css class and the disabled attribute
+                $buttons.toggleClass('btnDisabled', false).attr('disabled', null);
+            } 
+        }
+        
+        function buttonsDisabled() {
+            
+            buttonsEnabled(false);
+            
+            // return false to prevent the click from posting the form a second time
+            return false;
+        }
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+        function stopStatus(){
+            $dialog.dialog('close');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+    </script>
+    
+    <script>
+        (function($) {
+            $(document).ready(function() {
+                
+                $('.quantityClass, .priceClass').live('change', function() {
+                    console.log('change');
+                    var defaultedFloat = function(s) {
+                        if (s !== null && s !== '') {
+                            var r = parseFloat(s);
+                            if (!isNaN(r)) return r;
+                        }
+                        return 0;
+                    };
+        
+                    // Recalculate the row
+                    var tr = $(this).closest('tr');
+                    var q = tr.find('.quantityClass');
+                    var p = tr.find('.priceClass');
+                    var t = tr.find('.totalClass');
+                    // Better handling of rounding may be needed
+                    t.text((defaultedFloat(q.val()) * defaultedFloat(p.val())).toFixed(2));
+                    
+                });
+            });
+        })(jQuery.noConflict());
+    </script>
+
+    <apex:slds />
+
+    <apex:sectionheader title="{!Account.AccountNumber} - {!Account.Name} {!IF(onlyShowMode, ' - ' + oQuote.QuoteNumber,'')}" subtitle="Sélection de {!IF(rebateType=='REBATE', 'la remise','l avoir')}"/>
+    <apex:pageMessages id="mainMsg" showDetail="false" rendered="true"/>
+    
+    <apex:form id="form" rendered="{!showForm}">
+    <!-- <apex:form id="form" rendered="true"> -->
+        
+        <!-- The script must be rerendered so the value is refreshed from the controller -->
+        <apex:outputPanel id="runCalloutPanel">
+            <script>
+                function performCallOutMethodIfSuccess(){
+                    var runCalloutVar = {!runCalloutAction};
+                    
+                    if(runCalloutVar === true) {
+                        CallWebService_JS();
+                    } else {
+                        stopStatus();
+                        buttonsEnabled(true);
+                    }
+                }
+            </script>
+        </apex:outputPanel>
+        
+        
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+        <apex:pageblock mode="maindetail"  id="RebatesPageBlock">
+            <!-- <apex:pageMessages showDetail="false"/> -->
+            
+            <apex:outputPanel layout="none" rendered="true" id="CurrentRebatesPanel">
+                <apex:pageBlock title="Situation actuelle" id="selectBlock">
+                    <apex:pageblockbuttons location="Top" >
+                        <apex:outputPanel id="topButtons">
+                            <apex:actionFunction action="{!createRelatedRecords}" name="InsertRecord_JS" status="Status1" reRender="statuses, mainMsg, runCalloutPanel" oncomplete="performCallOutMethodIfSuccess();"/> 
+                            <apex:actionFunction action="{!initRebatesFromSAP}" name="CallWebService_JS" status="Status2" reRender="statuses, mainMsg, topButtons, panelCurrent, pgb_TargetRebate, pgb_SelectCredit, pgb_TargetCredit, pgb_CreditComment, pgb_Comment, pgb_Attachment, rlProcessSteps" oncomplete="stopStatus();buttonsEnabled(true);"/>
+                            
+                            <input name="InitSAP" class="btn" type="button" value="{!IF(Account.Activity_Domain__r.ExternalID__c==41, 'Initialiser','Récupérer les informations du contrat')}" onclick="startStatus();InsertRecord_JS();buttonsDisabled();return false;" style="display:{!IF(!onlyShowMode && !bInitSAPDone, '', 'none')};" />
+                            
+                            <apex:actionFunction action="{!redirectToLAT_MAIN}" name="redirectToLAT_MAIN_JS" status="Status_LAT_MAIN" reRender="mainMsg" oncomplete="stopStatus();buttonsEnabled(true);"/>
+                            <input name="SubmitLatitude" class="btn" type="button" value="Enregistrer et demander approbation latitude" onclick="startStatus();redirectToLAT_MAIN_JS();buttonsDisabled();return false;" style="display:{!IF(!onlyShowMode && bInitSAPDone, '', 'none')};" />
+                            
+                            <apex:actionFunction action="{!postToSAP}" name="postToSAP_JS" status="Status_PostToSAP" reRender="mainMsg, topButtons" oncomplete="stopStatus();buttonsEnabled(true);"/>
+                            <input name="SendToSAP" class="btn" type="button" value="Envoyer vers SAP" onclick="startStatus();postToSAP_JS();buttonsDisabled();return false;" style="display:{!IF(onlyShowMode && !oQuote.Sent_To_SAP__c, '', 'none')};" />
+                            
+                            <apex:actionFunction action="{!initCreditTable}" name="initCreditTable_JS" status="modalStatus" reRender="pgb_TargetCredit, IdTableCreditProductToAdd" />
+                            
+                            
+                            <apex:actionstatus id="RebatesCancel">
+                                <apex:facet name="start">
+                                    <apex:commandbutton value="{!$Label.pricing_cancel}" disabled="true"/>
+                                </apex:facet>
+                                <apex:facet name="stop">
+                                    <apex:commandbutton value="{!$Label.pricing_cancel}" action="{!cancel}" status="modalStatus" style="display:{!IF(!onlyShowMode, '', 'none')};"/>
+                                </apex:facet>
+                            </apex:actionstatus>
+                            
+                            <!-- Specific button to redirect to the quote if we came from there -->
+                            <apex:commandbutton value="{!$Label.pricing_back}" action="{!redirectToQuoteDetail}" status="modalStatus" style="display:{!IF(onlyShowMode, '', 'none')};"/>
+                            
+                            
+                            <apex:outputPanel id="statuses"> 
+                                <apex:actionStatus id="Status1" startText="...Création des enregistrements..." />
+                                <apex:actionStatus id="Status2" startText="...Récupération des informations de SAP..." />
+                                <apex:actionStatus id="Status_LAT_MAIN" startText="...Calcul des latitudes en cours..." />
+                                <!-- <apex:actionStatus id="Status_Simu_LAT" startText="...Simulation des latitudes en cours..." /> -->
+                                <apex:actionStatus id="Status_PostToSAP" startText="...Envoi de {!IF(rebateType=='REBATE', 'la remise','l avoir')} vers SAP..." />
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </apex:pageblockbuttons>
+                    <apex:pageBlockSection rendered="{!Account.Activity_Domain__r.ExternalID__c==42}">
+                        <apex:outputField value="{!Account.Scale__c}"/>
+                        <apex:outputText label="Barème produit" value="{!productScale}"/>
+                        <apex:outputField value="{!Account.Groupement__c}"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection rendered="{!Account.Activity_Domain__r.ExternalID__c==41}">
+                        <apex:outputField value="{!Account.Channel__c}"/>
+                        <apex:outputField value="{!Account.Sub_Channel__c}"/>
+                        <apex:outputField value="{!Account.GR_PRODUCT_SCALE__c}"/>
+                        <apex:outputField label="Hiérarchie" value="{!Account.Parent.AccountNumber}"/>
+                        <!--<apex:outputText label="Barème produit" value="{!productScale}"/>-->
+                        <apex:pageBlockSectionItem rendered="true"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+
+                    <!-- If RebateType == Credit : Display reason and date -->
+                    <apex:pageBlockSection rendered="{! onlyShowMode && rebateType=='CREDIT' }">
+                        <apex:outputField value="{!oQuote.Opportunity.Reason__c}"/>
+                        <apex:outputField value="{!oQuote.Credit_Price_Date__c}"/>
+                        <apex:outputField value="{!oQuote.Credit_Comment_For_Customer__c}"/>
+                        
+                        <apex:pageBlockSectionItem rendered="true"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+                    
+                    
+                    <apex:outputpanel id="panelCurrent">
+                        
+                        <apex:pageBlockTable value="{!currentQLIs}" var="curQli" id="pgbTbl_Current" style="text-align:left;" rendered="{! currentQLIs != null && (bInitSAPDone && !onlyShowMode && Account.Activity_Domain__r.ExternalID__c==42) || (onlyShowMode) }" >
+                            <apex:column headerValue="PTL" value="{!curQli.Quote_PTL__r.PTL_Name__c}" style="text-align:left;"/>
+                            
+                            <!-- Rebate fields -->
+                            <apex:column headerValue="{!$ObjectType.QuoteLineItem.fields.Price_List_HT__c.label}" rendered="{! rebateType=='REBATE' }">
+                                <apex:outputField value="{!curQli.Price_List_HT__c}" rendered="{! NOT(curQli.PricebookEntry.Product2.MonthlyPriceDisplay__c) }" />
+                                <apex:outputText value="{0, number, 0.00 €}" rendered="{! curQli.PricebookEntry.Product2.MonthlyPriceDisplay__c }">
+                                    <apex:param value="{!(curQli.Price_List_HT__c/12)}" />
+                                </apex:outputText>
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.QuoteLineItem.fields.Price_List_TTC__c.label}" rendered="{! rebateType=='REBATE' }">
+                                <apex:outputField value="{!curQli.Price_List_TTC__c}" rendered="{! NOT(curQli.PricebookEntry.Product2.MonthlyPriceDisplay__c) }" />
+                                <apex:outputText value="{0, number, 0.00 €}" rendered="{! curQli.PricebookEntry.Product2.MonthlyPriceDisplay__c }">
+                                    <apex:param value="{!(curQli.Price_List_TTC__c/12)}" />
+                                </apex:outputText>
+                            </apex:column>
+                            
+                            <apex:column style="text-align:left;" rendered="{! rebateType=='REBATE' }">
+                                <apex:facet name="header">RCE</apex:facet>
+                                <apex:outputText value="{!curQli.RCE_Rebate_TTC__c}"/>
+                            </apex:column>
+                            <apex:column headerValue="Type de RCE" value="{!curQli.Reason_For_Order__c}" style="text-align:left;" headerClass="ct" rendered="{! onlyShowMode && rebateType=='REBATE' }"/>
+                            <apex:column headerValue="RCOM" value="{!curQli.Commercial_Rebate_TTC__c}" style="text-align:left;" headerClass="ct" rendered="{! !onlyShowMode && rebateType=='REBATE' }"/>
+                            <apex:column headerValue="RCONJ" value="{!curQli.Cyclical_Rebate_TTC__c}" style="text-align:left;" rendered="{! rebateType=='REBATE' }"/>
+                            <apex:column headerValue="Durée RCONJ" value="{!curQli.Cyclical_Rebate_Months__c}" style="text-align:left;" rendered="{! rebateType=='REBATE' }"/>
+                            <apex:column headerValue="Date de début de remise" value="{!curQli.Rebate_Starting_Date__c}" style="text-align:left;" rendered="{! onlyShowMode && rebateType=='REBATE' }"/>
+                            <apex:column headerValue="RCOM Groupement" value="{!curQli.Group_Commercial_Rebate_TTC__c}" style="text-align:left;" rendered="{! !onlyShowMode && rebateType=='REBATE' }"/>
+                            <apex:column headerValue="RCONJ Groupement" value="{!curQli.Group_Cyclical_Rebate_TTC__c}" style="text-align:left;" rendered="{! !onlyShowMode && rebateType=='REBATE' }"/>
+                            <apex:column headerValue="Durée RCONJ Groupement" value="{!curQli.Group_Cyclical_Rebate_lenght_in_months__c}" style="text-align:left;" rendered="{! !onlyShowMode && rebateType=='REBATE' }"/>
+                            
+                            <!-- Credit fields -->
+                            <apex:column headerValue="Famille" value="{!curQli.PricebookEntry.Product2.Family}" rendered="{! rebateType=='CREDIT' }"/>
+                            <apex:column headerValue="Article" value="{!curQli.PricebookEntry.Product2.Name}" rendered="{! rebateType=='CREDIT' }"/>
+                            <apex:column headerValue="Quantité" value="{!curQli.Credit_Quantity__c}" rendered="{! rebateType=='CREDIT' }"/>
+                            <apex:column headerValue="Prix unitaire HT" value="{!curQli.Credit_Unit_Price_HT__c}" rendered="{! rebateType=='CREDIT' }"/>
+                            <apex:column headerValue="Prix total HT" value="{!curQli.Credit_Total_Price_HT__c}" rendered="{! rebateType=='CREDIT' }"/>
+                        </apex:pageBlockTable>
+                        
+                    </apex:outputpanel>
+                    
+                </apex:pageblock>
+                
+                <br/>
+                
+                <!-- Target for rebateType=='REBATE' -->
+                <apex:pageBlock title="Sélection du type de remise à créer" id="pgb_TargetRebate" rendered="{! bInitSAPDone && NOT(onlyShowMode) && rebateType=='REBATE' }">
+                    
+                    <apex:pageBlockSection >
+                        <apex:pageBlockSectionItem rendered="true"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+                    
+                    <apex:pageBlockTable value="{!TargetQLIs}" var="targetQLI" style="text-align:center;" >
+                        
+                        <apex:column headerValue="PTL" value="{!targetQLI.qli.Quote_PTL__r.PTL_Name__c}"/>
+                        
+                        <apex:column >
+                            <apex:facet name="header">RCE/Avoir</apex:facet>
+                            <apex:inputText value="{!targetQLI.tempRCE}" />
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">
+                                <apex:outputPanel >
+                                    <apex:outputText value="Type de RCE "/>
+                                    <apex:image value="/s.gif" styleClass="helpIcon" title="{!$ObjectType.QuoteLineItem.Fields.Reason_For_Order__c.InlineHelpText}"/>
+                                </apex:outputPanel>
+                            </apex:facet>
+                            
+                            <apex:selectList value="{!targetQLI.tempReasonForOrder}" multiselect="false" size="1">
+                                <apex:selectOptions value="{!RCEReasons}" />
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column rendered="{!NOT(isGECSansRCONJ)}" >
+                            <apex:facet name="header">RCONJ</apex:facet>
+                            <apex:inputText value="{!targetQLI.tempRCONJ}" />
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Date de début</apex:facet>
+                            <apex:input type="date" value="{!targetQLI.tempStartDate}" />
+                        </apex:column>
+                        <apex:column rendered="{!NOT(isGECSansRCONJ)}" >
+                            <apex:facet name="header">Durée RCONJ</apex:facet>
+                            <apex:selectList value="{!targetQLI.tempDuration}" multiselect="false" size="1">
+                                <apex:selectOptions value="{!durations}" />
+                            </apex:selectList>
+                        </apex:column>
+                        
+                    </apex:pageBlockTable>
+                    
+                </apex:pageBlock>
+
+                <!-- Target for rebateType=='CREDIT' -->
+                <apex:pageBlock title="Sélection du type d'avoir à créer" id="pgb_SelectCredit" rendered="{! bInitSAPDone && NOT(onlyShowMode) && rebateType=='CREDIT' }"> <!-- rendered="{! bInitSAPDone && NOT(onlyShowMode) && rebateType=='CREDIT' }"-->
+                    
+                    <apex:pageBlockSection >
+                        <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+
+                    <apex:pageBlockSection >
+                        <apex:selectList label="Raison de commande" value="{!selectedCreditReason}" onchange="initCreditTable_JS()" multiselect="false" size="1">  <!-- onchange="filterProducts_JS()" -->
+                            <apex:selectOptions value="{!CreditReasons}" />
+                            <apex:actionSupport event="onchange" reRender="IdTableCreditProductToAdd, pgb_TargetCredit"/>
+                        </apex:selectList>
+
+                        <apex:input type="date" label="Date de prix" value="{!creditPriceDate}" />
+                        
+                        <apex:pageBlockSectionItem rendered="true"/>
+                        <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+
+                    <!-- Line to add products to the QLIs table -->
+                    <apex:outputPanel id="IdTableCreditProductToAdd"> <!-- rendered="{! NOT(onlyShowMode) && selectedCreditReason != '' }" -->
+                    <apex:pageBlockTable value="{!creditProductToAdd}" var="prd" style="text-align:center;" rendered="{! NOT(onlyShowMode) && selectedCreditReason != '' }">
+
+                        <apex:column headerValue="PTL">
+                            <apex:selectList id="ptl" value="{!prd.selectedPTL}" size="1">
+                                <apex:selectOptions value="{!QPTLOptions}"></apex:selectOptions>
+                            </apex:selectList>
+                        </apex:column>
+
+                        <apex:column headerValue="Famille">
+                            <apex:selectList value="{!prd.tempSelectedProductFamily}" size="1">
+                                <apex:selectOptions value="{!productFamilyOptions}"/>
+                                <apex:actionSupport event="onchange" reRender="creditProducts, creditNoFamilySelected, creditNoProducts" status="modalStatus"/>
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column headerValue="Article">
+                            <apex:outputPanel id="creditProducts">
+                                <apex:selectList value="{!prd.selectedProduct}" size="1" rendered="{! prd.selectedProductFamily != '' && prd.productOptions.size > 0 }">
+                                    <apex:selectOptions value="{!prd.productOptions}"/>
+                                </apex:selectList>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="creditNoFamilySelected">
+                                <apex:outputText value="Sélectionnez une famille" rendered="{! prd.selectedProductFamily == '' }"/>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="creditNoProducts">
+                                <apex:outputText value="Pas d'article pour cette famille" rendered="{! prd.selectedProductFamily != '' && prd.productOptions.size == 0 }"/>
+                            </apex:outputPanel>
+                        </apex:column>
+                        
+                        <apex:column >
+                            <apex:facet name="header">Quantité</apex:facet>
+                            <apex:input type="number" html-step="0.001" value="{!prd.tempCreditQuantity}" styleClass="quantityClass"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Prix unitaire HT</apex:facet>
+                            <apex:input type="number" html-step="0.01" value="{!prd.tempCreditUnitPriceHT}" styleClass="priceClass"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Prix total HT</apex:facet>
+                            <apex:outputtext styleClass="totalClass"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:commandbutton value="+" status="modalStatus" action="{!prd.add}" Oncomplete="" rerender="pgb_TargetCredit, mainMsg" title="{!$Label.pricing_addProduct}"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    </apex:outputPanel>
+                    
+                </apex:pageBlock>
+
+                <apex:pageBlockSection >
+                    <apex:pageBlockSectionItem rendered="true"/>
+                    <apex:pageBlockSectionItem rendered="true"/>
+                </apex:pageBlockSection>
+                
+                <apex:pageBlock title="Avoir à créer" id="pgb_TargetCredit" rendered="{! bInitSAPDone && NOT(onlyShowMode) && rebateType=='CREDIT' && selectedCreditReason != '' }">
+                    <!--<apex:outputPanel id="IdTableTargetQLIsCredit">-->
+                    <apex:pageBlockTable value="{!TargetQLIs}" var="targetQLI" style="text-align:center;" id="tableTargetQLIs">
+                        <apex:variable value="{!0}" var="counter"/>
+                        
+                        <apex:column headerValue="">
+                            <apex:commandbutton value="-" status="modalStatus" action="{!removeTargetCreditRow}" rerender="pgb_TargetCredit" disabled="{!onlyShowMode}">
+                                <apex:param name="index" value="{!counter}"/>
+                            </apex:commandbutton>
+                            <apex:variable var="counter" value="{!counter+1}"/>
+                        </apex:column>
+
+                        <apex:column headerValue="PTL" value="{!targetQLI.tempPTL}"/>
+                        
+                        <apex:column headerValue="Famille" value="{!targetQLI.tempProductFamily}"/>
+                        <apex:column headerValue="Article" value="{!targetQLI.tempProduct}"/>
+                        
+                        <apex:column >
+                            <apex:facet name="header">Quantité</apex:facet>
+                            <apex:input type="number" html-step="0.001" value="{!targetQLI.tempCreditQuantity}" styleClass="quantityClass"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Prix unitaire HT</apex:facet>
+                            <apex:input type="number" html-step="0.01" value="{!targetQLI.tempCreditUnitPriceHT}" styleClass="priceClass"/>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Prix total HT</apex:facet>
+                            <apex:outputText value="{!targetQLI.tempCreditTotalPriceHT}" styleClass="totalClass"/>
+                        </apex:column>
+                        
+                    </apex:pageBlockTable>
+                    <!--</apex:outputPanel>-->
+                </apex:pageBlock>
+
+                <br/>
+                
+                <apex:pageBlock title="Texte sur avoir (à destination du Client)" id="pgb_CreditComment" rendered="{! bInitSAPDone && rebateType=='CREDIT' }">
+                    <!-- Text to add as a Credit Comment to the quote -->
+                    <apex:inputText value="{!oQuote.Credit_Comment_For_Customer__c}"  maxlength="70" style="width:600px"/>
+                </apex:pageBlock>
+
+                <br/>
+
+                <apex:pageBlock title="Commentaire" id="pgb_Comment" rendered="{! bInitSAPDone }">
+                    <!-- Text to add as a note related to the quote -->
+                    <p>Titre : </p><apex:inputText value="{!inputNoteTitle}"  maxlength="80" />
+                    <br/><br/>
+                    <p>Commentaire :</p><apex:inputTextarea id="txtAreaNote" value="{!inputNoteTextArea}" rows="5" cols="200" />
+                </apex:pageBlock>
+
+                <!-- Display add attachment block if rebateType == 'CREDIT' -->
+                <!-- upload v1 -->
+                <!--
+                <apex:pageBlock title="Pièce(s) jointe(s)" id="pgb_Attachment" rendered="{! bInitSAPDone && rebateType=='CREDIT' }">
+                    <apex:inputFile value="{!attachment.body}" fileName="{!attachment.Name}" />
+                    <apex:commandButton value="Sauvegarder" action="{!SaveAttachment}"/>
+                </apex:pageBlock>
+                -->
+                <!-- upload v2 -->
+                <!--
+                <apex:pageBlock title="Pièce(s) jointe(s)" id="pgb_Attachment" rendered="{! bInitSAPDone && rebateType=='CREDIT' }">
+
+                    <apex:pageBlockButtons >
+                        <apex:commandButton action="{!upload}" value="Sauvegarder"/>
+                    </apex:pageBlockButtons>
+
+                    <apex:pageBlockSection showHeader="false" columns="2" id="block1">
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="File Name" for="fileName"/>
+                            <apex:inputText value="{!attachment.name}" id="fileName"/>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="File" for="file"/>
+                            <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file"/>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="Description" for="description"/>
+                            <apex:inputTextarea value="{!attachment.description}" id="description"/>
+                        </apex:pageBlockSectionItem>
+
+                    </apex:pageBlockSection>
+
+                </apex:pageBlock>
+                -->
+            </apex:outputPanel>
+        </apex:pageblock>
+    </apex:form>
+    
+    <!--
+    <apex:outputPanel id="rlNotes">
+        <apex:relatedList list="CombinedAttachments" subject="{!$CurrentPage.parameters.quoteId}" rendered="{!onlyShowMode}" />
+    </apex:outputPanel>
+    -->
+    <!--
+    <apex:listViews type="CombinedAttachments" rendered="{!onlyShowMode}">
+        <apex:facet name="header">&nbsp;</apex:facet>
+    </apex:listViews>
+    -->
+    <br/>
+    
+    <apex:outputPanel id="rlProcessSteps">
+        <apex:relatedList list="ProcessSteps" subject="{!$CurrentPage.parameters.quoteId}" rendered="{! onlyShowMode }" />
+    </apex:outputPanel>
+    
+    <!-- <script>
+        function checkAll(cb)
+        {
+            var inputElem = document.getElementsByTagName("input");
+            for(var i=0; i<inputElem.length; i++)
+            {
+                if(inputElem[i].id.indexOf("checkedone")!=-1)
+                inputElem[i].checked = cb.checked;
+            }
+        }
+    </script> -->
+    
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}" style="display:none">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}" />
+        </div>
+    </div>
+        
+    <script>
+        var $dialog;
+        jQuery(document).ready(function($) {
+            $(function() {
+            
+                $dialog =jQuery("#dialog-modal")
+                    .dialog({
+                        autoOpen: false,
+                        height: 150,
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false
+                });
+              
+            });
+        });
+    </script>
+    
+    
+</apex:page>

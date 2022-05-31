@@ -1,0 +1,37 @@
+<apex:page title="PDF Viewer" controller="GDB_DocaPostPdfViewerController" showHeader="false" sidebar="false">
+    <apex:includeLightning />
+    <apex:outputPanel layout="block">
+    <div id="lightning"></div>
+    <script type="text/javascript">
+        function maxHeight() {
+            document.getElementById("lightning").style.height = parent.window.innerHeight + 'px';
+        }
+        window.onload = function() { maxHeight(); }
+        window.onresize = function() { maxHeight(); }
+        
+        var invoiceId = null;
+        
+        if(typeof window.parent !== 'undefined' && window.parent !== null
+        && typeof window.parent.location !== 'undefined' && window.parent.location !== null
+        && typeof window.parent.location.search !== 'undefined' && window.parent.location.search !== null) {
+            var regex = new RegExp('[\\?&]id=([^&#]*)');
+            var results = regex.exec(window.parent.location.search);
+            if(results !== null) {
+                invoiceId = decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+        }
+        
+        $Lightning.use("c:GDB_DocaPostPdfViewerApp", function() {
+            $Lightning.createComponent(
+                "c:GDB_DocaPostPdfViewer",
+                { 
+                    "invoiceId": invoiceId
+                },
+                "lightning",
+                function(cmp) { }
+            );
+        });
+
+    </script>
+    </apex:outputPanel>
+</apex:page>

@@ -1,0 +1,327 @@
+<apex:component controller="FicheStandardiseeController">
+    
+    <apex:attribute name="currentQuote"
+                    type="Quote"
+                    assignTo="{!oQuote}"
+                    required="true"
+                    description="Current quote we're working on" />
+    
+    
+    <!-- <html> -->
+        <head>
+            <!-- <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+                <style type="text/css" media="all">
+            </style> -->
+            
+            <style type="text/css">       
+                table{border-width:1px; border-color:black}
+            </style>
+        </head>
+    <!-- </html> -->
+    
+    <!-- Empty field to execute the method retrieving the quote data because component attributes are not yet available in the constructor -->
+    <apex:outputText style="height: 1px;" value="{!QuoteId}"/>
+    
+    <!-- <body> -->
+        
+        <!-- <style type="text/css">       
+            table{border-width:1px; border-collapse:collapse; border-color:black; border-style:none}
+        </style> -->
+    
+        
+        <div id="Title" >
+            <h1>Fiche standardisée d'information Butagaz</h1>
+            
+            <table style="width:95%; border:0">
+            <tr>
+                <td style="width:47%; text-align:left; vertical-align:middle">Date de validité de l'offre : {!DateOfValidityOfTheOffer}</td>
+                <td style="width:48%; text-align:right; vertical-align:middle">OFFRE GAZ EN CITERNE&nbsp;
+                    <span style="display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c!='OldContracts','','none')}">{!oQuote.Opportunity.T_Pack__c}</span>
+                    <span style="display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c=='OldContracts','','none')}"><apex:outputField value="{!oQuote.Product_Scale__c}"/></span>
+                    <span style="display:{!IF(oQuote.Market_type__c=='PRO','','none')}">PRO</span>
+                </td>
+            </tr>
+            <tr>
+                <td>{!IF(oQuote.Market_type__c=='PRO', 'Les prix indiqués sont en HT.', '')}</td>
+                <td style="width:48%; text-align:right; vertical-align:middle; display:{!IF(oQuote.T_RollUp_BioPercentage__c>0,'','none')}">{!'Option ' & TEXT(oQuote.T_Rollup_BioPercentage__c) & '% biopropane'}</td>
+                <td style="width:48%; text-align:right; vertical-align:middle; display:{!IF(oQuote.T_RollUp_CompenseCarbone__c>0,'','none')}">Option 100% Compensé Carbone</td>
+            </tr>
+            <!-- <tr>
+                <td></td>
+                <td style="width:48%; text-align:right; vertical-align:middle; display:{!IF(oQuote.T_RollUp_CompenseCarbone__c>0,'','none')}">Option 100% Compensé Carbone</td>
+            </tr> -->
+            </table>
+            
+            <!-- <p>Cette fiche doit vous permettre de comparer les offres commerciales des différents fournisseurs.<span style="display:{!IF(oQuote.Market_type__c=='PRO','','none')}"><br/>Les prix indiqués sont en HT.</span></p> -->
+            <!-- <p style="display:{!IF(oQuote.Market_type__c=='PRO','','none')}">Les prix indiqués sont en HT.</p> -->
+        </div>
+        
+        <br/>
+        <!-- <div class="contractSection"> -->
+        <!-- <table style="width:95%; border:1px"> -->
+        <table class="ButagazTable">
+        <!-- <table class="ButagazTable" style="border-width:1px; border-color:black"> -->
+        <!-- <table> -->
+            <tr>
+                <th rowspan="{!rowspanOfferCharacteristics}" style="width:12%; text-align:center; vertical-align:middle">Caractéristiques de l'offre</th>
+                <th rowspan="{!rowspanOfferCharacteristics}" style="width:10%; vertical-align:middle"></th>
+                <td style="width:33%; vertical-align:middle; border: 1px solid black">Durée du contrat (en année)</td>
+                <td style="width:44%; text-align:center; vertical-align:middle; border: 1px solid black">{!oQuote.Contract_Duration__c}</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Le mode de livraison du gaz de pétrole liquéfié en vrac</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputField value="{!oQuote.Shipping_Condition__c}"/>&nbsp;{!shippingCondition}</td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Caractéristiques du matériel de stockage</td>
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!tankCharacteristicsList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <!-- // 20211026 : SP464 : Butagaz chose not to sell tanks to B2C customers anymore -->
+            <tr style="display:{!IF(oQuote.Market_type__c=='PRO','','none')}">
+                <td style="vertical-align:middle">Modalités de vente de la citerne</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!modaliteVenteCiterne}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Propriété du matériel de stockage</td>
+                <!-- <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!tankProperty}" escape="false"/></td> -->
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!tankPropertyList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <th rowspan="22" style="text-align:center; vertical-align:middle">Présentation de l'offre</th>
+                <th rowspan="3" style="text-align:center; vertical-align:middle">Prix de la fourniture de GPL</th>
+                <td style="vertical-align:middle">Prix de la fourniture de GPL à la tonne (1)</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!gplPricePerTon}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Montant des frais de livraison</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!shippingAmount}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Modalités de modification du prix du GPL</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!modaliteModifPrix}" escape="false"/></td>
+            </tr>
+            <tr>
+                <th rowspan="{!rowspanTankInstallation}" style="text-align:center; vertical-align:middle">Frais de mise à disposition de la citerne</th>
+                <td style="vertical-align:middle">Montant des frais d'installation de la citerne (2)</td>
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!tankInstallationPriceList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+               </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Montant des frais annuels de la location de la citerne</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!tankAnnualRentPrice}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Montant du dépôt de garantie</td>
+                <!-- <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!warrantyDepositPrice}" escape="false"/></td> -->
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!warrantyDepositPriceList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle; display:{!IF(rowspanTankInstallation=3,'none','')}">Montant des frais de retrait de la citerne déjà en place</td>
+                <td style="text-align:center; vertical-align:middle; display:{!IF(rowspanTankInstallation=3,'none','')}">
+                    <apex:repeat var="v" value="{!tankRemovalOrMovingAtContractStartPriceList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <th style="vertical-align:middle">Frais de maintenance et entretien de la citerne</th>
+                <td style="vertical-align:middle">Montant annuel des frais de maintenance et entretien de la ou des citernes</td>
+                <!-- <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!tankMaintenanceAndUpkeepPriceList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td> -->
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!tankMaintenanceAndUpkeepPrice}" escape="false"/></td>
+            </tr>
+            <tr>
+                <th rowspan="6" style="text-align:center; vertical-align:middle">Frais de sortie du contrat</th>
+                <td style="vertical-align:middle">Montant des frais de retrait de la citerne<span style="display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c=='SOLO','','none')}">&nbsp;(5)</span></td>
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!tankRemovalOrMovingAtContractEndPriceList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Montant des frais de neutralisation éventuelle de la citerne (3)<span style="display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c=='SOLO','','none')}">&nbsp;(5)</span></td>
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!tankNeutralizationPriceList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="{!rowspanPumpingPrice}" style="vertical-align:middle">Montant des frais de repompage éventuel du gaz<span style="display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c=='SOLO','','none')}">&nbsp;(5)</span></td>
+                <!-- <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!pumpingPriceAtClient}" escape="false"/></td> -->
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!pumpingPriceAtClientList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <!-- <td style="text-align:center"><apex:outputText value="{!pumpingPriceAtWorkshop}" escape="false"/></td> -->
+                <!-- <td style="text-align:center; vertical-align:middle; display:{!IF(rowspanPumpingPrice=1,'none','')}"><apex:outputText value="{!pumpingPriceAtWorkshop}" escape="false"/></td> -->
+                <!-- SHAREPOINT 422 DOUVES | MLC 20210608 -->
+               <!-- <td style="text-align:center; vertical-align:middle; display:{!IF(rowspanPumpingPrice=1,'none','')}">
+                    <apex:repeat var="v" value="{!pumpingPriceAtWorkshopList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>-->
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Montant de la pénalité en cas de résiliation anticipée avant mise en place de la citerne</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!penaltyBeforeInstallPrice}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Montant de la pénalité en cas de résiliation anticipée après mise en place de la citerne</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!penaltyAfterInstallPrice}" escape="false"/></td>
+            </tr>
+            <tr>
+                <th style="text-align:center; vertical-align:middle">Autres frais</th>
+                <td style="vertical-align:middle">Montant des frais de dossier</td>
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!feesPrice}" escape="false"/></td>
+            </tr>
+            
+            
+            <!-- Ajouter section Options -->
+            <tr>
+                <!-- <th rowspan="{!rowspanOptionsDOM}" style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}">Option(s)</th> -->
+                <th rowspan="7" style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}">Option(s)</th>
+               <!-- <td style="vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}">Butagaz Assistance</td>
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}"><apex:outputText value="{!butagazAssistancePrice}" escape="false"/></td>-->
+            </tr>
+            <tr>
+                <td style="vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}">Echelonnement de la facture</td>
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}"><apex:outputText value="{!paymentSpread}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}">Prix Bloqué (coût annuel)</td>
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='DOM','','none')}"><apex:outputText value="{!lockedPrice}" escape="false"/></td>
+            </tr>
+            <tr>
+                <!-- <th rowspan="{!rowspanOptionsPRO}" style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='PRO','','none')}">Option(s)</th> -->
+                <th rowspan="4" style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='PRO','','none')}">Option(s)</th>
+                <td style="vertical-align:middle">Fourniture et installation de la jauge connectée</td>
+                <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!connectedGaugeSupplyAndInstallationList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle">Abonnement annuel jauge connectée</td>
+                <!-- <td style="text-align:center; vertical-align:middle">
+                    <apex:repeat var="v" value="{!connectedGaugeMonthlySubscriptionList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td> -->
+                <td style="text-align:center; vertical-align:middle"><apex:outputText value="{!connectedGaugeMonthlySubscription}" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle; ">Biopropane</td>
+                <!-- Biopropane -->
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.T_RollUp_BioPercentage__c>0,'','none')}">{! TEXT(oQuote.T_RollUp_BioPercentage__c) & '% biopropane'}</td>
+                <!-- No Biopropane -->
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.T_RollUp_BioPercentage__c==0,'','none')}"><apex:outputText value="Non souscrit" escape="false"/></td>
+            </tr>
+            <tr>
+                <td style="vertical-align:middle; display:{!IF(oQuote.Market_type__c=='PRO','','none')}">Compensation carbone</td>
+                <!-- CompenseCarbone -->
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='PRO' && oQuote.T_RollUp_CompenseCarbone__c>0,'','none')}"><apex:outputText value="Souscrit" escape="false"/></td>
+                <!-- No CompenseCarbone -->
+                <td style="text-align:center; vertical-align:middle; display:{!IF(oQuote.Market_type__c=='PRO' && oQuote.T_RollUp_CompenseCarbone__c==0,'','none')}"><apex:outputText value="Non souscrit" escape="false"/></td>
+            </tr>
+            
+        </table>
+        
+        <!-- Options -->
+        <!-- <table class="ButagazTable">
+            <tr>
+                <th rowspan="{!optionsRowSpan}" style="width:13%; border:none"></th>
+                <th rowspan="{!optionsRowSpan}" style="width:13%; border:none; text-align:center; vertical-align:middle">Options</th>
+                <td style="width:48%; text-align:right">Option1</td>
+            </tr>
+            <tr>
+                <td style="width:48%; text-align:right; display:none">Option2</td>
+            </tr>
+            <tr>
+                <td style="width:48%; text-align:right">Option3</td>
+            </tr>
+            <tr>
+                <td style="width:48%; text-align:right">Option4</td>
+            </tr>
+            <tr>
+                <td style="width:48%; text-align:right">Option5</td>
+            </tr>
+        </table> -->
+        
+        <!-- Mensualité ecoConfortique -->
+        <apex:outputPanel rendered="{!oQuote.Opportunity.T_Pack__c=='ECOCFT'}">
+            <br/>
+            <table class="ButagazTable">
+                <tr>
+                    <td style="width:12%; border:none"></td>
+                    <th style="width:43%; text-align:right">Mensualité ecoConfortique</th>
+                    <td style="width:44%; text-align:center; vertical-align:middle; border: 1px solid black"><apex:outputText value="{!ecocftMonthlyPrice}" escape="false"/></td>
+                </tr>
+            </table>
+        </apex:outputPanel>
+        
+        <br/>
+        <!-- <table style="width:98%; border:none"> -->
+        <table class="ButagazTable">
+            <tr>
+                <td style="width:12%; border:none"></td>
+                <th style="width:43%; text-align:right">Somme des frais sur la durée du contrat <br/> <span style="font-size: 75%;">(hors fourniture du GPL et avec retrait de la citerne en fin de contrat)</span></th>
+                <td style="width:44%; text-align:center; vertical-align:middle; border: 1px solid black"><apex:outputText value="{!sumOfFeesOverContractDuration}" escape="false"/></td>
+            </tr>
+        </table>
+        
+        <br/>
+        <!-- <table style="width:98%; border:none"> -->
+        <table class="ButagazTable">
+            <tr>
+                <td style="width:12%; border:none"></td>
+                <th style="width:43%; text-align:right">Estimation du coût annuel (4) <br/> <span style="font-size: 75%;">Pour une consommation annuelle estimée de {!estimatedConsumption}</span> <span style="font-size: 75%; display:{!IF(rebatesIncluded=false,'none','')}"><br/>Remises incluses </span></th>
+                <td style="width:44%; text-align:center; vertical-align:middle; border: 1px solid black">
+                   <apex:repeat var="v" value="{!finalAnnualCostEstimateList}">
+                        <apex:outputText value="{!v}" escape="false"/>
+                    </apex:repeat>
+                </td>
+            </tr>
+        </table>
+        <!-- </div> -->
+        <br/>
+        <p style="font-size: 70%; display:{!IF(oQuote.Market_type__c=='DOM' && (oQuote.Opportunity.T_Pack__c!='OPTIMO' && (oQuote.Opportunity.T_Pack__c=='IDEO' || oQuote.Opportunity.T_Pack__c=='SOLO' ||  oQuote.Opportunity.Client_Type__c == 'Renter')),'','none')}">(1) Le tarif basse saison (du 1er mai au 30 septembre) est inférieur de 50€ par tonne au tarif haute saison (du 1er octobre au 30 avril). Le prix barème indiqué est valable au jour de la signature du contrat. Il peut évoluer conformément à la clause contractuelle de modification du prix, sauf offre prix bloqué/fixe. Dans tous les cas, le prix peut subir les fluctuations des taxes et autres contributions obligatoires communes à tous les fournisseurs.</p>
+        <p style="font-size: 70%; display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c=='ECOCFT','','none')}">(1) Le prix de la fourniture de GPL est inclus dans la mensualité. Il sera réévalué une fois par an lors du bilan de l’année précédente du contrat, en fonction de la consommation du Client sur l’année précédente ainsi que de l’évolution de l’indice des prix à la consommation. Par ailleurs, le prix peut subir les fluctuations des taxes et autres contributions obligatoires communes à tous les fournisseurs.</p>
+        <p style="font-size: 70%; display:{!IF(oQuote.Market_type__c=='PRO' && (oQuote.DO_Groupement__c==null || (oQuote.DO_Groupement__c!=null && LEFT(oQuote.DO_Groupement__r.AccountNumber,5)!='PROFT')),'','none')}">(1) Le prix barème indiqué est valable au jour de la signature du contrat. Il peut évoluer conformément à la clause contractuelle de modification du prix. Dans tous les cas, le prix peut subir les fluctuations des taxes et autres contributions obligatoires communes à tous les fournisseurs.</p>
+        <p style="font-size: 70%; display:{!IF(oQuote.Market_type__c=='PRO' && LEFT(oQuote.DO_Groupement__r.AccountNumber,5)=='PROFT','','none')}">(1) Le prix indiqué correspond au prix fixe valable pendant une durée de 24 mois. Ce prix fixe est garanti à la condition que votre consommation soit comprise dans la tranche de l’estimatif de consommation annuelle définie ensemble à la signature du contrat. A échéance de cette période de 24 mois, il vous sera automatiquement appliqué le prix du barème en vigueur à cette date pour votre tranche de consommation, conformément aux conditions contractuelles. Dans tous les cas, le prix peut subir les fluctuations des taxes et autres contributions obligatoires communes à tous les fournisseurs.</p>
+         <p style="font-size: 70%; display:{!IF(oQuote.Market_type__c=='DOM' && (oQuote.Opportunity.T_Pack__c=='OPTIMO' || oQuote.Opportunity.Client_Type__c == 'Renter'),'','none')}">(1) Le prix  indiqué est valable au jour de la signature du contrat. Il peut évoluer conformément à la clause contractuelle de modification du prix. Dans tous les cas, le prix peut subir les fluctuations des taxes et autres contributions obligatoires communes à tous les fournisseurs.</p>
+        <p style="font-size: 70%;">(2) Hors prestations exceptionnelles (brise roche…) et repompage du gaz en cas d’adaptation de stockage.</p>
+        <p style="font-size: 70%;">(3) Seulement si retrait de la citerne est impossible.</p>
+        <p style="font-size: 70%;">(4) Cette estimation comprend l'ensemble des frais sur la durée du contrat rapportés à une année ainsi que la fourniture d'une quantité de GPL calculée au prix au jour de la conclusion du contrat et sur la base de la consommation estimée par le consommateur.<span style="display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Shipping_Condition__c=='02' && oQuote.Payment_spread__c!='ZM03','','none')}">&nbsp;Estimation calculée sur la base de commandes de plus de 651kg réalisées sur l’Espace Client.</span><span style="display:{!IF(oQuote.Payment_spread__c=='ZM03','','none')}">&nbsp;Calcul qui tient compte de l’option payante paiement en 3 fois.</span></p>
+        <p style="font-size: 70%; display:{!IF(oQuote.Market_type__c=='DOM' && oQuote.Opportunity.T_Pack__c=='SOLO','','none')}">(5) Pour information, frais facturés en cas de demande du client de retrait, de neutralisation ou de repompage du gaz.</p>
+        <br/>
+        <p style="font-size: 70%;">Conformément au 1er alinea de l'article L224-22, tout projet de modification des conditions contractuelles à l'initiative du professionnel est communiqué par écrit par ce professionnel au consommateur au moins un mois avant son entrée en vigueur, assorti de l'information, énoncée de manière claire, précise et visible, selon laquelle ce dernier peut, tant qu'il n'a pas expressément accepté les nouvelles conditions, résilier le contrat, sans pénalité de résiliation et sans droit à dédommagement, jusque dans un délai de trois mois après l'entrée en vigueur de la modification.</p>
+        
+        
+        
+    <!-- </body> -->
+    
+</apex:component>

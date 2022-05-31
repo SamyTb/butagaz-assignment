@@ -1,0 +1,11 @@
+<apex:page standardController="Quote" extensions="VFC_Quote" action="{!calculateAndSaveSautDeTranche}">
+    <apex:form >
+        <apex:inputHidden value="{!Quote.Id}"/> 
+        <apex:pageBlock title="Calcul du saut de tranche" >
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!back}" value="Retour"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

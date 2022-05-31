@@ -1,0 +1,487 @@
+<apex:page standardController="Quote" showHeader="false" extensions="VFC_Quotelineitem_01">
+<div id="containerGPLC"> 
+
+   <apex:image url="{!$Resource.test}" width="180" height="75"/>
+	
+	<div class="footerRight">
+			<p align="right">Code Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>     		
+	</div> 
+
+    <div class="footer"> 
+
+    <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+    <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre - APE 4671Z</p>
+    
+    </div>
+  
+    <div class="header">
+
+        <div class="ClientAddress">
+   
+            <p>{!Quote.Opportunity.DO_Salutation__c} {!Quote.Opportunity.DO_Name__c},</p>
+            <br/>
+            <p> {!Quote.Opportunity.DO_Street_n__c}&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp;{!Quote.Opportunity.DO_Street_type__c}&nbsp;{!Quote.Opportunity.DO_Street_name__c}</p>
+            <p><apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/></p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}</p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}</p>
+            <br/> <p>Date du Devis&nbsp;:&nbsp;{!PrettyDate}</p>
+        </div>
+
+    </div> 
+   
+    <div class="clear"/>
+    
+    <div class="contractSection">
+        <h1> CONTRAT DE FOURNITURE EN VRAC
+             POUR LA REVENTE AU DETAIL DE GAZ DE PETROLE LIQUEFIE
+             CLIENT {!Quote.Opportunity.DO_Name__c}
+        </h1>
+    </div>
+     
+    <!--apex:pageBlock rendered="{!Quote.Activity_Domain_Opportunity__c=='GPLc - Gepel' && Quote.Opportunity.Direct_Client__c==false && Quote.Opportunity.Account.Market_Type__c=='PRO' && Quote.Opportunity.Type_of_contract_GER__c!='Energiegaz' && Quote.Opportunity.Type_of_contract_GER__c!='Precigaz'}"--> 
+ 
+    <div class="contractSection">
+             
+            <p>ENTRE LES SOUSSIGNES :</p>
+            <p>BUTAGAZ, Société par Actions simplifiée au capital de 195 225 000 € inscrite au Registre du Commerce et des Sociétés de Nanterre, sous le N° 402 960 397, dont le siège social est à Levallois-Perret (92594), 47-53, rue Raspail, représentée par :</p>
+            <p>Représentée par Monsieur :  Antoine LAROCHE, Responsable Grands Comptes</p>
+            <p>ci-après dénommée BUTAGAZ</p><br  />
+            
+            <p>d'une part,</p><br  />
+           
+            <p>Et &nbsp;{!Quote.Opportunity.DO_Name__c}, au capital de {!Quote.Opportunity.DO_Capital__c} €, inscrite au Registre du Commerce et des Sociétés sous le N° {!Quote.Opportunity.DO_R_C_S_or_R_C_M_Number__c} dont le siège social est à </p>
+            
+             <br/>   
+            <p> {!Quote.Opportunity.DO_Street_n__c}&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp;{!Quote.Opportunity.DO_Street_type__c}&nbsp;{!Quote.Opportunity.DO_Street_name__c}</p>
+            <p><apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/></p>            
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}</p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}</p>
+            <p>{!Quote.Opportunity.DO_Country__c}</p>
+            <br/>
+            <br/>
+              <p> représentée par :</p>
+             <br/>
+             <br/>
+            <p>Monsieur &nbsp;{!Quote.Contact.FirstName& ' '&Quote.Contact.LastName&'.'}</p>
+            <br/>
+            <br/>
+            <p>ci-après dénommée le REVENDEUR</p>
+            <p>d'autre part,</p>
+            <br/>
+            <p> <STRONG>"IL EST CONVENU ET ARRETE CE QUI SUIT :</STRONG></p>
+            <br/>
+            <p>En contrepartie des avantages et services consentis par BUTAGAZ au REVENDEUR, celui-ci confirme son accord pour assurer aux Conditions Générales et Particulières ci-après, </p>
+            <p>dans le fonds de commerce qu'il exploite à l'adresse suivante :</p><br/>
+            
+            <p> {!Quote.Opportunity.DO_Street_n__c}&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp;{!Quote.Opportunity.DO_Street_type__c}&nbsp;{!Quote.Opportunity.DO_Street_name__c}</p>
+            <p><apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/></p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}</p>
+            <p>{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}</p>
+            <p>la revente au détail du Mélange Spécial Carburant Liquéfié de la marque de la Société BUTAGAZ.</p>
+            
+    </div>
+ 
+    <div style="page-break-inside:avoid;">
+    
+        <h1>I - CONDITIONS GENERALES</h1>
+
+            <h2>Article 1 - Exclusivité</h2>
+                <p>Le REVENDEUR réserve à BUTAGAZ l'exclusivité de la fourniture de G.P.L.c (Gaz de Pétrole Liquéfié Carburant) dans l'ensemble du fonds de commerce ci-dessus indiqué.</p>
+   
+    
+            <h2>Article 2 - Qualité</h2>
+                
+                <p>Le Gaz de Pétrole Liquéfié Carburant livré au REVENDEUR sera conforme aux caractéristiques définies par les spécifications officielles en vigueur et désigné ci-après sous le nom de G.P.L.c.</p>
+    </div>
+ 
+    <div style="page-break-inside:avoid;">
+    
+    <h2>Article 3 - Durée</h2>
+       <p>Le présent contrat de fourniture est conclu pour une durée ferme de {!Quote.Contract_duration__c}&nbsp;ans à dater de la première livraison, et jusqu’à réalisation effective des quantités estimées.</p>
+       <p>Il prend effet à compter de la date de signature.</p>
+       <p>Le Contrat sera reconduit d’année en année jusqu’à réalisation des quantités conventionnelles définies.</p>
+       <p>Il se renouvellera ensuite tacitement par périodes successives d’un an, avec la possibilité, pour chacune des parties, de résilier le contrat par lettre recommandée avec accusé de réception, moyennant un préavis de trois mois, avant l'expiration de chaque période.</p>
+       <p>En cas de terminaison de Contrat pour quel que motif que ce soit, toutes les sommes dues à BUTAGAZ deviennent immédiatement exigibles.</p>
+    
+    
+    <h2>Article 4 - Quantité</h2>
+        <p>La quantité a été estimée d'un commun accord pour un volume minimal annuel de {!ROUND((Quote.Sum_PTL_Consumption__c * $Setup.OrganizationSettings__c.Tonne_to_m3__c),0)} m3, soit {!VALUE(Quote.Contract_Duration__c) * ROUND((Quote.Sum_PTL_Consumption__c * $Setup.OrganizationSettings__c.Tonne_to_m3__c),0)} m3 sur la durée contractuelle. Cette quantité est un élément déterminant du Contrat.</p>
+        <p>Le contrat se prolongera jusqu'à la réalisation de cette quantité</p>
+    </div>
+ 
+    <div style="page-break-inside:avoid;">
+    
+    <h2>Article 5 - Livraison</h2>
+       <p>Les commandes passées par le REVENDEUR seront au minimum de 6 m3 ou sans minimum si BUTAGAZ à la maîtrise de la livraison et lui seront livrées dans le stockage par camion-citerne, le ticket compteur faisant foi des quantités livrées dans le stockage.</p>
+       <p>Les opérations de ravitaillement du stockage seront effectuées sous la responsabilité de BUTAGAZ.</p>
+       <p>Le REVENDEUR devra prendre toutes dispositions nécessaires pour maintenir praticable, dégagée et accessible par tous temps aux véhicules de livraison, la zone où s'effectuent les opérations de dépotage, respecter et faire respecter les consignes de sécurité prescrites par la réglementation en vigueur sur les opérations de ravitaillement du stockage, notamment : arrêt du moteur des véhicules et extinction des feux nus susceptibles de se trouver dans la zone de sécurité.</p>
+       <p>BUTAGAZ se réserve la possibilité de refuser toute livraison en cas de non conformité apparente de l'installation aux réglementations en vigueur.</p>
+   
+    <h2>Article 6 - Commande</h2>
+       <p>Sur demande du REVENDEUR, exprimée 72 heures ouvrées à l'avance, les quantités de G.P.L.c indiquées à l'article 4 des Conditions Particulières lui seront livrées par BUTAGAZ ou sur son ordre, sauf cas de force majeure.</p>
+       <p>Par cas de force majeure, il faut entendre notamment et sans que cette énumération soit limitative, tous événements hors du contrôle de BUTAGAZ,  tout acte des autorités de fait ou de droit, les grèves ou tous autres actes concertés du personnel, les incendies, les inondations, les explosions, les émeutes, les guerres ou conflits armés, les rébellions et sabotages, les restrictions à l'importation ou à l'exportation.</p>
+       <p>En cas de survenance de l'un quelconque des événements précités, avis doit être donné au REVENDEUR par BUTAGAZ par tous moyens. Le contrat sera alors simplement suspendu et la période de suspension s'ajoutera à la durée du contrat.</p>
+       <p>Le REVENDEUR devra prendre, en tant que de besoin, toutes réserves nécessaires auprès des transporteurs pour tous manquants ou avaries lors de la livraison  du G.P.L.c. Les déchargements dans le réservoir seront effectués sous sa seule responsabilité.</p>
+       <p>Le REVENDEUR devra reconnaître le produit en quantité, le ticket compteur faisant foi des volumes livrés dans le stockage.</p>
+    
+    </div>
+ 
+    <div style="page-break-inside:avoid;">
+    
+    <h2>Article 7 - Installation de Distribution de Gaz de Pétrole Liquéfié Carburant</h2>
+       <p>Butagaz se charge de la fourniture, pose et raccordement des différentes canalisations et réseau électrique de la station GPLc. Le REVENDEUR met à disposition de Butagaz la puissance électrique requise pour le fonctionnement de l’installation GPL-C.</p>
+       <p>L'installation de distribution du G.P.L.c comprend le matériel énuméré ci-dessous appartenant à BUTAGAZ qui le met à la disposition du REVENDEUR à titre de prêt à usage.</p>
+       <p>L'implantation de l'installation devant satisfaire aux règles relatives aux stockages de gaz liquéfiés et le matériel devant remplir les spécifications exigées, le REVENDEUR n'y apportera aucune modification à partir du moment où le point de vente du G.P.L.c  aura été mis en service.</p>
+       <p>Le REVENDEUR ne peut ni modifier, ni remplacer ce matériel sans l'accord préalable écrit de BUTAGAZ.</p>
+       <p>Le REVENDEUR a la charge d'équiper l'installation d'extincteurs suivant la réglementation.</p>
+       <p>Si le matériel BUTAGAZ est implanté sur un terrain qui n'appartient pas au REVENDEUR mais dont il a la jouissance, ce dernier devra indiquer à BUTAGAZ le nom et l'adresse du propriétaire afin que lui soit faite la notification prévue par l'article 2102 du Code Civil.</p>
+
+    </div>   
+    
+    
+ 
+     
+<apex:pageBlock rendered="{!quoteLineItems.size > 0}">
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+      
+      <h2>Enumération du matériel et valeur</h2>
+      
+
+        <table class="ButagazTable">
+            <tr>
+                <th>Quantité</th>
+                <th>Point livré</th>
+          
+                <th>Citerne(s)</th>
+                <th>Mise à disposition</th>
+                <th colspan=" 1" style="display:{!if(Quote.Customer_Owned_Tanks__c!=0,'', 'none')}" >Information Complémentaire</th>
+            </tr>
+            <apex:repeat value="{!quoteLineItems}" var="line">
+            <tr>
+                <td class="number">{!line.Quantity}</td>
+                <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td> 
+          
+                <td>{!line.pricebookentry.Name}</td>
+                <td><Apex:outputField value="{!line.Mis_Disposition__c}"/></td>
+                <td style="display:{!if(OR(line.Mis_Disposition__c='Customer Owned Tank',line.Mis_Disposition__c='Tank sold by BTZ'),'', 'none')}"> 
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}">
+                            
+                                    <STRONG> Citerne</STRONG>:&nbsp; {!line.Customer_Owned_Tank_Name__c}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        
+                                       <apex:outputText value="Epreuve décennale le:{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!line.Customer_Owned_Tank_Appr_Date__c}" />
+                                       </apex:outputText>
+                                       <br/>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText value="Re épreuve decennale avant le:{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!line.Customer_Owned_Tank_ReApprBefore_Date__c}" />
+                                        </apex:outputText>
+                            </p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> N de serie </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Serial_Number__c}</p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Capacité</STRONG>:&nbsp; {!line.Customer_Owned_Tank_Capacity__c} </p>
+                            
+                                                       
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Constructeur</STRONG>:&nbsp; {!line.Brand__c}</p><br/>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}">La requalification périodique de votre citerne vous sera facturée selon le barème V2P en vigueur au jour de la requalification</p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','','none')}">Vous avez la possibilité d’acheter une citerne BUTAGAZ selon le barème MADV ci-joint. Les conditions de vente de la citerne BUTAGAZ feront l’objet d’un contrat de vente spécifique</p>
+                </td>
+            </tr>
+            </apex:repeat>
+        </table>
+    </div>
+    
+</apex:pageBlock>     
+
+<apex:pageBlock rendered="{!Service.size > 0}">
+
+    <div class="contractSection" Style="page-break-inside:avoid">
+      <h2>Services, options et accessoires</h2>
+      <table class="ButagazTable">
+        <tr>
+          <th>Point livré </th>
+         
+          <th>Article(s)</th>
+          
+          <th>Quantité</th>
+          <th>Unité</th>
+        </tr>
+        <apex:repeat value="{!Service}" var="line">
+          <tr>
+            <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+            <td>{!line.pricebookentry.Name}</td>
+            <td class="number">{!line.Quantity}</td>
+            <td class="number">{!line.F_Quantity_Unit__c}</td> 
+          </tr>
+        </apex:repeat>
+        <apex:repeat value="{!OtherEquipment}" var="line">
+          <tr>
+            <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+            <td>{!line.pricebookentry.Name}</td>
+            <td class="number">{!line.Quantity}</td>
+            <td class="number">{!line.F_Quantity_Unit__c}</td> 
+          </tr>
+        </apex:repeat>
+      </table>
+
+    </div>
+    
+    </apex:pageBlock>              
+    
+    <div class="contractSection" style="page-break-sinside:avoid">
+
+       <p>Soit une valeur totale de remplacement à neuf à ce jour de XXXX  € HTVA</p>
+       <p align="justify">Le REVENDEUR s'engage à ne pas déplacer ou laisser débrancher ce matériel, à ne pas modifier les conditions d'implantation sans l'autorisation écrite et préalable de BUTAGAZ, ni à rendre le stockage non conforme à la réglementation.</p>
+       <p>Ces équipements sont mis en place et exploités sous la responsabilité du REVENDEUR conformément à la réglementation et aux prescriptions concernant les installations fonctionnant au GPL.</p>
+       <p>L'installation fonctionnera sous la responsabilité exclusive du REVENDEUR et aucun recours ne pourra être exercé contre BUTAGAZ notamment en cas d'incendie ou de dégâts causés directement ou indirectement par l'exploitation de ce matériel.</p>
+       <p>Le CLIENT s'engage à obtenir cette même renonciation à recours de ses assureurs.</p>
+       <p>Toutefois, les installateurs, prestataires, concepteurs et constructeurs d'appareils sont entièrement responsables de leurs installations, fournitures et instructions d'utilisations, et le REVENDEUR reste seul responsable de l'utilisation des matériels et de la conduite des productions et fabrications.</p>
+     
+    <h2>Article 8 – Génie Civil</h2>
+       <p>L'implantation et l‘emplacement de la station GPLc devra être déterminé en accord avec BUTAGAZ et en fonction de la réglementation en vigueur.</p>
+       <p>Les travaux d'aménagement et de présentation notamment de Génie Civil nécessaires à la mise en place du matériel appartenant à BUTAGAZ, décidés d'un commun accord, devront être conformes à l’étude réalisée entre {!Quote.Opportunity.DO_Name__c} et Butagaz</p>
+    </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+    
+    <h2>Article 10 - Entretien du matériel</h2>
+       <p>Le matériel mis à disposition du REVENDEUR par BUTAGAZ reste la propriété de BUTAGAZ et devra être identifié en tant que tel.</p>
+       <p>Le REVENDEUR devra respecter et protéger l'identification de ce matériel comme étant la propriété de BUTAGAZ.</p>
+       <p>Le REVENDEUR s'engage pendant toute la durée du contrat à ne pas céder, transférer à titre gratuit et / ou onéreux tout ou partie du matériel notamment à des tiers, de même qu'il s'interdit d'utiliser le matériel à des fins autres que celles prévues aux présentes.</p>
+       <p>Le REVENDEUR s'interdit en particulier d'utiliser le matériel pour le compte de tiers.</p>
+       <p>Par ailleurs, dans l'hypothèse ou le REVENDEUR ferait l'objet d'une action judiciaire pour quelque cause que ce soit, il devrait prendre toutes les mesures conservatoires nécessaires pour protéger les droits de propriété de BUTAGAZ sur le matériel et s'opposer à toutes actions ( telles que notamment les saisies , inscriptions de sûreté.....), susceptibles de porter atteinte aux droits de propriété de BUTAGAZ sur le dit matériel.</p>
+        <br/> 
+       <p>BUTAGAZ :</p>
+       <p>- assure ou fera assurer les opérations imposées par la Réglementation sur les appareils à pression de gaz (épreuves, réépreuves, visites triennales) et les instruments de mesure,</p>
+       <p>- prend à sa charge l'entretien et les réparations consécutives à l'usure normale du matériel, à l'exception des extincteurs qui sont la propriété du REVENDEUR et dont l'entretien est à la charge de celui-ci,</p>
+       <p>- le REVENDEUR devra agir en bon père de famille et en cas d'anomalie de fonctionnement de l'installation, ou de défaillance du matériel mettant en cause la sécurité, il devra prévenir les entreprises de dépannage dont les noms, adresses, sont dans le manuel 'Règles d'exploitation et de sécurité d'une station GEPEL' qui est remis lors de la mise en service de l'installation contre récépissé.</p>
+       <p>Ces renseignements devront être affichés dans le ou les locaux où s'exploite le fonds de commerce susvisé.</p>
+     <br/>
+    
+    </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+    
+        <h2>Article 11 - Responsabilité - Assurances</h2>
+           <p>11.1 Garde du Matériel:</p>
+           <p>Il est expressément entendu que le matériel confié au REVENDEUR sera, dans les rapports entre les parties, considéré comme placé sous la garde et la responsabilité exclusive de celui-ci dès l'instant de sa mise à disposition .  Par suite, le REVENDEUR répondra des dommages de toutes natures d'origine accidentelle notamment (incendie, explosion, accident, vol, tempête, ouragan, etc... ) que pourrait subir ce matériel.</p>
+            <br/>
+           <p>11.2  Responsabilité</p>
+           <p>Le REVENDEUR répondra de tous les dommages causés à ses clients ou aux tiers par lui-même et / ou par ses préposés ainsi que des dommages résultant du matériel  placé sous sa garde pour l'exécution des présentes.</p>
+           <p>Les dommages et / ou pertes de toute nature que peuvent subir le matériel dont le REVENDEUR a la garde sont à sa charge, même lorsqu'ils proviennent de cas fortuits ou de force majeure par dérogation à l'article 1929 du Code Civil.</p>
+            <br/>
+           <p>11.3 Assurances</p>
+           <p>Ces différents risques et responsabilités doivent être garantis et couverts par une police d'assurance souscrite par le REVENDEUR auprès d'une compagnie de son choix et notoirement solvable.  Il est expressément convenu que le matériel appartenant à BUTAGAZ sera couvert en valeur à neuf.</p>
+           <p>Le REVENDEUR renoncera à tout recours contre BUTAGAZ au titre de ces risques et responsabilités et imposera cette renonciation à son assureur.</p>
+           <p>Dès souscription de la police, il fournira à BUTAGAZ une attestation de la compagnie d'assurance donnant toutes précisions sur le respect du présent article.  BUTAGAZ pourra à tout moment demander au REVENDEUR de produire une attestation d'assurance.</p>
+           <br/>
+           <br/>
+    </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">    
+    
+        <h2>Article 12 - Conditions générales de vente</h2>
+               <p>Le G.P.L.c sera facturé au REVENDEUR au prix correspondant à la tranche de volume annuel acheté et à la zone géographique, à laquelle est rattaché le point de vente selon le barème {!Quote.Product_Scale__c} de la Société BUTAGAZ, minoré d’une remise commerciale</p>
+         <br/>
+        <apex:pageblock rendered="{!OR(NOT(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c),Quote.DO_Groupement__c='')}"> 
+        
+     <h2 class=" spaceBefore">Tarification</h2>
+    
+                <table class="ButagazTable">
+        <tr>
+          <th> Point livré</th>
+          <th> Nombre </th>
+          <th>Produit(s)</th>
+          <th class="smallWidth">Unité de facturation</th>
+          <th>Prix barème HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};">Remise Commerciale  EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conj. (Mois)</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">Remise Groupement EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};">Remise Commerciale Groupement EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Groupement Conj. (Mois)</th>
+          <th style="display:{!if(OR(pricingQuoteVisibilityRCERebate,pricingQuoteVisibilityCommercialRebate,pricingQuoteVisibilityCyclicalRebate,pricingQuoteVisibilityGroupementRebate,pricingQuoteVisibilityGroupCommercialRebate,pricingQuoteVisibilityGroupCyclicalRebate), 'table-cell', 'none')};">Prix net facturé HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle EUR HT</th>
+          
+          
+        </tr>
+        <apex:repeat value="{!Produits}" var="line">
+              <tr>
+                <td class="smallWidth">{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Name__c}</td>
+                <td>{!line.F_Product_Code__c}</td> 
+                <td class="smallWidth">{!line.pricebookentry.Name}</td>
+                
+                     <!--<td class="smallWidth">{!line.F_Quantity_Unit__c}</td>-->
+                     <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+               
+                <td class="number;smallWidth">{!IF(line.Price_List_HT__c=0,'',TEXT(line.Price_List_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Commercial_Rebate_HT__c,2)))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_HT__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_HT__c,2)))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(line.Cyclical_Rebate_Months__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_Commercial_Rebate_HT__c,2)))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_Commercial_Rebate_HT__c,2)))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_lenght_in_months__c=0,'',TEXT(line.Group_Cyclical_Rebate_lenght_in_months__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(OR(pricingQuoteVisibilityRCERebate,pricingQuoteVisibilityCommercialRebate,pricingQuoteVisibilityCyclicalRebate,pricingQuoteVisibilityGroupementRebate,pricingQuoteVisibilityGroupCommercialRebate,pricingQuoteVisibilityGroupCyclicalRebate), 'table-cell', 'none')};">{!IF(line.New_Price_HT__c=0,'',TEXT(line.New_Price_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.RCE_Rebate_HT__c,2)))}</td>
+    
+              </tr>
+        </apex:repeat>
+      </table>
+      
+          <!-- <br/>
+              <p style="display:{!if(pricingQuoteVisibilityRCERebate,'','None')}"> * La remise commerciale exceptionnelle s’applique une fois, déduite de la première facture </p>
+              <p style="display:{!if(pricingQuoteVisibilityCommercialRebate,'','None')}">**  La remise commerciale  s’applique pendant la durée initiale  du contrat </p>
+              <p style="display:{!if(pricingQuoteVisibilityCyclicalRebate,'','None')}"> *** La remise conjoncturelle s’applique sur toutes les tonnes de propane livrées pendant le nombre de mois spécifiés à compter de la date de signature du contrat. </p>
+              <br/>-->
+              
+                <br/>
+			     <p style="display:{!if(pricingQuoteVisibilityRCERebate,'','None')}">La remise commerciale exceptionnelle s’applique une seule fois, et est déduite de la première facture sur le montant total facturé, peu importe la quantité de gaz livré.  </p>
+			     <p style="display:{!if(pricingQuoteVisibilityCommercialRebate,'','None')}">La remise commerciale s’applique pendant la durée initiale du contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+			     <p style="display:{!if(pricingQuoteVisibilityCyclicalRebate,'','None')}">La remise conjoncturelle s’applique pendant le nombre de mois spécifiés à compter de la date de signature du présent contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+		     <br/>
+              <p> {!IF(Quote.Pack_Type__c='Pack Liberté',' Le tarif du propane est donné ici à titre indicatif pour une livraison de 801 à 1300 kg »','')}</p>
+                 
+  </apex:pageblock>
+            <br/>
+        
+               <p>A la date d'ouverture de la station et à chaque date anniversaire contractuelle, le REVENDEUR sera facturé en tranche 1. Ce taux de facturation sera ajusté à la fin de chaque année contractuelle et chaque fois que les ventes atteindront les tranches supérieures à 360 m3 et 600 m3 ; le différentiel de taux correspondant à la tranche réalisée par rapport à la tranche 1 étant rétroactivement remboursé au REVENDEUR. </p>
+               <p>De même si le volume annuel devait atteindre un volume inférieur à 100 m3/an, Butagaz peut ajuster ou supprimer la remise commerciale accordée. Dans cette perspective les parties se rencontrerons lorsque nécessaire pour se mettre  d’accord afin d’adapter les conditions du présent contrat à la nouvelle situation.</p>
+               <p>Un exemplaire du  barème {!Quote.Product_Scale__c} est annexé au présent contrat et toute modification de barème et de zone sera portée à la connaissance du REVENDEUR par l'envoi d'un nouveau tarif.</p>
+               <p>Les taxes éventuelles au profit des aéroports et des Chambres de Commerce ou toutes Sociétés concédantes sont toujours à la charge du REVENDEUR.</p>
+               <p>Le G.P.L.c est payable à&nbsp;<apex:outputField value="{!Quote.Payment_spread__c}"/> après la date de facturation.</p>
+     
+    </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+    
+        <H2>Article 13 - Service et Ravitaillement de la clientèle - Publicité</h2>
+           <p>Le REVENDEUR maintiendra l'installation en bon état de propreté et constamment approvisionnée de manière à répondre aux besoins de la clientèle conformément aux usages de la profession et de la région ainsi qu'à la réglementation administrative en vigueur.</p>
+           <p>Le REVENDEUR réservera à BUTAGAZ l'exclusivité de la publicité pour la vente du Gaz de Pétrole Liquéfié Carburant.</p>
+     
+    
+        <h2>Article 14 - Transfert du fonds de commerce</h2>
+           <p>En cas de cession de son fonds de commerce ou si son exploitation se trouvait transférée sous toute autre forme (notamment apport en Société), le REVENDEUR mettra BUTAGAZ en rapport avec le tiers auquel il aurait à imposer (sous garantie solidaire, en cas de location-gérance) la continuation pure et simple du contrat, faute de quoi celui-ci se trouverait résolu dans les conditions prévues à l'article 15.</p>
+           <p>BUTAGAZ se réserve le droit de céder tout ou partie du présent contrat à toute personne physique ou morale de son choix à charge pour elle d'en aviser le REVENDEUR au moins un mois à l'avance.</p>
+    </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+    
+        <h2>Article 15 - Clause résolutoire</h2>
+           <p>En cas d'inexécution par l'une ou l'autre des parties de l'une quelconque des obligations résultant du présent contrat, celui-ci pourrait être résilié, si bon semble à l'autre partie de plein droit et sans formalités judiciaires 15 jours après mise en demeure par lettre recommandée avec avis de réception, restée sans résultat et ce, sans préjudice de tous dommages - intérêts au profit de la partie lésée.</p>
+           <p>De même, BUTAGAZ se réserve la possibilité de suspendre immédiatement la présente convention en cas de manquement par le REVENDEUR de l'une quelconque des consignes et / ou règles de sécurité jusqu'à ce que les conditions normales de sécurité soient de nouveau remplies.</p>
+           <p>Dans les cas précités comme dans ceux où le présent contrat prendrait fin par anticipation, et ce quelle que soit la raison de sa cessation, le REVENDEUR devra :</p>
+           <p>a)rembourser à BUTAGAZ le montant forfaitaire des frais , de transport et de matériel déterminé dans l'article  7</p>
+           <p>b)prendre à sa charge les frais de démontage et de réexpédition du matériel qui lui a été prêté à usage par BUTAGAZ,</p>
+           <p>c)verser à cette dernière une indemnité égale au préjudice subi par elle du fait de la terminaison anticipée du contrat.  A défaut d'accord sur son montant celui-ci sera fixé par le Tribunal de Commerce de Paris,</p>
+           <p>d)   dans le cas où la force majeure rendrait impossible la continuation du présent contrat jusqu'à son terme, le REVENDEUR aura à payer à BUTAGAZ, les sommes qui viennent d'être indiquées dans les hypothèses ci-dessus, sauf le montant de l'indemnité prévue à l'alinéa .</p>
+         
+    
+        <h2>Article 16- Cessation du contrat</h2>
+           <p>Dans tous les cas de cessation du contrat pour quelque cause que ce soit ou à l'échéance de celui-ci,  le REVENDEUR devra faire disparaître à ses frais les marques, couleurs et signes distinctifs de BUTAGAZ de l'ensemble de son établissement et restituera aussitôt à BUTAGAZ tout le matériel mis par cette dernière à sa disposition.</p>
+           <p>A défaut de pouvoir restituer à BUTAGAZ le matériel, en tout ou partie, le REVENDEUR devrait alors rembourser le dit matériel à concurrence de sa valeur à neuf de remplacement.</p>
+           <p>BUTAGAZ ne sera pas tenue de remettre les lieux en état.</p>
+         
+    </div>
+     
+    <div class="contractSection" Style="page-break-inside:avoid">
+
+        <h2>Article 17 - Cas de force majeure</h2>
+           <p>Il est expressément convenu que les cas de force majeure auxquels sont assimilés, sans que cette énumération soit limitative, tout acte des autorités de fait ou de droit, fait de grève, ou tous actes concertés de personnel, les incendies, les inondations, explosions, émeutes, guerres, rébellions, sabotages, barrières de dégel, l'interdiction de la circulation des véhicules d'un tonnage habituellement utilisé par BUTAGAZ, les difficultés d'approvisionnement ou pénuries de matières premières, n'entraîneront que la suspension du contrat pendant le temps où ils produisent leurs effets.</p>
+           <p>La partie qui entend s'en prévaloir devra en informer l'autre par tous moyens disponibles : lettre, télex, télégramme, téléphone, déplacement, et le confirmer par lettre recommandée avec avis de réception dès que les circonstances le permettront.</p>
+           <p>Toutefois, la suspension du contrat ne pourra excéder un délai de trois mois à compter de la date de réception de la lettre recommandée, à l'expiration duquel les parties se rencontreront pour mettre fin au contrat, avec restitution du matériel appartenant à BUTAGAZ, sans que cela puisse donner lieu à versement de dommages et intérêts.</p>
+         
+    
+        <h2>Article 18 - Réglementation et prescriptions particulières</h2>
+           <p>Le REVENDEUR s'engage à respecter la réglementation relative à la distribution du Mélange Spécial Carburant Liquéfié et notamment à :</p>
+           <p>     *    tenir une comptabilité matières à présenter à toute réquisition du Service des Douanes et l'informer de la Société livrancière du G.P.L.c , ainsi que le REVENDEUR s'y engage dans sa demande d'agrément,</p>
+           <p>     *    effectuer à la Préfecture, Service des Installations classées pour la protection de l'environnement : les déclarations ou demandes d'autorisation conformes aux textes en vigueur dont notamment la loi du 19 juillet 1976 et ses arrêtés d'application.</p>
+           <p>             L'implantation de l'installation devant satisfaire aux règles relatives aux stockages de gaz liquéfiés et le matériel devant remplir les spécifications exigées, le REVENDEUR n'y apportera aucune modification à partir du moment où le point de vente Mélange Spécial Carburant Liquéfié aura été mis en service.</p>
+    
+    </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+    
+        <h2>Article 19 - Non concurrence</h2>
+           <p>Pendant toute la durée du présent contrat, le REVENDEUR s'interdit de s'intéresser directement ou indirectement à la vente ou à la promotion de tout Gaz de Pétrole Liquéfié Carburant  concurrent de celui faisant l'objet du présent contrat, et ce dans un rayon de 5 km à partir du lieu d'exploitation du fonds.</p>
+         
+    
+        <h2>Article 20 - Attribution de juridiction</h2>
+           <p>Tous litiges seront soumis au Tribunal de Commerce de Paris et cela même en cas de pluralité de défendeurs et d'appel en garantie.</p>
+         
+        <h2>Article 21 - Réserves Administratives</h2>
+           <p>En tout état de cause, le présent contrat ne pourra prendre effet qu'après obtention des différentes autorisations administratives nécessaires à la réalisation de cette installation et en aucun cas, la responsabilité de BUTAGAZ ne pourra être recherchée en cas de refus de l'administration.</p>
+    
+    </div > 
+     
+    <div  Style="page-break-inside:avoid">
+      
+            <div class="Signatures" Style=" page-break-inside:avoid">
+   
+                    <h1>Signatures</h1>
+                          
+                    <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+    
+                <div class="clear"></div>
+   
+     
+
+                <div class="ButagazSignature"  Style=" page-break-inside:avoid">
+                
+                     <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                     <p class="nospace">&nbsp;</p>
+                     <p class="nospace">&nbsp;</p>
+                     <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter"><p>Signature:</p></div>
+                     
+                     
+                          
+                     
+                    <div class="ButagazCachet"  Style=" page-break-inside:avoid">
+                    <p> Pour Butagaz: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                </div>  
+                    
+                    
+                <div class="ClientSignature"  Style=" page-break-inside:avoid">
+                 
+                 <p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+                  <br/>
+                  
+                  <br/>
+                  <p class="SpaceBefore">Date d’impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                  <br/>
+                  <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                  <br/>
+                  <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                  <br/>
+                   
+                  <p>Signature &nbsp;(1):</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                </div> 
+       
+        
+          
+              
+            
+        
+            </div>
+     <div class="clear"/>  
+</div>
+</div>
+</apex:page>

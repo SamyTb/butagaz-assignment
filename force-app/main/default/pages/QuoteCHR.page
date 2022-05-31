@@ -1,0 +1,480 @@
+<apex:page showHeader="false" sidebar="false" standardController="Quote" renderas="pdf" extensions="VFC_Quotelineitem_01" standardStylesheets="false">
+<!--************************* GEC PRO CHR ACTIVITY DOMAIN**********************************************************************************************************-->      
+<!--************************* GEC PRO CHR ACTIVITY DOMAIN**********************************************************************************************************-->   
+<!--************************* GEC PRO CHR ACTIVITY DOMAIN**********************************************************************************************************-->   
+
+<div id="containerQUOTEGECCHR">
+
+        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        
+    <div class="footer"> 
+
+        <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+        <p >Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+    </div>
+    
+    <div class="header">
+        
+        <div class="ClientAddress">
+   
+              <p>{!Quote.Opportunity.DO_Salutation__c} {!Quote.Opportunity.DO_Name__c},</p>
+              <br/>
+              <p>{!Quote.Opportunity.DO_Street_N__c},&nbsp;<Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; {!Quote.Opportunity.DO_Street_name__c}</p>
+              <p>{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}</p>
+              <p>{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}</p>
+              
+              <P>Date de la proposition&nbsp;:&nbsp;{!PrettyDate}</p>
+        </div>
+
+        <div class="clear"></div>
+        
+    
+        
+    </div> 
+
+    <div class="clear">
+    </div>
+
+    
+    <div class="quoteBody">
+    
+        <div class="contractSection">
+                  <h1>Proposition Commerciale</h1>
+                  <p><Apex:outputField value="{!Quote.Contact.Salutation}"/>&nbsp;{!Quote.Contact.FirstName}&nbsp;{!Quote.Contact.LastName}</p>
+                  <p>{!$Label.GEC_QUOTE} {!Quote.CreatedBy.FirstName} {!Quote.CreatedBy.LastName} {!$Label.GEC_QUOTE_2}</p>
+        </div> 
+      
+        <div class="contractSection">
+              
+            <h1>Consommation</h1>
+                <br/>
+        
+           <p> Consommation estimée:&nbsp;{!Quote.Sum_PTL_Consumption__c}&nbsp;(en tonne par an) </p>
+         <br/>
+          <p class="smallNote">Cette consommation a été estimée en fonction des informations que vous nous avez communiquées.</p>
+        </div>
+
+        <div class="contractSection">
+
+                  <h1>Mise à disposition citerne et prestations techniques</h1>
+                  
+                  <h2> Adresse de(s) citerne(s)</h2>
+            
+                   <table class="ButagazTable">
+                     <tr>
+                        <th>Point livré</th>
+                        <th>Adresse</th>
+                        <th>Usage(s)</th>
+                    </tr>
+                        <apex:repeat value="{!QUOTEPTLS}" var="line">
+                     <tr>
+                         <td>{!IF(line.PTL_Name__c!='',line.PTL_Name__c,line.PTL_Label__c)}</td>
+                         <td>{!line.Opportunity_PTL__r.PTL_Street_number__c}&nbsp;<apex:outputField value="{!Line.Opportunity_PTL__r.PTL_Number_extention__c}"/>&nbsp;<apex:outputField value="{!Line.Opportunity_PTL__r.PTL_Street_type__c}"/>&nbsp;{!line.Opportunity_PTL__r.PTL_Street_name__c}&nbsp;{!line.Opportunity_PTL__r.PTL_City_Postal_Code__r.Name}</td>
+                         <td><apex:outputField value="{!line.RPTL_Purposes__c}"/></td></tr>
+                        </apex:repeat>
+                  </table>
+        </div>
+
+        <div class="contractSection" Style="page-break-inside:avoid">
+          
+              <h2>Citerne(s)</h2>
+         
+
+            <table class="ButagazTable">
+                    <tr>
+                        
+                        <th>Point livré</th>
+                  <th>Quantité</th>
+                        <th>Citerne(s)</th>
+                        <th>Mise à disposition</th>
+                        <th colspan=" 1" style="display:{!if(Quote.Customer_Owned_Tanks__c!=0,'', 'none')}" >Information Complémentaire</th>
+                    </tr>
+                     <apex:repeat value="{!quoteLineItems}" var="line">
+                    <tr>
+                        
+                        <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td> 
+                       <td class="number">{!line.Quantity}</td>
+                        <td>{!line.pricebookentry.Name}</td>
+                        <td><Apex:outputField value="{!line.Mis_Disposition__c}"/></td>
+                        <td style="display:{!if(OR(line.Mis_Disposition__c='Customer Owned Tank',line.Mis_Disposition__c='Tank sold by BTZ'),'', 'none')}"> 
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}">
+                            
+                                    <STRONG> Citerne</STRONG>:&nbsp; {!line.Customer_Owned_Tank_Name__c}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        
+                                       <apex:outputText value="Epreuve décennale le:{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!line.Customer_Owned_Tank_Appr_Date__c}" />
+                                       </apex:outputText>
+                                       <br/>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText value="Re épreuve décennale avant le:{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!line.Customer_Owned_Tank_ReApprBefore_Date__c}" />
+                                        </apex:outputText>
+                            </p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> N de serie </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Serial_Number__c}</p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Capacité</STRONG>:&nbsp; {!line.Customer_Owned_Tank_Capacity__c} </p>
+                            
+                                                       
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Constructeur</STRONG>:&nbsp; {!line.Brand__c}</p><br/>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}">La requalification périodique de votre citerne vous sera facturée selon le barème V2P en vigueur au jour de la requalification</p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','','none')}">Vous avez la possibilité d’acheter une citerne BUTAGAZ selon le barème MADV ci-joint. Les conditions de vente de la citerne BUTAGAZ feront l’objet d’un contrat de vente spécifique</p>
+                          </td>
+                    </tr>
+                     </apex:repeat>
+            </table>
+        </div>
+
+
+<apex:pageBlock rendered="{!Service.size > 0}">
+        <div class="contractSection" Style=" page-break-inside:avoid;">
+      
+        <h2>Services,options et accessoires</h2>
+                  <table class="ButagazTable">
+                     <tr>
+                      <th>Point livré </th>
+                  
+                         <th>Article(s)</th>
+                  
+                  <th>Quantité</th>
+                  <th>Unité</th>
+                </tr>
+                <apex:repeat value="{!Service}" var="line">
+                  <tr>
+                    <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+                    
+                    <td>{!line.pricebookentry.Name}</td>
+                    <td class="number">{!line.Quantity}</td>
+                    <td class="number">{!line.F_Quantity_Unit__c}</td> 
+                  </tr>
+                </apex:repeat>
+              </table>
+              
+            <p class="smallNote" style="display: {!IF(CEM=true, '', 'none')}">Sauf si des prestations supplémentaires sont nécessaires en cas de difficultés particulières de mise en place (enlèvement terres, bris de roche, déplacements ultérieures de la citerne,..) facturées selon le barème {!Quote.Product_Scale__c}(1) en vigueur. Un nouveau devis vous sera établi pour accord.</p>
+        </div>
+        </apex:pageBlock>
+    
+    
+        <apex:pageBlock rendered="{!redevence.size > 0}">
+          
+          
+        <div class="contractSection" Style=" page-break-inside:avoid;">
+      
+            <h2  >Redevance(s)</h2>
+            
+                <table class="ButagazTable" >
+                    <tr>
+                        <th> Point livré </th>
+         
+                        <th>Article</th>
+                        <th>Quantité</th>
+                        <th>Unité</th>
+                    </tr>
+                        <apex:repeat value="{!Redevence}" var="line">
+                    <tr>
+                        <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+           
+                        <td>{!line.pricebookentry.Name}</td>
+                        <td class="number">{!line.Quantity}</td>
+                        <td class="number">{!line.F_Quantity_Unit__c}</td> 
+                    </tr>
+                        </apex:repeat>
+                </table>
+      
+      
+        </div>
+            
+        </apex:pageblock>
+    
+    
+    
+    
+      
+    
+    
+          
+      <div class="contractSection" Style=" page-break-inside:avoid;">
+        <apex:pageBlock rendered="{!Produits.size > 0}">  
+
+            <h2>Produit</h2>
+
+                    <table class="ButagazTable">
+                         <tr>
+                            <th>Point livré</th>
+          
+                            <th>Produit</th>
+          
+                            <th class="smallWidth">Unité de facturation</th>
+          
+                         </tr>
+                            <apex:repeat value="{!Produits}" var="line">
+                          <tr>
+                             <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+                
+                             <td>{!line.pricebookentry.Name}</td>
+            
+                               <!-- <td class="smallWidth">{!line.F_Quantity_Unit__c}</td>-->
+            
+                            <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+         
+                         </tr>
+                       </apex:repeat>
+                    </table>
+        </apex:pageblock>
+
+            
+     </div>   
+        
+        
+                    
+                         
+        
+                
+     <div class="contractSection" Style=" page-break-inside:avoid;">
+        
+                <apex:pageblock rendered="{!OR(NOT(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c),Quote.DO_Groupement__c='')}"> 
+        
+                    <h2 class="ButagazTableHeader; spaceBefore">Tarification</h2>
+                         <table class="ButagazTable">
+        <tr>
+          <th> Point livré</th>
+          <th>Article(s)</th>
+          <th class="smallWidth">Unité de facturation</th>
+          <th>Prix barème EURO HT  </th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle EURO HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conj. (Mois)</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle Groupement EURO HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};">Remise Commerciale Groupement EURO HT</th>
+        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Conj. Groupement EURO HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Groupement Conj. (Mois)</th>
+        </tr>
+        <apex:repeat value="{!Pricing}" var="line">
+          <tr>
+            <td class="smallWidth">{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+           
+            <td >{!line.pricebookentry.Name}</td>
+            <!-- <td class="smallWidth">{!line.F_Quantity_Unit__c}</td>-->
+            
+            <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+            <td class="number;smallWidth"  >{!IF(line.Price_List_HT__c=0,'',TEXT(ROUND(line.Price_List_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.RCE_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Commercial_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_HT__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_Months__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">{!IF(line.Group_RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_RCE_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_Commercial_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_HT__c=0,'',TEXT(line.Group_Cyclical_Rebate_HT__c))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_lenght_in_months__c=0,'',TEXT(line.Group_Cyclical_Rebate_lenght_in_months__c))}</td>
+        
+          </tr>
+        </apex:repeat>
+      </table>
+      
+      <br/>
+        <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'G13PFPRO14'),BEGINS(Quote.DO_groupement__r.AccountNumber,'G13PFPPK14'),BEGINS(Quote.DO_groupement__r.AccountNumber,'G13PFPCO14')),'','None')}">
+              Par dérogation au tableau ci-dessus et aux conditions du contrat Professionnel de fourniture de gaz propane en citerne BUTAGAZ, à titre exceptionnel, vous bénéficierez d’un prix du gaz propane fixe jusqu’au 31 décembre 2015 pour toutes les livraisons à compter de la date de signature du contrat. Ce prix fixe de 950 € HT / tonne sera applicable pour toutes les livraisons effectuées au cours de cette seule période quelle que soit l’évolution (à la hausse comme à la baisse) du Barème V1GR Pack en vigueur au jour de la livraison et/ou de la commande de gaz. 
+              A l’expiration de cette période soit à partir du 1er janvier 2016 et jusqu’au terme de la durée initiale du contrat de fourniture de gaz, il vous sera automatiquement appliqué le prix du barème V1GR Pack en vigueur avec application d’une remise de 100 € HT / tonne de gaz, pour toutes vos livraisons de gaz. A l’issue de la durée initiale du contrat, il vous sera automatiquement appliqué le prix du barème V1GR Pack en vigueur, pour toutes vos livraisons de gaz.
+        </p>
+                    
+                    
+         <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'G15PFPRO14'),BEGINS(Quote.DO_groupement__r.AccountNumber,'G15PFPPK14'),BEGINS(Quote.DO_groupement__r.AccountNumber,'G15PFPCO14')),'','None')}">
+            Par dérogation au tableau ci-dessus et aux conditions du contrat Professionnel de fourniture de gaz propane en citerne BUTAGAZ, à titre exceptionnel, vous bénéficierez d’un prix du gaz propane fixe jusqu’au 31 décembre 2016 pour toutes les livraisons à compter de la date de signature du contrat. Ce prix fixe de 950 € HT / tonne sera applicable pour toutes les livraisons effectuées au cours de cette seule période quelle que soit l’évolution (à la hausse comme à la baisse) du Barème V1GR Pack en vigueur au jour de la livraison et/ou de la commande de gaz. 
+             A l’expiration de cette période soit à partir du 1er janvier 2017 et jusqu’au terme de la durée initiale du contrat de fourniture de gaz, il vous sera automatiquement appliqué le prix du barème V1GR Pack en vigueur avec application d’une remise de 200 € HT / tonne de gaz, pour toutes vos livraisons de gaz. A l’issue de la durée initiale du contrat, il vous sera automatiquement appliqué le prix du barème V1GR Pack en vigueur, pour toutes vos livraisons de gaz.
+          </p>
+          
+          
+          <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'G1G40SPLG0'), BEGINS(Quote.DO_groupement__r.AccountNumber,'G1GRPL2900'), BEGINS(Quote.DO_groupement__r.AccountNumber,'G0GRPL3400'), BEGINS(Quote.DO_groupement__r.AccountNumber,'G0GRPENES0'), BEGINS(Quote.DO_groupement__r.AccountNumber,'G1GRPLPRO0'), BEGINS(Quote.DO_groupement__r.AccountNumber,'G1GRPLGAI0')),'','None')}">
+            Le prix du gaz facturable évolue tous les mois pendant la durée contractuelle en fonction de l’indice CIF NWE Large Cargo publié dans le magazine Usine Nouvelle. 
+            Le 10 de chaque mois, ce prix sera réactualisé sur la base de la moyenne sur le mois calendaire m-1 de l’indice CIF NWE Large Cargo publié chaque semaine dans le magazine Usine Nouvelle. Ce prix restera applicable jusqu’au 9 du mois m+1. Le prix du gaz est établie à la tonne. 
+            Pour les clients à la commande, il est pris en compte le prix facturable en vigueur à la date de commande. 
+            Pour les clients en livraison prévisionnelle, il est pris en compte le prix facturable en vigueur à la date de livraison.
+          </p>
+              
+     <br/>
+                        
+     <!-- <br/>
+         <p style="display:{!if(pricingQuoteVisibilityRCERebate,'','None')}">  La remise commerciale exceptionnelle s’applique une seule fois, et est déduite de la première facture sur le montant total facturé, peu importe la quantité de gaz livré.  </p>
+         <p style="display:{!if(pricingQuoteVisibilityCommercialRebate,'','None')}"> La remise commerciale s’applique pendant la durée initiale du contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+         <p style="display:{!if(pricingQuoteVisibilityCyclicalRebate,'','None')}"> •    La remise conjoncturelle s’applique pendant le nombre de mois spécifiés à compter de la date de signature du contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+     <br/>-->
+     <br/>
+                 <p style="display:{!if(pricingQuoteVisibilityRCERebate,'','None')}">La remise commerciale exceptionnelle s’applique une seule fois, et est déduite de la première facture sur le montant total facturé, peu importe la quantité de gaz livré.  </p>
+                 <p style="display:{!if(pricingQuoteVisibilityCommercialRebate,'','None')}">La remise commerciale s’applique pendant la durée initiale du contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+                 <p style="display:{!if(pricingQuoteVisibilityCyclicalRebate,'','None')}">La remise conjoncturelle s’applique pendant le nombre de mois spécifiés à compter de la date de signature du contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+             <br/>
+              <p> {!IF(Quote.Pack_Type__c='Pack Liberté','Le tarif du propane est donné ici à titre indicatif pour une livraison de 801 à 1300 kg','')}</p>
+              <p> {!IF(Quote.Pack_Type__c='Pack Facilipro','Le prix du propane indiqué peut inclure le Joker Anti-Hausse à la date d’impression de ce devis, comme expliqué sur le barème.','')}</p>
+                 
+                </apex:pageblock>
+            </div>    
+        <apex:pageblock rendered="{!IF(Quote.Pack_Type__c=='Pack Facilipro','','None')}">  
+            <div class="contractSection" Style=" page-break-inside: avoid">
+              
+                <h1>Pack et services </h1>
+                       <br/>
+                    <h3>Vous avez choisi le pack :</h3>
+                    
+        
+                    <h3> {!IF(Quote.Pack_Type__c='Pack Facilipro','PACK FACILIPRO','')}</h3>
+                       <br/>
+                    <h3> {!IF(Quote.Pack_Type__c='Pack Facilipro','Services compris dans votre contrat:','')}</h3>
+                        <br/>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="-   La livraison du gaz est prévisionnelle."/></p>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="-   Le service d'information avant livraison.Votre Distributeur Régional vous contactera la veille pour vous prévenir du passage du chauffeur pour procéder à la livraison du gaz."/></p>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="-   Le contrôle technique inclus."/></p>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="-   Le Joker anti-hausse"/></p>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="-   Echelonnement du paiement de vos factures en 2 fois sans frais supplémentaires sous réserve de l'acceptation et de la signature d'un avenant « Paiement en 2 fois »"/></p>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="-   Votre abonnement au PACK FACILIPRO"/></p>
+                        <p> <apex:outputtext escape="false" rendered="{!IF(Quote.Pack_Type__c='Pack Facilipro','','None')}" value="    Le prix de l&#039;abonnement à l'ensemble des services qui vous sont offerts dans le cadre du PACK FACILIPRO est indiqué dans le barème V2P Pro."/></p>
+                   
+                        
+                        <br/>
+            </div>
+                
+          </apex:pageblock>     
+               
+            <div class="contractSection" Style=" page-break-inside: avoid">
+                    
+                    <h1>Contrat et services</h1>
+                        <p class="nospace"><strong>Contrat choisi&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.Pack_Type__c}"/></p> 
+                        <p class="spaceBefore"><strong>Mode de Livraison&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.Shipping_Condition__c}"/></p>
+                        <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>Mode de paiement&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.DO_Payment_method__c}"/></p>
+                       <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"><strong>Délai de paiement&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.Payment_spread__c}"/></p>
+                      <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"> {!IF(OR(Quote.Payment_spread__c='ZM10',Quote.Payment_spread__c='ZF10',Quote.Payment_spread__c='ZM02',Quote.Payment_spread__c='ZF02',Quote.Payment_spread__c='ZM03',Quote.Payment_spread__c='ZF03'),'Échelonnement du paiement de vos factures sous réserve de l’acceptation et de la signature d’un avenant','')} </p>
+                      <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="spaceBefore"> {!IF(OR(Quote.Payment_spread__c='ZM10',Quote.Payment_spread__c='ZM02',Quote.Payment_spread__c='ZM03'),'Le coût forfaitaire de cette offre est ajouté au prix de la tonne livrée','')} </p>
+  
+                       </div>
+                
+                <div class="contractSection" Style=" page-break-inside: avoid">
+
+                    
+
+                    <h1 Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c,'','none')}">  Durée du contrat</h1>
+    <h1 Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Tarification et Durée du contrat</h1>
+      <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}" class="nospace"><strong>Barème applicable pour le propane:&nbsp;</strong><Apex:outputField value="{!Quote.Product_Scale__c}"/></p>
+                        
+                                 <p style="display: {!IF(Quote.DO_Groupement__c!='', '', 'none')}" class="nospace"> <strong>Groupement&nbsp;:&nbsp;</strong><Apex:outputField value="{!Quote.DO_Groupement__r.Name}"/></p>
+                                 <br/>
+                                  <p style="display: {!IF(Quote.DO_Adherent_Central_Number__c!='', '', 'none')}" class="nospace"> <strong>Code adhérent :&nbsp;</strong><Apex:outputField value="{!Quote.DO_Adherent_Central_Number__c}"/></p>
+                                 <br/><p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c,'','none')}"> Facturation centralisée auprès du Groupement selon modalités de l’accord cadre entre BUTAGAZ et le Groupement. Voir les conditions tarifaires qui vous sont applicables (gaz propane et prestations associées) auprès de votre Groupement.</p>
+
+                                 <br/>
+      
+      
+                      <p class="nospace"><strong>Durée contrat&nbsp;:&nbsp;</strong>{!Quote.Contract_Duration__c} An(s)</p>
+      
+                      
+                      <p class="spaceBefore" >Conformément à l’article 8 des Conditions Générales, la durée du contrat est définie d’un commun accord avec le CLIENT.</p>
+      
+      
+                      
+                      <p class="spaceBefore" style="display: {!IF(Quote.Opportunity.Parrain__c!=null,'', 'none')}"><STRONG>Offre Parrainage</STRONG>:</p>
+              
+                      <p class="spaceBefore" style="display: {!IF(Quote.Opportunity.Parrain__c!=null,'', 'none')}">Nom du Parrain:&nbsp;{!Quote.Opportunity.Parrain__r.Name}</p>
+                      <p class="spaceBefore" style="display: {!IF(Quote.Opportunity.Parrainage_Offer_EUR__c!=null,'', 'none')}">Montant de l'avoir gaz sur la première livraison de gaz: {!Quote.Opportunity.Parrainage_Offer_EUR__c} &nbsp; EURO HT</p>
+
+                </div>  
+                
+                <br/>
+                
+                
+    <!-- RGPD DEBUT -->
+    <div Style="page-break-before:always;">
+        <h1>Données à caractère personnel</h1><br/>
+        <p>Suite à l’adoption du Règlement (UE) 2016/679, à compter du 25 mai 2018, de nouveaux droits sur les données à caractère personnel voient le jour. Nous tenions à vous en informer.</p><br/>
+            <ul class="circle">
+				<li class="circle"> BUTAGAZ prend les mesures propres à assurer la protection et la confidentialité des informations nominatives qu’elle détient ou qu’elle traite dans le respect des dispositions de la Loi n°7817 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés et du règlement (UE) 2016/679 (dit « RGPD »).<br/><br/></li>
+                <li class="circle"> Les informations recueillies dans le cadre de la conclusion du Contrat BUTAGAZ font l’objet d’un traitement informatique. Elles sont utilisées par BUTAGAZ, par son Distributeur BUTAGAZ, et par des prestataires, dans le cadre de l’exécution du contrat et de la gestion du compte CLIENT.<br/><br/></li>
+                <li class="circle"> Les informations collectées par BUTAGAZ sont nécessaires à l’exécution du contrat. Par exemple, nous avons besoin du nom d’une personne dans votre entreprise pour savoir qui contacter, ainsi que de ses coordonnées. Ce traitement de ces données est basé sur le contrat. Vous pouvez toujours décider de ne pas nous communiquer ces données, mais ceci nous empêchera d’exécuter le contrat de fourniture de gaz. Le CLIENT doit être habilité à communiquer ces données à BUTAGAZ. Il informe les personnes concernées de l’existence et du contenu du présent article.<br/><br/></li>
+                <li class="circle"> Nous croyons aussi que nous avons un intérêt mutuel à partager nos offres de prix, promotions et informations. BUTAGAZ fonde ce traitement de ces données sur son intérêt légitime, dans la mesure où les droits des personnes sont respectés.<br/><br/></li>
+               	<li class="circle"> Les données sont conservées pendant toute la durée du contrat, puis jusqu’à l’expiration de tous les recours judiciaires possibles, soit selon les cas, 5 ans à compter de la fin du contrat, ou bien au maximum 5 ans à compter du retrait de la citerne. Les factures sont quant à elles conservées 10 ans conformément à la loi.<br/><br/></li>
+               	<li class="circle"> Les personnes dont nous avons des données disposent d’un droit d’accès, de rectification, d’opposition, de limitation et d’effacement des données les concernant, qu’elles peuvent exercer auprès du Distributeur BUTAGAZ ou de : BUTAGAZ Service CLIENTS 47/53, rue Raspail 92594 Levallois Perret Cedex. Ces personnes disposent enfin d’un droit à la portabilité de ses données et, si elles considèrent que le traitement de données à caractère personnel les concernant constituent une violation du Règlement, introduire une réclamation auprès de la CNIL.<br/><br/></li>
+            </ul>
+    </div>
+    <!-- RGPD FIN -->
+            
+            <div Style="page-break-inside:avoid">
+            
+      <h1>Signatures</h1>
+      <p>Cette proposition commerciale est valable jusqu'au {!PrettyExpirationDate}. Au-delà, la présente proposition sera caduque, et ne pourra en aucun cas engager Butagaz.</p>
+      <p>Si cette proposition retient votre attention et que vous souhaitez en bénéficier, merci de bien vouloir retourner la présente proposition datée et signée au distributeur régional de Butagaz dont les coordonnées figurent ci-dessous.</p>
+      
+            <div class="Signatures" Style="page-break-inside:avoid" >
+             <div class="clear"></div>
+
+          <div class="ButagazSignature">
+             <p class="nospace">Votre Contact:&nbsp; {!Quote.CreatedBy.Name}</p>
+             <p class="nospace">email&nbsp;: {!Quote.CreatedBy.Email}</p>
+             <br/>
+             <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter"><p>Signature:</p></div>        
+                     
+                     
+                          
+                     
+                    <div class="ButagazCachet">
+                    <p> Pour Butagaz: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                                
+                                
+         
+          
+          </div>
+        <div class="ClientSignature">
+          <p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+          <br/>
+          <p class="nospace">Nom et prénom du contact&nbsp;: {!Quote.Contact.LastName}&nbsp;{!Quote.Contact.FirstName}</p>
+          <br/>
+          <p class="SpaceBefore">Date: <apex:outputtext value="__/__/____"/> </p>
+                <div class="bigSpaceAfter"><p>&nbsp;</p></div>   
+          
+          <p>et Signature(1)&nbsp;:</p>
+          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+
+      </div> 
+       
+        
+          
+              
+            
+        
+      
+      
+    </div>
+    <div class="clear"><p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Un exemplaire de chaque barème susvisé est joint au présent devis.</p>
+         <p> Le présent document est sans valeur contractuelle et ne peut en aucun cas se substituer à la conclusion d’un contrat de fourniture de gaz propane en citerne avec Butagaz.</p>
+          <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Les tarifs indiqués dans cette proposition sont valables pendant la période de validité du présent devis, sauf modification des barèmes susvisés. </p>
+          </div>
+  </div> 
+  
+                
+        
+      
+      <div class="clear"/>  
+    
+  
+ 
+            
+    </div>  
+    
+</div>
+
+              
+  
+         
+</apex:page>

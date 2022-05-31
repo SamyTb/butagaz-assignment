@@ -1,0 +1,10 @@
+<apex:page standardController="Opportunity" extensions="VFC_NewQuote_01" action="{!newQuote}"> 
+  <apex:form >     
+        <apex:pageblock id="idBlockIssue">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+        </apex:pageblock>
+  </apex:form>
+</apex:page>

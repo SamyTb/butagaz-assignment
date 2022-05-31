@@ -1,0 +1,22 @@
+<apex:page standardcontroller="Quote" extensions="VFC06_SelectPriceBook" id="page" tabStyle="Quote" action="{!autoAssignPricebook}">
+    <apex:sectionheader title="{!Quote.Name}" subtitle="{!$Label.pricebook_selection}"/>
+        <apex:form id="form">
+            <apex:pageBlock id="QuoteBlock">
+                <apex:pageMessages showDetail="false"/>
+                <apex:pageBlockSection title="{!$Label.pricebook}">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$Label.name}" for="pricebooks"/>
+                        <apex:selectList id="pricebooks" value="{!Quote.pricebook2Id}" size="1" title="PriceBookList">
+                            <apex:selectOptions value="{!availablePriceBooks}" />
+                        </apex:selectList>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+                <apex:pageBlockButtons location="bottom">
+                    <apex:commandbutton value="{!$Label.update_pricebook}" action="{!updatePriceBook}" rerender="QuoteBlock"/>
+                    <apex:commandbutton value="{!$Label.pricing_next}" action="{!goToCallingPage}" rendered="{!(renderSuivantButton)}"/>
+                    <apex:commandbutton value="{!$Label.pricing_back}" action="{!backToQuote}" />
+                </apex:pageBlockButtons>
+             </apex:pageBlock>    
+
+        </apex:form>
+</apex:page>

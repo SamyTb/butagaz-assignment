@@ -1,0 +1,517 @@
+<apex:page standardController="Opportunity_PTL__c" language="fr" renderas="pdf" showHeader="false" standardStylesheets="false" extensions="VFC_MEP_01">
+
+
+    
+<div style="display: none;">
+    <apex:outputText value="{!Opportunity_PTL__c.Opportunity__r.SyncedQuoteId}"></apex:outputText>
+    <apex:outputText value="{!Opportunity_PTL__c.PTL__c}"></apex:outputText>
+</div>
+
+        <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/> 
+            
+            
+            
+            <style type="text/css" media="all">
+      </style>
+            
+
+            
+                                                               
+                                                                
+                                                           
+                                                        
+                                                        
+                                                    
+            
+
+<div Style=" page-break-before:always">
+
+    <div class="footerRight">
+        <p align="right">Matricule&nbsp;:&nbsp;{!Opportunity_PTL__c.Name}&nbsp;&nbsp;Code Client&nbsp;: {!Opportunity_PTL__c.Opportunity__r.DO_AccountNumber__c}&nbsp;</p>
+    </div>  
+
+    <div class="footer"> 
+
+        <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+        <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+    </div>
+
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    
+    <!-- DOSSIER DE MISE EN PLACE -->
+        <div>
+            <h1>DOSSIER DE MISE EN PLACE</h1>
+    
+            <p><STRONG> Type de Mouvement:&nbsp;</STRONG><apex:outputfield value="{!Opportunity_PTL__c.MEP_Choice__c}"/></p>
+            <br/><br/>
+            <h3>Date de Mouvement:</h3>
+    
+            <Div class="ButagazSignature">
+    
+    
+                <p><apex:outputText escape="false" value="Date demandée au plus tôt:&nbsp;{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!Opportunity_PTL__c.PTL_MEP_Earliest_Tank_moving_Date__c}"/>
+                                       </apex:outputText></p>
+    
+    
+    
+        </div>
+        
+        <Div class="ClientSignature">
+
+   
+            <p><apex:outputText escape="false" value="Date demandée au plus tard:&nbsp;&nbsp;{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!Opportunity_PTL__c.PTL_MEP_Latest_Tank_moving_Date_MEP__c}"/>
+                                       </apex:outputText></p>
+   
+   
+        </div>
+        
+        <div class="clear"/> 
+        
+            <br/>
+            <p>Mouvement de la citerne possible en absence du client:&nbsp; {!Opportunity_PTL__c.MouvementPossibleAbsence__c}</p>
+            <br/>
+            <p>Livraison de la citerne possible en absence du client:&nbsp; <apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Delivery_possible_in_absence_of_clie__c=='true','Oui','Non')}"/></p>
+            <br/>
+    
+            <p>Etabli par:&nbsp; {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.CreatedBy.Name}</p>
+        </div>         
+
+        
+        <!-- IDENTIFICATION DU CLIENT -->
+        
+        <div class="contractSection">
+        
+            <h1>IDENTIFICATION DU CLIENT</h1>
+        
+            <div class="ButagazSignature">
+                
+                <p>Matricule client:&nbsp; {!Opportunity_PTL__c.Opportunity__r.DO_AccountNumber__c}</p>
+                <br/>
+                <p>Nom du client: {!Opportunity_PTL__c.Opportunity__r.DO_Name__c}</p>
+                <br/>
+        
+       
+                <br/>
+                <p>Nom et Prénom du contact: {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.Contact.FirstName}&nbsp;&nbsp;{!Opportunity_PTL__c.Opportunity__r.SyncedQuote.Contact.LastName}</p>
+                <p class="spaceBefore">Fonction :{!Opportunity_PTL__c.Opportunity__r.SyncedQuote.Contact_Role_del__c}   </p>
+                <p class="spaceBefore">Téléphone portable : {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.Contact_Mobile_Phone__c}</p>
+                <p class="spaceBefore">Téléphone professionnel : {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.Contact_Phone__c}</p>
+                <p class="spaceBefore">E-mail : {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.Contact__c}</p>
+                           
+            
+        
+            </div> 
+      
+        
+        
+        
+        
+        
+        
+            
+        
+        
+      
+        
+            <div class="ClientSignature">
+           
+           
+           
+                <p><STRONG> Adresse d'installation:</STRONG>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                <p class="spaceBefore"><apex:outputtext value=" {!Opportunity_PTL__c.PTL_Street_number__c}"></apex:outputtext>&nbsp;
+                <apex:outputfield value=" {!Opportunity_PTL__c.PTL_Number_extention__c}"/>,&nbsp;
+                <apex:outputfield value="{!Opportunity_PTL__c.PTL_Street_type__c}"/>&nbsp;
+                <apex:outputtext value="{!Opportunity_PTL__c.PTL_Street_name__c}"></apex:outputtext></p>
+                <apex:outputtext rendered="{!Opportunity_PTL__c.PTL_Place_Called__c !=null && Opportunity_PTL__c.PTL_Place_Called__c!= ''}" 
+                              value="{!'Lieu-dit'&' '&Opportunity_PTL__c.PTL_Place_Called__c}"></apex:outputtext>
+                                
+                <p class="spaceBefore"> <apex:outputtext value="{!Opportunity_PTL__c.PTL_City_Postal_Code__r.Name}"></apex:outputtext></P>
+                <p class="spaceBefore"> Personne à contacter si different du contact:&nbsp;&nbsp; <apex:outputtext value="{!Opportunity_PTL__c.PTL_First_and_Last_Name__c}"></apex:outputtext> </p>
+                <p class="spaceBefore"> Téléphone portable :&nbsp;&nbsp;  <apex:outputtext value="{!Opportunity_PTL__c.PTL_Mobile_Phone_Number__c}"></apex:outputtext> </p>
+                <p class="spaceBefore"> Téléphone professionnel:&nbsp;&nbsp;  <apex:outputtext value="{!Opportunity_PTL__c.PTL_Work_Phone_Number__c}"></apex:outputtext> </p>
+                <p class="spaceBefore"> Coordonnées GPS :&nbsp;&nbsp;  <apex:outputtext value="{!Opportunity_PTL__c.Opty_PTL_Geolocation__Latitude__s}"></apex:outputtext> &nbsp;/&nbsp; <apex:outputtext value="{!Opportunity_PTL__c.Opty_PTL_Geolocation__Longitude__s}"></apex:outputtext> </p>
+            </div>
+        
+        
+        
+            <div class="clear"/>   
+        
+        </div>
+  
+  
+        <div class="contractSection">
+        
+            <h1>Demande d'intervention</h1>
+                
+                <p> Pré-visite:&nbsp;  <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Pre_Visit__c,'Oui','Non')}"/> &nbsp; </p>
+   
+   
+                <br/> 
+                <p> Cl&eacute; en main:&nbsp;  <Apex:outputtext value="{!Opportunity_PTL__c.PTL_MEP_Cles_en_Main_Y_N__c}"/> &nbsp;</p> <p style="display: {!IF(Opportunity_PTL__c.PTL_MEP_Cles_en_Main_Y_N__c == 'Oui','Clé en Main *La présence du client est obligatoire lors de la mise en place','None')}"/> 
+                <br/>
+                <p> Dossier de d&eacute;claration en pr&eacute;fecture  :&nbsp;  <Apex:outputtext value="{!IF(Opportunity_PTL__c.Opportunity__r.SyncedQuote.RollUp_Estimated_Capacity_PTL__c>6,'Oui','Non')}"/></p>
+                <br/>
+        </div>
+
+
+        <Div class="ClientSignature">   
+
+
+
+            <p> Mouvement à la même adresse:&nbsp;  <Apex:outputtext value="{!Opportunity_PTL__c.PTL_MEP_MouvementMemeAdresseButagaz_Y_N__c}"/></p>           
+            <br/>
+            <p> Raccordement à prevoir:&nbsp;  <Apex:outputtext value="{!Opportunity_PTL__c.PTL_MEP_Precheck_Tank_Connection_Y_N__c}"/></p>
+            <br />
+            <p> Modification installation:&nbsp;  <Apex:outputtext value="{!Opportunity_PTL__c.PTL_MEP_ModificationOfInstallNeeded__c}"/></p>
+            <br />
+            <p> MEP simultanées:&nbsp;  <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Simultaneous_MEP__c,'Oui','Non')}"/></p>
+            <br/>
+            <p> Citernes jumelées:&nbsp;  <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Connected_Tank__c,'Oui','Non')}"/></p>
+        </div>
+        
+        <div class="clear"/>   
+        
+   <!-- ADAPTATION DE STOCKAGE -->
+  <!-- <apex:pageblock rendered="{!Opportunity_PTL__c.MEP_Choice__c=='Adaption de stockage'}">-->
+        <div class="contractSection" style="page-break-inside:avoid; display: {!IF(Opportunity_PTL__c.MEP_Choice__c=='Adaption de stockage','','None')}">
+        
+            <h2>Adaptation de Stockage</h2>
+
+                <p>Motif de la demande :&nbsp; <apex:outputfield value="{!Opportunity_PTL__c.Reason_for_mouvement__c}"/>&nbsp;</p>
+                <br/><p>% jauge &agrave; la signature (adaptation):&nbsp; <Apex:outputField value="{!Opportunity_PTL__c.PTL_MEP_Percentage_Jauge_Adaptation_Tank__c}"/></p>
+
+            <div class="clear"/> 
+            
+            <h3>Référence de l'ancienne citerne</H3>
+        
+            
+                    <table class="ButagazTable">
+                    <tr>
+                      
+                      <th>Point livré</th>
+                      <th>Citerne</th>
+                      <th>Numéro de la Citerne</th>
+                      <th>Type Citerne</th>
+                      <th>Capacite de Citerne</th>
+                      <th>Usage(s)</th>
+                      
+                    </tr>
+                    <apex:repeat value="{!PTLEQUIPEMENTS}" var="line">
+                      <tr>
+                        
+                        <td>{!Opportunity_PTL__c.Opportunity__R.Existing_PTL__r.Name}</td>
+                        <td>{!line.Designation__c}</td>
+                        <td>{!line.Name}</td>
+                        <td><Apex:outputField value="{!line.Tank_Type__c}"/></td>
+                        <td><Apex:outputField value="{!line.Capacity_Tank__c}"/></td>
+                        <td><Apex:outputField value="{!Opportunity_PTL__c.Opportunity__r.Existing_PTL__r.Purposes__c}"/></td>
+                      </tr>
+                    </apex:repeat>
+                   </table>
+              </div>
+              <!--/apex:pageblock-->
+              <Div> 
+              <br/>     
+                   <h3>Nouvelle citerne à mettre en place</h3>
+        
+                <table class="ButagazTable">
+                    <tr>
+          
+          
+                        <th>Citerne(s)</th>
+                        <th>Type de Citerne</th>
+                        <th>Capacité de Citerne</th>
+                        <th>Mise à disposition</th>
+          
+                             <th colspan=" 1" style="display:{!if(Opportunity_PTL__c.Opportunity__r.SyncedQuote.Customer_Owned_Tanks__c!=0,'', 'None')}" >Information Complémentaire</th>
+                                </tr>
+                        <apex:repeat value="{!CurrentTankQuoteLineItems}" var="line">
+                        <tr>
+            
+                            <td>{!line.pricebookentry.Name}</td>
+                            <td>{!line.Tank_Placing_Type__c}</td>
+                            <td>{!line.Tank_Capacity__c}</td>
+                        
+                        <td><Apex:outputField value="{!line.Mis_Disposition__c}"/></td>
+                        <td style="display:{!if(OR(line.Mis_Disposition__c='Customer Owned Tank',line.Mis_Disposition__c='Tank sold by BTZ'),'', 'None')}"> 
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'None')}">
+                            
+                                    <STRONG> Citerne</STRONG>:&nbsp; {!line.Customer_Owned_Tank_Name__c}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        
+                                       <apex:outputText value="Epreuve décennale le:{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!line.Customer_Owned_Tank_Appr_Date__c}" />
+                                       </apex:outputText>
+                                       <br/>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <apex:outputText value="Re épreuve decennale avant le:{0,date,dd.MM.yyyy}">
+                                           <apex:param value="{!line.Customer_Owned_Tank_ReApprBefore_Date__c}" />
+                                        </apex:outputText>
+                            </p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'None')}"><STRONG> N de serie </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Serial_Number__c}</p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'None')}"><STRONG> Capacité</STRONG>:&nbsp; {!line.Customer_Owned_Tank_Capacity__c} </p>
+                            
+                                                       
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'None')}"><STRONG> Constructeur</STRONG>:&nbsp; {!line.Brand__c}</p><br/>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'None')}">La requalification périodique de votre citerne vous sera facturée selon le barème V2P en vigueur au jour de la requalification</p>
+                            <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','','None')}">Vous avez la possibilité d’acheter une citerne BUTAGAZ selon le barème MADV ci-joint. Les conditions de vente de la citerne BUTAGAZ feront l’objet d’un contrat de vente spécifique</p>
+                          </td>
+                </tr>
+                </apex:repeat>
+                </table>
+        </div>
+                
+        <div>      
+               <apex:pageblock rendered="{!Opportunity_PTL__c.MEP_Competitor_Tank_present__c}">
+                      
+                          
+                            
+                               <h2>R&eacute;servoir concurrent chez client &agrave; date de signature: &nbsp; {!IF(Opportunity_PTL__c.MEP_Competitor_Tank_present__c,'Oui','Non')} </h2>
+                           
+
+                            <p Class="spaceBefore" >% jauge &agrave; la signature:&nbsp; <Apex:outputField value="{!Opportunity_PTL__c.PTL_MEP_Percentage_Jauge_Competitor_Tank__c}"/></p>
+                            <p Class="spaceBefore" > Marque:  {!Opportunity_PTL__C.Tank_Brand_Concurrent__c}</p>
+                            <P Class="spaceBefore"> Position Citerne Butagaz:&nbsp;  <Apex:outputField value="{!Opportunity_PTL__c.PTL_MEP_Tank_Placing_Type_Details__c} "/></p>
+                            
+                           
+                       
+                        
+                        </apex:pageblock> 
+                        
+            <apex:pageblock rendered="{!Opportunity_PTL__c.PTL_MEP_Precheck_Tank_Connection_Y_N__c}">
+                <h3> Raccordement a pr&eacute;voir :&nbsp; <Apex:outputtext value="{!Opportunity_PTL__c.PTL_MEP_Precheck_Tank_Connection_Y_N__c}"/></h3>
+                <p Class="spaceBefore" > Modification Installation:&nbsp; <Apex:outputField value="{!Opportunity_PTL__c.PTL_MEP_ModificationOfInstallNeeded__c} "/></p>
+                <p Class="spaceBefore"> Type d'installateur:&nbsp;    <Apex:outputField value="{!Opportunity_PTL__c.PTL_MEP_Mechanic_type__c} "/>   </p>   
+            
+                        </apex:pageblock> 
+        </div>       
+
+
+  
+        <div class="contractSection" Style="Page-break-inside:avoid">
+    
+                <h1> Support et Equipement</h1>
+    
+            <div class="ButagazSignature">
+            
+                    <p> Dalle béton(client):&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Concrete__c,'Oui','Non')}"/></p>
+                    <br/><p> Dallettes béton &agrave; fournir:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Concrete_Tile_Flooring__c,'Oui','Non')}"/></p>
+                    <br/><p> Ancrage citerne apparente:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Anchoring_Surface_Tank__c,'Oui','Non')}   "/></p>
+                    <br/><p> Téléjauge:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_TeleJauge__c,'Oui','Non')}"/></p>
+            </div>  
+            
+            <div class="ClientSignature">    
+            
+                <p> Rehausse jauge:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Enhance_Jauge__c,'Oui','Non')}"/></p>
+                <br/><p> Attaches 3 points:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Three_point_attachement__c,'Oui','Non')}"/></p>
+                <br/><p> Détente 3 bar:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Detente_3_Bar__c,'Oui','Non')}"/></p>
+                <br/><p> Débit industriel :&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Insdustrial_Outflow__c,'Oui','Non')}"/></p>
+                <br/><p> Système de coupure sur canalisation liquide:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_SysCutOffPtAtLiquidChannel__c,'Oui','Non')}"/></p>
+            </div>
+            <div class="clear"/> 
+        </div>   
+        
+            
+           
+        <div class="contractSection" Style="Page-break-inside: avoid; display: {!IF(Opportunity_PTL__c.PTL_MEP_Cles_en_Main_Y_N__c == 'Oui','','None')}">
+    
+            <h1> Option Clé en Main</h1>
+    
+            <div class="ButagazSignature">
+                    <p> Etalement des terres (-10 m):&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Land_spreading_10_m__c,'Oui','Non')}"/></p>
+                    <br/><p> Préparation de la tranchée (-5 m):&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Preparation_trench__c,'Oui','Non')}"/></p>
+                    <br/><p> Réalisation d'un drain:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Drain__c,'Oui','Non')}   "/></p>
+                    <br/><p> Dalle de lestage citerne enterrée*:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_FlooringForBurriedBallastTank__c,'Oui','Non')}"/></p>
+            </div>  
+            
+            <div class="ClientSignature">    
+                <p> Intervention d'un brise-roche*:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.MEP_Intervention__c,'Oui','Non')}"/></p>
+                <br/><p> Supplément de remblaiement*:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Supplementary_Filling__c,'Oui','Non')}"/></p>
+                <br/><p> Evacuation des terres ou gravats*:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_MEP_Evacuation_of_Dirt_Rubble__c,'Oui','Non')}"/></p>
+            </div>
+         
+            <div class="clear"/>
+        
+                <p Style="font-style:Italic"> * facturation supplémentaire par Butagaz au barème en vigueur</p>
+        </div>   
+    
+        <div class="contractSection" Style="page-break-inside:avoid; display: {!IF(Opportunity_PTL__c.PTL_MEP_Cles_en_Main_Y_N__c == 'Oui','','None')}">
+        
+            <h2>Spécificités “Clé en main”</h2>
+
+                <p align="justify" style="font-style:italic">Les travaux ne pourront être réalisés que sous réserve d'acceptation du dossier par le Service Technique.</p><br/>
+                <p align="justify" style="font-style:italic">Si lors de l'intervention du prestataire sur le terrain du Client, la présence de canalisations enterrées ou autres obstacles signalés ci-dessous et/ou découverts lors de l'intervention rendaient impossible la réalisation des travaux, Butagaz s'efforcera de trouver une solution alternative qui soit conforme à la réglementation en vigueur.</p><br/>
+                <p align="justify" style="font-style:italic">En l'absence de solution alternative satisfaisante, le contrat de fourniture de gaz qui lie le Client à Butagaz sera annulé de plein droit sans qu'aucune indemnité de quelle que nature que ce soit ou aucuns frais ne soient dûs au Client et/ou à Butagaz.</p><br/>
+      
+        
+        <div class="clear"/>
+           
+        <!-- SPECIFICITÉS “Cl&ecute; en main” -->
+
+            <div class="ButagazSignature"> 
+                <br/><p>Canalisation enterrée (eau, gaz, câble tél...):&nbsp;<Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Existing_below_ground_channels__c,'Oui','Non')}"/></p>
+                <br/><p>Argile:&nbsp;<Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Clayground__c,'Oui','Non')}"/></p>
+                <br/><p>Autres spécificités:&nbsp;<Apex:outputtext value="{!Opportunity_PTL__c.PTL_Other_Cles_enMain_Conditions__c}"/></p>
+            </div> 
+           
+            <div class="ClientSignature">
+                <br/><p>Ligne électrique haute tension: &nbsp;<Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Electric_Cable_High_voltage__c,'Oui','Non')}"/></p>
+                <br/><p>Fosse septique ou regard:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Septic_Tank__c,'Oui','Non')}"/></p>
+            </div>
+        </div>
+         
+        <div class="clear"/>
+    
+   <!-- ENVIRONNEMENT/ACCES CITERNIER -->
+    
+        <div class="contractSection" Style="page-break-inside:avoid">
+        
+            <h1>Environnement et acc&egrave;s citernier</h1>
+        
+            <div class="ButagazSignature">
+                <br/><p>Avec mur:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_With_Wall__c,'Oui','Non')}"/></p>
+                <br/><p>Hauteur limitée si inf. &agrave; 3.5 m:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Limitation_of_Height_if_3_5__c,'Oui','Non')}"/></p>
+                <br/><p>Largeur inf. &agrave; 3 m:&nbsp; <Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Size_3m__c,'Oui','Non')}"/></p>
+                <br/><p>Position citerne en surélévation/contrebas:&nbsp;<Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Position_Tank_Heightend_Sunken__c,'Oui','Non')}"/></p>
+                <br/><p>Passage sur pelouse ou plantations:&nbsp;<Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Acces_via_lawn_or_vegetation__c,'Oui','Non')}"/></p>
+                <br/><p>Obstacle sur le parcours camion:&nbsp;<Apex:outputtext value="{!Opportunity_PTL__c.PTL_Obslacle_at_access_point_PTL__c}"/></p>
+                <br/><p>Moyens probables-manutention réservoir:&nbsp;<Apex:outputtext value="{!Opportunity_PTL__c.PTL_Means_for_Handling_tank_to_from__c}"/></p>
+            </div>   
+         
+            <div class="ClientSignature">      
+                <br/><p>Dérogation de limitation de tonnage à prévoir :&nbsp; <Apex:outputField value="{!Opportunity_PTL__c.PTL_Excemption_of_Tonnage_estimated_at__c}"/></p>
+                <br/><p>Sol ne pouvant pas supporter la charge du camion (19T):&nbsp;<Apex:outputtext value="{!IF(Opportunity_PTL__c.PTL_Limitation_of_Tonnage__c,'Oui','Non')}"/></p>
+                
+                <br/><p> Passage au-dessus d'un mur ou haie (m):&nbsp;<Apex:outputtext value="{!Opportunity_PTL__c.PTL_Passage_over_a_Wall_fence__c}"/></p>
+                <br/><p>Fils électriques (m): <Apex:outputfield value="{!Opportunity_PTL__c.PTL_Passage_electric_equipement__c}"/></p>
+            </div>
+
+        </div>
+        </div>
+        
+        <div class="clear"/>     
+  
+
+        <div Style="page-break-inside:avoid; display: {!IF(Opportunity_PTL__c.PTL_MEP_Comments__c!=null,'','None')}">
+      
+            <h1>Commentaires</h1>
+      
+            <p>&nbsp;<Apex:outputtext value="{!Opportunity_PTL__c.PTL_MEP_Comments__c}"/></p>
+          
+     
+        </div>  
+  
+        
+        <div class="contractSection" Style="page-break-inside:avoid; display: {!IF($CurrentPage.parameters.isSE!='true','','None')}">
+        
+        
+           <h1>Signatures</h1>
+
+            <div class="ButagazSignature" Style="page-break-inside:avoid">
+                
+                     <p class="nospace">Votre Contact: {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.CreatedBy.Name}</p>
+                     <p class="nospace">email&nbsp;: {!Opportunity_PTL__c.Opportunity__r.SyncedQuote.CreatedBy.Email}</p>
+                     <br/>
+                     <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+            <div class="bigSpaceAfter"><p>Signature:</p></div>
+                     
+                     
+                          
+                     
+            <div class="ButagazCachet" Style="page-break-inside:avoid">
+                    <p> Pour Butagaz: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Opportunity_PTL__c.Opportunity__r.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Opportunity_PTL__c.Opportunity__r.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+            </div>  
+                    
+                    
+            <div class="ClientSignature" Style="page-break-inside:avoid">
+                 
+                 <p class=" nospace "> Client Signataire: {!Opportunity_PTL__c.Opportunity__r.DO_NAme__c}</p>
+                  <br/>
+                  
+                  <br/>
+                
+                  <br/>
+                  <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="{!PrettyDate}"/>  </p>
+                 
+                  
+                  <br/>
+                   
+                  <p>Signature &nbsp;(1):</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+            </div> 
+            
+            <div class="clear"/>
+        </div>
+        <div class="clear"/>
+   
+          
+<!--************************* Dossier de mise en place et Dossier de mouvement *************************-->
+    
+    <div class="clear"/>
+    
+
+<!--************************* Plan d'implantation *************************-->
+    
+    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true' && PlanImplantation.size>0,true,false)}">
+            <apex:image url="{!$Resource.test}" width="180" height="75"/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+        
+            <p style="text-align: center;">
+                <span style="font-size:26px;"><strong>Plan d&#39;implantation</strong></span></p>
+            <p align="center">
+            
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <apex:repeat value="{!PlanImplantation}" var="att">
+                <!-- <apex:panelgrid columns="1"> -->
+                     <!--<apex:image url="{!URLFOR($Action.Attachment.Download, att.id)}" style="width:600px;height:600px;text-align:center;"/>-->
+                <!--      <img src="{!URLFOR($Action.Attachment.Download, att.id)}" style="width:600px;height:600px;text-align:center;align:center;" align="center"/> -->
+                <!-- </apex:panelgrid> -->
+                
+                <div style="width:100%;">
+                   <p align="center">
+                        <img src="{!URLFOR($Action.Attachment.Download, att.id)}" style="width:600px;height:600px;"/>
+                   </p>
+               </div>
+            </apex:repeat>
+            </p>
+     </apex:outputPanel>
+
+<!--************************* Page de signature pour signature électronique *************************-->
+    
+    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+        <c:SignaturePDF nbSig="1"/>
+    </apex:outputPanel>
+    
+    
+    
+</apex:page>

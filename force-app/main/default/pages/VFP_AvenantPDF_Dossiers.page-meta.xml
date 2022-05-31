@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>26.0</apiVersion>
+    <availableInTouch>false</availableInTouch>
+    <confirmationTokenRequired>false</confirmationTokenRequired>
+    <description>&quot;Dossier de mise en place&quot; et &quot;Dossier de mouvement&quot;</description>
+    <label>VFP_AvenantPDF_Dossiers</label>
+</ApexPage>

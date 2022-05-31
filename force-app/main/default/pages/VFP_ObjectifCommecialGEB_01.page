@@ -1,0 +1,169 @@
+<apex:page standardController="ObjCom_GEB__c" extensions="VFC_ObjectifCommecialGEB_01" showHeader="true" sidebar="false" tabStyle="ObjCom_GEB__c">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+    <script>
+        var $dialog;
+        $(document).ready(function() {
+        $dialog = $("#dialog-modal")
+            .dialog({
+                autoOpen: false,
+                height: 150,
+                width: 250,
+                modal: true,
+                closeOnEscape: false,
+                resizable: false
+            });
+        });
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            return false;
+        }
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+
+        $(function() {
+ 
+    		$("form").bind("keypress", function(e) {
+            	if (e.keyCode == 13) CallSaveBtn();
+      		});
+ 
+		});         
+    </script>
+    
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}"/>
+        </div>
+    </div>    
+
+  <apex:form >
+    	<apex:actionFunction action="{!saveBtn}" name="CallSaveBtn"/>    
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>       
+        <apex:sectionheader title="{!$Label.Objectif_Commercial}" subtitle="GEB"/>
+        <apex:pageblock id="idBlock">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.PEC_calculate_cost}" action="{!calcTotal}" rerender="idBlock" status="modalStatus"/> 
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!saveBtn}"  rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}" status="modalStatus"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+            <apex:pageblocksection >            
+                <apex:inputField value="{!ObjCom_GEB__c.Commercial__c}" required="true"/> 
+                <apex:pageBlockSectionItem />                               
+                <apex:inputField value="{!ObjCom_GEB__c.Code_AC__c}" required="true"/>                                                
+                <apex:inputField value="{!ObjCom_GEB__c.ObjCOm_date__c}" required="true"/>
+            </apex:pageblocksection>
+            <apex:pageblocksection title="Consignations nettes" collapsible="true" columns="1">                                          
+	            <apex:pageblocktable value="{!lcObjArticleYearMonth}" var="line">                             
+	                
+	                <apex:column headervalue="Nom de l'article" rendered="{!line.bIsTotal!=true}" style="width:220px !important;">
+	                    <apex:outputtext value="{!line.oArticle.Name}  ({!line.oArticle.Code_Article__c})" style="width:220px !important;"/>
+	                </apex:column> 
+	                <apex:column headervalue="Nom de l'article" rendered="{!line.bIsTotal==true}" style="width:220px !important;">
+	                    <apex:outputtext value="Total" style="width:220px !important;"/>	                  
+	                </apex:column> 
+	                	                 	                 
+	                 <apex:column headervalue="Janvier" style="width:60px !important;">
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[1].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[1].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/> 	    
+	                </apex:column>                
+	                 <apex:column headervalue="Février" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[2].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[2].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                 <apex:column headervalue="Mars" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[3].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[3].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                 <apex:column headervalue="Avril" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[4].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[4].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                <apex:column headervalue="May" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[5].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[5].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                 <apex:column headervalue="Juin" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[6].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[6].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>   
+	                <apex:column headervalue="Juillet" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[7].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[7].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                <apex:column headervalue="Août" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[8].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[8].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                <apex:column headervalue="Septembre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[9].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[9].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                <apex:column headervalue="Octobre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[10].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[10].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                <apex:column headervalue="Novembre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[11].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[11].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column>  
+	                <apex:column headervalue="Décembre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[12].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal!=true}"/> 
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[12].Consignations_nettes_mandataire__c}" style="width:60px !important;" rendered="{!line.bIsTotal==true}"/>	                </apex:column> 
+	                <apex:column headervalue="Total année" >
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[13].Consignations_nettes_mandataire__c}" style="width:60px !important;"/> 
+	                </apex:column>                                                                                                                                                                   
+	            </apex:pageblocktable>
+             </apex:pageblocksection>              
+
+  		  
+	  		<apex:pageblocksection title="Volumes" collapsible="true" columns="1">  
+	            <apex:pageblocktable value="{!TotalObjectives}" var="line">                             
+	                
+	                <apex:column headervalue="" style="width:220px !important;">
+	                    <apex:outputtext value="Tonnage Global UB" style="width:220px !important;"/>	                  
+	                </apex:column> 
+	                	                 	                 
+	                 <apex:column headervalue="Janvier" style="width:60px !important;" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[1].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>                
+	                 <apex:column headervalue="Février" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[2].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                 <apex:column headervalue="Mars" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[3].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                 <apex:column headervalue="Avril" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[4].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                <apex:column headervalue="May" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[5].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                 <apex:column headervalue="Juin" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[6].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>   
+	                <apex:column headervalue="Juillet" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[7].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                <apex:column headervalue="Août" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[8].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                <apex:column headervalue="Septembre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[9].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                <apex:column headervalue="Octobre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[10].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                <apex:column headervalue="Novembre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[11].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>  
+	                <apex:column headervalue="Décembre" >
+	                	<apex:inputfield value="{!line.mObjArticleYearMonth[12].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column> 
+	                <apex:column headervalue="Total année" >
+	                	<apex:outputfield value="{!line.mObjArticleYearMonth[13].Tonnage_Global__c}" style="width:60px !important;"/> 
+	                </apex:column>                                                                                                                                                                   
+	            </apex:pageblocktable>	  		
+	  		</apex:pageblocksection>		  		
+  	  	</apex:pageblock> 
+  	   	
+  </apex:form>		      
+
+</apex:page>

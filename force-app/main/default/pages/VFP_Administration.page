@@ -1,0 +1,89 @@
+<apex:page controller="VFC_Administration" showHeader="true" sidebar="true">
+    
+    <style>
+        .errorClass {
+            background-color: red;
+        }
+        .successClass {
+            background-color: green;
+        }
+        .normalClass {
+            background-color: white;
+        }
+    </style>
+
+
+    <apex:form >
+        <apex:pageMessages />
+
+        <br/><br/><br/><br/><br/>
+        <div align="center">
+            <apex:selectList value="{!menuEntry}" size="1">
+                <apex:selectOptions value="{!menuEntries}"/>
+                <apex:actionSupport event="onchange" reRender="ViewBlock"/>
+            </apex:selectList>
+        </div>
+        <br/><br/><br/>
+
+        <!--
+        <apex:pageBlock title="Test" id="Test">
+            <apex:outputText value="{!menuEntry}"/>
+        </apex:pageBlock>
+        -->
+
+        <apex:pageBlock title="{!blockTitle}" id="ViewBlock">
+            <!-- No item selected in list -->
+            <div align="center">
+                <apex:outputText value="Veuillez sélectionner une action" rendered="{!menuEntry='None'}"/>
+            </div>
+
+            <!-- Quota GEB selected -->
+            <apex:pageBlockTable value="{!OptiesAndQuotaToDisplay}" var="mdtQuota" rendered="{!menuEntry='QuotasGEB'}">
+                <apex:column headervalue="Nom">
+                    <apex:outputLink target="_blank" value="/{!mdtQuota.mandataireId}">{!mdtQuota.mandataireName}</apex:outputLink>
+                </apex:column>
+                <apex:column headervalue="Nombre d'opportunités" value="{!mdtQuota.mandataireCurrentValue}" 
+                    styleClass="{!IF(mdtQuota.mandataireCurrentValue / mdtQuota.mandataireQuota * 100 > 90,'errorClass','normalClass')}"/>
+                <apex:column headervalue="Quota" value="{!mdtQuota.mandataireQuota}"/>
+            </apex:pageBlockTable>
+
+            <!-- Signea Package licenses -->
+            <!-- Licenses remaining/available -->
+            <apex:pageBlockTable value="{!SigneaPackageLicenseDetails}" var="signeaPckgLicense" rendered="{!AND(menuEntry='SigneaUsers', SigneaPackageLicenseDetails.size!=0)}">
+                <apex:column headervalue="Nom du package">
+                    <apex:outputLink target="_blank" value="/{!signeaPckgLicense.Id}">{!signeaPckgLicense.NamespacePrefix}</apex:outputLink>
+                </apex:column>
+                <apex:column headervalue="Licenses utilisées" value="{!signeaPckgLicense.UsedLicenses}"
+                    styleClass="{!IF(signeaPckgLicense.UsedLicenses / signeaPckgLicense.AllowedLicenses * 100 > 90,'errorClass','normalClass')}"/>
+                <apex:column headervalue="Licenses autorisées" value="{!signeaPckgLicense.AllowedLicenses}"/>
+                <apex:column headervalue="Date de création du package" value="{!signeaPckgLicense.CreatedDate}"/>
+                <apex:column headervalue="Date d'expiration du package" value="{!signeaPckgLicense.ExpirationDate}"/>
+                <apex:column headervalue="Statut" value="{!signeaPckgLicense.Status}"/>
+            </apex:pageBlockTable>
+            <br/><br/><br/>
+            <!-- No record -->
+            <div align="center">
+                <apex:outputText value="Pas d'utilisateurs associés à cette licence de package" rendered="{!AND(menuEntry='SigneaUsers', SigneaUsersList.size=0)}"/>
+            </div>
+            <!-- Users list -->
+            <apex:pageBlockTable value="{!SigneaUsersList}" var="signeaUser" rendered="{!AND(menuEntry='SigneaUsers', SigneaUsersList.size!=0)}">
+                <apex:column headervalue="Utilisateur">
+                    <apex:outputLink target="_blank" value="/{!signeaUser.Id}">{!signeaUser.Name}</apex:outputLink>
+                </apex:column>
+                <apex:column headervalue="Mandataire" value="{!signeaUser.Mandataire__c}"/>
+                    <!-- <apex:outputLink target="_blank" value="/{!signeaUser.Mandataire__c}">{!signeaUser.Mandataire__c}</apex:outputLink> -->
+                <!-- </apex:column> -->
+                <apex:column headervalue="Profil">
+                    <apex:outputLink target="_blank" value="/{!signeaUser.Profile.Id}">{!signeaUser.Profile.Name}</apex:outputLink>
+                </apex:column>
+                <apex:column headervalue="Rôle">
+                    <apex:outputLink target="_blank" value="/{!signeaUser.UserRole.Id}">{!signeaUser.UserRole.Name}</apex:outputLink>
+                </apex:column>
+            </apex:pageBlockTable>
+
+
+        </apex:pageBlock>
+
+    </apex:form>
+
+</apex:page>

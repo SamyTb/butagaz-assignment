@@ -1,0 +1,41 @@
+<apex:page standardController="PTL__c" id="CampMarket" extensions="VFC_PageDetailCampaign">
+
+<style>
+.fewerMore { display: none;}
+
+td{
+  vertical-align : top;   
+  text-align: left;
+</style>
+
+<apex:form >
+
+   <apex:pageblock id="CustomList"  >
+    
+        <apex:pageBlockTable value="{!camp}" var="c" rendered="{!NOT(ISNULL(camp))}" >
+	        <apex:column headerValue="Action">
+			<apex:outputlink id="Edit" value="/{!c.CampaignMembers[0].Id}/e?parent_id={!c.CampaignMembers[0].ContactId }&retURL=%2F{!c.CampaignMembers[0].ContactId} " target="_blank">Modifier</apex:outputlink> 
+			&nbsp; 
+			<apex:outputlink id="View" value="/{!c.CampaignMembers[0].Id}" target="_blank">Vue</apex:outputlink>    
+			</apex:column>
+			<apex:column headerValue="Nom de la campagne" width="5%"><apex:outputlink id="CampaignName" value="/{!c.id}" target="_blank" >{!c.Name}</apex:outputlink></apex:column>  
+			<apex:column headerValue="Type d'enregistrement" value="{!c.RecordTypeid}"  />
+			<apex:column headerValue="Statut du membre" value="{!c.CampaignMembers[0].Status}" />
+			<apex:column headerValue="Alerte" value="{!c.Alerte_Campagne__c}"  />
+			<apex:column headerValue="Campagne principale" value="{!c.Parent.Name}"  />
+			<apex:column headerValue="Date de début" value="{!c.StartDate}" />
+			<apex:column headerValue="Type" value="{!c.Type}"  />
+			<!--  <apex:column headerValue="A répondu"  value="{!c.CampaignMembers[0].HasResponded}"  />  -->
+			<apex:column headerValue="MAJ Statut du membre"  value="{!c.CampaignMembers[0].Interested_date__c}"  />
+			<apex:column headerValue="Statut campagne" value="{!c.Status}" />
+		</apex:pageBlockTable><br/>
+    
+ 		
+		<apex:outputLabel value="Aucun enregistrement à afficher" rendered="{!(ISNULL(camp))}" styleClass="noRowsHeader"></apex:outputLabel>
+	
+	</apex:pageblock>
+       
+</apex:form>
+
+
+</apex:page>

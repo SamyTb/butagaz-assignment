@@ -1,0 +1,5 @@
+<apex:page controller="GDB_Checkout_ValidatePaymentController" action="{!validateResponse}" contentType="text/html" showHeader="false" standardStylesheets="false" sidebar="false" cache="false">
+    <script type="text/javascript">
+        window.location.href = '{!redirectURL}';
+    </script>
+</apex:page>

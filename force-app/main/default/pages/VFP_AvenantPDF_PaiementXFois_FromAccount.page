@@ -1,0 +1,422 @@
+<apex:page standardController="CampaignMember" showHeader="false" renderas="pdf" language="fr" extensions="VFC_ProcessDataForSigneaFromCampaign">
+
+
+    <!-- Used for Avenant Etalement de paiement en signature électronique -->
+
+    <div id="containerAvenantPaymentSpreadSE"> 
+
+        <div class="footerRight">
+            <p align="right">Référence Client&nbsp;:&nbsp;{!CampaignMember.Contact.Account.AccountNumber}</p>              
+        </div>
+
+        <div class="footer">
+            <!--<p Style="display:{!IF(CampaignMember.Contact.Account.Market_type__c=='DOM','','None')}"> {!$Label.Avenant_Octroi_DOM}</p>-->
+            <p>{!$Label.Avenant_Etalement_Paiement_SE}</p>
+            <!--
+            <p Style="display:{!IF(AND(Account.Market_type__c=='PRO', OR(Account.Product_Scale__c == 'V1PRO', Account.Product_Scale__c == 'V1GR')),'','None')}"> {!$Label.Avenant_Octroi_PRO}</p>
+            <p Style="display:{!IF(AND(Account.Market_type__c=='PRO', OR(Account.Product_Scale__c == 'V1PRP1', Account.Product_Scale__c == 'V1GRP1', Account.Product_Scale__c == 'V1PRP2', Account.Product_Scale__c == 'V1GRP2')),'','None')}"> {!$Label.Avenant_Octroi_PRO_CHR}</p>
+            <p Style="display:{!IF(AND(Account.Market_type__c=='PRO', OR(Account.Product_Scale__c == 'V1PRP3', Account.Product_Scale__c == 'V1GRP3')),'','None')}"> {!$Label.Avenant_Octroi_PRO_COLL}</p>
+            -->
+            <p>Butagaz Siège : 47-53 rue Raspail --- 92594 LEVALLOIS PERRET CEDEX</p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+        </div>
+
+
+        <!-- Document Header -->  
+        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        <!--<div Style="display:{!IF(CampaignMember.Contact.Account.Market_Type__c=='DOM','','None')}">
+            <h1>Avenant au Contrat Domestique de fourniture de gaz propane en citerne et prestations d’entretien
+                            <br/>Modification des conditions commerciales</h1>
+        <!--</div>-->
+        <div>
+            <h1>Avenant au contrat pour la fourniture de gaz en citerne<br/>Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois »</h1>
+        </div>
+        
+        <!--<div Style="display:{!IF(CampaignMember.Contact.Account.Market_Type__c=='PRO','','None')}">
+            <h1>Avenant au Contrat Professionnel de fourniture de gaz propane en citerne et prestations d’entretien
+                            <br/>Modification des conditions commerciales</h1>
+        </div>-->
+        <br/>
+        
+        <!-- Entre le Client et Butagaz -->
+        <div class="contractSection">
+            <p align="justify">Les présentes conditions ont été négociées entre le CLIENT et Butagaz. Le CLIENT déclare qu’il accepte l’intégralité des conditions précisées aux présentes.</p>
+        </div>
+
+      
+       
+        <div class="contractSection">
+        
+            <h1>Client signataire</h1>
+        
+            <table border="0" width="95%">
+                        
+                <tr><td colspan="3">
+                    <span class="value">   Référence Client :&nbsp;<Apex:outputField value="{!CampaignMember.Contact.Account.AccountNumber}"/></span>
+                    <br/>
+                    <span class="value">   Nom et Prénom :&nbsp;<Apex:outputField value="{!CampaignMember.Contact.Account.Salutation}"/>&nbsp;  {!CampaignMember.Contact.Account.Name}</span>
+                </td></tr>
+                        
+                <tr><td colspan="3">
+                    <span class="field">Adresse : </span>
+                    <span class="value">{!CampaignMember.Contact.Account.Street_N__c}&nbsp;&nbsp; <Apex:outputField value="{!CampaignMember.Contact.Account.Street_type__c}"/> {!CampaignMember.Contact.Account.Street_name__c}</span>
+                </td></tr>
+                        
+                <tr><td colspan="3">
+                    <span class="field">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    <!-- IF a Postal code and a city are filled THEN display it-->
+                    <apex:outputtext rendered="{!CampaignMember.Contact.Account.Postal_Code__c !=null && CampaignMember.Contact.Account.City__c != ''}" 
+                                              value="{!CampaignMember.Contact.Account.Postal_Code__c&' '&CampaignMember.Contact.Account.City__c}"></apex:outputtext>
+                    <!-- ELSE display City_Postal_Code__r.Name -->
+                    <apex:outputtext rendered="{!CampaignMember.Contact.Account.Postal_Code__c == null && CampaignMember.Contact.Account.City__c == ''}" 
+                                              value="{!CampaignMember.Contact.Account.City_Postal_Code__r.Name}"></apex:outputtext> <br />
+                </td></tr>
+
+                <tr><td colspan="3"><br /></td></tr>   
+                       
+                <tr>
+                    <td><span class="field">Téléphone domicile : </span><span class="value">{!CampaignMember.Contact.Account.Phone}</span></td>
+                            
+                    <td><span class="field">{!IF(CampaignMember.Contact.Account.Phone_Restriction__c=='R', 'Liste Rouge :  Oui', 'Liste Rouge: Non')}</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field">T&eacute;l&eacute;phone portable : </span><span class="value">{!CampaignMember.Contact.Account.Mobile_Phone_Number__c}</span></td>
+                    <td><span class="field">T&eacute;l&eacute;phone travail : </span><span class="value">{!CampaignMember.Contact.Account.Work_Phone_Number__c}</span></td> 
+                </tr>
+                <tr><td colspan="3"><span class="field">E-mail : </span><span class="value">{!CampaignMember.Contact.Account.Email__c}</span></td></tr>
+                        
+            </table>
+        </div>
+
+        <!-- 3. Le prix du gaz et des prestations associées -->
+        <div class="contractSection">
+            <h1> Nouvelles Conditions</h1>
+           
+            <p align="justify">BUTAGAZ et le CLIENT décident par le présent avenant de compléter le Contrat précité dans ses conditions particulières tarifaires, en vue de faire bénéficier le CLIENT, à compter de la signature du présent avenant, d'un étalement de paiement pour ses factures liées à son Contrat de fourniture de gaz.</p><br/> 
+
+            <p class="spaceBefore"><strong>Mode de paiement&nbsp;:&nbsp;</strong>&nbsp;PRELEVEMENT D'OFFICE</p>  <!--<Apex:outputField value="{!CampaignMember.Contact.Account.Payment_method__c}"/>-->
+            <!--<p class="spaceBefore"><strong>Délai de paiement&nbsp;:&nbsp;</strong><Apex:outputField value="{!CampaignMember.Contact.Account.Payment_Time_Value__c}"/></p>-->
+            <p class="spaceBefore"><strong>Délai de paiement&nbsp;:&nbsp;</strong>{!IF($CurrentPage.parameters.paymentSpreadChosen=='3', 'PO en 3 fois sans frais au 8', 'PO en 10 fois sans frais au 8')}</p>
+            <p class="spaceBefore"><strong>Barème applicable pour le propane&nbsp;:</strong>&nbsp;V1DOM</p>  <!--<Apex:outputField value="{!CampaignMember.Contact.Account.Product_Scale__c}"/>-->
+                        
+        </div>
+        
+        <div class="contractSection" Style="page-break-inside:avoid">
+          
+            <div class="Signatures">
+       
+                <!--<h1>Signatures</h1>-->
+                <p>Toutes les autres clauses et conditions du contrat de fourniture gaz propane en citerne non modifiées par le présent avenant gardent leur plein et entier effet. Le CLIENT déclare par ailleurs avoir connaissance du caractère évolutif, pendant toute la durée du contrat, des barèmes qui lui ont été communiqués.</p>
+
+                <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+        
+                <div class="clear"></div>
+
+                <!--<div class="ButagazSignature">
+                    <p class="nospace">Votre Contact : {!CampaignMember.Contact.Account.CreatedBy.Name}</p>
+                </div>
+                <div class="clear"/>-->
+            </div>
+        </div>
+    </div>
+
+    <!--************************* OPTION: Paiement X fois *************************-->
+    <div id="containerAvenantPaymentSpreadSE_XTimes" Style="page-break-before:always">
+        <!-- Document Header -->  
+        <!--<apex:image url="{!$Resource.test}" width="180" height="75"/>
+        <div>
+            <h1>Avenant au contrat pour la fourniture de gaz en citerne<br/>Option « Paiement 3 fois »</h1>
+        </div>
+        <br/>-->
+        
+        <!-- Entre le Client et Butagaz -->
+        <div class="contractSection">
+            <h1>Entre le Client et Butagaz</h1>
+            
+            <p align="justify">
+                &nbsp;
+                Vous avez signé un contrat de fourniture de gaz propane en citerne Butagaz, et vous souhaitez régler vos dépenses de gaz en plusieurs fois. Avec l'Option «Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois », Butagaz vous offre la possibilité d'échelonner le paiement de vos livraisons de gaz, en 3 fois.</p>
+            <br/>
+            <br/>
+        </div>
+
+        <!-- Les conditions de l'Option « Paiement X fois » -->
+        <div class="contractSection">
+            <h1>Les conditions de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois »</h1>
+            
+            <p align="justify">Cette offre concerne exclusivement le paiement des factures de gaz propane, dans le cadre de votre contrat de fourniture de gaz propane en citerne.</p>
+            <p align="justify">Elle s'appliquera à chaque livraison de gaz sauf renonciation à la présente offre selon les modalités ci-dessous.</p>
+        </div>
+        
+        <!-- Ouverture de l'Option « Paiement X fois » -->
+        <div class="contractSection">
+            <h1>Ouverture de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois »</h1>
+            
+            <p>Butagaz se réserve de donner son accord après étude de votre dossier.</p>
+        </div>
+
+        <!-- coût de l'option « Paiement X fois » et modalités de paiement -->
+        <div class="contractSection">
+            <h1>Coût de l'option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » et modalités de paiement</h1>
+            
+            <p>(1) Le Coût de cette Option est actuellement : nul</p>
+            <p align="justify"><span class="field">- cette Option étant en effet actuellement gratuite.</span></p><br/>
+            <p align="justify">(2) Les prélèvements sur votre compte bancaire ou postal commenceront le 8 du mois suivant votre livraison, et se succèderont tous les 8 des mois suivants. Vous joindrez au présent avenant une demande de prélèvement accompagnant vos coordonnées bancaires ou postales. En cas de modification de votre domiciliation bancaire ou postale, vous nous communiquerez vos nouvelles coordonnées un mois à l'avance.</p><br/>
+            <p align="justify">(3) Vous recevez une facture par courrier avec le montant des échéances à prélever, lequel sera égal à la valeur de votre facture de gaz propane divisée par {!$CurrentPage.parameters.paymentSpreadChosen}, étant précisé que les {!IF($CurrentPage.parameters.paymentSpreadChosen=='3', '2', '9')} premières échéances ne comporteront pas d'arrondi, lequel sera reporté sur la dernière échéance.</p><br/>
+            <p align="justify">(4) En cas de prélèvement rejeté, vous perdez de plein droit le bénéfice de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » 15 jours après une mise en demeure restée infructueuse et les sommes restant dues deviendront immédiatement exigibles, sans mise en demeure. Les livraisons suivantes devront être réglées au comptant sans escompte à réception de facture.</p><br/>
+            <p align="justify">(5) A aucun moment le solde des sommes à régler à Butagaz, y compris les échéances de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » à venir, ne peut dépasser 2000 €. Si, par exemple, une livraison fait dépasser ce solde, Butagaz se réserve le droit de vous demander de régler au comptant les sommes excédant ce solde de 2000 €.</p>
+        </div>
+        
+        <!-- Faculté de renonciation à tout moment à l'Option « Paiement X fois » -->
+        <div class="contractSection">
+            <h1>Faculté de renonciation à tout moment à l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois »</h1>
+            
+            <p align="justify">Vous pouvez renoncer à l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » à tout moment par courrier avec accusé de réception, et moyennant un préavis de un mois. A partir de ce moment, vous réglerez vos prochaines livraisons au comptant conformément au contrat de fourniture de gaz propane en citerne Butagaz. Les échéances de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » concernant les livraisons déjà opérées seront prélevées conformément au présent avenant jusqu'à parfait paiement. A tout moment, vous pouvez solder par anticipation le montant des échéances à venir ; dans ce cas, aucun frais ne vous serait réclamé. Dans le cadre de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois », le forfait de l'option en cours restera acquis par Butagaz.</p>
+        </div>  
+
+        <!-- Durée -->
+        <div class="contractSection">
+            <h1>Durée</h1>
+            
+            <p align="justify">La facilité de paiement de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » est accordée pour la durée de votre contrat de fourniture de gaz propane en citerne.</p>
+        </div>
+        
+        <!-- Conditions de résiliation de l'Option « Paiement X fois » -->
+        <div class="contractSection" Style="page-break-inside:avoid">
+            <h1>Conditions de résiliation de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois »</h1>
+            
+            <p align="justify">a) A votre initiative à tout moment sous réserve de respecter un préavis de 30 jours ouvrables avant le 30 du mois, notifié par courrier recommandé avec accusé de réception à BUTAGAZ.</p><br/>
+            <p align="justify">b) Par BUTAGAZ, à tout moment sous réserve de respecter un préavis de un mois notifié par courrier avec accusé de réception.</p><br/>
+            <p align="justify">c) De plein droit et sans préavis de part ou d'autre :</p>
+            <p>
+              <!-- - En cas de suppression par le CLIENT de son autorisation de prélèvement automatique,<br/>-->
+            - En cas de suppression par le CLIENT de son mandat de prélèvement SEPA  automatique,
+            - En cas de rejet d'un prélèvement non régularisé 15 jours après une mise en demeure,<br/>
+            - En cas de résiliation du contrat de fourniture de gaz en citerne BUTAGAZ.<br/>
+            </p>
+        </div>
+        
+        <!-- Conséquences de la résiliation -->
+        <div class="contractSection">
+            <h1>Conséquences de la résiliation</h1>
+            
+            <p align="justify">En cas de résiliation de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois », pour quelle que raison que ce soit, un arrêté de compte sera dressé par Butagaz.</p>
+            <p align="justify">Si le solde est débiteur, le CLIENT dispose d'un délai de 15 jours à compter de la date de réception de l'arrêté de compte, pour le régler.</p>
+            <p align="justify">En cas de solde créditeur, celui-ci sera remboursé au CLIENT dans un délai maximum de 15 jours après réception de l'arrêté de compte par le CLIENT.</p>
+            <p>La livraison sera réglée au comptant.</p>
+            <p align="justify">La résiliation de l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » ou la renonciation à l'Option « Paiement {!$CurrentPage.parameters.paymentSpreadChosen} fois » n'entraînent pas la résiliation du contrat de fourniture, lequel s'exécutera au comptant.</p>
+        </div>
+
+        <!-- Contentieux -->
+        <div class="contractSection">
+            <h1>Contentieux</h1>
+            
+            <p align="justify">Suivant l'article R312-35 du Code de la consommation :</p>
+            <p align="justify">Le tribunal d'instance connaît des litiges nés de l'application des dispositions du présent chapitre. Les actions en paiement engagées devant lui à l'occasion de la défaillance de l'emprunteur doivent être formées dans les deux ans de l'événement qui leur a donné naissance à peine de forclusion. Cet événement est caractérisé par :
+                                -le non-paiement des sommes dues à la suite de la résiliation du contrat ou de son terme ;
+                                -ou le premier incident de paiement non régularisé ;
+                                -ou le dépassement non régularisé du montant total du crédit consenti dans le cadre d'un contrat de crédit renouvelable ;
+                                -ou le dépassement, au sens du 13° de l'article L. 311-1, non régularisé à l'issue du délai prévu à l'article L. 312-93. 
+                                Lorsque les modalités de règlement des échéances impayées ont fait l'objet d'un réaménagement ou d'un rééchelonnement, le point de départ du délai de forclusion est le premier incident non régularisé intervenu après le premier aménagement ou rééchelonnement conclu entre les intéressés ou après adoption du plan conventionnel de redressement prévu à l'article L. 732-1 ou après décision de la commission imposant les mesures prévues à l'article L. 733-1 ou la décision du juge de l'exécution homologuant les mesures prévues à l'article L. 733-7.
+                                </p>
+        </div>
+        <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+        
+        
+        <!-- Condition de résiliation -->
+        
+        <div class="clear"></div>
+        
+         
+        <div Style="page-break-before:always">
+            
+            
+            <h1>Conditions de résiliation</h1>
+            
+            <p align="justify">En cas de changement d'offre commerciale dans le cadre de son contrat de fourniture de gaz propane en citerne, quels qu&#39;en soient les motifs, le présent avenant sera résilié de plein droit à la date de changement de contrat. De nouvelles modalités d&#39;étalement de paiement pourront être proposées par BUTAGAZ au CLIENT aux conditions indiquées dans le contrat de fourniture de gaz du CLIENT.</p><br/>
+            <p align="justify">Toutes les autres clauses et conditions du contrat de fourniture de gaz propane en citerne non modifiées par le présent avenant gardent leur plein et entier effet.</p>
+        
+
+        
+            <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+            <div>
+                <div class="clear"></div>
+                
+                
+                
+                <div class="ButagazSignature">
+                    
+                    <p class="nospace">Votre Contact : Butagaz</p>
+                    <p class="nospace">&nbsp;</p>
+                    <p class="nospace">&nbsp;</p>
+                    <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter" style="display: {!IF($CurrentPage.parameters.isSE!='true','','None')}"><p>Signature :</p></div>
+                    
+                    
+                    
+                    
+                    <div class="ButagazCachet">
+                        <p> Votre Distributeur Butagaz :</p>
+                        <br/>
+                        <p><apex:outputtext escape="False" value="  {!CampaignMember.Contact.Account.Mandataire__r.Name}"/></p>
+                        <p><apex:outputtext escape="False" value="  {!CampaignMember.Contact.Account.Mandataire__r.Headquarters_address__c}"/></p>
+                        <br/>
+                        <p><apex:outputfield value=" {!CampaignMember.Contact.Account.Mandataire__r.Headquarters_RCS__c}"/></p>                    
+                    </div>
+                </div>
+                
+                
+                <div class="ClientSignature">
+                    
+                    <p class=" nospace "> Client Signataire : {!CampaignMember.Contact.Account.LastName}&nbsp;{!CampaignMember.Contact.Account.FirstName}</p>
+                    <br/>
+                        
+                    <br/>
+                    <div style="display: {!IF($CurrentPage.parameters.isSE!='true','','None')}">
+                        <p class="SpaceBefore">Date d’impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                        <br/>
+                        <p class="SpaceBefore">Date de Signature :&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                        <br/>
+                        <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                        <br/>
+                        
+                        <p>Signature(1) :</p>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>                  
+                              <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                    </div>
+                    <div style="display: {!IF($CurrentPage.parameters.isSE=='true','','None')}">
+                        <p>Document signé électroniquement.</p>
+                    </div>
+                </div> 
+                <br/> 
+                
+            </div>
+            <div class="contractSection" Style="page-break-after:always" />
+        </div >
+                
+        
+        
+        <div Style="page-break-before:always">
+            <h3> Droit de rétractation </h3>
+            <br/>
+            <p align="justify">Vous avez le droit de vous rétracter du présent avenant de paiement sans donner de motif dans un délai de quatorze jours.
+            Le délai de rétractation expire quatorze jours après le jour la conclusion du contrat.
+            </p>
+            <br/>
+            <p align="justify">Pour exercer le droit de rétractation, vous devez nous notifier votre décision de rétractation du présent contrat au moyen d’une déclaration dénuée d’ambiguïté (par exemple, lettre envoyée par la poste, télécopie ou courrier électronique). Vous pouvez utiliser le modèle de formulaire de rétractation mais ce n’est pas obligatoire. La charge de la preuve de l'exercice du droit de rétractation pèse sur le consommateur, nous vous recommandons donc d’utiliser un moyen traçable (exemple : lettre recommandée avec accusé de réception). Nous vous rappelons que le fait de signer électroniquement votre contrat n'emporte pas signature de ce bon de rétractation.
+            </p>
+            <br/>
+            <p align="justify">Pour que le délai de rétractation soit respecté, il suffit que vous transmettiez votre communication relative à l’exercice du droit de rétractation avant l’expiration du délai de rétractation.
+            </p>
+            <br/>
+            <p align="justify">En cas de rétractation de votre part du présent contrat, nous vous rembourserons tous les paiements reçus de vous, sans retard excessif et, en tout état de cause, au plus tard quatorze jours à compter du jour où nous sommes informés de votre décision de rétractation du présent contrat. Nous procéderons au remboursement en utilisant le même moyen de paiement que celui que vous aurez utilisé pour la transaction initiale, sauf si vous convenez expressément d’un moyen différent; en tout état de cause, ce remboursement n’occasionnera pas de frais pour vous.
+            </p>
+            <br/>
+        </div> 
+        <br/>
+        <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+        
+        <div class= "ButagazCadre" Style="page-break-inside:avoid">
+            <h3>Bordereau de rétractation à l'option étalement de paiement.</h3><br/>
+            <p align="justify">A renvoyer au plus tard quatorze jours après la date de signature du contrat pour la souscription de l’option étalement de paiement</p><br/><br/>
+            <p align="justify">Lorsque le crédit sert exclusivement à financer la fourniture de biens particuliers ou la prestation de services particuliers, que le contrat de crédit mentionne, et que vous avez opté, par demande écrite signée et datée, pour la livraison ou la fourniture immédiate du bien ou de la prestation de services, ce délai de rétractation expire à la date à laquelle le bien est livré ou le service fourni, sans pouvoir excéder quatorze jours, ni être inférieur à trois jours, sauf en cas de vente ou de démarchage à domicile : dans ce cas-là, le délai de rétractation est de quatorze jours, quelle que soit la date de livraison du bien.</p><br/> <br/>
+            <p align="justify">Le délai commence à courir à compter de la date de signature du présent contrat pour la souscription de l’option étalement de paiement.</p><br/><br/>
+            <p align="justify">La présente rétractation n'est valable que si elle est adressée, lisiblement et parfaitement remplie, avant l'expiration des délais rappelés ci-dessus, par lettre recommandée avec accusé de réception, à l'adresse suivante : Butagaz - Service Clients – 47/53 rue Raspail, 92594 Levallois-Perret Cedex</p><br/><br/>
+            <p align="justify">Je soussigné (nom / prénom), ............................................., déclare renoncer au contrat pour la souscription de l’option étalement de paiement et ainsi à l'offre de crédit d’un montant maximal de 2000 euros que j'avais acceptée le (date de la signature du contrat) ......................... pour étaler le prix de mes livraisons en gaz propane dans le cadre de mon contrat de fourniture de gaz propane en citerne conclu avec BUTAGAZ.</p><br/><br/>
+            <p align="justify">Fait le :  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Signature du client : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br/>
+        </div>
+        <!-- <div Style="page-break-before:always">
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            
+            <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>   
+            <br/>
+            <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:32px;" >BUTAGAZ</span></p><br/><br/>
+            <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:24px;" >SERVICE CLIENTS</span></p><br/><br/>
+            <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:24px;" >47/53 rue Raspail</span></p><br/> <br/>
+            <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:24px;" >92594 Levallois-Perret Cedex</span></p><br/><br/>
+            
+        </div> -->
+        
+        <div Style="page-break-before:always">
+            <h1>CONDITIONS GENERALES D’UTILISATION DU SERVICE DE SIGNATURE ELECTRONIQUE</h1>
+            <br/>
+            <br/>
+
+            <div Style="page-break-inside:avoid">
+                <h3>1. CADRE</h3>
+                <p align="justify" Style="page-break-inside:avoid">La signature électronique consiste en un procédé fiable d’identification garantissant un lien avec l’acte auquel elle s’attache. Elle a la même valeur que la signature papier. Lorsque vous choisissez la signature électronique, vous recevez un email contenant un lien vers une page qui vous permettra notamment de consulter votre contrat, les barèmes applicables, ainsi que les éventuels avenants. Vous pourrez choisir la durée de votre contrat. Vous signez ces documents en apposant un code unique qui vous est transmis confidentiellement par SMS sur votre mobile. L’ensemble des éléments rassemblés pour cette signature constitue le fichier de preuve. Ce fichier sera archivé dans un coffre-fort électronique sécurisé.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>2. OBJET</h3>
+                <p align="justify" Style="page-break-inside:avoid">Les présentes conditions générales d’utilisation du service de signature électronique sont applicables à la fourniture du service de souscription en ligne d’un contrat de fourniture de gaz en citerne ou bien de tout avenant en rapport avec un tel contrat, au moyen de la signature électronique, pour les clients qui souhaitent avoir recours à ce service et disposent des moyens techniques nécessaires.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>3. ACCEPTATION</h3>
+                <p align="justify" Style="page-break-inside:avoid">L’utilisation de la signature électronique est subordonnée à votre acceptation des présentes conditions générales. A cet effet, vous avez reçu un mail contenant un lien hypertexte donnant accès une plateforme sécurisée où se trouvent tous vos documents contractuels. Vous vous engagez à les lire attentivement, et à fournir les pièces demandées pour la constitution du fichier de preuve. La totalité des éléments que vous déposerez ne devra pas excéder 5Mo. Pour réduire la taille de vos fichiers, vous pourrez utiliser un logiciel disponible gratuitement sur Internet. Vous signerez électroniquement en validant l’authentification via le code secret reçu par SMS.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>4. ACCÈS ET UTILISATION DU SERVICE</h3>
+                <p align="justify">Afin de bénéficier du service de signature électronique, vous devez disposer des moyens techniques nécessaires :</p>
+                <p>
+                - ordinateur, tablette ou smartphone<br/>
+                - accès à Internet<br/>
+                - adresse de messagerie électronique valide<br/>
+                - numéro de téléphone mobile valide<br/>
+                Vous vous engagez à conserver votre numéro de dossier afin que nous puissions donner suite à toute demande de communication de pièces, ainsi qu’à conserver votre contrat, sous la forme électronique ou papier, dans des conditions de nature à en garantir l’intégrité.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>5. RESPONSABILITÉ</h3>
+                <p align="justify">Dans le cadre de l’utilisation du présent service de signature électronique, Butagaz ne saurait être tenu responsable de tout dommage quel qu’il soit causé par votre faute, sur les personnes ou les biens. En particulier, Butagaz ne pourra pas être tenu responsable en cas de défaillance d’accès au service, de perte de vos identifiants personnels, et/ou de contamination par un virus, et de façon générale pour tout dommage indirect qui pourrait résulter de l’utilisation du service. Pour l’application de la présente clause, le dommage indirect s’entend comme celui ne résultant pas exclusivement et directement de la défaillance du service. De même, en cas de survenance d’un évènement imprévisible et insurmontable, et généralement pour tout cas de force majeure, la responsabilité de Butagaz ne saurait être engagée.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>6. ÉVOLUTION DU SERVICE</h3>
+                <p align="justify">Le service de signature électronique peut être amené à évoluer dans le temps, notamment en fonction des avancées technologiques. Butagaz ne saurait être tenu responsable des modifications, évolutions ou remplacements, quelle que soit leur cause.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>7. SÉCURITÉ DES INFORMATIONS</h3>
+                <p align="justify">Il est rappelé qu’Internet n’est pas un réseau sécurisé, et que le secret des correspondances sur ce réseau ne peut ainsi pas être garanti. Il appartient à chaque usager de prendre toutes les mesures appropriées pour protéger ses données et logiciels d’éventuels virus.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>8. CONSTITUTION ET CONSERVATION D’UNE PREUVE ÉLECTRONIQUE</h3>
+                <p align="justify">Butagaz utilise le service SIGNEA de DOCAPOST, filiale du groupe LA POSTE, selon le procédé suivant :</p>
+                <p>
+                - Constitution d’un ensemble contractuel signé par l’apposition d’une signature électronique.<br/>
+                - Horodatage de l’ensemble réuni dans un document original.<br/>
+                - Création, transmission et archivage du fichier de preuve.<br/>
+                Le fichier de preuve garantit le lien entre l’acte et ses signataires.<br/>
+                Il est conservé pendant au moins dix ans à compter de la date de la signature.</p><br/>
+            </div>
+
+            <div Style="page-break-inside:avoid">
+                <h3>9. CONVENTION DE PREUVE</h3>
+                <p align="justify">Conformément au nouvel article 1356 du Code civil, le client et Butagaz souhaitent par les présentes fixer les règles de preuve qui leur seront applicables. Ainsi, Butagaz et le client s’engagent à accepter qu’en cas de litige, le fichier de preuve soit valablement produit devant le Tribunal, par l’une ou l’autre des parties, aux fins de prouver les faits et les engagements rapportés dans ledit fichier. A cet effet, le client et Butagaz acceptent que le client manifeste son consentement via un service de signature électronique, selon les modalités décrites à l’article 1 « Cadre ». Vous garantissez à Butagaz que tous les éléments que vous transmettez (copie de pièce d’identité, copie du bail si vous êtes locataire, copie de l’acte de vente si vous êtes nouvel acquéreur, mandat SEPA si vous avez choisi le prélèvement automatique, et votre RIB) sont valables au moment de leur transmission. Le client et Butagaz reconnaissent que la signature électronique fondée sur un certificat à usage unique vaut preuve au même titre que la signature manuscrite. L’apposition de la signature électronique a pour effet d’exprimer le consentement du client pour tous les éléments contenus dans la plateforme, à l’exception du bordereau de rétractation, qui devra être renvoyé à l’adresse indiquée pour valoir rétractation.</p><br/>
+            </div>
+
+        </div>
+        
+    </div>  
+        
+       
+    <!--************************* END OPTION: Paiement X fois *************************-->
+
+
+    <!--************************* Page de signature pour signature électronique *************************-->
+    
+    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+        <c:SignaturePDF nbSig="3"/>
+    </apex:outputPanel>
+
+</apex:page>

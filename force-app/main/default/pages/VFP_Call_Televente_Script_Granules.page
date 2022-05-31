@@ -1,0 +1,10 @@
+<apex:page standardController="Lead" tabStyle="Lead" >
+    <flow:interview name="Televente_Call_Script_Granules" finishLocation="{!'/'&Lead.Id}">
+        <apex:param name="Lead_Id" value="{!Lead.Id}"/>
+    </flow:interview>
+    <apex:form >
+        <div align="center">
+            <apex:commandLink value="Annuler" action="{!cancel}"/>
+        </div>
+    </apex:form>
+</apex:page>

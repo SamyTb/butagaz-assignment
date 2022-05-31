@@ -1,0 +1,504 @@
+<apex:page standardController="Quote" extensions="VFC_Send_Quote_To_SAP" action="{!init}">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+                
+
+    <style>
+        th.headerRow{
+            text-align:center;
+            border: 2px solid grey !important;
+        }
+
+        td.dataCell{
+            text-align:center;
+            border: 2px solid grey !important;
+        }
+        
+        h2.mainTitle{
+            text-align:left;
+            text-decoration: underline !important;
+            font-weight: bold;
+        }
+
+        .fsWrapper{
+            width: 95%;
+            margin: 0 auto;
+        }          
+        
+        .largeurColEtat{
+            width: 120px !important;
+        }          
+
+        .largeurColRetourSAP{
+            width: 300px !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+
+        }          
+
+        .centerButton{
+            text-align: center;
+        }          
+
+
+        .headerTitle{
+            font-family: arial, sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff!important;
+            text-align: left;
+            text-transform: uppercase;
+            background: #4e75a3;
+            display: block;
+            padding: 5px !important;
+            margin:0;
+        }
+ 
+        .paddingButton {
+            padding-left: 100px !important;
+        }
+
+        
+
+    </style>
+    
+    <!--<script type="text/javascript">-->
+    <script>
+        $.noConflict();
+        
+        function buttonsEnabled(enabled) {
+            // retrieve all of the buttons or links on the page
+            // with the css class of btn
+            var $buttons = jQuery('.btn');
+            if (enabled === false) {
+                // add the btnDisabled class to give it the look of being disabled
+                // add the disabled attribute to actually disable interactability
+                $buttons.toggleClass('btnDisabled', true).attr('disabled', 'disabled');
+            } else {
+                // remove the css class and the disabled attribute
+                $buttons.toggleClass('btnDisabled', false).attr('disabled', null);
+            } 
+        }
+        
+        function buttonsDisabled() {
+            buttonsEnabled(false);
+            return false;
+        }
+        
+        function startStatus(objet){
+            $dialog.dialog('open');
+            $dialog.dialog("option", "title", objet);
+            return false;
+        }
+
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+
+        function getStatus() {
+            var status = jQuery( 'input[id$=statusContinue]' ).val();
+            //console.log('status:'+status);
+            return status;
+        }
+
+        function getstepPTL() {
+            var stepPTL = jQuery( 'input[id$=stepPTL]' ).val();
+            //console.log('stepPTL:'+stepPTL);
+            return stepPTL;
+        }
+
+        function getstepAccount() {
+            var stepAccount = jQuery( 'input[id$=stepAccount]' ).val();
+            //console.log('stepAccount:'+stepAccount);
+            return stepAccount;
+        }
+
+        function callOrNoCallpostPTLToSAP_JS()
+        {
+            console.log('PTL:'+getStatus());
+            if(getStatus()=="true")
+            {
+                postPTLToSAP_JS();
+                startStatus('Synchronisation PTL ...');
+            }
+        }
+
+        function callOrNoCallpostAccountToSAP_JS()
+        {
+            console.log('Account:'+getStatus());
+            if(getStatus()=="true")
+            {
+                postAccountToSAP_JS();
+                startStatus('Synchronisation Compte ...');
+            }
+        }
+
+        function callOrNoCallpostRebateToSAP_JS()
+        {
+            console.log('Remise:'+getStatus());
+            if(getStatus()=="true")
+            {
+                if({!displayRebate} || {!displayActionCo})
+                {
+                    postRebateToSAP_JS();
+                    startStatus('Synchronisation Remises et Actions Commerciales ...');
+                }
+                else
+                    callOrNoCallpostContractToSAP_JS();
+            }
+        }
+
+        function callOrNoCallpostContractToSAP_JS()
+        {
+            console.log('Contract:'+getStatus());
+            if(getStatus()=="true")
+            {
+                postContractToSAP_JS();
+                startStatus('Synchronisation Contrat ...');
+            }
+        }
+
+        function callOrNoCallpostOrderToSAP_JS()
+        {
+            console.log('Order:'+getStatus());
+            if(getStatus()=="true")
+            {
+                if({!displayOrder})
+                {
+                    postOrderToSAP_JS();
+                    startStatus('Synchronisation Commande ...');
+                }
+                else
+                    callOrNoCallpostBankToSAP_JS();
+            }
+        }
+
+        function callOrNoCallpostBankToSAP_JS()
+        {
+            console.log('Bank:'+getStatus());
+            if(getStatus()=="true")
+            {
+                if({!signature})
+                {                
+                    postBankToSAP_JS();
+                    startStatus('Synchronisation Mandat SEPA ...');
+                }
+            }
+        }
+
+        function masterFunctionWrapper_JS()
+        {
+            console.log('masterFunctionWrapper_JS');
+            console.log('getStatus:'+getStatus());
+            console.log('getstepPTL:'+getstepPTL());
+            console.log('getstepAccount:'+getstepAccount());
+
+            if({!projetTypeCREA}==true)
+            {
+                if(getstepPTL()=="false" && getstepAccount()=="false")
+                    callOrNoCallpostPTLToSAP_JS();
+                if(getstepPTL()=="true" && getstepAccount()=="false")
+                    callOrNoCallpostAccountToSAP_JS();
+                if(getstepPTL()=="true" && getstepAccount()=="true")
+                    callOrNoCallpostRebateToSAP_JS();    
+            }
+            
+            if({!projetTypeEXTE}==true)
+            {
+                if(getstepPTL()=="false" && getstepAccount()=="false")
+                    callOrNoCallpostPTLToSAP_JS();
+                //if(getstepPTL()=="true" && getstepAccount()=="false")
+                    //callOrNoCallpostAccountToSAP_JS();
+                //if(getstepPTL()=="true" && getstepAccount()=="true")
+                    //callOrNoCallpostRebateToSAP_JS();    
+                if(getstepPTL()=="true")
+                    callOrNoCallpostRebateToSAP_JS();    
+            }
+
+            if({!projetTypeSUCC}==true)
+            {
+                if(getstepPTL()=="false" && getstepAccount()=="false")
+                    callOrNoCallpostAccountToSAP_JS();
+                if(getstepPTL()=="false" && getstepAccount()=="true")
+                    callOrNoCallpostPTLToSAP_JS();
+                if(getstepPTL()=="true" && getstepAccount()=="true")
+                    callOrNoCallpostRebateToSAP_JS();    
+            }
+        }
+
+    </script>
+
+<apex:slds />
+
+<apex:sectionheader title="{!Quote.Name}" subtitle="Synchronisation vers SAP"/>
+<apex:pageMessages id="mainMsg" showDetail="false" rendered="true" escape="false"/>
+
+<apex:form id="form" styleClass="fsWrapper">
+
+    <apex:pageblock >
+
+        <apex:pageblockbuttons location="{!locationButton}" styleClass="paddingButton">
+            <input name="SendToSAP"  class="btn" type="{!typeButton}" value="Envoyer vers SAP" onclick="masterFunction_JS();buttonsDisabled();return false;"/>
+            <apex:commandbutton value="{!$Label.pricing_back}" action="{!redirectToQuoteDetail}"/>
+        </apex:pageblockbuttons>
+
+        <apex:actionFunction action="{!masterFunction}" name="masterFunction_JS" reRender="withSendButton,withoutSendButton,acc,ptl,state,step1,step2" 
+            oncomplete="stopStatus();buttonsEnabled(true);masterFunctionWrapper_JS();"/>
+
+
+        <apex:actionFunction action="{!postPTLToSAP}" name="postPTLToSAP_JS" status="Status1" reRender="acc,ptl,state,step1,step2" 
+            oncomplete="stopStatus();buttonsEnabled(true);masterFunctionWrapper_JS();"/>
+
+        <apex:actionFunction action="{!postAccountToSAP}" name="postAccountToSAP_JS" reRender="acc,state,step1,step2" 
+                oncomplete="stopStatus();buttonsEnabled(true);masterFunctionWrapper_JS()"/>
+
+        <apex:actionFunction action="{!postRebateToSAP}" name="postRebateToSAP_JS" reRender="lRemiseDom, lRemisePro,state,qactionco" 
+                oncomplete="stopStatus();buttonsEnabled(true);callOrNoCallpostContractToSAP_JS();"/>
+
+        <apex:actionFunction action="{!postContractToSAP}" name="postContractToSAP_JS" reRender="qptl,state" 
+                oncomplete="stopStatus();buttonsEnabled(true);callOrNoCallpostOrderToSAP_JS();"/>
+
+        <apex:actionFunction action="{!postOrderToSAP}" name="postOrderToSAP_JS" reRender="lOrder,state" 
+                oncomplete="stopStatus();buttonsEnabled(true);callOrNoCallpostBankToSAP_JS();"/>
+
+        <apex:actionFunction action="{!postBankToSAP}" name="postBankToSAP_JS" reRender="lBank,state" 
+                oncomplete="stopStatus();buttonsEnabled(true);"/>
+
+        <!--DEBUT DEVIS DEJA RATTACHE A OPTY ET SYNCHRONISE-->
+        <apex:pageBlock title="{!DevisDejaEnvoye}" rendered="{!afficheDevisDejaEnvoye}">
+        </apex:pageBlock>
+        <!--FIN DEVIS DEJA RATTACHE A OPTY ET SYNCHRONISE-->
+
+        <apex:outputPanel id="state">
+            <input type="hidden" id="statusContinue" value="{!statusContinue}"/>
+        </apex:outputPanel>
+
+        <apex:outputPanel id="step1">
+            <input type="hidden" id="stepPTL" value="{!stepPTL}"/>
+        </apex:outputPanel>
+
+        <apex:outputPanel id="step2">
+            <input type="hidden" id="stepAccount" value="{!stepAccount}"/>
+        </apex:outputPanel>
+
+        <!--statusContinue : <apex:outputPanel id="state">
+            <input type="text" id="statusContinue" value="{!statusContinue}"/>
+        </apex:outputPanel>
+
+        stepPTL : <apex:outputPanel id="step1">
+            <input type="text" id="stepPTL" value="{!stepPTL}"/>
+        </apex:outputPanel>
+
+        stepAccount : <apex:outputPanel id="step2">
+            <input type="text" id="stepAccount" value="{!stepAccount}"/>
+        </apex:outputPanel>-->
+
+        <!-- DEBUT PTL -->
+            <apex:outputPanel styleClass="dataTable" id="ptl" rendered="{!bSynchroSend}">
+                <apex:pageBlock >
+                    <h2 class="headerTitle">Liste PTL</h2>
+                <apex:pageBlockTable value="{!lOPTL}" var="optl">
+                    <apex:column headerValue="Libellé OPTL" value="{!optl.PTL_Label__c}"/>
+                    <apex:column headerValue="Numéro OPTL" value="{!optl.name}"/>
+                    <apex:column headerValue="PTL" value="{!optl.PTLSynchroSAP__c}"/>
+                    <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                        <apex:outputText value="{!optl.Error_Synchro_To_SAP__c}" escape="false" />
+                    </apex:column>
+                    <apex:column headerValue="Etat Synchro SAP" styleClass="largeurColEtat">
+                        <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!optl.State_Synchro_To_SAP__c==null}"/>
+                        <apex:image value="{!$Resource.RedFlag}" rendered="{!optl.State_Synchro_To_SAP__c=='KO'}"/>
+                        <apex:image value="{!$Resource.GreenFlag}" rendered="{!optl.State_Synchro_To_SAP__c=='OK'}"/>
+                    </apex:column>
+                </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!-- FIN PTL -->
+
+        <!--DEBUT ACCOUNT-->
+        <apex:outputPanel styleClass="dataTable" id="acc" rendered="{!bSynchroSend && displayAccount}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Compte Client</h2>
+            <apex:pageBlockTable value="{!lAccount}" var="acc">
+                <apex:column value="{!acc.Name}"/>
+                <apex:column value="{!acc.AccountNumber}"/>
+                <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                    <apex:outputText value="{!acc.Error_Synchro_To_SAP__c}" escape="false" />
+                </apex:column>
+                <!--<apex:column headerValue="Retour SAP" value="{!acc.Error_Synchro_To_SAP__c}" styleClass="largeurColRetourSAP"/>-->
+                <apex:column headerValue="Etat Synchro SAP" styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!acc.State_Synchro_To_SAP__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!acc.State_Synchro_To_SAP__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!acc.State_Synchro_To_SAP__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN ACCOUNT-->
+
+        <!--DEBUT REMISE PRO -->
+        <apex:outputPanel styleClass="dataTable" id="lRemisePro" rendered="{! bSynchroSend && displayRebate && typeClientPro}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Remises</h2>
+            <apex:pageBlockTable value="{!lQuoteLineItemRebate}" var="qliRebate">
+                <apex:column headerValue="PTL" value="{!qliRebate.Quote_PTL__r.Opportunity_PTL__r.PTLSynchroSAP__c}"/>
+                <apex:column value="{!qliRebate.PriceBookEntry.Product2.ProductCode}"/>
+                <apex:column headerValue="RCE" value="{!qliRebate.RCE_Rebate_HT__c}" style="text-align:center;"/>
+                <apex:column headerValue="RCOM" value="{!qliRebate.Commercial_Rebate_HT__c}" style="text-align:center;"/>
+                <apex:column headerValue="RCONJ" value="{!qliRebate.Cyclical_Rebate_HT__c}" style="text-align:center;"/>
+                <apex:column headerValue="Durée RCONJ (mois)" value="{!qliRebate.Cyclical_Rebate_Months__c}" style="text-align:center;"/>
+                <apex:column headerValue="Remise post offre" value="{!qliRebate.Remise_Post_Offre_HT__c}" style="text-align:center;"/>
+                <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                    <apex:outputText value="{!qliRebate.Error_Rebate_Synchro_To_SAP__c}" escape="false" />
+                </apex:column>
+                <apex:column headerValue="Etat Synchro SAP"  styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!qliRebate.State_Rebate_Synchro_To_SAP__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!qliRebate.State_Rebate_Synchro_To_SAP__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!qliRebate.State_Rebate_Synchro_To_SAP__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN REMISE PRO -->
+
+        <!--DEBUT REMISE DOM -->
+        <apex:outputPanel styleClass="dataTable" id="lRemiseDom" rendered="{! bSynchroSend && displayRebate && typeClientDom}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Remises</h2>
+            <apex:pageBlockTable value="{!lQuoteLineItemRebate}" var="qliRebate">
+                <apex:column headerValue="PTL" value="{!qliRebate.Quote_PTL__r.Opportunity_PTL__r.PTLSynchroSAP__c}"/>
+                <apex:column value="{!qliRebate.PriceBookEntry.Product2.ProductCode}"/>
+                <apex:column headerValue="RCE" value="{!qliRebate.RCE_Rebate_TTC__c}" style="text-align:center;"/>
+                <apex:column headerValue="RCOM" value="{!qliRebate.Commercial_Rebate_TTC__c}" style="text-align:center;"/>
+                <apex:column headerValue="RCONJ" value="{!qliRebate.Cyclical_Rebate_TTC__c}" style="text-align:center;"/>
+                <apex:column headerValue="Durée RCONJ (mois)" value="{!qliRebate.Cyclical_Rebate_Months__c}" style="text-align:center;"/>
+                <apex:column headerValue="Remise post offre" value="{!qliRebate.Remise_Post_Offre_HT__c}" style="text-align:center;"/>
+                <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                    <apex:outputText value="{!qliRebate.Error_Rebate_Synchro_To_SAP__c}" escape="false" />
+                </apex:column>
+                <apex:column headerValue="Etat Synchro SAP"  styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!qliRebate.State_Rebate_Synchro_To_SAP__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!qliRebate.State_Rebate_Synchro_To_SAP__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!qliRebate.State_Rebate_Synchro_To_SAP__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN REMISE DOM -->
+
+        <!--DEBUT ACTION CO ACCOUNT-->
+        <apex:outputPanel styleClass="dataTable" id="qactionco" rendered="{! bSynchroSend && displayActionCo}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Action commerciale</h2>
+            <apex:pageBlockTable value="{!lQuote}" var="q">
+                <apex:column value="{!q.Action_Commerciale__r.Name}"/>
+                <apex:column value="{!q.Action_Commerciale__r.Libelle__c}"/>
+                <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                    <apex:outputText value="{!q.Error_Synchro_To_SAP_ActionCo__c}" escape="false" />
+                </apex:column>
+                <apex:column headerValue="Etat Synchro SAP" styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!q.State_Synchro_To_SAP_ActionCo__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!q.State_Synchro_To_SAP_ActionCo__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!q.State_Synchro_To_SAP_ActionCo__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN ACTION CO ACCOUNT-->
+
+        <!--DEBUT QPTL CONTRAT-->
+        <apex:outputPanel styleClass="dataTable" id="qptl" rendered="{!bSynchroSend}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Liste des contrats</h2>
+            <apex:pageBlockTable value="{!lQPTL}" var="qptl">
+                <apex:column headerValue="Numéro QPTL" value="{!qptl.Input_network_number__c}"/>
+                <!--<apex:column headerValue="Numéro QPTL" value="{!qptl.Name}"/>-->
+                <apex:column headerValue="Numéro de contrat" value="{!qptl.ContractSynchroSAP__c}"/>
+                <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                    <apex:outputText value="{!qptl.Error_Synchro_To_SAP__c}" escape="false" />
+                </apex:column>
+                <apex:column headerValue="Etat Synchro SAP"  styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!qptl.State_Synchro_To_SAP__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!qptl.State_Synchro_To_SAP__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!qptl.State_Synchro_To_SAP__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN QPTL CONTRAT-->
+
+        <!--DEBUT COMMANDE-->
+        <apex:outputPanel styleClass="dataTable" id="lOrder" rendered="{!bSynchroSend && displayOrder}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Liste des commandes</h2>
+            <apex:pageBlockTable value="{!lQuoteLineItem}" var="order">
+                <apex:column value="{!order.Product_Description__c}"/>
+                <apex:column value="{!order.Sub_Type__c}"/>
+                <apex:column value="{!order.Tank_Placing_Options__c}"/>
+                <apex:column headerValue="Numéro de commande" value="{!order.OrderSynchroSAP__c}"/>
+                <apex:column headerValue="Retour SAP" styleClass="largeurColRetourSAP">
+                    <apex:outputText value="{!order.Error_Synchro_To_SAP__c}" escape="false" />
+                </apex:column>
+                <!--<apex:column headerValue="Retour SAP"  value="{!order.Error_Synchro_To_SAP__c}" styleClass="largeurColRetourSAP"/>-->
+                <apex:column headerValue="Etat Synchro SAP"  styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!order.State_Synchro_To_SAP__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!order.State_Synchro_To_SAP__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!order.State_Synchro_To_SAP__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN COMMANDE-->
+
+        <!--DEBUT BANQUE-->
+        <apex:outputPanel styleClass="dataTable" id="lBank" rendered="{!bSynchroSend && signature}">
+            <apex:pageBlock >
+            <h2 class="headerTitle">Mandat SEPA</h2>
+            <apex:pageBlockTable value="{!lAccount}" var="acc">
+                <apex:column headerValue="Retour SAP">
+                    <apex:outputText value="{!acc.Error_Synchro_Bank_To_SAP__c}" escape="false" />
+                </apex:column>
+                <!--<apex:column headerValue="Retour SAP"  value="{!acc.Error_Synchro_Bank_To_SAP__c}"/>-->
+                <apex:column headerValue="Etat Synchro SAP" styleClass="largeurColEtat">
+                    <apex:image value="{!$Resource.checkbox_unchecked}" rendered="{!acc.State_Synchro_Bank_To_SAP__c==null}"/>
+                    <apex:image value="{!$Resource.RedFlag}" rendered="{!acc.State_Synchro_Bank_To_SAP__c=='KO'}"/>
+                    <apex:image value="{!$Resource.GreenFlag}" rendered="{!acc.State_Synchro_Bank_To_SAP__c=='OK'}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+            </apex:pageBlock>
+        </apex:outputPanel>
+        <!--FIN BANQUE-->
+
+    </apex:pageblock>
+
+</apex:form>
+
+<!--DEBUT BOITE DE DIALOGUE-->
+<div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}" style="display:none">
+    <div>
+        <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+        <apex:outputText value="{!$Label.pricing_popup_message_wait}" />
+    </div>
+</div>
+    
+<script>
+    var $dialog;
+    jQuery(document).ready(function($) {
+        $(function() {
+        
+            $dialog =jQuery("#dialog-modal")
+                .dialog({
+                    autoOpen: false,
+                    height: 150,
+                    modal: true,
+                    closeOnEscape: false,
+                    resizable: false
+            });
+          
+        });
+    });
+</script>
+<!--FIN BOITE DE DIALOGUE-->
+
+</apex:page>

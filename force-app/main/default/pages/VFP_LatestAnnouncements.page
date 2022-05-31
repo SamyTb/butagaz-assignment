@@ -1,0 +1,32 @@
+<apex:page controller="VFC_LatestAnnouncements" showheader="false" sidebar="false" cache="false" tabStyle="Task" >
+    <apex:pageBlock title="Les dernières annonces de Bob !">
+           <!-- BEGIN Link Output -->
+               <apex:outputPanel rendered="{!displayPopUp}">
+                    Vous avez une nouvelle annonce ! 
+                    <apex:outputText escape="false">
+                        <script>window.open('/apex/VFP_Announcement?id={!latestAnnouncement.id}&core.apexpages.devmode.url=0');</script>
+                    </apex:outputText>
+               </apex:outputPanel>
+               
+               <apex:outputPanel rendered="{!NOT(DisplayPopUp)}">
+                   Il n'y a pas de nouvelle annonce !
+               </apex:outputPanel>
+           <!-- END Link Output -->
+    
+      
+      <!-- BEGIN PageBlockTable version -->
+          <apex:pageBlockTable value="{!lAnnouncements}" var="announcement">
+              <apex:column value="{!announcement.createdDate}" width="20%">
+                  <apex:facet name="header">Ajouté</apex:facet>
+              </apex:column>
+              <apex:column value="{!announcement.name}" width="70%">
+                  <apex:facet name="header">Annonce</apex:facet>
+              </apex:column>
+              <apex:column width="10%">
+                  <apex:facet name="header">En savoir plus!</apex:facet>
+                  <apex:outputLink value="#" onclick="window.open('/apex/VFP_Announcement?id={!announcement.id}&core.apexpages.devmode.url=0');">Go!</apex:outputLink>
+              </apex:column>
+          </apex:pageBlockTable>
+      <!-- END PageBlockTable version -->
+    </apex:pageBlock>
+</apex:page>

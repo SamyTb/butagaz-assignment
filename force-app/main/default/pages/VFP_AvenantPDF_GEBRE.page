@@ -1,0 +1,197 @@
+<apex:page standardController="Quote"  language="fr" showHeader="false" extensions="VFC_Quotelineitem_01">
+    
+    <div id="containerAvenantGEBRE" Style="page-break-before:always;">  
+    
+        <!-- Document Footer --> 
+        
+        <div class="footerRight">
+        <p align="right">Code Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>              
+        </div>
+        
+         <div class="footer">
+            Réf.{!$Label.Contract_ref_GECPRO}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+            <p >Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+        </div>
+        
+            <!-- Document Header -->  
+            <apex:image url="{!$Resource.test}" width="180" height="75"/>
+            
+        <div class="body">  
+
+            <h1>Avenant au Contrat de Revendeur Agréé <br/> Modification de conditions tarifaires</h1>      
+
+            <h2>Client signataire</h2>
+            <table class="ButagazHorizontalTable">              
+                <tr><td><strong>Code Client :</strong>&nbsp;</td><td>{!Quote.Client_Code__c}</td></tr>
+                <apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c='PRO'}">
+                    <tr><td><strong>Raison Sociale :</strong>&nbsp;</td><td><apex:outputfield value="{!Quote.Opportunity.DO_Salutation__c}"/>&nbsp;{!Quote.Opportunity.DO_Name__c}</td></tr>
+                </apex:outputpanel>
+                <apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c!='PRO'}">
+                    <tr><td><strong>Particulier :</strong>&nbsp;</td><td><apex:outputfield value="{!Quote.Opportunity.DO_Salutation__c}"/>&nbsp;{!Quote.Opportunity.DO_Name__c}</td></tr>
+                </apex:outputpanel> 
+                <tr><td><strong>N° SIRET :</strong>&nbsp;</td><td>{!Quote.Opportunity.DO_Code_SIRET__c}</td></tr>
+                <tr><td><strong>Code NAF :</strong>&nbsp;</td><td>{!Quote.Opportunity.DO_Code_NAF__r.Name}</td></tr>
+                <tr><td><strong>Adresse :</strong>&nbsp;</td><td>{!Quote.Opportunity.DO_Street_N__c}&nbsp;{!Quote.Opportunity.DO_Street_type__c}&nbsp;{!Quote.Opportunity.DO_Street_name__c}&nbsp;{!Quote.Opportunity.DO_City_Postal_Code__r.Name}</td></tr>                            
+            </table>
+        
+            <br/>
+            
+            <h2>Contact</h2>
+            <table class="ButagazHorizontalTable">
+                <tr><td><strong>Nom et Prénom :</strong>&nbsp;</td><td><apex:outputfield value="{!Quote.Contact.salutation}"/>&nbsp;{!Quote.Contact.LastName}&nbsp;{!Quote.Contact.FirstName}</td></tr>           
+                <tr><td><strong>Fonction :</strong>&nbsp;</td><td>{!Quote.Contact.Quality__c}</td></tr>   
+                <tr><td><strong>Téléphone portable :</strong>&nbsp;</td><td>{!Quote.Contact_Mobile_Phone__c}</td></tr> 
+                <tr><td><strong>Téléphone travail :</strong>&nbsp;</td><td>{!Quote.Contact.Phone}</td></tr> 
+                <tr><td><strong>E-mail :</strong>&nbsp;</td><td>{!Quote.Contact__c}</td></tr>
+            </table>         
+            <!-- {!IF(Quote.Contact.HasOptedOutOfEmail, 
+              'Non, je ne souhaite pas être informé(e) des nouveautés BUTAGAZ par e-mail.', 
+              'Oui, je souhaite être informé(e) des nouveautés BUTAGAZ par e-mail.')} -->
+              <p>En concluant un contrat de Revendeur Agréé de bouteilles de gaz avec BUTAGAZ, vous acceptez de recevoir des informations et des offres, sauf si vous vous y opposez en écrivant à votre Distributeur ou dans votre Espace Client sur Butagaz.fr.</p>  
+                <apex:outputpanel rendered="{!Quote.Remise_en_euro__c!=null && Quote.Remise_en_euro__c!=0}">
+                    <tr><td colspan="2">Nous vous confirmons que vous bénéficiez d’une remise commerciale exceptionnelle de&nbsp;<Apex:outputText value="{!Quote.Remise_en_euro__c}"/> € HT, elle sera déduite de votre prochaine facture de gaz.</td></tr>
+                </apex:outputpanel>
+                <BR/>
+                <h1>Clause Particulière</h1>  
+                <p class="spaceBefore" align="justify">
+                    <strong>BUTAGAZ</strong> et le <strong>Revendeur Agréé</strong> ont conclu un contrat de <strong>Revendeur Agréé</strong> Butagaz ayant pour objet la revente par le Revendeur Agréé de Gaz en Bouteilles de marque Butagaz (ci-après le « Contrat »).
+                </p>
+                <p class="spaceBefore" align="justify"> 
+                    Selon les Conditions Particulières de ce Contrat, le <strong>Revendeur Agréé</strong> est facturé du prix du gaz selon le barème {!ScaleGEB} en vigueur (cf barème ci-joint), celui-ci étant susceptible de varier à la hausse comme à la baisse conformément aux Conditions Générales du Contrat. 
+                </p>
+                <p class="spaceBefore" align="justify"> 
+                    Le barème {!ScaleGEB} établit des tranches de facturation suivant la consommation annuelle en Unités Bouteilles Butagaz du <strong>Revendeur Agréé</strong>. La consommation en Unités Bouteilles du <strong>Revendeur Agréé</strong> étant susceptible de varier d’une année sur l’autre, ceci peut avoir comme effet de faire changer le <strong>Revendeur Agréé</strong> de tranche de facturation selon le barème {!ScaleGEB}.
+                </p>
+                <p class="spaceBefore" align="justify">
+                    Chaque année au 1er Janvier, <strong>BUTAGAZ</strong> constatera la consommation réelle en Unités Bouteilles Butagaz du <strong>Revendeur Agréé</strong> sur l’année passée, et facturera le <strong>Revendeur Agréé</strong> au titre des livraisons sur l’année suivante dans la tranche du barème {!ScaleGEB} correspondant. 
+                </p>
+                <p class="spaceBefore" align="justify">
+                    Compte tenu du volume potentiel de vente d’Unités Bouteilles Butagaz sur l’année déterminé par les Parties, le <strong>Revendeur Agréé</strong> devrait être facturé par BUTAGAZ dans la tranche correspondante du barème {!ScaleGEB} pour  l’année à venir.    
+                </p>
+                <p class="spaceBefore" align="justify">
+                    Par dérogation à ce qui précède et aux conditions du Contrat, <strong>BUTAGAZ</strong> accepte, à titre exceptionnel, de faire bénéficier le <strong>Revendeur Agréé</strong>, à compter de la signature du présent avenant jusqu’au 31 Décembre de l’année en cours, de la facturation dans la tranche <strong>{!Quote.Tranche_finale__c}</strong> du barème {!ScaleGEB} en lieu et place de la tranche <strong>{!Quote.Opportunity.Account.Price_Group__c}</strong> telle que prévue pour l’année à venir, et ce, quelque soit la consommation réelle en Unités Bouteilles Butagaz du <strong>Revendeur Agréé</strong> durant la période de cet avantage commercial. 
+                </p>
+                <p class="spaceBefore" align="justify">
+                    A l’issue de la période durant laquelle cet avantage commercial est octroyé, il sera appliqué automatiquement au <strong>Revendeur Agréé</strong> les conditions tarifaires strictes du Contrat. Ce dernier sera dès lors facturé pour les livraisons futures dans la tranche du barème {!ScaleGEB}  correspondant à sa consommation réelle en Unités Bouteilles Butagaz sur l’année passée telle que constatée par <strong>BUTAGAZ</strong>.
+                </p>
+                <p class="spaceBefore" align="justify">
+                    Le bénéfice de cet avantage commercial étant accordé par <strong>BUTAGAZ</strong> au <strong>Revendeur Agréé</strong> en considération de la personne de ce dernier, cet avantage commercial n’est pas transférable à un tiers ou à des ayants droit, sauf accord écrit de <strong>BUTAGAZ</strong>.
+                </p>
+                <p class="spaceBefore" align="justify">
+                    En cas de vente par le <strong>Revendeur Agréé</strong> de son point de vente, le nouveau propriétaire qui souhaiterait conclure avec <strong>BUTAGAZ</strong> un contrat de revendeur agréé Butagaz ne pourrait en aucun cas se prévaloir du bénéfice de l’avantage commercial susvisé. 
+                </p>
+                <p class="spaceBefore" align="justify">
+                    Toutes les autres clauses et conditions du Contrat précité, non modifiées par le présent avenant, conservent leur plein effet entre le <strong>Revendeur Agréé</strong> et <strong>BUTAGAZ</strong>.
+                </p>
+
+
+            <!--************************* Informations de contact pour signature électronique *************************-->
+            <!--<div class="contractSection" layout="block" style="page-break-inside:avoid;" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+                <apex:outputPanel layout="block" style="page-break-inside:avoid;">
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    <p class="nospace">Votre Contact :&nbsp; {!Quote.CreatedBy.Name}</p>
+                    <div class="ButagazSignature">
+                        <div class="ButagazCachet">
+                            <p>Pour Butagaz: votre Distributeur:</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="{!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value="{!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div>-->
+
+            <!--************************* Page de CGU pour signature électronique *************************-->
+            <div class="contractSection" rendered="{!IF(isSE=='true',true,false)}">
+                <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.displayCGUSE=='true',true,false)}">
+                    <c:CGU_SignatureElectroniquePDF />
+                </apex:outputPanel>
+                <apex:outputPanel layout="block" rendered="{!IF(isSE=='true',true,false)}">
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    <p class="nospace">Votre Contact :&nbsp; {!Quote.CreatedBy.Name}</p>
+                    <div class="ButagazSignature">
+                        <div class="ButagazCachet">
+                            <p>Pour Butagaz: votre Distributeur:</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="{!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value="{!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div>
+
+            <apex:repeat value="{!ScalesGEBDoc}" var="doc">
+                  <div style="width:100%;">
+                        <p align="center">
+                              <apex:image url="/servlet/servlet.FileDownload?file={!doc.id}" style="height: 91%; width: 91%;"/>
+                        </p>
+                  </div>
+            </apex:repeat>
+
+            
+            <!--<div class="contractSection" Style="page-break-inside:avoid">-->
+            <div class="contractSection" layout="block" style="page-break-inside:avoid; display:{!if(isSE!='true',"block","none")};">
+                <div class="Signatures">  
+                    <h1>Signatures</h1>
+                     <br/><br/>                 
+                    <p class="spaceBefore"><strong>Fait en deux exemplaires originaux</strong></p>
+                    <div class="bigSpaceAfter"><p>&nbsp;</p></div>    
+                    <div class="clear"></div>
+
+                    <div class="ButagazSignature">                
+                        <p class="nospace">Votre Contact : {!Quote.CreatedBy.Name}</p>
+                        <br/>                  
+                        <br/>
+                        <p class="SpaceBefore">&nbsp;</p>
+                        <br/>
+                        <p class="SpaceBefore">&nbsp;</p>
+                        <br/>
+                        <p class="SpaceBefore">&nbsp;</p>
+                        <br/>                       
+                        <div class="bigSpaceAfter"><p>Signature :</p></div>
+
+                        <p>&nbsp;</p> 
+                        <p>&nbsp;</p>
+                        <div class="ButagazCachet">
+                            <p> Pour Butagaz: votre Distributeur :</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                        </div>
+                    </div>  
+                    
+                    
+                    <div class="ClientSignature">                 
+                        <p class=" nospace "> Client Signataire :&nbsp; <apex:outputfield value="{!Quote.Contact.salutation}"/>&nbsp; {!Quote.Contact.LastName}&nbsp;{!Quote.Contact.FirstName}</p>
+                        <br/>                  
+                        <br/>
+                        <p class="SpaceBefore">Date d’impression du contrat :&nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                        <br/>
+                        <p class="SpaceBefore">Date de Signature :&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                        <br/>
+                        <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                        <br/>
+                        <div class="bigSpaceAfter"><p>Signature &nbsp;(1):</p></div>                            
+                
+                        <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                        
+                        <div class="ButagazCachet">
+                            <p> Cachet commercial Revendeur Agréé</p>
+                            <br/>
+                            <p>&nbsp;</p>
+                            <br/>
+                            <p>&nbsp;</p>                    
+                        </div>                        
+                    </div> 
+                                   
+                </div>
+                <div class="clear"/>
+            </div>
+                                
+        </div>                  
+    </div>
+</apex:page>

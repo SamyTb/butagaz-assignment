@@ -1,0 +1,20 @@
+<apex:page standardController="Case" extensions="CaseReopenControllerExtension" >
+    <apex:form >
+        <apex:pageBlock title="Réouverture d'une demande" mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons >
+            <apex:commandButton action="{!SaveCase}" value="{!$Label.Save}"/>
+            <apex:commandButton action="{!CancelCase}" value="Annuler"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection title="Informations principales" columns="2">
+            	<apex:inputField value="{!Case.Last_Reason_for_Reopening__c}" required="true"/>
+            	<apex:outputField value="{!Case.Reopen_Number__c}" />
+            	<apex:outputField value="{!Case.Claim__c}" />
+                <apex:inputField value="{!Case.Customer_Project__c}"/>
+                <apex:pageBlockSectionItem rendered="true"/>
+                <apex:inputField value="{!Case.Customer_Project_Comment__c}"/>
+            	<apex:inputHidden value="{!Case.Number_Of_Closed_Comments__c}"/>
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

@@ -1,0 +1,317 @@
+<apex:page standardController="Quote" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<!--************************* AVENANT: Services à la carte *************************-->
+<div id="containerServicesALaCarte">
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    <div>
+        <h2>BUTAGAZ services à la carte</h2>
+        <h1>Avenant au contrat de fourniture de gaz<br/>Prestations de service relatives à un réseau canalisé privé</h1>
+    </div>         
+    <br/>
+    
+    <!-- Entre les soussignées : -->
+    <div class="contractSection">   
+        <p><span class="field"><u>Entre les soussignées</u></span> :</p><br/>       
+        <p align="justify"><span class="field">La société BUTAGAZ</span>, Société par Actions Simplifiée au capital de 11 086 500 €, dont le siège social est sis à Levallois-Perret (92594 Cedex), rue Raspail aux numéros 47/53, immatriculée au RCS de Nanterre sous le numéro 542 095 575,</p><br/>
+        <p align="justify">Représentée par {!Quote.CreatedBy.Name},en sa qualité de ___________________________, dûment habilité pour les présentes,</p><br/>
+        <p align="right"> Ci-après dénommée « <span class="field">BUTAGAZ</span> »<br/>
+        D'une part,
+        </p><br/>       
+        <p><span class="field"><u>Et</u></span> :</p><br/>
+        <p align="justify"><span class="field">La Société {!Quote.Opportunity.DO_Name__c}</span>,au capital de &nbsp;{!Quote.Opportunity.DO_Capital__c} €, dont le siège social est sis à {!Quote.Opportunity.DO_Street_n__c} <apex:outputfield value="{!Quote.Opportunity.DO_Street_type__c}"/> {!Quote.Opportunity.DO_Street_name__c}&nbsp;               
+            <!-- IF a Postal code and a city are filled THEN display it-->
+            <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+            <!-- ELSE display City_Postal_Code__r.Name -->
+            <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext>
+            , {!Quote.Opportunity.DO_Country__c}, immatriculée au RCS de {!Quote.Opportunity.DO_R_C_S_or_R_C_M_Number__c} sous le numéro  {!Quote.Opportunity.Account.Code_SIRET__c},</p><br/>
+        <p align="justify">Représentée par {!Quote.Opportunity.DO_Salutation__c&' '&Quote.Contact.LastName&' '&Quote.Contact.FirstName},  en sa qualité de {!IF(Quote.Contact.Quality__c!='', Quote.Contact.Quality__c, '_________________')}, ayant tous pouvoirs à cet effet,</p><br/>
+        <p align="right"> Ci-après dénommée « <span class="field">CLIENT</span> »<br/>
+        D'autre part,
+        </p><br/>
+        <p align="right"> Ensembles, dénommées ci-après « <span class="field">les Parties aux présentes</span> » ;</p>
+    </div>
+    
+    <!-- IL A ETE, PREALABLEMENT AUX PRESENTES, RAPPELE ET EXPOSE CE QUI SUIT : -->
+    <div class="contractSection">   
+        <p><span class="field">IL A ETE, PREALABLEMENT AUX PRESENTES, RAPPELE ET EXPOSE CE QUI SUIT</span> :</p><br/>       
+        <p align="justify">Le CLIENT et BUTAGAZ ont signé un accord en date du &nbsp;{!PrettyDate}&nbsp; pour la fourniture en GPL d'un ou plusieurs réseau(x) canalisé(s) privé(s).</p><br/>
+        <p align="justify">Le CLIENT est propriétaire ou est mandaté par le propriétaire du(des) réseau(x), qui a le statut d'opérateur de réseau au sens de l'arrêté du 13 juillet 2000. A ce titre, le propriétaire est soumis à un certain nombre d'obligations dont le but est de garantir la sécurité des usagers du gaz, c'est pourquoi il a choisi de confier la réalisation de prestations de services relatives à ce(s) réseau(x), à un prestataire qualifié.</p><br/>
+        <p align="justify">De son côté, la société BUTAGAZ est spécialisée dans ce type de prestations ; elle bénéficie notamment de l'agrément ministériel relatif aux missions d'opérateur de réseaux publics, et est donc en mesure de proposer un panel de services à la carte qui répond aux exigences légales et réglementaires. Les parties se sont donc rapprochées et ont convenu ensemble ci-après les conditions et les modalités de leur accord, constituant un avenant au contrat de fourniture sus-visé.</p><br/>     
+        <p><span class="field">CECI EXPOSE, IL EST CONVENU ET ARRETE CE QUI SUIT</span></p>
+    </div>  
+
+    <!-- TITRE I - GENERALITES - ARTICLE 1 – DEFINITIONS COMPLEMENTAIRES -->
+    <div class="contractSection" style="page-break-inside:avoid">
+        <h1>TITRE I - GENERALITES</h1>
+        <h2>ARTICLE 1 – DEFINITIONS COMPLEMENTAIRES</h2>
+        
+        <p align="justify">Aux fins des présentes, les termes et expressions suivantes peuvent s'entendre au singulier ou au pluriel et correspondent respectivement aux significations ci-après :</p><br/>
+        <p align="justify">Le terme « <span class="field">Candidat(s) à l'acquisition</span> » correspond pour chaque site, aux candidat(s) à la propriété de tout ou partie du(des) terrain(s) et/ou des biens immobiliers qui y seront édifiés, c'est à dire :</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- toute personne intéressée par l'acquisition de chaque îlot de propriété,</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ou toute personne intéressée par l'acquisition d'une ou plusieurs Parcelles de terrain,</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ou toute personne intéressée par l'acquisition de biens immobiliers qui y seront édifiés.</p><br/>
+        <p align="justify">Le terme « <span class="field">Candidat(s) à la jouissance</span> » correspond pour chaque site, aux candidat(s) à la jouissance de tout ou partie du(des) terrain(s) et/ou des biens immobiliers qui y seront édifiés, c'est à dire :</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- tout locataire (ou assimilé) de chaque terrain,</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ou tout locataire (ou assimilé) d'une ou plusieurs Parcelles de terrain,</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- ou tout locataire (ou assimilé) des biens immobiliers qui y seront édifiés.</p><br/>
+        <p align="justify">Le terme « <span class="field">Candidat(s)</span> » correspond aux éventuels Candidat(s) à l'acquisition et aux éventuels Candidat(s) à la jouissance, tels que définis ci-dessus.</p><br/>
+        <p align="justify">Le terme « <span class="field">Contrat</span> » correspond à l'accord contractuel de fourniture de gaz tel que visé au préambule, qui comprend les conditions générales, les conditions particulières, toutes les annexes, ainsi que tout avenant écrit pouvant venir le compléter ou le modifier, notamment le présent avenant.</p><br/>
+        <p align="justify">Le terme « <span class="field">ensemble immobilier</span> » correspond aux biens immobiliers, objet du projet de construction ou de rénovation sur chaque site.</p><br/>
+        <p align="justify">Le terme « <span class="field">Propriétaire du(des) Terrain(s)</span> » désigne le CLIENT lui-même s'il est propriétaire du(des) terrain(s) objet du Contrat ou bien son mandant propriétaire de celui-ci(ceux-ci) au jour du Contrat.</p><br/>
+        <p align="justify">Le terme « <span class="field">Raccordement</span> » correspond pour chaque Site, à la partie de branchement située entre la canalisation principale ou secondaire et l'organe de coupure mentionné à l'article 1er de l'arrêté du 2 août 1977 ou l'organe de coupure générale des installations non soumises aux dispositions dudit arrêté.</p><br/>
+        <p align="justify">Le terme « <span class="field">Terrain(s)</span> » ou « <span class="field">Site(s)</span> » peut correspondre à :</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un(des) îlot(s) de propriété,  c'est à dire une ou plusieurs unités foncières. Le cas échéant le(s) plan(s) cadastral(aux) correspondant est(sont) annexé(s) ci-après (annexe 1),</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un(des) terrain(s) loti(s), c'est à dire à un(des) îlot(s) de propriété qui a(ont), préalablement au Contrat, fait l'objet d'une division « en propriété » ou « en jouissance », donnant naissance à plusieurs parcelles (ci-après « <span class="field">parcelle(s)</span> »). Le cas échéant le(s) plan(s) cadastral(aux) correspondant, faisant apparaître les parcelles, est annexé ci-après (annexe 1).</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;La précision du type de Terrain ou de Site est donnée dans chaque jeu de conditions particulières correspondant.</p><br/>
+        <p align="justify">L'expression « <span class="field">Travaux de Voies et Réseaux Divers</span> », ci-après « Travaux de V.R.D. », correspond aux travaux préalables effectués pour installer des dessertes communes variées (énergie, communication, eau…) et dont la réalisation est également nécessaire pour implanter un réseau canalisé de distribution de gaz.</p><br/>
+        <p align="justify">Le terme « <span class="field">Usager(s)</span> » correspond aux personnes qui occuperont les locaux présents sur le(s) site(s) desservi(s) et qui utiliseront donc l'installation de distribution collective de gaz propane. Ces personnes sont le Propriétaire du(des) Terrain(s) et/ou les acquéreurs de parcelles ou les propriétaires ou les locataires (ou assimilés) des locaux desservis en gaz qui seront édifiés sur le(s) Site(s).</p>
+    </div>
+    
+    <!-- TITRE 1 GENERALITES - ARTICLE 2 – OBJET -->
+    <div class="contractSection" style="page-break-before:always;">     
+        <h2>ARTICLE 2 – OBJET</h2>
+    
+        <p align="justify">Le CLIENT confie par les présentes à BUTAGAZ la réalisation d'une ou plusieurs des prestations de service ci-après définies, relatives au(x) Réseau(x) canalisé(s) de desserte en gaz propane, du(des) Site(s) ci-après énumérés, dont les plans figurent en annexe 1 au Contrat et les détails figurent aux conditions particulières :</p><br/>    
+       <table class="ButagazTable">
+        <tr>
+          <th>Point livré</th>
+          <th>Adresse</th>
+          <th>Usage(s)</th>
+        </tr>
+        <apex:repeat value="{!QUOTEPTLS}" var="line">
+          <tr>
+            <td>{!IF(line.PTL_Name__c!='',line.PTL_Name__c,line.PTL_Label__c)}</td>
+            
+            <td>{!line.Opportunity_PTL__r.PTL_Street_number__c}&nbsp;<apex:outputField value="{!Line.Opportunity_PTL__r.PTL_Number_extention__c}"/>&nbsp;<apex:outputField value="{!Line.Opportunity_PTL__r.PTL_Street_type__c}"/>&nbsp;{!line.Opportunity_PTL__r.PTL_Street_name__c}&nbsp;{!line.Opportunity_PTL__r.PTL_City_Postal_Code__r.Name}</td>
+            <td><apex:outputField value="{!line.RPTL_Purposes__c}"/></td></tr>
+        </apex:repeat>
+      </table>
+        <br/><br/>
+        <p align="justify">BUTAGAZ peut proposer au CLIENT de choisir parmi les prestations suivantes :</p><br/>
+        <p>• L'établissement d'une Cartographie conforme</p>
+        <p>• La mise à jour de la Cartographie</p>
+        <p>• L'entretien</p>
+        <p>• La maintenance</p>
+        <p>• La gestion des interventions de sécurité</p><br/>
+        <p align="justify">BUTAGAZ accepte cette mission dans les termes et conditions ci-après précisés, dans le respect des exigences de qualité et de sécurité imposées par la Législation en vigueur, notamment l'arrêté du 13 juillet 2000.</p>  
+    </div>
+    
+    <!-- TITRE 1 GENERALITES - ARTICLE 3 – CONDITIONS PREALABLES -->
+    <div class="contractSection">           
+        <h2>ARTICLE 3 – CONDITIONS PREALABLES</h2>
+        
+        <h3>3.1. Certificats et attestation de conformité</h3>
+        <p align="justify">Avant le début de toute exécution du présent avenant, le CLIENT doit fournir à BUTAGAZ une attestation de conformité du Réseau canalisé tout comme les certificats prévus aux conditions générales du Contrat (Article 3.1. des Conditions Générales), à moins que le CLIENT ne les ait déjà remis à BUTAGAZ.</p><br/>   
+
+        <h3>3.2. Cartographie du réseau</h3>
+        <p align="justify">Avant le début de toute exécution du présent avenant, le CLIENT doit également fournir à BUTAGAZ, une cartographie du réseau qui répond aux exigences posées par les dispositions légales, réglementaires et les normes professionnelles en vigueur.</p><br/>         
+        <p align="justify">Dans le cas d'une cartographie initiale non-suffisamment renseignée, BUTAGAZ procédera aux frais du CLIENT, à l'établissement d'une nouvelle cartographie selon un modèle prédéfini par les normes professionnelles et les exigences de sécurité posées par le service technique de BUTAGAZ.</p><br/>         
+        <p align="justify">Pendant la durée du Contrat, si le CLIENT modifie de quelque manière que ce soit le Réseau canalisé, il s'engage à fournir sans délai à BUTAGAZ une cartographie mise à jour du réseau. S'il le souhaite, il peut faire appel à BUTAGAZ pour établir cette mise à jour, dans les conditions fixées infra.</p><br/>
+
+        <h3>3.3. Diagnostic préalable du Réseau canalisé</h3>
+        <p align="justify">Si le service technique de BUTAGAZ l'estime nécessaire, notamment compte tenu de la configuration ou de l'ancienneté du réseau, BUTAGAZ effectue un diagnostic préalable du réseau canalisé en place, qui portera notamment sur les points suivants :</p><br/>            
+        <p>• Etat général des coffrets, notamment de détente,</p>
+        <p>• Recherche de fuite au niveau des raccords apparents,</p>
+        <p>• Vérification de l'accès aux organes de coupure,</p>
+        <p>• Conformité des organes de coupure.</p><br/>
+        <p align="justify">Si le diagnostic révèle des points non conformes aux spécifications minimum de sécurité imposées par les dispositions légales, réglementaires et les normes professionnelles en vigueur, ou si la vétusté du réseau en place ne permet pas de garantir le respect desdites dispositions, le CLIENT doit procéder aux réparations et/ou modifications requises par le service technique de BUTAGAZ. Si le CLIENT ne procède pas à ces réparations ou modifications, le présent avenant sera réputé nul et non avenu, sans qu'aucune indemnité ne soit due au CLIENT à quelque titre que ce soit.</p><br/>          
+        <p align="justify">Lorsque le contrat entre effectivement en vigueur entre les parties et que toutes les conditions sont remplies, cette prestation est offerte par BUTAGAZ au CLIENT. Si le contrat n'entre pas en vigueur du fait du CLIENT, BUTAGAZ facturera le coût du diagnostic au CLIENT conformément aux conditions financières précisées ci-après.</p>
+    </div>
+    
+    <!-- TITRE II – LES PRESTATIONS AU CHOIX - ARTICLE 4 – CARTOGRAPHIE -->
+    <div class="contractSection" style="page-break-before:always;">
+        <h1>TITRE II – LES PRESTATIONS AU CHOIX</h1>
+        <h2>ARTICLE 4 – CARTOGRAPHIE</h2>
+        
+        <p align="justify">L'établissement d'une Cartographie conforme ou la mise à jour de la cartographie du(des) Réseau(x) au fur et à mesure de ses(leurs) évolutions, peut être effectué(e) par BUTAGAZ dès lors que le CLIENT lui fournit tous les documents nécessaires, relatifs à toute modification intervenue sur le(s) réseau(x).</p><br/>
+        <p align="justify">Le prix correspondant est fonction de l'ampleur de chaque réseau correspondant (longueur, nombre de raccordements, nombre de clients).</p><br/>
+        <p align="justify">Le prix de l'établissement de la cartographie conforme est précisé ci-après dans les conditions financières.</p><br/>
+        <p align="justify">Le prix correspondant à une mise à jour de la cartographie dépendra de l'ampleur et du type de la modification intervenue sur le(s) réseau(x). Il sera donc précisé sur devis, au moment opportun, et la prestation ne sera effectuée qu'après acceptation expresse du CLIENT.</p>
+    </div>  
+
+    <!-- TITRE II – LES PRESTATIONS AU CHOIX - ARTICLE 5 – L'ENTRETIEN ET/OU LA MAINTENANCE -->
+    <div class="contractSection">
+        <h2>ARTICLE 5 – L'ENTRETIEN ET/OU LA MAINTENANCE</h2>
+        
+        <p align="justify">Ces prestations correspondent au minimum exigé par l'arrêté du 13 juillet 2000 pour tout Réseau canalisé.</p><br/>
+        
+        <h3>5.1. L'entretien</h3>
+        <p align="justify">Il a pour but de réduire les risques de panne et de maintenir dans le temps le niveau de performance du Réseau concerné. Cette prestation consiste en une visite périodique de contrôle du Réseau concerné, portant sur les points visés par la réglementation et les normes professionnels en vigueur (cahier des charges de l'Association Française du Gaz « RSDG 14 »).</p><br/>
+        <p align="justify">BUTAGAZ organise les visites de contrôle périodiques et missionnent des techniciens agréés par ses services, qui réalisent notamment :</p><br/>
+        <p>• recherche de fuites périodique,</p>
+        <p>• manœuvre des robinets,</p>
+        <p>• repérage des différents constituants du réseau.</p><br/>
+        <p align="justify">Suite à ces visites, un compte rendu est rédigé et envoyé au client.</p><br/>
+        <p align="justify">L'entretien ne couvre pas le remplacement de matériel défectueux, ni la réparation d'une partie quelconque du réseau canalisé, ni les frais de main d'œuvre ou les travaux nécessaires (terrassement, remblaiement) correspondants.</p><br/>
+        <p align="justify">Le prix de l'entretien est précisé ci-après dans les conditions financières.</p><br/>
+
+        <h3>5.2. La maintenance</h3>
+        <p align="justify">Il s'agit ici de la remise en état du Réseau concerné à la suite d'une défaillance. Cette prestation comprend les opérations de réparation ou d'échange de pièces défectueuses.</p><br/>
+        <p align="justify">La maintenance est réalisée sur devis, après acceptation du CLIENT.</p>
+    </div>
+    
+    <!-- TITRE II – LES PRESTATIONS AU CHOIX - ARTICLE 6 – LA GESTION DES INTERVENTIONS DE SECURITE -->
+    <div class="contractSection">
+        <h2>ARTICLE 6 – LA GESTION DES INTERVENTIONS DE SECURITE</h2>
+        
+        <p align="justify">BUTAGAZ assure la gestion de toutes interventions nécessaires sur chaque Réseau conformément aux règles de sécurité imposées par les lois, les règlements et les normes professionnelles en vigueur.</p><br/>
+        <p align="justify">BUTAGAZ met à disposition des Usagers un numéro d'urgence accessible 24h/24h et 7 jours/ 7 jours, en cas de panne ou de problème de sécurité. Ce numéro est le suivant : 0811 900 065 (0,15 €TTC/la minute).</p><br/>
+        <p align="justify">Le centre d'appel est chargé d'effectuer un diagnostic à distance du problème signalé puis, lorsque les circonstances l'exigent, de missionner un technicien chargé de mettre les personnes et les biens hors de danger puis de faire un compte-rendu à BUTAGAZ sur l'incident.</p><br/>
+        <p align="justify">Suivant les cas, l'intervention d'urgence peut être suivie d'une opération de maintenance, en sus.</p><br/>
+        <p align="justify">Le coût de la gestion des interventions d'urgence est précisé ci-après.</p>
+    </div>      
+    
+    <!-- TITRE III – CHOIX DU CLIENT ET CONDITIONS FINANCIERES -->
+    <div class="contractSection" style="page-break-inside:avoid">
+        <h1>TITRE III – CHOIX DU CLIENT ET CONDITIONS FINANCIERES</h1>
+        
+             <table class="ButagazTable">
+                    
+                    <tr>
+                      <th> Point livré</th>
+                      
+                      <th>Article(s)</th>
+                      <th class="smallWidth">Unité de facturation</th>
+                      <th>Prix barème  EURO HT </th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle EURO HT </th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  EURO HT </th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle EURO HT</th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conj. (Mois)</th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle Groupement EURO HT</th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  Groupement EURO HT</th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Conj. Groupement EURO HT</th>
+                      <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Groupement Conj. (Mois)</th>
+                    </tr>
+                    
+                    <apex:repeat value="{!Pricing}" var="line">
+                      <tr>
+                        <td class="smallWidth">{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+                       
+                        <td >{!line.pricebookentry.Name}</td>
+                        <!--<td class="smallWidth">{!line.F_Quantity_Unit__c}</td>-->
+                     <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+               
+                        <td class="number;smallWidth">
+                        <apex:outputfield rendered="{!line.Product_Family__c=='Produit' &&line.Price_List_HT__c!=0}" value="{!Quote.Product_Scale__c}"/>   
+ 
+                        <apex:outputtext rendered="{!line.Product_Family__c!='Produit' &&line.Price_List_HT__c!=0}" value="{!line.Price_List_HT__c}"/>   
+                        </td>
+                        
+                        
+                        
+                        
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.RCE_Rebate_HT__c,2)))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Commercial_Rebate_HT__c,2)))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_HT__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_HT__c,2)))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_Months__c,2)))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">{!IF(line.Group_RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_RCE_Rebate_HT__c,2)))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_Commercial_Rebate_HT__c,2)))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_HT__c=0,'',TEXT(line.Group_Cyclical_Rebate_HT__c))}</td>
+                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_lenght_in_months__c=0,'',TEXT(line.Group_Cyclical_Rebate_lenght_in_months__c))}</td>
+                    
+                      </tr>
+                    </apex:repeat>
+                  </table> 
+    </div>  
+    
+    <!-- TITRE IV - OBLIGATIONS GENERALES DU CLIENT - ARTICLE 6 –  OBLIGATION DE RENSEIGNEMENT PREALABLE -->
+    <div class="contractSection" style="page-break-inside:avoid">
+        <h1>TITRE IV - OBLIGATIONS GENERALES DU CLIENT</h1>
+        <h2>ARTICLE 6 – OBLIGATION DE RENSEIGNEMENT PREALABLE</h2>
+        
+        <p align="justify">Le CLIENT s'engage à remettre à BUTAGAZ, tous plans et documents relatifs au(x) Réseau(x), notamment :</p><br/>
+        <p>• un plan sur lequel figurent les routes et zones publiques situées à proximité de chaque Site ainsi que toutes les voies privées alentours,</p><br/>
+        <p>• un plan cadastral décrivant précisément chaque Site, et les différentes Parcelles le cas échéant,</p><br/>
+        <p>• éventuellement un plan du(des) projet(s) d'Ensemble(s) immobilier(s) (lorsque les locaux desservis par le réseau ne sont pas encore construits ou sont en cours de construction ou de rénovation),</p><br/>
+        <p>• un plan des installations techniques en sous-sol à l'échelle adaptée pour chaque Site,</p><br/>
+        <p>• tout document relatif à une modification ou une extension intervenue sur le(s) réseau(x) canalisé(s).</p>
+    </div>
+    
+    <!-- TITRE IV - OBLIGATIONS GENERALES DU CLIENT - ARTICLE 7 – INFORMATION PREALABLE DES CANDIDATS -->
+    <div class="contractSection">
+        <h2>ARTICLE 7 – INFORMATION PREALABLE DES CANDIDATS</h2>
+        
+        <p align="justify">Que les locaux desservis par le(s) réseau(x) correspondant(s) ne soient pas encore construits ou soient en cours de construction (cas n°1), ou que les locaux soient déjà édifiés (cas n°2), le CLIENT s'engage à informer, par tous moyens utiles, les candidats à la propriété ou à la jouissance des locaux, de l'existence du Contrat, notamment du présent avenant, entre lui et BUTAGAZ.</p><br/>
+        <p align="justify">Dans le cas n°1, il annexe à cette fin le Contrat au cahier des charges de chaque Ensemble immobilier concerné, ainsi qu'aux statuts du(des) groupement(s) des futurs propriétaires des biens immobiliers, qu'il est en principe chargé de rédiger au moment de la demande du permis de construire ou du permis de lotir.</p><br/>
+        <p align="justify">Pour chaque Site, le CLIENT s'engage expressément à insérer ou à faire insérer dans le règlement de co-propriété, le cas échéant, comme dans les statuts du groupement des propriétaires (notamment dans la partie concernant les équipements collectifs et les VRD), la clause suivante :</p><br/>
+        <p align="justify" style="font-style:italic">« Un contrat a été souscrit par le CLIENT concernant des prestations de services relatives à l'équipement collectif permettant la desserte en gaz propane de l'ensemble immobilier, telles qu'imposés par la loi et la réglementation. Un exemplaire de ce contrat est annexé aux présentes. Sans préjudice de ses droits, le groupement des propriétaires reprend expressément à sa charge pour le compte des propriétaires, les droits et engagements qui en découlent. »</p><br/>
+        <p align="justify">Le CLIENT transmettra le règlement de co-propriété le cas échéant ou son projet, tout comme les statuts du groupement des propriétaires, le cas échéant, ou le projet de statuts, à tout candidat à la propriété, et il veillera à ce que cette transmission soit régulièrement effectuée par le Notaire auxdits candidats, au plus tard au moment de l'acte notarié.</p><br/>
+        <p align="justify">Dans le cas n°2, le CLIENT et les acquéreurs transmettront également le règlement de co-propriété, tout comme les statuts du groupement des propriétaires, le cas échéant, à tout candidat à la jouissance. Le CLIENT et les acquéreurs, veilleront à ce que qu'une note soit adressée à chaque candidat à la jouissance précisant l'existence d'un contrat entre BUTAGAZ et le CLIENT, et les obligations qui en découlent.</p><br/>
+        <p align="justify">Le CLIENT transmettra à BUTAGAZ toute information concernant les candidats (état civil complet, coordonnées complètes) dès leur prise de possession ou de jouissance. BUTAGAZ sera ainsi en mesure de prendre contact avec chacun d'eux pour réaliser à bien les prestations objet du Contrat.</p>
+    </div>  
+
+    <!-- TITRE IV - OBLIGATIONS GENERALES DU CLIENT - ARTICLE 8 – TRANSFERT DES DROITS ET OBLIGATIONS AUX ACQUEREURS -->
+    <div class="contractSection">
+        <h2>ARTICLE 8 – TRANSFERT DES DROITS ET OBLIGATIONS AUX ACQUEREURS</h2>
+        
+        <p align="justify">Pour chaque Site, la revente des Parcelles et/ou des biens immobiliers – au quel cas, le cahier des charges de l'ensemble immobilier ou du Terrain, ainsi que le règlement de co-propriété, le cas échéant, qui comportent le Contrat en annexe, ont été obligatoirement présentés par le CLIENT et le Notaire aux candidats concernés avant la signature de tout contrat de vente - emporte automatiquement transfert des droits et des obligations qui découlent du Contrat, concernant les prestations relatives à l'installation collective alimentant les Parcelles ou les biens immobiliers acquis. Sont expressément exclus du transfert toutes les obligations stipulées par le CLIENT pour lui-même dans le cadre de son activité.</p><br/>
+        <p align="justify">Ce transfert est opéré pour chaque acquéreur, conformément aux dispositions en vigueur en matière de co-propriété ou proportionnellement à sa quote-part de charges par rapport à l'ensemble de l'Îlot de propriété et/ou des biens immobiliers, et pour la durée du Contrat qui reste à courir.</p><br/>
+        <p align="justify">En outre, l'équipement dont il est question dans le Contrat est un équipement collectif. Les droits et obligations issus du Contrat transférés à chaque acquisition de biens immobiliers situés sur le site, sont par conséquent, également transférés au groupement des propriétaires, qui en a la charge.</p><br/>
+        <p align="justify">Dans l'hypothèse où les locaux desservis par le(s) réseau(x) correspondant(s) ne sont pas encore construits ou sont en cours de construction, le CLIENT s'engage expressément à faire confirmer par le groupement des propriétaires, dès sa constitution effective, et au maximum dans les deux mois après la première acquisition d'une Parcelle et/ou d'un bien immobilier, que le groupement a bien eu connaissance des droits et engagements issus du Contrat qui lui sont transférés. Pour ce faire, il veille à ce que le représentant du groupement ou son mandataire remplisse le document annexé ci-après (annexe 1A) et le renvoie à BUTAGAZ.</p>
+    </div>
+    
+    <!-- TITRE IV - OBLIGATIONS GENERALES DU CLIENT - ARTICLE 9 – ASSURANCES ET RESPONSABILITES -->
+    <div class="contractSection">
+        <h2>ARTICLE 9 – ASSURANCES ET RESPONSABILITES</h2>
+        
+        <p align="justify">Pour chaque Site, le CLIENT, ainsi que les acquéreurs de Parcelles et/ou de biens immobiliers le cas échéant, sont propriétaires du Réseau correspondant et ils ont la garde et la conservation du Stockage. Ils doivent par conséquent souscrire une assurance en responsabilité civile auprès d'une compagnie de leur choix, (ou faire étendre la couverture dont il dispose déjà par l'ajout d'une clause), en considération des risques liés à la propriété et à la garde de la chose, conformément au droit commun.</p>
+    </div>
+    
+    <!-- TITRE IV - OBLIGATIONS GENERALES DU CLIENT - ARTICLE 10 – DUREE -->
+    <div class="contractSection">
+        <h2>ARTICLE 10 – DUREE</h2>
+        
+        <p align="justify">Le présent avenant est conclu pour la durée du Contrat restant à courir à sa date de signature.</p>
+    </div>
+
+    <!-- TITRE IV - OBLIGATIONS GENERALES DU CLIENT - ARTICLE 11 – FORCE OBLIGATOIRE DE L'ACCORD INITIAL -->
+    <div class="contractSection">
+        <h2>ARTICLE 11 – FORCE OBLIGATOIRE DE L'ACCORD INITIAL</h2>
+        
+        <p align="justify">Toutes les autres clauses et annexes de l'accord de fourniture susmentionné dans le préambule, qui ne sont pas modifiées par le présent avenant, demeurent applicables, et gardent leur pleine et entière validité.</p>
+    </div>
+    
+    <!-- Signatures -->
+    <div class="contractSection">
+        <table border="0" width="95%">  
+            <tr>
+                <td width="40%">
+                    <apex:outputtext styleClass="line" value="Pour BUTAGAZ"/><br/><br/>
+                    <apex:outputtext styleClass="line" value="{!Quote.CreatedBy.Name}"/><br/>
+                    <apex:outputtext styleClass="line" value="(Nom du Commercial)"/>
+                </td>
+                <td width="20%">&nbsp;</td>
+                <td width="40%">
+                    <apex:outputtext styleClass="line" value="Pour le CLIENT"/><br/><br/>
+                    <apex:outputtext styleClass="line" value="{!Quote.Opportunity.DO_Salutation__c} {!Quote.Contact.LastName} {!Quote.Contact.FirstName}"/><br/>
+                    <apex:outputtext styleClass="line" value="{!IF(Quote.Contact.Quality__c!='', Quote.Contact.Quality__c, '_________________')}"/><br/>
+                    <apex:outputtext styleClass="line" value="(Nom et qualité du Signataire)"/><br/><br/>
+                    <apex:outputtext styleClass="line" value="qui reconnaît avoir pris connaissance des"/><br/> 
+                    <apex:outputtext styleClass="line" value="présentes conditions générales, qu'il accepte"/><br/>
+                    <apex:outputtext styleClass="line" value="expressément."/>  
+                </td>
+            </tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr>
+                <td>
+                    <apex:outputtext styleClass="line" value="Signature + Cachet Commercial"/>
+                </td>
+                <td>&nbsp;</td>
+                <td>
+                    <apex:outputtext styleClass="line" value="Signature + Cachet du CLIENT"/> 
+                </td>
+            </tr>
+        </table>                    
+    </div>                  
+</div>    
+<!--************************* END AVENANT: Services à la carte *************************-->
+
+</apex:page>

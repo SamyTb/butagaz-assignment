@@ -1,0 +1,737 @@
+<apex:page standardController="Quote"  language="fr" showHeader="false" extensions="VFC_Quotelineitem_01">
+	
+	<div id="containerGEBRE" >	
+	
+	    <div class="footerRight">
+			<p align="right">Code Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>     		
+		</div> 
+	    <!-- Document Footer --> 
+		 <div class="footer">
+		 	Réf.{!$Label.Contract_ref_GECPRO}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        	<p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+        	<p >Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+    	</div>
+    	
+        <!-- Document Header -->  
+        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+       
+	    <p style="text-align: center;margin-top: 100pt;">
+	            <span style="font-size:26px;"><strong>Bienvenue chez Butagaz</strong></span>
+	    </p>
+	        
+	    <p style="text-align: center;margin-top: 100pt;">
+	            <span style="font-size:26px;"><strong>Contrat de fourniture de gaz en bouteille <br/> pour un Revendeur</strong></span>
+	    </p> 
+	      
+	    <h1 Style="page-break-before:always">SOMMAIRE</h1>
+	    <br/>
+	    <h2 align="center">LE PRESENT CONTRAT COMPREND LES DOCUMENTS SUIVANTS&nbsp;:</h2>
+		<div  style="margin-left:20pt;">		
+		    <p class="spaceBefore"><strong>- LES CONDITIONS G&Eacute;N&Eacute;RALES&nbsp; DU CONTRAT</strong></p>
+		    <p class="spaceBefore"><strong>- LES CONDITIONS G&Eacute;N&Eacute;RALES&nbsp; DE VENTE</strong></p>	
+	     	<p class="spaceBefore"><strong>- LES CONDITIONS PARTICULI&Egrave;RES&nbsp; DU CONTRAT</strong></p>
+      	 	<p class="spaceBefore"><strong>- PRISE ENCHARGE DU MATERIEL BUTAGAZ</strong></p>
+      	 	<p class="spaceBefore"><strong>- BROCHURE 105B du COMITE FRANÇAIS DU BUTANE ET DU PROPANE</strong></p>
+      	 	<p class="spaceBefore"><strong>- PROTOCOLE D’ACCORD DU 20 DECEMBRE 1984</strong></p>
+      	</div>
+      	
+    	<div class="body">  
+    	
+    	   <h1 Style="page-break-before:always;">Contrat de fourniture de gaz en bouteille pour un Revendeur <br/> CONDITIONS G&Eacute;N&Eacute;RALES DU CONTRAT</h1>      
+    	      
+	        <!-- Client Signataire -->
+	        <div class="contractSection">
+	        	<p class="spaceBefore"><strong>LE PR&Eacute;SENT CONTRAT EST CONCLU ENTRE</strong></p>
+        		<p class="spaceBefore" align="justify">La société BUTAGAZ, Société par Actions Simplifiée, au capital de 195 225 000 €, immatriculée au R.C.S. de Nanterre sous le numéro 402 960 397, dont le siège social est situé : 47/53, rue Raspail – 92594 LEVALLOIS-PERRET CEDEX,</p>
+        		<p class="spaceBefore" align="justify">
+        			Ci-après dénommée <strong>BUTAGAZ</strong>, qui a donné mandat à la société sus-désignée pour la représenter,
+        		</p>
+            </div>
+            
+			<table class="ButagazHorizontalTable">
+		        <tr><td><p class="spaceBefore" ><strong>La société :</strong></p></td><td>&nbsp;{!Quote.Opportunity.DO_Mandataire__r.Name}</td></tr>
+		        <tr><td><strong>Au capital de :</strong></td><td>&nbsp;{!Quote.Opportunity.DO_Mandataire__r.Headquarters_Equity__c}</td></tr>
+		   		<tr><td><strong>Enregistrée sous le RCS :</strong></td><td align="justify">&nbsp;{!Quote.Opportunity.DO_Mandataire__r.Headquarters_RCS__c}</td></tr>
+		   		<tr><td width="30%"><strong>Dont le siège social est situé :</strong></td>
+		   			<td align="justify">&nbsp;{!Quote.Opportunity.DO_Mandataire__r.Headquarters_address__c}
+		   			</td>
+		   		</tr>     		
+      		</table>
+      		
+            <p class="spaceBefore"><strong>D’UNE PART, ET</strong></p>
+            
+          <div style="display: {!IF(Quote.Opportunity.Project_market_type__c=='PRO', '', 'none')};">                  
+				
+				<table class="ButagazHorizontalTable">		
+		      		<tr><td><p class="spaceBefore" ><strong>Société :</strong></p></td><td>&nbsp;{!Quote.Opportunity.DO_Name__c}</td></tr>
+		      		<tr><td><strong>Forme juridique :</strong></td><td>&nbsp;<apex:outputfield value="{!Quote.Opportunity.DO_Salutation__c}"/></td></tr>
+			        <tr><td><strong> Au capital de :</strong></td><td>&nbsp;{!Quote.Opportunity.DO_Capital__c}</td></tr>
+			   		<tr><td><strong>Enregistrée sous le RCS :</strong></td><td align="justify">&nbsp;{!Quote.Opportunity.DO_R_C_S_or_R_C_M_Number__c}</td></tr>
+			   		<tr>
+			   			<td width="30%"><strong>Dont le siège social est situé :</strong>			   		
+			   			</td>
+			   			<td align="justify">			   			
+		   			      	&nbsp;{!Quote.Opportunity.DO_Street_N__c},&nbsp; {!Quote.Opportunity.DO_Street_type__c}&nbsp; {!Quote.Opportunity.DO_Street_name__c}<br/>
+     						{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}
+     						{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}
+			   			</td>
+			   		</tr> 
+			   		<tr>
+			   			<td colspan="2">
+      						<p class="spaceBefore" align="justify">Ci-après dénommée <strong>le Revendeur Agréé</strong>,</p>
+      					</td>
+      				</tr>
+      			</table>
+      				   		   		      		
+		    </div>
+			<div style="display: {!IF(Quote.Opportunity.Project_market_type__c!='PRO', '', 'none')};">  
+		    	<table class="ButagazHorizontalTable">				    	
+		      		<tr><td><strong>Particulier :</strong></td><td>&nbsp;<apex:outputfield value="{!Quote.Opportunity.DO_Salutation__c}"/>&nbsp;{!Quote.Opportunity.DO_Name__c}</td></tr>
+		      		<tr>
+		      		<td colspan="2">
+		      			 <p class="spaceBefore" align="justify">Ci-après dénommé <strong>le Revendeur Agréé</strong>,</p>	
+		      		 </td>
+		      	    </tr>
+		      	</table>
+		    </div>					     		
+			
+			<p class="spaceBefore" align="justify"><strong>D'AUTRE PART, IL A &Eacute;T&Eacute; CONVENU CE QUI SUIT: </strong></p>
+			
+      		<h1>1.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  OBJET DU CONTRAT</h1>
+      		<p align="justify">
+				Le Revendeur Agréé assure dans son établissement la vente au détail aux consommateurs du butane et propane BUTAGAZ en bouteilles,
+				qu’il achète à BUTAGAZ représentée par le Distributeur Régional, conformément aux recommandations d’utilisation du butane et du propane
+				figurant sur les bulletins de consignation et aux présentes conditions générales de vente.      		
+      		</p>
+      		<p class="spaceBefore" align="justify">
+      			Sont désignés comme ''produits BUTAGAZ'' vendus par BUTAGAZ au Revendeur Agréé selon les modalités des présentes Conditions Générales, 
+      			le gaz propane et/ou butane contenu dans les emballages.
+      		</p>
+      		<p class="spaceBefore" align="justify">
+      			Sont désignés par ''emballages'' ou ''bouteilles'' les bouteilles de gaz de marque BUTAGAZ en tant que contenant du gaz propane et/ou butane. Les emballages BUTAGAZ peuvent être de diverses sortes tels que:     
+      		</p>
+      		<div  style="margin-left:20pt;">
+	      		<p class="spaceBefore">- Bouteille 13 Kg</p>
+				<p>- Bouteille 35 Kg</p>
+				<p>- Bouteille de 5 Kg et/ou de 6 Kg dites ''le Cube''</p>
+				<p>- Bouteille 10 Kg dite ''Viséo''.</p>
+      		</div>
+      		
+      		<p class="spaceBefore" align="justify">
+	      		 Il est expressément convenu entre les Parties que seul le gaz contenu dans les bouteilles sera vendu et en aucun cas les emballages, ces derniers demeurant à tout moment la propriété incessible,
+	      		 inaliénable et insaisissable de BUTAGAZ.
+      		</p>
+      		
+      		<h1>2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CARACTERE PERSONNEL</h1>
+      		<p class="spaceBefore" align="justify">
+      			Le présent contrat est conclu en considération expresse de la qualité propre du Revendeur Agréé, personne morale, et ne peut être ni cédé ni transféré sans l’accord préalable et écrit de BUTAGAZ.
+      		</p>
+	       
+	       <h1>3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OBLIGATIONS DU REVENDEUR AGREE</h1>
+      		<table style="page-break-inside:auto;">	
+	      		<tr>
+	      			<td style="width:25px">3.1</td>
+		      		<td align="justify">
+		      			<p>
+				      		 Le revendeur Agréé s'engage à respecter les consignes techniques et de sécurité décrites dans la brochure réglementaire 105b et notamment à respecter et maintenir les règles de conformité du stockage. 
+				      		Aucun contrôle concernant l'application de ces consignes de sécurité dont notamment les règles régissant la conformité du stockage ne sera réalisé par BUTAGAZ, la responsabilité de l'application de cette 
+				      		réglementation incombant exclusivement au Revendeur Agréé. En conséquence, la responsabilité de BUTAGAZ ne saurait être retenue en cas de non respect par le Revendeur Agréé des règles décrites dans ladite 
+				      		brochure réglementaire 105b.   
+			      		</p>
+			      		<p class="spaceBefore">
+      						Le Revendeur Agréé est informé que la réglementation et/ou les normes de sécurité peuvent évoluer. Les Parties s'engagent à se conformer à toute nouvelle réglementation et/ou normes de sécurité pouvant intervenir.      				
+			      		</p>
+			      	</td>	
+		      	</tr>
+	      		 
+	      		<tr>
+	      			<td style="width:25px">3.2</td>
+		      		<td align="justify">
+		      			<p class="spaceBefore">
+  							Le Revendeur Agréé s’engage à réserver exclusivement la distribution des produits précités de marque BUTAGAZ aux consommateurs finaux.			      		
+			      		</p>
+			      	</td>	
+		      	</tr>      		
+
+	      		<tr>
+	      			<td style="width:25px">3.3</td>
+		      		<td align="justify">
+		      			<p class="spaceBefore">
+							Le Revendeur Agréé reconnaît que BUTAGAZ conserve la propriété des présentoirs
+			      		</p>
+			      	</td>	
+		      	</tr> 
+
+	      		<tr>
+	      			<td style="width:25px">3.4</td>
+		      		<td align="justify">
+		      			<p class="spaceBefore">
+							Le Revendeur Agréé s'engage à respecter rigoureusement la législation en matière de publicité des prix. A ce titre, le Revendeur Agréé s'engage à ce que les prix de vente aux consommateurs finaux des charges 
+	      		 			de gaz (ci-après les "Produits BUTAGAZ") soient visibles, lisibles et exprimés en euro et toutes taxes comprises.
+		      	 		</p>
+		      	 		<p class="spaceBefore">		      	      	 
+	      	 				En outre, il est rappelé que le prix de la charge de gaz est librement fixé par le Revendeur Agréé en sa qualité de commerçant indépendant, qui s'engage à fixer ce prix dans le respect des réglementations applicables. 
+	      			 		BUTAGAZ pourra toutefois conseiller au Revendeur Agréé un prix maximal de revente des Produits BUTAGAZ.	
+	      			 	</p>
+	      			 	<p class="spaceBefore">
+	      		 			En revanche, BUTAGAZ restant propriétaire des emballages contenant le gaz, BUTAGAZ fixe seule et unilatéralement le montant de la consignation portant sur cet emballage. Dans ces conditions, le Revendeur Agréé s'engage 
+	      		 			à afficher de façon visible et lisible pour le client final, le montant exact des consignations des emballages fixé par BUTAGAZ. 	
+						</p>
+					</td>
+      			 </tr>
+
+	      		<tr>
+	      			<td style="width:25px">3.5</td>
+		      		<td align="justify">
+			      		 <p class="spaceBefore">
+			      			Le Revendeur Agréé déclare avoir été informé des dispositions du Protocole d’accord du 20 décembre 1984 relatif à la distribution des bouteilles de butane et de propane conclu par les sociétés distributrices de GPL sous
+			      		 	l’égide du CFBP. En conséquence, le Revendeur Agréé s’interdit, notamment, sous peine de poursuites pénales, d’échanger les bouteilles portant la marque BUTAGAZ avec des bouteilles de toute autre marque, et ce, quelque soit
+			      		  	le dispositif de distribution ou d'entreposage des bouteilles de gaz mis en place par le Revendeur Agréé. 
+			      		 </p>
+      		 
+			      		 <p class="spaceBefore">
+			      			D’une manière plus générale, le Revendeur Agréé s’interdit toutes pratiques déloyales susceptibles de porter atteinte aux droits de propriété de BUTAGAZ sur l’emballage et les équipements complémentaires.
+			      		</p>
+					</td>
+      			 </tr>	
+      			 
+	      		<tr>
+	      			<td style="width:25px">3.6</td>
+		      		<td align="justify">
+			      		 <p class="spaceBefore">      			 		      		
+      						La publicité sur le lieu de vente du Revendeur Agréé, relative aux produits BUTAGAZ, doit être conforme aux dispositions de la charte graphique de BUTAGAZ.
+      					</p>
+			      		<p class="spaceBefore">
+			      			A ce titre, le Revendeur Agréé reconnaît que l’agencement des produits publicitaires et la disposition des supports d’information, notamment le barème des taux de consignation, respectent les recommandations BUTAGAZ.
+			      		</p>
+			      		<p class="spaceBefore">
+			      			Le Revendeur Agréé s’engage à appliquer les offres commerciales sur l’ensemble de la gamme des produits de marque BUTAGAZ présents sur son point de vente, et à mettre en place toutes communications (PLV, ILV,...etc) 
+			      			prévues éventuellement dans le dispositif de promotion de ces offres et ce, de façon à ce que les clients finaux en aient une vision lisible et claire.
+			      		</p>
+			      		<p class="spaceBefore">
+			      			Lors de la mise en œuvre par BUTAGAZ de toute promotion et publicité relatives à ses produits, le Revendeur Agréé s'engage à mettre en place au sein de son point de vente, ces promotions et toute publicité et ce,
+			      		 	conformément aux indications de BUTAGAZ et aux supports éventuellement transmis par BUTAGAZ. A ce titre, le Revendeur Agréé s'interdit de faire toute modification portant sur les modalités des offres éditées par
+			      		  	BUTAGAZ ou des supports de publicité tels que transmis par BUTAGAZ. 
+			      		</p> 
+			      		<p class="spaceBefore"> 
+			      			L'utilisation de la marque et/ou du logo BUTAGAZ, des noms de domaine appartenant à BUTAGAZ, ou de l'image des bouteilles BUTAGAZ, devra être expressément acceptée par écrit par BUTAGAZ préalablement à toute publication.
+			      		</p>
+			      		<p class="spaceBefore"> 
+			      			Les éléments éventuellement fournis par BUTAGAZ devront être reproduits tels quels par le Revendeur Agréé, toute modification devant avoir obtenu l'accord préalable et écrit de BUTAGAZ. Dans l'hypothèse où le Revendeur Agréé
+			      		 	ferait une publicité en utilisant un signe distinctif de BUTAGAZ sans avoir obtenu l'autorisation préalable et écrite de BUTAGAZ, cette dernière se réserverait le droit de demander des dommages-intérêts pour le préjudice 
+			      		 	pouvant découler de cette opération publicitaire. 
+			      		</p> 
+					</td>
+      			 </tr>	
+      			 			      		
+	      		<tr>
+	      			<td style="width:25px">3.7</td>
+		      		<td align="justify">			      		
+      					<p class="spaceBefore"> 
+      		 				Le Revendeur Agréé s’engage à respecter les « Conditions Générales de Vente de Gaz en Bouteilles Butagaz » figurant ci-après, incluant les dispositions relatives au ravitaillement du Revendeur Agréé et au système de 
+      		 				consignation-déconsignation des bouteilles Butagaz que le Revendeur Agréé s’engage à mettre en place. 
+      					</p>  
+					</td>
+      			 </tr>	      			 		      		  
+      		</table>
+      		
+      		<h1>4.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRIX ET MODALITES DE PAIEMENT</h1>	
+      		<table style="page-break-inside:auto;">
+	      		<tr>
+	      			<td style="width:25px">4.1</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore" style="font-weight: bold;">Prix</p>
+		      			<p class="spaceBefore">
+		      				La fourniture du gaz est consentie au Revendeur Agréé selon le barème BUTAGAZ C1 en vigueur à la date de chaque livraison et disponible sur le site www.butagaz.fr, sauf accord particulier.
+		      			</p>
+		      			<p class="spaceBefore">
+		      				Le barème C1 est susceptible de varier, notamment sur la base de l'évolution des coûts des matières premières sur les marchés internationaux (CIF NWE + 7 000 tonnes, CIF NWE + de 3 000 tonnes,
+		      				 publiés à titre indicatif dans " l'Usine Nouvelle "), du coût du transport (Indice CNL Distribution avec Conducteur et Carburant publié par la Fédération des Entreprises de Transport et Logistique 
+		      				 de France) et de l'évolution des taux de change, BUTAGAZ s'efforçant de lisser ces évolutions au cours de l'année.
+		      			</p>
+		      			<p class="spaceBefore">
+		      				Le Revendeur Agréé déclare parfaitement connaître ces évolutions de prix liées notamment aux coûts des matières premières et déclare les accepter expressément. Le Revendeur Agréé sera prévenu par 
+		      				courrier moyennant un délai de 4 semaines avant l'application des nouveaux tarifs. Ce délai pourra être réduit en cas de force majeure.
+		      			</p>
+		      			<p class="spaceBefore">
+		      				Ce barème fixe le prix de facturation par charge de 6 Kg, 10 Kg et 13 Kg (butane), 5 Kg, 13 Kg et 35 Kg (propane), ainsi que la 13 Kg (propane carburation).
+		      			</p>
+		      			<p class="spaceBefore">	
+		      				Les écarts de barème sont fonction des quantités annuelles livrées au Revendeur Agréé en Unité Bouteille 13 Kg (ci-après désigné par ''UB'') étant entendu que:
+		      			</p>
+		      			<div  style="margin-left:20pt;">
+				      		<p class="spaceBefore">- 1 bouteille 13 Kg = 1 Unité Bouteille (UB)</p>
+							<p>- 1 bouteille 35 Kg (dite ''P35'') = 35/13 UB</p>
+							<p>- 1 bouteille de 5 et/ou 6 Kg (Le Cube) = 6/13 UB</p>
+							<p>- 1 bouteille 10 Kg (Viséo) = 10/13 UB</p>	
+      					</div>	
+      					<p class="spaceBefore" style="font-weight: bold;">
+      						Cas spécifique de la 1ère année pour points de vente nouvellement créés:
+      					</p>
+      					
+      					<p>
+      						Lors de la création d'un point de vente, les parties déterminent ensemble, sur la base des indications du Revendeur Agréé, un volume potentiel de vente d'unités bouteilles sur l'année à venir. 
+      						Le Revendeur Agréé sera facturé du prix du gaz, la première année, dans la tranche du Barème C1 correspondant à la consommation estimée.
+      					</p>
+      					<p>
+      						Par la suite, en fonction du volume réel de vente d'unités bouteilles réalisé par le Revendeur Agréé sur l'année passée, le Revendeur Agréé sera facturé du prix du gaz dans la tranche du Barème
+      						 C1 correspondant à sa consommation réelle. 	
+      					</p>
+      					<p class="spaceBefore" style="font-weight: bold;">
+      						Pour les points de vente préexistants : 
+      					</p>
+      					<p>
+      						le Revendeur Agréé sera facturé, la 1ère année, du prix du gaz dans la tranche du Barème C1 correspondant à la consommation en Unités Bouteilles sur l'année passée constatée sur le point de vente.		
+      					</p>      					
+      					<p class="spaceBefore">
+      						La consommation en Unités Bouteilles du Revendeur Agréé étant susceptible de varier d'une année à l'autre, ceci pourra avoir comme effet de faire changer le Revendeur Agréé de tranche de facturation 
+      						selon le Barème C1. Chaque année la consommation réelle en Unités Bouteilles du Revendeur Agréé sur l'année passée sera examinée par BUTAGAZ qui facturera le Revendeur Agréé pour les livraisons sur 
+      						l'année suivante, dans la tranche du Barème C1 correspondante.	  
+						</p>											
+					</td>
+      			 </tr>
+      			 
+	      		<tr>
+	      			<td style="width:25px">4.2</td>
+		      		<td align="justify">  
+		      			<p class="spaceBefore" style="font-weight: bold;">Modalités de paiement</p> 
+		      			<p class="spaceBefore">
+		      				Le règlement s’effectue au comptant et sans escompte, sauf accord particulier.
+		      		    </p>
+		      		    <p class="spaceBefore">
+		      		    	Toute dérogation que le Distributeur Régional pourrait accorder au Revendeur Agréé ne 
+		      		    	le serait qu’à titre précaire et révocable à tout moment.			 
+	      		  		</p> 	
+	      		  		<p class="spaceBefore">
+	      		  			Conformément aux articles L. 441-6 et D. 441-5 du Code du commerce, à défaut de paiement à son échéance d’une somme exigible, il sera appliqué au débiteur, sans mise en demeure, par dérogation à 
+	      		  			l’article 1153 du Code Civil, des intérêts de retard dont le montant résultera de l’application d’un taux d’intérêt égal à 3 fois le taux d’intérêt légal. De plus, BUTAGAZ pourra appliquer au débiteur 
+	      		  			une indemnité forfaitaire d'un montant de 40€ au titre des frais de recouvrement, sous réserve de toute modification de ce montant par décret. Lorsque ces frais de recouvrement sont supérieurs, BUTAGAZ
+	      		  			 pourra exiger une indemnisation complémentaire au débiteur sur présentation des documents justificatifs. Par ailleurs, en cas de défaut de paiement, le contrat pourra également être résilié de plein droit,
+	      		  			  si bon semble à BUTAGAZ, et ce, conformément à l'article 10 du présent contrat.
+	      		  		</p>
+	      		  		<p class="spaceBefore">
+	      		  			Par ailleurs, le contrat pourra être résilié, de plein droit, conformément à l’article 10.
+	      		  		</p>
+					</td>
+      			 </tr>	      			 		      		  
+      		</table>	      		  		
+	      	<h1>5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RESERVE DE PROPRIETE – TRANSFERT DES RISQUES</h1>
+	      	<p class="spaceBefore" align="justify">
+	      		BUTAGAZ conserve la propriété du gaz contenu dans les emballages jusqu’au paiement effectif de l’intégralité du prix en principal et accessoires par le Revendeur Agréé.
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		Ne constitue pas paiement au sens de cette clause la remise d’un titre créant une obligation de paiement (lettre de change ou autre).
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		Les dispositions ci-dessus ne font pas obstacle, à compter de la livraison, au transfert au Revendeur Agréé des risques de perte de gaz ainsi que des dommages qu’il pourrait occasionner.
+	      	</p>
+	      	
+	      	<h1>6.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DUREE</h1>
+	      	<p class="spaceBefore" align="justify">
+	      		Ce contrat annule et remplace tous les accords antérieurs ayant le même objet et prend effet à compter de sa signature.
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		Le contrat est conclu pour une durée indéterminée, à laquelle chaque partie peut mettre fin, moyennant un préavis minimum de trois (3) mois signifié par lettre recommandée avec avis de réception.
+	      		 Il est entendu entre les Parties que la durée de ce préavis pourra être adaptée pour être conforme aux dispositions de l’article L. 442-6 I 5° du Code de Commerce. 
+	      	</p>
+	      	
+	      	<h1>7.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FIN DE CONTRAT</h1>
+	      	<p class="spaceBefore" align="justify">
+	      		A la date de cession des relations commerciales, pour quelque cause que ce soit le Revendeur Agréé restituera, immédiatement et au plus tard sous quinze jours, au Distributeur Régional BUTAGAZ 
+	      		conformément aux indications portées sur le document de la prise en charge, le stock de bouteilles et le matériel de stockage, ainsi que tout matériel publicitaire fourni par BUTAGAZ, et fera 
+	      		disparaître de son établissement à ses frais toutes marques distinctives BUTAGAZ.
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		A compter de cette date, le Revendeur Agréé ne sera plus habilité à procéder aux consignations et déconsignations des bouteilles butane et propane BUTAGAZ. Il refusera de prendre en charge les
+	      		 bouteilles BUTAGAZ confiées par des tiers ou des consommateurs finaux qui auraient, notamment, consigné leurs bouteilles BUTAGAZ dans son établissement avant la résiliation du présent contrat 
+	      		 ou dans tout autre lieu agréé BUTAGAZ.
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		Le matériel (emballage – présentoir…) manquant lors de l’inventaire de clôture seront facturés au Revendeur Agréé au jour de la fermeture du dépôt.
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		Les charges restantes seront remboursées au Revendeur Agréé  selon le prix d’achat.
+	      	</p>	
+
+			<h1>8.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ASSURANCES</h1>					
+      		<table style="page-break-inside:auto;">
+	      		<tr>
+	      			<td style="width:25px">8.1</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore" style="font-weight: bold;">Dommages subis par les biens de BUTAGAZ et du Revendeur Agréé</p>	      	
+	      	      	</td>
+	      	    </tr>
+	      		<tr>
+	      			<td style="width:25px">a)</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				BUTAGAZ prend à sa charge, sauf faute prouvée du Revendeur Agréé, les dommages subis par son matériel, à la suite d’incendie ou d’explosion, entre sa réception par le Revendeur
+		      				Agréé et sa livraison aux consommateurs, ainsi qu’entre sa reprise par le Revendeur Agréé et sa restitution au Distributeur Régional BUATGAZ.		      					      			
+		      			</p>	   
+		      			<p class="spaceBefore">
+		      				Aucune opération d’emplissage ou de transvasement ne doit être effectuée par le Revendeur Agréé.
+		      			</p>		      				   	
+	      	      	</td>
+	      	    </tr>	      	    
+
+	      		<tr>
+	      			<td style="width:25px">b)</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				Le Revendeur Agréé prend à sa charge :		      					      			
+		      			</p>	   
+			      		<div  style="margin-left:20pt;">
+				      		<p>
+				      			<strong>o</strong> Les pertes ou dommages subis par le matériel BUTAGAZ qu’il détient, à la suite d’autres causes que l’incendie ou l’explosion.				   				      		
+				      		</p>
+							<p>
+								<strong>o</strong> Les pertes de gaz lui appartenant et les dommages subis par les locaux et installations lui appartenant ou qu’il utilise.
+								Le Revendeur Agréé fera son affaire personnelle de la souscription des polices d’assurance nécessaires pour garantir, selon 
+		      					le cas, les dommages à ses biens, sa responsabilité vis-à-vis des voisins, et le cas échéant ses risques locatifs. Il signalera
+		      					à son assureur incendie la présence dans ses locaux et installations de charges de gaz et supportera les surprimes éventuelles.	
+							</p>
+
+			      		</div>      				
+		      			<p class="spaceBefore">		
+		      				De plus, le Revendeur Agréé exiger de son assureur incendie qu’il renonce à tout recours contre BUTAGAZ. Réciproquement BUTAGAZ et ses assureurs 
+		      				renoncent à tout recours contre le Revendeur Agréé pour les dommages subis par son matériel après incendie ou explosion.				
+						</p>		   	
+	      	      	</td>
+	      	    </tr>
+
+				<tr>
+	      			<td style="width:25px">8.2</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore" style="font-weight: bold;">Dommages causés au Tiers</p>	      	
+	      	      	</td>
+	      	    </tr>
+				<tr>
+	      			<td style="width:25px">a)</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				BUTAGAZ, étant propriétaire des bouteilles, prend à sa charge les dommages de toute origine (incendie, accident, explosion, etc…) qui peuvent
+		      				 être causés aux tiers par le Revendeur Agréé dans l’exécution du contrat, chaque fois que la responsabilité civile de ce dernier est engagée, 
+		      				 à l’exception des dispositions prévues ci-dessus au paragraphe 8.1.b  					      			
+		      			</p>	   
+		      			<p class="spaceBefore">
+		      				Dans l’application de cette clause, le Revendeur Agréé, le Distributeur Régional et BUTAGAZ son considérés comme tiers entre eux.
+		      			</p>
+		      			<p class="spaceBefore">
+		      				La responsabilité pénale du Revendeur Agréé et de ses préposés reste leur affaire propre et les dispositions qui précèdent ne sauraient les
+		      				 préserver des conséquences de cette responsabilité.
+		      			</p>		      				      				 		      				   	
+	      	      	</td>
+	      	    </tr>	  	      	    
+
+	      		<tr>
+	      			<td style="width:25px">b)</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				Sont à la charge du Revendeur Agréé les dommages susceptibles d’être causés aux tiers :		      					      			
+		      			</p>	   
+			      		<div  style="margin-left:20pt;">
+				      		<p>
+				      			<strong>o</strong> Par ses véhicules et leur chargement, en circulation (véhicules en mouvement ou en stationnement				   				      		
+				      		</p>
+							<p>
+								<strong>o</strong> Du fait de ses travaux de plomberie (pose de canalisation – raccordement d’appareils d’utilisation, etc)
+								 et de maçonnerie
+							</p>
+
+			      		</div>      				
+		      			<p class="spaceBefore">		
+		      				Ces risques doivent être couverts par les assurances adéquates qui garantiront notamment, en matière d’installation, sa responsabilité
+		      				 civile d’entrepreneur pendant et après les travaux.				
+						</p>		   	
+	      	      	</td>
+	      	    </tr>
+
+				<tr>
+	      			<td style="width:25px">c)</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				BUTAGAZ est propriétaire du matériel de stockage et de tout matériel nécessaire à la revente au détail du butane et propane BUTAGAZ
+		      				 en bouteilles, tel que décrits sur la fiche « Prise en charge de matériel » jointe aux présentes. BUTAGAZ met ce matériel à disposition
+		      				  du Revendeur Agréé à titre de prêt à usage.  					      			
+		      			</p>	   
+		      			<p class="spaceBefore">
+		      				Pendant toute la durée du contrat, le Revendeur Agréé aura pour obligation de veiller à la garde juridique et à la conservation de ces
+		      				 installations, conformément au droit commun. En conséquence, le Revendeur Agréé répond des dommages causés au matériel prêté par BUTAGAZ
+		      				  et/ou causés aux tiers de son fait et/ou de ses préposés, sauf à prouver une faute de BUTAGAZ à l’origine du dommage.
+		      			</p>		      				      				 		      				   	
+	      	      	</td>
+	      	    </tr>
+	      	    
+				<tr>
+	      			<td style="width:25px">8.3</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore" style="font-weight: bold;">Disposition commune : double assurance</p>	      	
+	      	      	</td>
+	      	    </tr>
+				<tr>
+	      			<td style="width:25px"></td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				Si les dommages pris en charge par BUTAGAZ aux termes des dispositions 8.1 et 8.2 étaient déjà garantis par une assurance souscrite par 
+		      				le Revendeur Agréé, la prise en charge desdits dommages par BUTAGAZ n’interviendrait qu’après épuisement des garanties souscrites par le
+		      				 Revendeur Agréé. Le Revendeur Agréé qui se trouve dans cette situation doit informer son assureur de cette disposition. 					      			
+		      			</p>	   	      				      				 		      				   	
+	      	      	</td>
+	      	    </tr>
+	      	</table>
+	      	    
+			<h1>9.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORCE MAJEURE</h1>					
+			<p class="spaceBefore" align="justify">
+				Il est expressément convenu que le cas de force majeure auxquels son assimilés, sans que cette énumération soit limitative, tout acte des autorités de fait 
+				ou de droit, les émeutes, guerres, les grèves ou tous actes concertés du personnel, les incendies, les inondations, explosions, barrières de dégel, 
+				l’interdiction de la circulation des véhicules d’un tonnage habituellement utilisé, les difficultés d’approvisionnement ou pénuries de matière première, dispensent
+				 la partie concernée du respect de ses obligations.
+			</p>
+			<p class="spaceBefore" align="justify">
+	      	    Sera également considéré au cas de force majeure, le fait de ne plus approvisionner le dépôt du Revendeur Agréé, pour des raisons de sécurité, que ce soit à la suite
+	      	     d’une modification de l’environnement ou d’une modification de la législation.	      			 		      		  
+      		</p>	
+      		<p class="spaceBefore" align="justify">
+      			En cas de force majeure, il appartient à la partir concernée de notifier à l’autre partie, par tout moyen approprié, dans un délai de huit (8) jours, la survenance
+      			 de l’événement caractéristique de la force majeure.
+      		</p>
+      		<p class="spaceBefore" align="justify">
+      			En cas de survenance d’un cas de force majeure, le contrat sera suspendu pendant toute la durée dudit cas de force majeure.
+      		</p>     
+      		<p class="spaceBefore" align="justify">
+      			Si le cas de force majeure se poursuit pendant plus d’un (1) mois, le contrat pourra être résilié par chacune des Parties, par l'envoi d'une Lettre recommandée avec accusé
+      			 de réception et ce, sans qu’aucune indemnité ne soit due. 
+      		</p>
+      		<p class="spaceBefore" align="justify">
+      			Dans tous les cas, chaque partie s’engage à n’exercer aucun recours l’une envers l’autre.
+      		</p>
+
+			<h1>10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CLAUSE RESOLUTOIRE</h1>					
+			<p class="spaceBefore" align="justify">
+				En cas d’inexécution par l’une ou l’autre des parties de l’une quelconque des obligations résultant du présent accord, celui-ci pourrait, si bon semble à l’autre partie, être 
+				résolu de plein droit 30 jours après une mise en demeure par lettre recommandée avec avis de réception restée sans effet, et ce sans préjudice de tous dommages et intérêts au
+				 profit de la partie lésée.
+			</p>  
+
+			<h1>11.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATTRIBUTION DE COMPETENCE</h1>					
+      		<table style="page-break-inside:auto;">
+	      		<tr>
+	      			<td style="width:25px">11.1</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				 BUTAGAZ ou son Distributeur Régional peut, en cas de besoin, faire prescrire l’exécution des obligations prévues ci-dessus par simple ordonnance de référé du
+		      				 Président du Tribunal de Commerce au lieu de l’établissement du Revendeur Agréé, auquel il est fait attribution de compétence.
+		      			</p>	      	
+	      	      	</td>
+	      	    </tr>			
+	      		<tr>
+	      			<td style="width:25px">11.2</td>
+		      		<td align="justify">    
+		      			<p class="spaceBefore">
+		      				Pour toute procédure autre qu’une procédure de référé visée ci-dessus, susceptible d’être entamée à l’occasion des litiges, attribution de compétence
+		      				 est donnée par les parties au Tribunal de Commerce de PARIS, et ce, même en cas de pluralité de défendeurs, d’appel en garantie ou de demande incidente.
+		      			</p>	      	
+	      	      	</td>
+	      	    </tr>
+	      	</table>
+	      	
+	      	<h1>12.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TRAITEMENT INFORMATIQUE</h1>
+	      	<p class="spaceBefore" align="justify">
+	      		Conformément à la loi du 6 janvier 1978, BUTAGAZ est expressément autorisée à saisir l’ensemble des informations collectées sur fichier informatique.
+	      	</p>
+	      	<p class="spaceBefore" align="justify">
+	      		Le  Revendeur Agréé, disposant d’un droit d’accès et de rectification, pourra formuler toute demande par courrier auprès du Service Client
+	      	</p>   	
+	      	
+    	    <h1 Style="page-break-before:always;">Contrat de fourniture de gaz en bouteille pour un Revendeur <br/> CONDITIONS G&Eacute;N&Eacute;RALES DE VENTE</h1>      
+		    <BR/>	      
+	      	<h1>I.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RAVITAILLEMENT DU REVENDEUR AGREE</h1>	
+	      	<h2>1. Stockage</h2>
+	      	<p class="spaceBefore" align="justify">
+	      		Il est mis à disposition des Revendeurs Agréés un stock de départ de bouteilles BUTAGAZ. Le Distributeur Régional BUTAGAZ en détermine la composition et les modifications éventuelles dans le temps en fonction des ventes et des prévisions de ravitaillement du Distributeur Régional. Les charges de gaz sont payées comptant dès la mise en place du stock.
+	      	</p>	
+	      	<p class="spaceBefore" align="justify">
+				Les points de vente entreposent les bouteilles pleines et vides dans des sites propres à leur conservation, conformément à la règlementation sur les établissements classés ou les règles édictées par le Comité Français du Butane et du Propane (brochure 105 B intégrée au présent contrat en annexe). Il informe le propriétaire, si celui-ci n’est pas la Revendeur Agréé lui-même, de l’usage fait des sites et de la présence des bouteilles, propriété inaliénable et insaisissable de BUTAGAZ.
+			</p>	
+			<p class="spaceBefore" align="justify">
+				<strong>Prise en charge de matériel</strong> : Un document appelé « Prise en charge de matériel » sera établi pour préciser et valoriser tout le matériel mis à disposition du Revendeur Agréé au moment de sa mise en place par le Distributeur Régional. Ce document sera signé par le Revendeur Agréé et le Distributeur Régional, et pourra évoluer pendant la durée du présent contrat (voir annexe Prise en charge de Matériel).			
+			</p> 
+			<p class="spaceBefore" align="justify">
+				<strong>Contrôles de stock</strong> : A tout moment un contrôle de stock contradictoire pourra être réalisé par le Distributeur Régional avec le Revendeur Agréé sur la base de la Prise en Charge du Matériel en cours. Il donne lieu à la facturation des emballages ou du matériel manquant et, le cas échéant, à l’émission d’un nouveau document « Prise en charge de Matériel » dûment signé par le Revendeur Agréé et le Distributeur Régional.     	    				    		      	      		      		  		                        
+    		</p>
+    		<p class="spaceBefore" align="justify">
+    			Si le Revendeur Agréé était victime d'un vol de bouteilles BUTAGAZ, il doit sans délai en avertir BUTAGAZ par tout moyen puis, sous un délai maximum de 2 semaines à compter de la constatation du vol, le confirmer par écrit. Cette déclaration écrite devra être accompagnée d'une attestation d'assurance ainsi que la copie de la plainte pour vol que le Revendeur Agréé aura déposée auprès de la Gendarmerie ou d'un commissariat. Cette plainte devra expressément préciser que le Revendeur Agréé a porté plainte pour vol de bouteilles de marque BUTAGAZ, propriété de BUTAGAZ, contenant du butane et/ou du propane ainsi que le nombre de bouteilles volées.
+    		</p>
+    		
+    		<h2>2. Livraisons</h2>
+    		<p class="spaceBefore" align="justify">
+    			La livraison des bouteilles de gaz est organisée à l’initiative de BUTAGAZ (mode prévisionnel).
+    		</p>
+    		<p class="spaceBefore" align="justify">
+				A titre dérogatoire et exceptionnel, BUTAGAZ, comme le Revendeur Agréé, peuvent se réserver la faculté d’opter pour le mode de livraison à la commande, ce qui sera précisé dans les conditions particulières du contrat de Revendeur Agréé. Le Distributeur Régional BUTAGAZ livre à ses frais au Revendeur Agréé des bouteilles pleines BUTAGAZ en nombre égal à celui des bouteilles vides BUTAGAZ que ce dernier lui restitue.    		
+			</p>
+    		<p class="spaceBefore" align="justify">
+				Au titre de l'obligation de garde et de surveillance du Revendeur Agréé s'agissant des bouteilles BUTAGAZ livrées, toute perte ou vol de bouteille livrée sera facturé au Revendeur Agréé en cumulant le montant de la consignation de ladite bouteille (selon barème BUTAGAZ des taux de consignation en vigueur) et le prix de la charge de gaz (s'il s'agit d'une bouteille pleine et dans le cas où celle-ci n'aurait pas déjà été réglée par le Revendeur Agréé).
+			</p> 
+    		<p class="spaceBefore" align="justify">
+				<strong>Pour les Revendeurs Agréés livrés en mode prévisionnel</strong>, il est expressément précisé que le Distributeur Régional BUTAGAZ ne déclenche la livraison qu’à partir d’un minimum de 10 emballages vides ou 4 bouteilles 35 Kg (P35) constatées.			
+			</p>    
+			<p class="spaceBefore" align="justify">
+				<u>On entend par 1 emballage :</u>
+			</p>   
+      		<div  style="margin-left:20pt;">
+	      		<p class="spaceBefore">- 1 bouteille de 13 Kg ou</p>
+				<p>- 1 bouteille de 6 Kg ou</p>
+				<p>- 1 bouteille de 5 Kg ou</p>
+				<p>- 1 bouteille de 10 Kg </p>
+      		</div>			
+			<p class="spaceBefore" align="justify">
+				<u>Cas particulier :</u>
+			</p>   
+      		<div  style="margin-left:20pt;">
+	      		<p class="spaceBefore">- 1 bouteille de 35 Kg = 3 emballages </p>
+      		</div>	
+      		<p class="spaceBefore" align="justify">	
+	      		<strong>Pour les Revendeurs Agréés qui sont livrés à la commande</strong>, les livraisons s’effectuent franco de port. Les commandes que passeront les points de vente devront porter sur un minimum de 10 emballages ou <u>4 bouteilles de 35Kg (P35)</u> tel que définis ci-dessus.
+				Si la commande porte sur moins de 10 emballages <u>ou 4 bouteilles 35 Kg (P35)</u> (comme définis ci-dessus), le point de vente se verra facturer un coût logistique forfaitaire supplémentaire de 35 €.
+			</p>
+			<p class="spaceBefore" align="justify">
+				Les délais de livraison sont fixés à cinq jours ouvrés date de commande.
+      		</p>
+      		<p class="spaceBefore" align="justify">
+      			<strong>Quel que soit le mode de livraison du Revendeur Agréé</strong> :
+      		</p>	
+			<p class="spaceBefore" align="justify">			
+				Le chargement et le déchargement des bouteilles s’effectuent par le transporteur chargé par BUTAGAZ du transport des bouteilles. Le Revendeur Agréé apportera éventuellement son aide au transporteur pour facilité l'accès de celui-ci aux infrastructures d'entreposage des bouteilles.
+			</p>
+			<p class="spaceBefore" align="justify">			
+				Les bouteilles dans lesquelles le gaz est livré demeurent la propriété de BUTAGAZ ; elles sont confiées en dépôt au Revendeur Agréé qui est responsable de leur conservation en bon état.
+			</p>
+			<p class="spaceBefore" align="justify">
+				Il appartient aux points de vente, en cas d’avarie des marchandises livrées ou de manquants, d’effectuer toutes les réserves nécessaires auprès du transporteur sur le bon de livraison.
+			</p>
+			<p class="spaceBefore" align="justify">	
+				Tout produit n’ayant pas fait l’objet de réserves par lettre recommandée avec accusé de réception dans les 3 jours de sa réception auprès du transporteur, conformément à l’article 133-3 du Code de Commerce, et dont copie sera adressée simultanément à BUTAGAZ, sera considéré et accepté par le Client.
+				Le Revendeur Agréé doit informer BUTAGAZ et son Distributeur Régional habituel de tout changement qui pourrait modifier les heures et jours de livraisons.
+			</p>
+			<p class="spaceBefore" align="justify">
+				En cas de non paiement de l'intégralité d'une facture venue à échéance, BUTAGAZ se réserve la faculté de suspendre toute livraison en cours et/ou à venir, sept (7) jours ouvrés après une mise en demeure par lettre recommandée avec accusé de réception, restée sans résultat. Le non paiement de toute facture arrivée à échéance pourra également entraîner la résiliation du présent contrat dans les conditions de l'article 10 des présentes. Dans le cas où le Revendeur Agréé passe commande auprès de BUTAGAZ sans avoir procédé au paiement de la ou les commande(s) précédente(s), BUTAGAZ pourra refuser d'honorer la commande et refuser de livrer les produits concernés, sans que le Revendeur Agréé puisse prétendre à une quelconque indemnité pour quelque raison que ce soit.
+      		</p>
+      		<h2>3. Bouteilles défectueuses</h2>	
+      		<p class="spaceBefore" align="justify">
+      			BUTAGAZ est attachée à la qualité de ses produits et pour cela a mis en place une procédure de gestion des bouteilles dites défectueuses (Procédure figurant en Annexe XX). Des collerettes à apposer sur les bouteilles défectueuses sont mises à disposition du Revendeur Agréé via le transporteur auquel BUTAGAZ aura fait appel ou sur demande auprès du Distributeur Régional Butagaz.			 				   		
+    		</p>
+    		<p class="spaceBefore" align="justify">
+    			En cas de bouteille Défectueuse, la charge de gaz sera remboursée par BUTAGAZ au Revendeur Agréé sous réserve que ce dernier ait dûment suivi la procédure figurant en annexe XX et sous réserve que la collerette ait été valablement remplie par le Revendeur Agréé avec le client final. Le remboursement de la charge de gaz par BUTAGAZ est soumis à la condition que la bouteille en question ne soit pas défectueuse du fait du Revendeur Agréé, de ses préposés et/ou d'un client final.
+    		</p>
+    		
+    		<h1>II.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CONSIGNATIONS - DECONSIGNATIONS DES BOUTEILLES</h1>	
+    		<h2>1. Consignation des bouteilles :</h2>	
+    		<p class="spaceBefore" align="justify">
+    			Les bouteilles demeurant la propriété de BUTAGAZ, le Revendeur Agréé les consigne au consommateur final lors de toute nouvelle consignation d’une bouteille de marque Butagaz. Il établit les bulletins de consignation sur un imprimé BUTAGAZ et encaisse, pour le compte de BUTAGAZ, le prix de la consignation selon le barème BUTAGAZ en vigueur au jour de la consignation.
+    		</p>
+    		<p class="spaceBefore" align="justify">	
+    			Le contrat de consignation formalise la remise à un client d'une bouteille, propriété incessible et insaisissable de BUTAGAZ. Il constitue un contrat de prêt à usage authentifiant la prise en charge par le client, d'un matériel appartenant à BUTAGAZ.	
+    		</p>
+    		<p class="spaceBefore" align="justify">	
+    			Le contrat de consignation précise également:
+    		</p>
+      		<div  style="margin-left:20pt;">
+	      		<p class="spaceBefore">- Les Conditions Générales de Consignation applicables aux bouteilles Butane et Propane Butagaz,</p>
+				<p>- la mise en service d'une bouteille Butagaz (butane ou propane) autre que la 13 Kg Carburation,</p>
+				<p>- les recommandations pour l'utilisation des bouteilles butane ou propane autres que la 13 Kg Carburation.</p>
+      		</div>	    		
+    		<p class="spaceBefore" align="justify">	
+    			Lors de la consignation de bouteilles BUTAGAZ au consommateur final, le Revendeur Agréé doit obligatoirement compléter le contrat de consignation des mentions suivantes:
+    		</p>
+      		<div  style="margin-left:20pt;">
+	      		<p class="spaceBefore">- apposer son cachet commercial sur chacun des feuillets,</p>
+				<p>- indiquer par type d'emballage le prix unitaire de la consignation conformément au barème BUTAGAZ en vigueur au jour de la consignation,</p>
+				<p>- indiquer la date de consignation,</p>
+				<p>- demander au client d'indiquer lisiblement ses nom et adresse sur le contrat avant de le signer. En effet, de par sa signature, le client reconnaît avoir reçu le texte "Mise en service et recommandations",</p>
+      			<p>- compléter la rubrique ''Conditions Particulières'',</p>
+      			<p>- chaque fois que le client aura bénéficié d'une offre promotionnelle (en indiquant uniquement le nom et la période de validité de la promotion).</p>    		
+      		</div>	    		
+    		<p class="spaceBefore" align="justify">	
+				Le Revendeur Agréé remet au Distributeur Régional au plus tard à la livraison suivante :    		
+			</p>
+      		<div  style="margin-left:20pt;">
+	      		<p class="spaceBefore">- D’une part, les bulletins de consignation et le montant des sommes encaissées</p>
+				<p>- D’autre part, les bulletins de déconsignation, les sommes déboursées lui étant remboursées par le Distributeur Régional BUTAGAZ en fonction du barème BUTAGAZ en vigueur au jour de la consignation.</p>		
+      		</div>    		    		
+    		<p class="spaceBefore" align="justify">
+    			Le Distributeur Régional BUTAGAZ reconstitue le stock initial du Revendeur Agréé lors de la livraison suivante, en fonction du nombre de bulletins de consignation que le Revendeur Agréé lui aura remis. Le non respect de cette procédure entraînerait la résiliation immédiate du contrat de revente sans préjudice de l’action civile que BUTAGAZ serait en droit de mener.
+    		</p>
+    		
+    		<h2>2. Taux de consignation :</h2>
+    		<p class="spaceBefore" align="justify">
+    			Pour tout nouveau client souhaitant consigner une bouteille Butagaz, le Revendeur devra facturer la consignation de celle-ci au client suivant le taux de consignation fixé dans le Barème C1 suivant le type de bouteille concerné : Butane (Cube, 13Kg ou Viséo) ou Propane (Cube, 13Kg ou 35Kg) ou Propane Carburation (GC).
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			Le Revendeur Agréé est informé que le barème C1 est susceptible d'évoluer pendant la durée du présent contrat.
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			L'affichage de la valeur de consignation doit être visible des consommateurs et doit suivre les évolutions du barème C1.
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			Les barèmes par année des valeurs de consignation sont disponibles auprès des Distributeurs Régionaux BUTAGAZ.
+    		</p>
+    		
+    		<h2>3. Déconsignation des bouteilles :</h2>
+    		<p class="spaceBefore" align="justify">
+    			Lorsque le consommateur restitue la bouteille BUTAGAZ, le Revendeur Agréé établit un bulletin de déconsignation et lui rembourse le montant de la consignation, conformément au montant figurant sur le bulletin de consignation et au barème BUTAGAZ en vigueur au jour de la consignation, déduit s’il y a lieu, des frais de réparation ou de remplacement des bouteilles détériorées. 
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			Lorsque le consommateur restitue la bouteille BUTAGAZ mais qu’il n’est pas en mesure de présenter son bulletin de consignation au Revendeur Agréé, ce dernier ne pourra lui rembourser le montant total de la consignation. Néanmoins, le Revendeur Agréé devra déconsigner la bouteille Butagaz selon les indications que BUTAGAZ lui fournira.
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			En effet, la loi dite « Grenelle 2 » du 12 juillet 2010 a reconnu le système de consignation des bouteilles de gaz butane et propane comme un système efficace favorisant le réemploi des bouteilles et participant à une meilleure protection de l’environnement. Le Revendeur Agréé déclare être parfaitement conscient de l’importance que revêt cette reprise de bouteilles pour garantir leur réutilisation et éviter au mieux le risque de délaissement sur la voie publique de bouteilles de gaz propane et butane.
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			En cas de suspicion de fraude d'un client final relative au remboursement du montant de sa consignation, le Revendeur Agréé en informera BUTAGAZ dans les meilleurs délais. 
+    		</p>	
+    		<p class="spaceBefore" align="justify">
+    			Lors de la déconsignation de la bouteille, le Revendeur Agréé doit systématiquement enregistrer l'identité du client et apposer son cachet commercial. BUTAGAZ se réserve le droit de modifier unilatéralement les modalités des déconsignations et du remboursement du montant de la consignation auprès de la clientèle.
+    		</p>
+    		<p class="spaceBefore" align="justify">
+    			Le Revendeur Agréé est informé que les conditions de la consignation/déconsignation peuvent être modifiées par des Lois et/ou décrets. Le Revendeur Agréé s'engage à respecter les éventuelles nouvelles conditions de la consignation/déconsignation qui seraient imposées par la réglementation.
+    		</p>	
+
+    		
+	        <div class="Signatures" >	        
+				<h1>Signatures</h1>
+				<p class="spaceBefore" align="justify">
+	    			Le REVENDEUR AGREE reconnaît avoir pris connaissance des conditions générales de vente de gaz en bouteilles BUTAGAZ et en avoir accepté l’intégralité des clauses. Il en est de même des autres documents listés en sommaire.
+	    		</p>
+	        	<apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c='PRO'}">
+			      	<p class="spaceBefore"><strong>Code Client :&nbsp;</strong>{!Quote.Client_Code__c}</p>
+			    </apex:outputpanel>
+	        	<apex:outputpanel rendered="{!Quote.Opportunity.DO_Adherent_Central_Number__c!=''}">
+	        		<p class="spaceBefore"><strong>Code Magasin :&nbsp;</strong>{!Quote.Opportunity.DO_Adherent_Central_Number__c}</p>
+	        	</apex:outputpanel>	 
+	        	<BR/>       
+				<p class="spaceBefore"><strong>Fait en deux exemplaires originaux</strong></p>
+				<BR/>
+				<p class="spaceBefore"><strong>Le &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/></strong></p>
+				<BR/>
+				<p class="spaceBefore"  >Le Revendeur Agréé (1)</p>
+	
+				<p class="spaceBefore" style="margin-top: 80pt;" >(1) Signature précédée de la mention manuscrite « Lu et approuvé »</p>
+		        
+	            <div class="ButagazSignature" Style="width:50%;">
+	                <div class="ButagazCachet" style="width:92%;height:150pt;padding: 5pt 5pt 5pt 5pt;position: relative;">
+					Cachet du Distributeur Régional :
+	                </div> 
+	            </div>    
+	
+	            <div class="ButagazSignature" Style="width:50%;">
+	                <div class="ButagazCachet" style="width:92%;height:150pt;padding: 5pt 5pt 5pt 5pt;position: relative;">
+					Cachet du Distributeur Régional :
+	                </div> 
+	            </div>          
+	        
+	        </div>      		
+    			
+    	</div>
+	</div>
+</apex:page>

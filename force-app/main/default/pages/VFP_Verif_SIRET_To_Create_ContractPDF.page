@@ -1,0 +1,7 @@
+<apex:page showHeader="false" standardController="Quote" extensions="VFC_Validation_Rules_Quote_SIRET" action="{!launchVerifSiretToCreateContractPdf}">
+  <apex:form >
+    <apex:pageBlock title="Validation" >
+    <apex:pageMessages />
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

@@ -1,0 +1,342 @@
+<apex:page standardController="Stock_Inventory__c" extensions="VFC_StockInventory" showHeader="true" sidebar="false">
+
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+    <script>
+        var $dialog;
+        $(document).ready(function() {
+        $dialog = $("#dialog-modal")
+            .dialog({
+                autoOpen: false,
+                height: 150,
+                width: 250,
+                modal: true,
+                closeOnEscape: false,
+                resizable: false
+            });
+        });
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            return false;
+        }
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+    </script>
+    
+    <!--
+    <script>
+        function ChangeDot(fieldid) {
+        	var searchInputId = 'div[id='+fieldid+']'; 
+            var local = '{!LocalCurrencyFormat}';  
+            if((local == 'fr_FR') || (local == 'fr_FR_EURO') || (local == 'fr')){      	    
+            		var inputValueBefore = jQuery(searchInputId).children('input').val();
+            		var inputValueAfter = inputValueBefore.replace(/\./g, ',');
+            		jQuery(searchInputId).children('input').val(inputValueAfter);			
+            }                          
+        }
+    </script>
+
+    <script>
+        function CheckPrixIndiff(ifChecked,fieldid) {
+        	var checkStatus = ifChecked;
+			if(checkStatus == true){
+				jQuery('div[id='+fieldid+']').children('input').attr('checked', true);
+				var pricefieldId =fieldid+'_price_';
+				jQuery('div[id^='+pricefieldId+']').each(function(e) {
+					copyFromBTZ(true,$(this).attr('id'));
+				}); 					    								
+			}			                       
+        }
+    </script>
+
+    <script>
+        function copyFromBTZ(ifChecked,fieldid) {
+        	var checkStatus = ifChecked;
+			if(checkStatus == true){
+			    var codeArticle = fieldid.split('_')[2];
+			    var BTZfieldId = 'Butagaz_price_'+codeArticle;
+				var BTZArticlePrice = jQuery('div[id='+BTZfieldId+']').children('input').val();
+				jQuery('div[id='+fieldid+']').children('input').val(BTZArticlePrice);
+			}			                       
+        }
+    </script> 
+
+    <script>
+        function copyValue(fieldid) {
+        	var codeArticle = fieldid.split('_')[2];
+			if(codeArticle == 'BD'){
+				var Gid = fieldid.split('_')[0]+'_price_'+'G';
+				var BDPrice = jQuery('div[id='+fieldid+']').children('input').val();
+				jQuery('div[id='+Gid+']').children('input').val(BDPrice);
+			}
+			
+			if(codeArticle == 'CB'){
+				var CPid = fieldid.split('_')[0]+'_price_'+'CP';
+				var CBPrice = jQuery('div[id='+fieldid+']').children('input').val();
+				jQuery('div[id='+CPid+']').children('input').val(CBPrice);
+			}				                       
+        }
+    </script>  
+    -->
+ 	   
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}"/>
+        </div>
+    </div>    
+    
+    <apex:form >
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+		
+        <apex:sectionheader title="{!$Label.Stock_Inventory}" subtitle="{!oPTL.Name}"/>
+        <apex:pageblock id="idBlockIssue" rendered="{!bIssue}">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+        </apex:pageblock>
+        <apex:pageblock id="idBlock" rendered="{!NOT(bIssue)}">
+            <apex:pagemessages escape="false"/>
+            <apex:pageblockbuttons >
+                <!--<apex:commandbutton value="{!$Label.diff_prix_button_label}" action="{!calcStockShareBtn}" rerender="idBlock" status="modalStatus"/>-->
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!saveBtn}" rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}" status="modalStatus"/>
+            </apex:pageblockbuttons>
+            <apex:pageblocksection >
+                <apex:outputField value="{!Stock_Inventory__c.PTL__c}"/>
+                <apex:inputField value="{!Stock_Inventory__c.Inventory_Date__c}"/>
+                <apex:inputField value="{!Stock_Inventory__c.Type__c}"/>
+            </apex:pageblocksection>
+            <!-- Butagaz Brand -->
+            <apex:pageblock tabStyle="Item__c">
+                <apex:repeat value="{!lSIBrand_Butagaz}" var="brand">
+                    <apex:pageblocksection title="{!brand.Brand__r.Name__c}" collapsible="true" columns="1">
+                        <apex:pageblocksection columns="2">
+                            <apex:inputcheckbox value="{!brand.Presence__c}"/>
+                        </apex:pageblocksection>
+                        <apex:pageblocktable value="{!brand}" var="line" style="width:100%;">
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_10_13__c.label}" style="width:8%;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_10_13__c}" style="width:90%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_5_6__c.label}" style="width:8%;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_5_6__c}" style="width:90%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_35__c.label}" style="width:8%;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_35__c}" style="width:90%;"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Calculated fields -->
+                            <!-- PTL stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_Total__c}"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Trademark stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_Total__c}"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Subchannel stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_Total__c}"/>
+                            </apex:column>
+                        </apex:pageblocktable>
+                    </apex:pageblocksection>
+                </apex:repeat>
+            </apex:pageblock>
+            <!-- National Brands -->
+            <apex:pageblock title="{!$Label.national_brand}" tabStyle="Stock_Inventory__c">
+                <apex:repeat value="{!lSIBrand_National}" var="brand">
+                    <apex:pageblocksection title="{!brand.Brand__r.Name__c}" collapsible="true" columns="1">
+                        <apex:pageblocksection columns="2">
+                            <apex:inputcheckbox value="{!brand.Presence__c}"/>
+                        </apex:pageblocksection>
+                        <apex:pageblocktable value="{!brand}" var="line" style="width:100%;">
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_10_13__c.label}" style="width:2%;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_10_13__c}" style="width:90%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_5_6__c.label}" style="width:2%;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_5_6__c}" style="width:90%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_35__c.label}" style="width:2%;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_35__c}" style="width:90%;"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Calculated fields -->
+                            <!-- PTL stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_Total__c}"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Trademark stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_Total__c}"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Subchannel stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_Total__c}"/>
+                            </apex:column>
+                        </apex:pageblocktable>
+                    </apex:pageblocksection>
+                </apex:repeat>
+            </apex:pageblock>
+            <!-- Distributor Brand -->
+            <apex:pageblock title="{!$Label.distributor_brand}" tabStyle="Stock_Inventory_Brand__c">
+                <apex:repeat value="{!lSIBrand_Distributor}" var="brand">
+                    <apex:pageblocksection title="{!brand.Brand__r.Name__c}" collapsible="true" columns="1">
+                        <apex:pageblocksection columns="2">
+                            <apex:inputcheckbox value="{!brand.Presence__c}"/>
+                        </apex:pageblocksection>
+                        <apex:pageblocktable value="{!brand}" var="line" style="width:100%;">
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_10_13__c.label}" style="width:10px;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_10_13__c}" style="width:90%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_5_6__c.label}" style="width:10px;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_5_6__c}" style="width:90%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Number_of_Bottle_Slots_35__c.label}" style="width:10px;">
+                                <apex:inputfield value="{!line.Number_of_Bottle_Slots_35__c}" style="width:90%;"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Calculated fields -->
+                            <!-- PTL stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.PTL_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.PTL_Stock_Share_Total__c}"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Trademark stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Trademark_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.Trademark_Stock_Share_Total__c}"/>
+                            </apex:column>
+                            <!-- Sep -->
+                            <apex:column headervalue="|" style="width:8px;">
+                                <apex:outputText value="|" style="width:100%;"/>
+                            </apex:column>
+                            <!-- Subchannel stock share -->
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_10_13__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_10_13__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_5_6__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_5_6__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_35__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_35__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Stock_Inventory_Brand__c.Fields.Subchannel_Stock_Share_Total__c.label}">
+                                <apex:outputfield value="{!line.Subchannel_Stock_Share_Total__c}"/>
+                            </apex:column>
+                        </apex:pageblocktable>
+                    </apex:pageblocksection>
+                </apex:repeat>
+            </apex:pageblock>
+            
+        </apex:pageblock>
+        
+        <apex:inputHidden value="{!Stock_Inventory__c.PTL__c}"/>
+    </apex:form>
+
+</apex:page>

@@ -1,0 +1,577 @@
+<apex:page standardController="Quote" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<!--************************* OPTION: Pack Collectivite *************************-->
+<div id="containerAvenantGECPROPackColl">
+<div class="footerRight">
+        <p align="right">Code Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>              
+</div>
+<div class="footer"> 
+
+            <p Style="display:{!IF(Quote.Shipping_Condition__c=='04' || Quote.Shipping_Condition__c=='05','','None')}"> {!$Label.Contract_Ref_GEC_Collectivite_Previ}{!IF(isSE=='true', ' SE','')}</p>
+            <p Style="display:{!IF(Quote.Shipping_Condition__c=='02','','None')}"> {!$Label.Contract_Ref_GEC_Collectivite_Commande}{!IF(isSE=='true', ' SE','')}</p>
+   
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+            <p >Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre - APE 4671Z</p>
+</div>
+        <!-- Document Header -->  
+        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='04' || Quote.Shipping_Condition__c=='05'}"> 
+    <div>
+        <h1>Avenant au contrat pour la fourniture de gaz en citerne<br/>Offre Pack Eco Performance Collectivités – Livraison prévisionnelle</h1>
+    </div> 
+    </apex:pageblock> 
+    <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='02'}">
+    <div>
+        <h1>Avenant au contrat pour la fourniture de gaz en citerne<br/>Offre Pack Eco Performance Collectivités – Livraison à la commande</h1>
+    </div> 
+    </apex:pageblock>
+            
+    <br/>
+    
+    <div class="contractSection">
+    
+        <h1>Client signataire</h1>
+         <table border="0" width="95%">
+         <tr><td colspan="3">Code Client &nbsp;  <Apex:outputField value="{!Quote.Client_Code__c}"/>&nbsp; </td></tr>
+            <tr><td colspan="3">Raison sociale &nbsp;  <Apex:outputField value="{!Quote.Opportunity.Account.Salutation}"/>&nbsp;  {!Quote.Opportunity.Account.Name}</td></tr>
+             <tr><td colspan="3">Nom et Prénom du contact &nbsp;  <Apex:outputField value="{!Quote.Contact.Name}"/>&nbsp; </td></tr>
+              <tr><td colspan="3">Fonction &nbsp;  <Apex:outputField value="{!Quote.Opportunity.Account.Fonction_Qualite__c}"/>&nbsp; </td></tr>
+              <br/>
+                <tr><td colspan="3">
+                  <span class="field">Adresse: </span>
+                  <span class="field">{!Quote.Opportunity.DO_Street_n__c},&nbsp;<apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp;<Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; {!Quote.Opportunity.DO_Street_name__c}</span>
+                 </td></tr>
+                 <tr><td colspan="3">
+                    <!-- IF a Postal code and a city are filled THEN display it-->
+                    <apex:outputfield styleClass="field" rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+                                      Value="{!Quote.Opportunity.DO_Postal_Code__c}"/>
+                                    <apex:outputfield styleClass="field" rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+                                      Value="{!Quote.Opportunity.DO_City__c}"/>  
+                    <!-- ELSE display City_Postal_Code__r.Name -->
+                    <apex:outputfield styleClass="field" rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}"  
+                                      value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"/> <br />
+
+                <tr><td colspan="3"><br /></td></tr>   
+
+                </td></tr>
+
+               <tr>
+                    <td><span class="field">Téléphone domicile : </span><span class="value">{!Quote.Opportunity.DO_Phone__c}</span></td>
+   
+                </tr>
+                <tr>
+                    <td><span class="field">Téléphone portable : </span><span class="value">{!Quote.Contact_Mobile_Phone__c}</span></td>
+                    <td><span class="field">Téléphone travail : </span><span class="value">{!Quote.Opportunity.DO_Work_Phone_Number__c}</span></td>
+                    
+                </tr>
+                <br/>
+                <br/>
+                <tr><td colspan="3"><span class="field">
+                    <!-- Email Principal --> 
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email__c != '' }" 
+                    value="E-mail principal : {!Quote.Opportunity.DO_Email__c}"></apex:outputtext> <br/>
+                    <!--MLC 20180929 Story 420 - point 2225-->
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email__c != ''}" 
+                    value="- En concluant un contrat de fourniture de gaz propane Butagaz, vous acceptez de recevoir des informations et des offres sur votre email principal et par courrier. Pour vous y opposer, écrivez à votre  Distributeur ou rendez-vous dans votre Espace Client sur Butagaz.fr"></apex:outputtext>      
+                    <br/>
+                    <br/>
+                     <!-- Email complémentaire --> 
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email_2__c!= '' }" 
+                    value="E-mail complémentaire : {!Quote.Opportunity.DO_Email_2__c}"></apex:outputtext> <br/>
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email_2__c != ''}" 
+                     value="- En concluant un contrat de fourniture de gaz propane Butagaz, vous acceptez de recevoir des informations et des offres sur votre email complémentaire  et par courrier. Pour vous y opposer, écrivez à votre  Distributeur ou rendez-vous dans votre Espace Client sur Butagaz.fr"></apex:outputtext>         
+                     
+                   <!-- Pas d'email -->
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == TRUE}" 
+                    value="Pas d'e-mail"></apex:outputtext>  
+                    </span>      
+                </td></tr>
+                <!--MLC 20180914 DEMAT -->
+                <br/><br/>
+                <tr><td colspan="3">
+                    <span style="font-weight:bold">
+                    
+                             
+               <!-- Email 1 renseigné  et email 2 vide  et DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c ==''   )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+              
+              
+                <!--les emails sont renseignés et les DEMAT sont cochés  OK --> 
+                  <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c !='')  && (Quote.Opportunity.DEMAT1__c== TRUE && Quote.Opportunity.DEMAT2__c== TRUE)}" 
+                  value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+               
+                <!--les emails sont renseignés et l'un des DEMAT est coché OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c !='')  && (Quote.Opportunity.DEMAT1__c== FALSE || Quote.Opportunity.DEMAT2__c== FALSE)}" 
+                  value="Vous acceptez d’être informés par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+               
+                                         
+                  
+                <!-- Email 1 renseigné  et email 2 vide  et DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c ==''  && Quote.Opportunity.DEMAT1__c== TRUE )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+               
+                      
+                  
+                <!-- Email 1 renseigné  et email 2 vide  et pas DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c ==''  && Quote.Opportunity.DEMAT1__c== FALSE)}" 
+                 value="Vous acceptez d’être informés par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+              
+              
+              
+                  
+                <!-- Email 2 renseigné  et email 1 vide  et DEMAT 2 coché   --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c !=''  && Quote.Opportunity.DEMAT2__c== TRUE )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+               
+                      
+                  
+                <!-- Email 2 renseigné  et email 2 vide  et DEMAT 2 pas  coché   --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c !=''  && Quote.Opportunity.DEMAT2__c== FALSE)}" 
+                 value="Vous acceptez d’être informés par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+             
+             </span>
+                </td></tr>
+                <br/>
+                
+                <tr>
+                    <td><span class="field">Code SIRET : </span><span class="value">{!Quote.Code_SIRET__c}</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field">Numéro RCS (ou RCM) : </span><span class="value">{!Quote.RCS_or_RCM_NUmber__c}</span></td>
+                    <td><span class="field">de la ville de : </span><span class="value">{!Quote.Opportunity.Account.SAP_City_Name__c}</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field">Code NAF : </span><span class="value">{!Quote.Code_NAF__c}</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field">Nom et adresse du propriétaire (si CLIENT locataire) : </span></td>
+                </tr>
+                
+              </table>
+    </div>
+    <!-- Entre le Client et Butagaz -->
+    <div class="contractSection">
+        <h1>Entre le Client et Butagaz</h1>
+        
+        <p align="justify">BUTAGAZ s'engage à assurer les livraisons de gaz, et à entretenir une ou plusieurs citernes dans laquelle (lesquelles) le produit sera livré sur le site figurant aux Conditions Particulières du Contrat.
+        {!IF(isSE!='true','Le résultat de leurs négociations a ensuite été redigé sur ordinateur sur le présent document puis imprimé pour relecture 
+          et signature par le CLIENT.','')}</p><br/>
+        <p align="justify">En contrepartie, le CLIENT accepte d'accorder à BUTAGAZ l'exclusivité de son approvisionnement en gaz et des prestations d'entretien citerne. Seule BUTAGAZ a la faculté de procéder à la livraison en gaz de la citerne.</p><br/>       
+    </div>
+    
+
+    <!-- 1. Services -->
+    <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='04' || Quote.Shipping_Condition__c=='05'}">
+    <div class="contractSection">
+        <h1>1.  Services</h1>
+        
+        <p align="justify">Butagaz vous fait bénéficier des services suivants pendant toute la durée du présent avenant :</p>
+        <p align="justify">- de la livraison prévisionnelle : les livraisons sont à l'initiative du Distributeur Régional BUTAGAZ, en fonction des indications fournies par le CLIENT (notamment, et sans que cette liste soit exhaustive : dimension du local, type d’usage gaz choisi, nombre de clients pouvant être reçus dans le local, niveau d’isolation du local, habitudes consommation en fonction du nombre de couverts). La consommation peut varier à la hausse comme à la baisse si un des facteurs était modifié. Ainsi, augmenter la température d’un degré C° augmente la consommation d’environ 7%). Le CLIENT est tenu d’accepter les livraisons programmées par le Distributeur Régional BUTAGAZ. Néanmoins, dans tous les cas, vous vous engagez surveiller régulièrement la jauge de la citerne et à prévenir le Distributeur Régional quand elle atteint 25%.</p>
+        <p align="justify">Le CLIENT pourra disposer également d’un accès à un espace client personnalisé sur butagaz.fr où il pourra actualiser le niveau de jauge de la citerne, consulter ses factures ou encore mettre à jour ses coordonnées.</p><br/>
+        <p align="justify">- vous bénéficiez d'un service d'information avant livraison : votre Distributeur Régional vous contactera la veille pour vous prévenir du passage du Chauffeur pour procéder à la livraison de gaz.</p>
+        <p align="justify">Merci d'indiquer le(s) numéros au(x) quel(s) nous pouvons vous prévenir :</p><br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Portable (SMS d'information la veille de livraison) :&nbsp; {!IF(Quote.Opportunity.Account.PersonMobilePhone=='',Quote.Contact_Mobile_Phone__c,Quote.Opportunity.Account.PersonMobilePhone)}</p><br/>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Téléphone (appel ou message vocal) :&nbsp;{!IF(Quote.Opportunity.Account.PersonHomePhone=='',Quote.Contact_Phone__c,Quote.Opportunity.Account.PersonHomePhone)}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Répondeur : OUI/NON</p><br/>
+        <p align="justify">Le Client veille à l'accessibilité de la citerne afin de permettre une livraison conforme à vos besoins. Si vous refusez sans justification l'accès de la citerne au Chauffeur le jour d'une livraison prévisionnelle dont vous avez été informé la veille, le déplacement inutile du Chauffeur vous sera facturé conformément au Barème V2.P.PRO en vigueur. Il en sera de même dans l'hypothèse où vous imposez une quantité de gaz déterminée. Seuls les refus motivés par des raisons de sécurité des personnes ou des biens, ou relevant de cas de force majeure, n'entraîneront aucune facturation.</p><br/>
+        <p align="justify">BUTAGAZ ne pourra être tenu pour responsable d’une éventuelle rupture de gaz si vous n’avez pas prévenu BUTAGAZ en temps utile d’une augmentation de votre consommation ou si vous refusez une livraison à la date et/ou pour la quantité prévue par BUTAGAZ. En cas de deux refus consécutifs de livraison sur une période de 12 mois par le CLIENT, celui-ci sera réputé avoir opté contractuellement pour le Pack « livraison à la commande » et en sera informé par courrier par son Distributeur Régional BUTAGAZ.</p><br/>
+        <p align="justify">Vous êtes libres de modifier votre choix de livraison à tout moment sur simple demande auprès de votre Distributeur Régional qui sera confirmée par écrit. Ce changement aura pour effet de vous faire également changer de Pack : votre demande sera confirmée par écrit afin de déterminer les nouvelles modalités que vous aurez choisies dans votre Pack.</p>
+        <p align="justify">La livraison en prévisionnel impliquant l'accessibilité de la citerne, si vous refusez deux « livraisons prévisionnelles » consécutives, sur une période de 18 mois, vous serez réputé avoir opté contractuellement pour le PACK avec « livraison à la commande ».</p>
+        <p align="justify">Nous assurons la maintenance et la sécurité du réservoir et de ses accessoires jusqu’au limiteur de pression inclus. Concernant les installations postérieures au 01/01/1994 n’ayant fait l’objet d’aucune modification depuis cette date, celles-ci peuvent, conformément à la règlementation en vigueur, ne pas comporter de limiteur de pression : dans ce cas précis, la maintenance et la sécurité du réservoir et des accessoires sont assurées jusqu’au détendeur.</p>
+    </div>
+    </apex:pageblock>
+    <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='02'}">
+    <!-- 1. Services -->
+    <div class="contractSection">
+        <h1>1.  Services</h1>
+        
+        <p align="justify">Butagaz vous fait bénéficier pendant toute la durée du présent avenant de la livraison à la commande à votre initiative. Butagaz effectue les livraisons suite à votre demande, vous surveillez votre jauge et vous commandez quand elle atteint 25%.</p><br/>
+        <p align="justify">Le CLIENT pourra disposer également d’un accès à un espace client personnalisé sur butagaz.fr où il pourra actualiser le niveau de jauge de la citerne, consulter ses factures ou encore mettre à jour ses coordonnées.</p><br/>
+        <p align="justify">Vous veillez à l'accessibilité de la citerne afin de permettre une livraison conforme à vos besoins. Si vous refusez sans justification l'accès de la citerne au Chauffeur le jour d'une livraison suite à une commande passée par vos soins et à votre convenance, le déplacement inutile du Chauffeur vous sera facturé conformément au Barème V2.P.PRO en vigueur. Seuls les refus motivés par des raisons de sécurité des personnes ou des biens, ou relevant de cas de force majeure, n'entraîneront aucune facturation.</p><br/>
+        <p align="justify">Vous êtes libres de modifier votre choix de livraison à tout moment sur simple demande auprès de votre Distributeur Régional qui sera confirmée par écrit. Votre demande sera confirmée par écrit afin de déterminer les nouvelles modalités que vous aurez choisies dans votre Pack.</p><br/>
+        <p align="justify">Nous assurons la maintenance et la sécurité du réservoir et de ses accessoires jusqu’au limiteur de pression inclus. Concernant les installations postérieures au 01/01/1994 n’ayant fait l’objet d’aucune modification depuis cette date, celles-ci peuvent, conformément à la règlementation en vigueur, ne pas comporter de limiteur de pression : dans ce cas précis, la maintenance et la sécurité du réservoir et des accessoires sont assurées jusqu’au détendeur.</p>
+    </div>
+    </apex:pageblock>
+    
+    <!-- 2. Accessibilité de la citerne et sécurité de l'installation -->
+    <div class="contractSection">
+        <h1>2.  Accessibilité de la citerne et sécurité de l'installation</h1>
+        
+        <p align="justify">• Si vous modifiez les lieux d'implantation, d'accessibilité ou l'environnement de la citerne (construction, aménagement du terrain, plantation ou autre élément...), vous devez impérativement, avant le début des travaux, en informer BUTAGAZ. Si ces modifications  s'avéraient être contraires à la réglementation, BUTAGAZ ne pourrait poursuivre les livraisons avant que l’environnement de la citerne n’ait été mis en conformité. Toute livraison de gaz serait alors suspendue.</p><br/>
+        <p align="justify">• Si cette remise en conformité nécessitait un déplacement de la citerne, vous vous exposez à des coûts de déplacement selon le Barème V2.P.PRO en vigueur pour la remise en conformité par rapport à la réglementation.</p>
+    </div>
+    
+     <!-- Insert CGU_SignatureElectroniquePDF if electronic signature  -->
+    <c:CGU_SignatureElectroniquePDF rendered="{!IF(isSE=='true',true,false)}"/>
+
+    <!-- 3. Le prix du gaz et des prestations associées -->
+    
+    <div class="contractSection">
+        <h1>3.  Le prix du gaz et des prestations associées</h1>
+        <h2>3.1. Le gaz</h2>
+        
+        <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='04' || Quote.Shipping_Condition__c=='05'}">
+            <p align="justify">• Le prix du gaz est établi à la tonne conformément au Barème V1 PRO Pack. La facturation est dégressive en fonction de la quantité livrée. Le prix du gaz est Franco installation CLIENT, sauf mention contraire dans les Conditions Particulières.</p><br/>
+        </apex:pageblock>
+        <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='02'}">
+            <p align="justify">• Le prix du gaz est établi à la tonne conformément au Barème V1 PRO Pack. La facturation est dégressive en fonction de la quantité livrée. Le prix du gaz appliqué est fonction du barème en vigueur au jour de la commande. Le prix du gaz est Franco installation CLIENT, sauf mention contraire dans les Conditions Particulières.</p><br/>
+        </apex:pageblock>
+        <apex:pageblock rendered="{!Quote.Shipping_Condition__c=='04' || Quote.Shipping_Condition__c=='05'}">
+            <p align="justify">Le prix du gaz appliqué est fonction du barème en vigueur au jour de la livraison.</p>
+            <p align="justify">Avec la livraison prévisionnelle à l'initiative de Butagaz vous bénéficiez d'une facturation avec les avantages suivants :</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un coût produit identique quelle que soit la quantité livrée,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- les livraisons partielles sont facturées au tarif correspondant au plein complet,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- vous profitez d'un « <span class="field">joker anti hausse</span> » : si le gaz augmente dans les trente (30) jours précédant la livraison, vous bénéficiez du tarif avant augmentation.</p><br/>
+        </apex:pageblock>
+        <p align="justify">• <span class="field">Les barèmes BUTAGAZ en vigueur sont tenus à votre disposition chez le Distributeur Régional BUTAGAZ et consultables sur notre site Internet www.butagaz.fr ou au numéro Cristal 09 70 81 81 22 (appel non surtaxé). Vous pouvez également souscrire un service gratuit « Alerte prix » vous informant de l'évolution du Barème par mail ou SMS. Si Butagaz était amené à modifier ces modes d'information vous en serez informé par courrier.</span></p><br/>
+        
+       
+    <apex:pageblock rendered="{!AND(Quote.Opportunity.DO_Price_information__c!='0',Quote.Opportunity.DO_Price_information__c!='')}">    
+       <div class="contractSection" Style="Page-break-inside: avoid ">
+        
+        
+        <p align="justify">
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!AND(Quote.Opportunity.DO_Price_information__c!='0',Quote.Opportunity.DO_Price_information__c!='')}"/>
+            &nbsp;
+            <apex:outputtext value="Oui, je m'inscris au Service Gratuit « Alerte Prix »" rendered="{!AND(Quote.Opportunity.DO_Price_information__c!='0',Quote.Opportunity.DO_Price_information__c!='')}"/> 
+            
+        </p><br/>
+        </div>
+        <apex:pageblock rendered="{!IF(Quote.Opportunity.DO_Price_information__c=='2','','none')}">
+        <br/>
+        <p align="justify">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}"/>
+            &nbsp;
+           
+            
+            Je souhaite recevoir l'information par mail et je suis responsable de la mise à jour de mon adresse e-mail (mise à jour sur www.butagaz.fr)
+        </p> <br/>
+        
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Adresse e-mail :{!Quote.Contact__c}</p>
+        </apex:pageblock>
+       
+        <br/> 
+        
+         <apex:pageblock rendered="{!IF(Quote.Opportunity.DO_Price_information__c=='4','','none')}">     
+        <p align="justify">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Opportunity.DO_Price_information__c=='4'}"/>
+            &nbsp;
+           
+            
+            Je souhaite recevoir l'information par SMS et je suis responsable de la mise à jour de mon numéro de téléphone portable
+        </p>
+        <br/>
+        
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Numéro de portable : {!Quote.Contact_Mobile_Phone__c}</p>
+        <br/>
+        </apex:pageblock>
+        
+        </apex:pageblock>
+        <p align="justify">• Vous êtes informé du fait que les barèmes sont <span class="field">susceptibles de varier</span> à la hausse comme à la baisse, notamment sur la base de l'évolution des coûts des matières premières sur les marchés internationaux (cotation E3000 propane CIF NWE, publié à titre indicatif dans « L'Usine Nouvelle »), et du coût du transport (Indice CNL Distribution avec Conducteur et Carburant publié par la Fédération des Entreprises de Transport et Logistique de France) BUTAGAZ s'efforçant de lisser ces évolutions au cours de l'année. Vous disposez de la faculté de résilier le contrat en cas de refus du nouveau barème.</p><br/>   
+    
+        <h2>3.2. La citerne</h2>
+        <p align="justify">Les prix des prestations, de contrôle technique, de requalification pour les citernes propriétés du Client, de dépannage et de mouvement citerne figurant au barème V2.P.PRO pourront être révisés chaque année en fonction de l'Indice du coût de Travail Horaire – tous salariés des industries Mécaniques et Electriques publié par l'Insee et de l'Indice CNL Distribution avec Conducteur et Carburant publié par la Fédération des Entreprises de Transport et Logistique de France.</p><br/>
+        <p align="justify"><span class="field">Mouvement citerne</span> : Le coût d'un mouvement de la citerne est indiqué au barème V2.P.PRO </p><br/>     
+        <p align="justify"><span class="field">Requalification périodique des Citernes non référencées</span> : La requalification est facturée au barème V2.P.PRO.</p><br/>
+        <p align="justify"><span class="field">Dépannage avec bouteilles de gaz</span> : le coût du déplacement du prestataire vous sera facturé selon le barème V2.P.PRO en vigueur en cas de manque de surveillance de la jauge citerne.</p>
+        <p align="justify"><span class="field">Achat</span> : A tout moment vous pouvez acheter une citerne Butagaz, le coût de la prestation d'entretien citerne étant à votre charge. Le prix et les conditions de cette cession feront l'objet d'un contrat de vente spécifique. Le présent contrat se poursuivra dans l'intégralité de ses dispositions. Le prix d'achat est indiqué au barème MADV que votre Distributeur Régional vous communiquera sur simple demande.</p>
+   
+    </div>
+   
+   <!-- 4. Adhésion à un groupement -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>4.  Adhésion à un groupement</h1>
+        
+        <p align="justify">Si vous êtes adhérent d’un groupement avec lequel Butagaz est lié par accord commercial, vous devez nous en informer et nous fournir tous documents justifiant votre adhésion à ce groupement pour pouvoir bénéficier des avantages éventuellement négociés entre Butagaz et ce groupement. Votre appartenance à ce groupement doit être indiquée dans cet avenant ou dans un avenant ultérieur si votre appartenance au groupement intervient en cours d’exécution de l’accord.</p><br/>
+        <p align="justify">Conformément aux engagements qui lient Butagaz au groupement, vous devrez vous rapprocher de votre groupement pour connaître les avantages négociés et l’ensemble des modalités de l’accord.</p>
+        <p align="justify">Le bénéfice des conditions négociées ne vous sera consenti que pendant la durée d’exécution de l’accord conclu entre Butagaz et le groupement et tant que vous aurez le statut d’adhérent. En cas de cessation de l’accord commercial conclu entre Butagaz et le groupement pour quelque cause que ce soit ou de la perte de votre qualité d’adhérent, vous ne pourrez plus bénéficier des avantages négociés.</p>
+        <p align="justify">Vous vous engagez à communiquer à Butagaz tous les ans pendant le premier trimestre, une copie du document justifiant le renouvellement de votre adhésion au groupement. A défaut, Butagaz cessera l’application des avantages négociés avec le groupement à compter de la fin de la date de validité du précédent justificatif.</p>
+        <p align="justify">Vous vous engagez à informer Butagaz dans les plus brefs délais de la perte de votre qualité d’adhérent au groupement. Si Butagaz venait à apprendre que vous ne l’avez pas informée de votre changement de statut, tous les avantages liés à l’appartenance au groupement vous seraient enlevés, de même, tous les avantages qui vous auraient été indûment octroyés vous seraient facturés pour remboursement.</p>
+    </div>
+
+    <!-- 5. Mode de paiement -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>5.  Mode de paiement</h1>
+        
+        <p align="justify">Vous disposez de la possibilité de choisir votre mode de paiement et pouvez le modifier à tout moment par simple courrier adressé à votre Distributeur Régional. A défaut, vous serez supposé avoir opté pour le prélèvement bancaire automatique.</p><br/>
+        <p align="justify">Si vous optez pour le paiement par prélèvement bancaire automatique : vous devez renvoyer à votre Distributeur Régional un Relevé d’Identité Bancaire et l’Autorisation de prélèvement dûment remplie. Le prélèvement de votre compte bancaire s’effectuera 8 jours à date de facture. En cas de réclamation sur la somme qui vous sera prélevée conformément à votre livraison de gaz, vous devez présenter votre réclamation à votre Distributeur Régional. Le remboursement de la somme qui vous aurait été éventuellement facturée par erreur vous sera déduite sur votre prochaine facture ou restituée par virement bancaire. Vous vous engagez à prévenir dans les plus brefs délais votre Distributeur Régional de toute modification de vos coordonnées bancaires.</p><br/>
+        <p align="justify">Vous êtes responsable du paiement de l'ensemble des sommes dues au titre du Contrat. Conformément aux articles L.441-6 et D. 441-5 du Code de commerce, en cas de retard de paiement, BUTAGAZ appliquera au débiteur une indemnité forfaitaire d’un montant de 40 € au titre des frais de recouvrement, sous réserve de toute modification de ce montant par décret. Lorsque ces frais de recouvrement sont supérieurs, BUTAGAZ pourra exiger une indemnisation complémentaire au débiteur sur présentation des documents justificatifs. BUTAGAZ pourra également appliquer au débiteur des pénalités de retard résultant de l’application d’un taux d’intérêt égal à trois fois le taux de l’intérêt légal.</p><br/>
+        <p align="justify">A défaut de paiement, BUTAGAZ se réservera le droit, de suspendre les livraisons de gaz, après en avoir dûment informé le CLIENT au terme d’un courrier de mise en demeure resté sans effet, qui précisera dans quel délai cette suspension interviendra  et/ou de résilier le Contrat dans les conditions précisées à l’article 8 des présentes. En cas de suspension des livraisons, le CLIENT reste tenu de l’ensemble de ses obligations contractuelles.</p>
+    </div>
+
+    <!-- 6. Durée -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>6.  Durée</h1>
+    
+        <p align="justify">• <span class="field">Les services décrits ci-dessus sont accordés d'un commun accord avec le Client pour une durée ferme précisée aux Conditions Particulières à compter de la Signature des présentes. A échéance, le Contrat sera renouvelé pour une durée indéterminée.</span></p><br/>
+        <p align="justify">• <span class="field">• Si, à échéance de la durée du Contrat ou après son renouvellement  pour une durée indéterminée,  vous vous décidez de mettre fin à votre contrat, vous devez prévenir le Distributeur Régional par lettre recommandée avec avis de réception, deux (2) mois avant l’échéance de la durée prévue ci-dessus ou à tout moment moyennant le respect d’un préavis de deux (2) mois lorsque le contrat aura été renouvelé pour une durée indéterminée.</span></p><br/>
+    </div>
+    
+    
+    <!-- 7. Fin du contrat -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>7.  Fin du contrat</h1>
+    
+        <p align="justify">• Chaque partie peut demander la résiliation du contrat pour inexécution par l'autre partie de l'une quelconque de ses obligations, trente (30) jours après une mise en demeure adressée par lettre recommandée avec accusé de réception, restée sans effet.</p><br/>
+        <p align="justify">• BUTAGAZ se réserve le droit de résilier le Contrat en cas de non-paiement par le CLIENT de ses factures dans les conditions précitées, de non-respect de l'exclusivité d'approvisionnement par le CLIENT, ou pour des raisons de sécurité, notamment en cas de modification de l'environnement de l'implantation de la citerne du fait du CLIENT, d'accès périlleux au domicile du CLIENT, de non obtention par le CLIENT d'une « dérogation de tonnage » accordée par l'administration pour permettre aux camions de livraison le passage sur une route déclarée « à tonnage limité », ou de non obtention de la requalification pour une citerne propriété client. En cas d'impératifs de sécurité, le délai du préavis de résiliation pourra être ramené à huit (8) jours.</p><br/>
+        <p align="justify">• Dans tous les cas de résiliation du fait du Client avant l’échéance du contrat, des coûts de résiliation anticipée lui seront facturés, indiqués dans le barème V2.P.PRO, dégressifs en fonction du temps restant à courir, la date de départ étant la date de signature du contrat d’origine entre Butagaz et le Client. De même, dans tous les cas de résiliation du fait de Butagaz avant l’échéance du contrat, des coûts de résiliation anticipée, indiqués dans le barème V2.P.PRO, seront versés au client, dégressifs également en fonction du temps restant à courir, la date de départ étant la date de signature du contrat d’origine entre Butagaz et le Client. Il est toutefois précisé que ces coûts de résiliation anticipée ne seront pas dus – tant par le Client que par Butagaz – si de nouvelles dispositions réglementaires relatives à la sécurité, à la maintenance et/ou  à l’approvisionnement de la citerne entraient en vigueur et empêchaient la poursuite du présent contrat.</p><br/>
+    </div>  
+    
+    <!-- 8. Faire enlever la citerne -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>8.  Faire enlever la citerne</h1>
+    
+        <p align="justify">• Butagaz s'engage à reprendre la (ou les) citerne(s) BUTAGAZ dans un délai de deux (2) mois si le % de jauge de la citerne est inférieur à 20% pour une citerne apparente et de 0% pour une citerne enterrée, trois (3) mois si le gaz restant est supérieur à ces valeurs.</p><br/>
+        <p align="justify">• Lors de tout retrait d'une citerne contenant encore du gaz, les coûts de repompage seront facturés selon le barème V2.P.PRO en vigueur. Ces coûts seront déduits de l'avoir correspondant à la valeur du gaz restant en citerne.</p><br/>
+        <p align="justify">• En cas de résiliation du Contrat par votre fait, les coûts de retrait de la (ou des) citerne(s) (comprenant notamment le démontage et le retour en atelier) seront facturés selon le barème V2.P.PRO, sauf si cette résiliation résulte d'une inexécution par BUTAGAZ de ses obligations.</p>
+        <p align="justify">• Si du fait de modifications d’environnement de votre responsabilité, le retrait de la citerne devient difficile ou impossible, vous vous exposez au paiement des coûts de retrait avec des moyens exceptionnels (présentation d’un devis) ou de coûts de neutralisation sur place, de cession de la citerne et éventuellement de découpage, selon le Barème V.2.P.PRO en vigueur. Le plan d’implantation de la citerne fait foi.</p>
+    </div>      
+    
+    <!-- 9. CESSION -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>9.  CESSION</h1>
+    
+        <p align="justify">Le CLIENT pourra, en cas de cession de son établissement, transférer le bénéfice du présent Contrat à toute personne physique ou morale, présentant des garanties de solvabilité suffisantes, à condition de prévenir BUTAGAZ en temps utile soit au plus tard un (1) moi avant la cession de façon à ce que la prise en charge du Contrat puisse être réalisée par le successeur, le CLIENT restant engagé jusqu’à la complète régularisation de cette prise en charge. BUTAGAZ aura la faculté de céder tout ou partie du présent Contrat à toute personne physique ou morale de son choix qui en reprendra les droits et obligations.</p><br/>
+    </div> 
+    
+    <!-- 10. Données à caractère personnel -->
+    <div class="contractSection" style="page-break-inside:avoid;">
+        <h1>10.  Données à caractère personnel</h1><br/>
+        <p>Suite à l’adoption du Règlement (UE) 2016/679, à compter du 25 mai 2018, de nouveaux droits sur les données à caractère personnel voient le jour. Nous tenions à vous en informer.</p><br/>
+            <ul class="circle">
+                <li class="circle"> BUTAGAZ prend les mesures propres à assurer la protection et la confidentialité des informations nominatives qu’elle détient ou qu’elle traite dans le respect des dispositions de la Loi n°7817 du 6 janvier 1978 relative à l’informatique, aux fichiers et aux libertés et du règlement (UE) 2016/679 (dit « RGPD »).<br/><br/></li>
+                <li class="circle"> Les informations recueillies dans le cadre de la conclusion du Contrat BUTAGAZ font l’objet d’un traitement informatique. Elles sont utilisées par BUTAGAZ, par son Distributeur BUTAGAZ, et par des prestataires, dans le cadre de l’exécution du contrat et de la gestion du compte CLIENT.<br/><br/></li>
+                <li class="circle"> Les informations collectées par BUTAGAZ sont nécessaires à l’exécution du contrat. Par exemple, nous avons besoin du nom d’une personne dans votre entreprise pour savoir qui contacter, ainsi que de ses coordonnées. Ce traitement de ces données est basé sur le contrat. Vous pouvez toujours décider de ne pas nous communiquer ces données, mais ceci nous empêchera d’exécuter le contrat de fourniture de gaz. Le CLIENT doit être habilité à communiquer ces données à BUTAGAZ. Il informe les personnes concernées de l’existence et du contenu du présent article.<br/><br/></li>
+                <li class="circle"> Nous croyons aussi que nous avons un intérêt mutuel à partager nos offres de prix, promotions et informations. BUTAGAZ fonde ce traitement de ces données sur son intérêt légitime, dans la mesure où les droits des personnes sont respectés.<br/><br/></li>
+                <li class="circle"> Les données sont conservées pendant toute la durée du contrat, puis jusqu’à l’expiration de tous les recours judiciaires possibles, soit selon les cas, 5 ans à compter de la fin du contrat, ou bien au maximum 5 ans à compter du retrait de la citerne. Les factures sont quant à elles conservées 10 ans conformément à la loi.<br/><br/></li>
+                <li class="circle"> Les personnes dont nous avons des données disposent d’un droit d’accès, de rectification, d’opposition, de limitation et d’effacement des données les concernant, qu’elles peuvent exercer auprès du Distributeur BUTAGAZ ou de : BUTAGAZ Service CLIENTS 47/53, rue Raspail 92594 Levallois Perret Cedex. Ces personnes disposent enfin d’un droit à la portabilité de ses données et, si elles considèrent que le traitement de données à caractère personnel les concernant constituent une violation du Règlement, introduire une réclamation auprès de la CNIL.<br/><br/></li>
+            </ul>
+    </div>  
+    
+    <!-- Conditions spécifiques -->
+    <div class="contractSection" style="page-break-after:always;">
+    </div>
+    <div class="contractSection" style="page-break-after:always;">
+         <h1>Conditions spécifiques</h1>
+<apex:pageblock rendered="{!OR(NOT(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c),Quote.DO_Groupement__c='')}"> 
+        
+      <h2 class="ButagazTableHeader; spaceBefore">Tarification</h2>
+      <table class="ButagazTable">
+                <tr>
+                  <th> Point livré</th>
+                  
+                  <th>Article(s)</th>
+                  <th class="smallWidth">Unité de facturation</th>
+                  <th>Prix barème EURO HT </th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle EURO HT</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  EURO HT</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle EURO HT</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conj. (Mois)</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">Remise Commercial Exceptionelle Groupement EURO HT</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  Groupement EURO HT</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Groupement Conj. (Mois)</th>
+                  <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Conj. Groupement EURO HT</th>
+                    
+                </tr>
+                <apex:repeat value="{!Pricing}" var="line">
+                  <tr>
+                    <td class="smallWidth">{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+                   
+                    <td >{!line.pricebookentry.Name}</td>
+                     <!--<td class="smallWidth">{!line.F_Quantity_Unit__c}</td>-->
+                     <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+               
+                       
+                     <td class="number;smallWidth">
+                        <apex:outputfield rendered="{!line.Product_Family__c=='Produit' &&line.Price_List_HT__c!=0}" value="{!Quote.Product_Scale__c}"/>   
+ 
+                        <apex:outputtext rendered="{!line.Product_Family__c!='Produit' &&line.Price_List_HT__c!=0}" value="{!line.Price_List_HT__c}"/>   
+                    </td>  
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.RCE_Rebate_HT__c,2)))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Commercial_Rebate_HT__c,2)))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_HT__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_HT__c,2)))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_Months__c,2)))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">{!IF(line.Group_RCE_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_RCE_Rebate_HT__c,2)))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Group_Commercial_Rebate_HT__c,2)))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_lenght_in_months__c=0,'',TEXT(line.Group_Cyclical_Rebate_lenght_in_months__c))}</td>
+                    <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_HT__c=0,'',TEXT(line.Group_Cyclical_Rebate_HT__c))}</td>
+                   
+                
+                  </tr>
+                </apex:repeat>
+              </table>
+              
+             <!--   <br/>
+              <p style="display:{!if(OR(pricingQuoteVisibilityRCERebate,pricingQuoteVisibilityGroupementRebate),'','None')}">  La remise commerciale exceptionnelle s’applique une seule fois, déduite de la première facture </p>
+              <p style="display:{!if(OR(pricingQuoteVisibilityCommercialRebate,pricingQuoteVisibilityGroupCommercialRebate),'','None')}">  La remise commerciale  s’applique pendant la durée initiale  du contrat </p>
+              <p style="display:{!if(OR(pricingQuoteVisibilityCyclicalRebate,pricingQuoteVisibilityGroupCyclicalRebate),'','None')}">  La remise conjoncturelle s’applique pendant le nombre de mois spécifiés à compter de la date de signature du contrat. </p>
+              <br/>-->
+              
+             <br/>
+                 <p style="display:{!if(pricingQuoteVisibilityRCERebate,'','None')}">La remise commerciale exceptionnelle s’applique une seule fois, et est déduite de la première facture sur le montant total facturé, peu importe la quantité de gaz livré.  </p>
+                 <p style="display:{!if(pricingQuoteVisibilityCommercialRebate,'','None')}">La remise commerciale s’applique pendant la durée initiale du contrat. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+                 <p style="display:{!if(pricingQuoteVisibilityCyclicalRebate,'','None')}">La remise conjoncturelle s’applique pendant le nombre de mois spécifiés à compter de la date de signature du présent avenant. L’unité de facturation de cette remise est la tonne de gaz livré. </p>
+             <br/>
+              
+              <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'FIXM'), BEGINS(Quote.DO_groupement__r.AccountNumber, 'FIXP'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICM'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICP')),'','None')}">    Par dérogation au tableau ci-dessus et aux conditions du contrat Domestique de fourniture de gaz propane en citerne BUTAGAZ,
+               à titre exceptionnel, vous bénéficierez d’un prix du gaz propane fixe pendant 24 mois pour toutes les 
+               livraisons à compter de la date de signature du présent avenant. Ce prix fixe de&nbsp;<apex:outputText value="{!NewPriceTTC - PaymentSpreadAmountTTC}"/>€ TTC / tonne 
+               (prix fixe résultant de l’application par Butagaz d’une remise d’un montant variable sur le prix 
+               Barème V1 Dom Pack) sera applicable pour toutes les livraisons effectuées au cours de cette seule période.
+               Ce prix fixe pourra cependant être révisé en fonction de l’évolution de la Taxe Intérieure de Consommation sur les Produits Energétiques (TICPE) ou de toute autre taxe dont Butagaz n’a pas la maitrise.
+              </p>
+              <br/>
+              
+               <!-- MLC 20160519 Story-0380 -->
+               <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'GIXM'), BEGINS(Quote.DO_groupement__r.AccountNumber, 'GIXP'),BEGINS(Quote.DO_groupement__r.AccountNumber,'GICM'),BEGINS(Quote.DO_groupement__r.AccountNumber,'GICP')),'','None')}">    Par dérogation au tableau ci-dessus et aux conditions du contrat Domestique de fourniture de gaz propane en citerne BUTAGAZ,
+               à titre exceptionnel, vous bénéficierez d’un prix du gaz propane fixe pendant 24 mois pour toutes les 
+               livraisons à compter de la date de signature du présent avenant. Ce prix fixe de&nbsp;<apex:outputText value="{!NewPriceTTC - PaymentSpreadAmountTTC}"/>€ TTC / tonne 
+               (prix fixe résultant de l’application par Butagaz d’une remise d’un montant variable sur le prix 
+               Barème V1 Dom Pack) sera applicable pour toutes les livraisons effectuées au cours de cette seule période.
+               Ce prix fixe pourra cependant être révisé en fonction de l’évolution de la Taxe Intérieure de Consommation sur les Produits Energétiques (TICPE) ou de toute autre taxe dont Butagaz n’a pas la maitrise.
+              </p>
+              <br/>
+                      
+              
+              <!--  <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'FIXM'), BEGINS(Quote.DO_groupement__r.AccountNumber, 'FIXP'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICM'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICP')),'','None')}"> 
+              A l’expiration de cette période de 24 mois et jusqu’au terme de la durée initiale du contrat de 
+              fourniture de gaz, il vous sera automatiquement appliqué le prix du barème V1Dom Pack en 
+              vigueur avec application d’une remise de 150 € TTC / Tonne de gaz, pour toutes vos livraisons 
+              de gaz. A l’issue de la durée initiale du contrat, il vous sera automatiquement appliqué 
+              le prix du barème V1Dom Pack en vigueur, pour toutes vos livraisons de gaz.
+              </p>
+              -->
+              
+          <p style="display:{!if(AND(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'FIXM'), BEGINS(Quote.DO_groupement__r.AccountNumber,'FIXP'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICM'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICP')),AND(Quote.Opportunity.Opportunity_Reason__c=='Substitution'), AND(Quote.Opportunity.Energy_Source__c=='Oil')),'','None')}">  
+              A l’expiration de cette période de 24 mois et jusqu’au terme de la durée initiale du contrat de 
+              fourniture de gaz, il vous sera automatiquement appliqué le prix du barème V1Dom Pack en 
+              vigueur avec application d’une remise de 150 € TTC / Tonne de gaz, pour toutes vos livraisons 
+              de gaz. A l’issue de la durée initiale du contrat, il vous sera automatiquement appliqué 
+              le prix du barème V1Dom Pack en vigueur, pour toutes vos livraisons de gaz.
+              </p>
+              
+            <br/>
+            <p style="display:{!if(AND(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'FIXM'), BEGINS(Quote.DO_groupement__r.AccountNumber,'FIXP'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICM'),BEGINS(Quote.DO_groupement__r.AccountNumber,'FICP')),OR(AND((Quote.Opportunity.Opportunity_Reason__c=='Substitution'), (Quote.Opportunity.Energy_Source__c!='Oil')),AND((Quote.Opportunity.Opportunity_Reason__c!='Substitution'), (Quote.Opportunity.Energy_Source__c=='Oil')),AND((Quote.Opportunity.Opportunity_Reason__c!='Substitution'), (Quote.Opportunity.Energy_Source__c!='Oil')))),'','None')}">  
+              A l'expiration de cette période de 24 mois, il vous sera automatiquement appliqué le prix du barème V1Dom Pack
+              en vigueur pour toutes vos livraisons de gaz futures, conformément à vos conditions contractuelles.
+             
+            </p> 
+
+            <br/>
+              <!-- MLC 20160519 Story-0380 -->
+              <p style="display:{!if(OR(BEGINS(Quote.DO_groupement__r.AccountNumber,'GIXM'), BEGINS(Quote.DO_groupement__r.AccountNumber, 'GIXP'),BEGINS(Quote.DO_groupement__r.AccountNumber,'GICM'),BEGINS(Quote.DO_groupement__r.AccountNumber,'GICP')),'','None')}"> 
+                A l'expiration de cette période de 24 mois, il vous sera automatiquement appliqué le prix du barème V1Dom Pack
+                en vigueur pour toutes vos livraisons de gaz futures, conformément à vos conditions contractuelles.
+             
+              </p>  
+              <br/>
+            
+            <p style="display: {!IF(Quote.DO_groupement__r.AccountNumber='G13PFPRO14','', 'none')}">
+            Par dérogation au tableau ci-dessus et aux conditions du contrat Professionnel de fourniture de gaz propane en citerne BUTAGAZ, à titre exceptionnel, vous bénéficierez d’un prix du gaz propane fixe jusqu’au 31 décembre 2015 pour toutes les livraisons à compter de la date de signature du présent avenant. Ce prix fixe de 950 € HT / tonne sera applicable pour toutes les livraisons effectuées au cours de cette seule période quelle que soit l’évolution (à la hausse comme à la baisse) du Barème V1GR en vigueur au jour de la livraison et/ou de la commande de gaz. 
+            A l’expiration de cette période soit à partir du 1er janvier 2016 et jusqu’au terme de la durée initiale du contrat de fourniture de gaz, il vous sera automatiquement appliqué le prix du barème V1GR en vigueur avec application d’une remise de 100 € HT / tonne de gaz, pour toutes vos livraisons de gaz. A l’issue de la durée initiale du contrat, il vous sera automatiquement appliqué le prix du barème V1GR en vigueur, pour toutes vos livraisons de gaz.
+            </p>
+                    
+                   
+                   
+            <p style="display: {!IF(Quote.DO_groupement__r.AccountNumber=='G15PFPRO14','', 'none')}">
+            Par dérogation au tableau ci-dessus et aux conditions du contrat Professionnel de fourniture de gaz propane en citerne BUTAGAZ, à titre exceptionnel, vous bénéficierez d’un prix du gaz propane fixe jusqu’au 31 décembre 2016 pour toutes les livraisons à compter de la date de signature du présent avenant. Ce prix fixe de 950 € HT / tonne sera applicable pour toutes les livraisons effectuées au cours de cette seule période quelle que soit l’évolution (à la hausse comme à la baisse) du Barème V1GR en vigueur au jour de la livraison et/ou de la commande de gaz. 
+            A l’expiration de cette période soit à partir du 1er janvier 2017 et jusqu’au terme de la durée initiale du contrat de fourniture de gaz, il vous sera automatiquement appliqué le prix du barème V1GR en vigueur avec application d’une remise de 200 € HT / tonne de gaz, pour toutes vos livraisons de gaz. A l’issue de la durée initiale du contrat, il vous sera automatiquement appliqué le prix du barème V1GR en vigueur, pour toutes vos livraisons de gaz.
+            </p>
+            
+            <br/>
+                 
+      </apex:pageblock>  
+     </div> 
+     
+     
+     <!-- Vos conditions spécifiques -->
+     <apex:pageBlock rendered="{!Quote.Opportunity.Other_specific_conditions__c!=''}">
+           <div class="contractSection" Style="page-break-inside:avoid">
+            <h1>Vos conditions spécifiques</h1>
+
+            <p>{!Quote.Opportunity.Other_specific_conditions__c}</p>
+           </div>
+     </apex:pageblock>
+     
+     <div class="clear"/>
+       <div class="contractSection" Style="page-break-inside:avoid;">
+      
+            <div class="Signatures" style="page-break-inside:avoid;">
+   
+   
+   
+   
+   
+               <apex:pageblock >
+                   <h1>{!IF(isSE!='true', 'Signatures','Acceptation des conditions')}</h1>
+                       <p>Toutes les autres clauses et conditions du contrat de fourniture gaz propane en citerne non modifiées par le présent avenant gardent leur plein et entier effet.</p>  
+                       <p>Le CLIENT déclare par ailleurs avoir connaissance du caractère évolutif, pendant toute la durée du contrat, des barèmes qui lui ont été communiqués. </p>
+                    <br/>
+                    <br/>
+                    <br/>
+               </apex:pageblock> 
+                <div class="clear"></div>
+    
+     
+
+                <div class="ButagazSignature" style="page-break-inside:avoid;">
+                
+                     <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                     <p class="nospace">&nbsp;</p>
+                     <p class="nospace">&nbsp;</p>
+                    <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter" style="display: {!IF(isSE!='true','','None')}"><p>Signature :</p></div>
+                      
+                     
+                     
+                          
+                     
+                    <div class="ButagazCachet">
+                    <p> Pour Butagaz: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                                
+         
+          
+                </div>
+                
+                 
+                  <div style="display: {!IF(isSE!='true','','None')}">
+                      <br/>
+                      <p class="SpaceBefore">Date d’impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                      <br/>
+                      <p class="SpaceBefore">Date de Signature :&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                      <br/>
+                      <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                      <br/>
+                       
+                      <p>Signature(1) :</p>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>                  
+                              <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                  </div>
+                  <div style="display: {!IF(isSE=='true','','None')}">
+                      <p>Document signé électroniquement.</p>
+                  </div>
+                
+            </div>  
+            <div class="clear"/>
+        </div>  
+     </div> 
+       
+<!--************************* END OPTION: Pack Collectivite *************************-->
+<div class="clear"/>
+</apex:page>

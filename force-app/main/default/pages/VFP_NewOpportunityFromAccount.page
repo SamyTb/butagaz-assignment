@@ -1,0 +1,9 @@
+<apex:page standardController="Account" extensions="VFC_NewOpportunity" action="{!redirectFromAccountToNewOpty}">
+    
+    <apex:pageMessages />
+
+    <br />
+
+    <div style="margin-left: 20px;"><a href="/{!account.Id}">{!$Label.Account_OpportunityCreationError_BackMessage} : {!account.Name}</a></div>
+
+</apex:page>

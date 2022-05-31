@@ -1,0 +1,20 @@
+<apex:page standardcontroller="Voxpay_Payment_History__c" lightningStylesheets="false" docType="html-5.0" >
+	
+	
+	<apex:slds />
+    <apex:pageMessages id="mainMsg" showDetail="false" rendered="true"/>
+    
+    <apex:form id="form" rendered="{! Voxpay_Payment_History__c.Payment_URL__c!=null}">
+    	
+    	<apex:outputPanel title="Suivi du paiement" layout="block" rendered="{! Voxpay_Payment_History__c.Payment_URL__c!=null}" id="voxpayIFrameBlock" style="width:50%;margin:0 auto;text-align: center;">
+			<apex:iframe height="780px" width="1000px" src="{! Voxpay_Payment_History__c.Payment_URL__c}" scrolling="false" id="voxpayIFrame"/>
+			<div style="text-align: center;">
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<apex:commandButton value="Revenir au compte" oncomplete="window.parent.location.href='/{!Voxpay_Payment_History__c.Account__c}'"/>
+				
+			</div>
+		</apex:outputPanel>
+    	
+    </apex:form>
+	
+</apex:page>

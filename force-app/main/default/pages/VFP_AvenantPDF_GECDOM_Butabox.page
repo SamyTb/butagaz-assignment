@@ -1,0 +1,222 @@
+<apex:page standardController="Quote"  language="fr" showHeader="false" extensions="VFC_Quotelineitem_01">
+<!--************************* AVENANT GECDOM BUTABOX *************************-->
+
+<div id="containerGECDOMButabox" Style="page-break-before:always">
+
+	<div class="footerRight">
+		<p align="right">Référence Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>     		
+    </div>
+    
+    <div class="contractSection" STYLE="page-break-inside:avoid">
+    	
+    	<h1>Avenant au contrat pour la fourniture de gaz en citerne<br/>
+			Option « Suivi de consommation Butabox »
+		</h1>
+    	<br/>
+    	<h1>Entre le CLIENT et BUTAGAZ</h1>
+		<br/>
+		<p align="justify">BUTAGAZ et le CLIENT ont conclu un contrat de fourniture de gaz propane en citerne BUTAGAZ et le CLIENT souhaite bénéficier du suivi de ses consommations d’énergie. Avec l’option « suivi de consommation Butabox », BUTAGAZ offre la possibilité au CLIENT  de suivre ses consommations d’énergie (gaz propane, électricité).</p>
+		<br/>
+        <h1>1.	Biens et services associés à l’option « Suivi de consommation Butabox »</h1>
+    	<br/>
+    	<p align="justify">BUTAGAZ fait bénéficier le CLIENT des biens et services suivants pendant toute la durée du présent avenant ;</p>
+    	<br/><br/>
+    	<h3>1.1 KIT BUTABOX</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Un kit BUTABOX permettant la communication des données à la plateforme Mabutabox dont le CLIENT est  propriétaire vendu conformément au barème V2P ou au barème Services+ en vigueur. Il comprend :</p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Un concentrateur : <span style="font-style:italic;">Branché à la box internet du CLIENT il permet de centraliser les données et de communiquer les informations sur ses consommations d’énergie à la plate-forme <u>www.mabutabox.fr</u></span></p><br/> 
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Un transmetteur : <span style="font-style:italic;">Relié au capteur électrique, il permet d’envoyer les données de consommation électrique au concentrateur</span></p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Un capteur électrique</p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Une prise intelligente : <span style="font-style:italic;">Permet de connaitre la consommation électrique de l’appareil choisi et de piloter à distance</span></p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Un câble réseau</p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Un afficheur local : <span style="font-style:italic;">Permet de visualiser la consommation électrique et le niveau de gaz de la citerne</span></p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;2 jeux de trois piles AA</p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Un transformateur électrique</p><br/>
+    	<br/>
+    	<h3>1.2 INSTALLATION DU KIT BUTABOX</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’installation du kit BUTABOX dans logement du CLIENT conformément au barème V2P ou au barème Services+ en vigueur.</p><br/>
+    	<br/>
+    	<h3>1.3 ACCES A L’ESPACE PRIVE MABUTABOX</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’accès à l’espace web personnel MABUTABOX disponible sur la plate-forme web <u>www.mabutabox.fr</u> dans les conditions d’utilisation de la plate-forme et dans les conditions tarifaires du barème V2P ou au barème Services+ en vigueur.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’espace web personnel MABUTABOX comprend les services suivants :</p><br/>
+    	<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Visualisation de la consommation de gaz propane et d’électricité</p><br/>
+    	<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Visualisation de la consommation  d’électricité des appareils électriques connectés à une prise intelligente</p><br/>
+    	<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Envoi d’un rapport mensuel sur les consommations d’énergie enregistrées</p><br/>
+    	<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Possibilité de connecter ou déconnecter les appareils électriques branchés aux prises intelligentes via l’espace web personnel MABUTABOX</p><br/>
+    	<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Programmation de la mise en marche/arrêt des appareils électriques branchés aux prises intelligentes</p><br/>
+    	<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;Programmation d’alarmes en cas de dépassement du niveau de consommation fixé</p><br/>
+    	<br/>
+    	<h3>1.4 ANTENNE « RTU »</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;La mise à disposition d’une antenne « RTU » reliant la citerne Butagaz au concentrateur Butabox et permettant de suivre le niveau de jauge de la citerne de gaz.</p><br/>
+    	
+    	<h1>2.	Commande</h1>
+    	<br/>
+    	<h3>2.1 DATE DE LA COMMANDE</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;La date de la commande est réputée être celle de la date de réception du présent avenant par le service administratif du Distributeur Régional du CLIENT.</p><br/>
+    	<br/>
+    	<h3>2.2 INFORMATIONS FOURNIES LORS DE LA COMMANDE</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le Client est responsable des informations renseignées sur son compte Client et sur sa commande, ces informations étant indispensables au bon traitement de la commande. Ainsi, en particulier, le Client est entièrement responsable du domicile déclaré et de l’adresse de livraison mentionnée. BUTAGAZ  ne pourra être tenue pour responsable de délais de livraison ou de coûts de livraison supplémentaires et en garantir les conséquences. Les frais engagés par BUTAGAZ liés à des informations erronées du Client seront à sa charge, en particulier les frais de réexpédition de commande.</p><br/>
+    	<br/>
+    	<h1>3.	Livraison du kit BUTABOX</h1>
+    	<br/>
+    	<!-- <p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le kit BUTABOX du CLIENT sera livré par colissimo au lieu qu’il aura indiqué dans un délai de 20 jours calendaires suivant la date de commande (rappel la date de commande = la date de réception du présent avenant signé par le service administratif du Distributeur Régional du CLIENT).</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;La livraison des colis ne pourra s’effectuer territorialement qu’en France métropolitaine, Corse comprise, à l’exclusion des DOM TOM.</p><br/> -->
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le kit BUTABOX du CLIENT sera livré par le technicien lors de l'installation.</p><br/>
+    	<br/>
+    	<h1>4.	Installation du kit BUTABOX</h1>
+    	<br/>
+    	<h3>4.1 CONDITIONS PREPARATOIRES</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Préalablement à l’installation du kit BUTABOX, le CLIENT devra fournir à BUTAGAZ toute information dont BUTAGAZ pourrait avoir besoin dans le cadre de l’installation.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le CLIENT devra notamment s’assurer de l’accès à la citerne, au compteur électrique et à toute autre installation à laquelle le technicien devra accéder dans le cadre de l’installation.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le CLIENT devra également vérifier qu’il possède une connexion Internet de type ADSL permettant de brancher un câble RJ45.</p><br/>
+    	<br/>
+    	<h3>4.2 MISE EN PLACE</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le kit BUTABOX du CLIENT sera installé dans un délai maximum de 30 jours suivant la date de la commande du kit Butabox sauf indisponibilité du CLIENT durant la période concernée.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Pour procéder à cette mise en place, un rendez-vous sera directement pris avec le CLIENT à une date déterminée d’un commun accord, par le prestataire mandaté par Butagaz pour cette opération.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le CLIENT s’engage à prévenir BUTAGAZ au moins 48 heures à l’avance en cas de toute difficulté pouvant empêcher l’installation le jour convenu. Dans l’hypothèse où le CLIENT n’aurait pas pris soin d’annuler dans les délais susvisés le rendez-vous et que de ce fait,  BUTAGAZ se trouve dans l’impossibilité de procéder à la mise en place, les frais d’installation du kit BUTABOX, dont le montant est précisé sur le Barème V2P ou le barème Services+, seront facturés au CLIENT pour dédommager BUTAGAZ de ce déplacement inutile.</p><br/>
+    	<br/>
+    	
+    	<h1>5.	Accès l’espace web personnel MABUTABOX</h1>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’espace web personnel MABUTABOX est accessible via l'adresse internet www.mabutabox.fr ou via l’application intitulée « BUTABOX » téléchargeable sur l’Apple store ou sur Google Play. L'accès aux fonctionnalités  de l’espace web personnel MABUTABOX est réservé exclusivement aux CLIENTS ayant souscrit l’avenant « Option suivi de consommation BUTABOX » et qui se sont préalablement enregistrés sur le site www.mabutabox.fr et dont le kit BUTABOX a déjà été installé.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’accès à l’espace web personnel MABUTABOX nécessite une inscription préalable du CLIENT. Pour se faire le CLIENT devra compléter un formulaire via le site mabutabox.fr et accepter les conditions générales d’utilisations de la plate-forme. Une fois le formulaire d’inscription à l’espace web personnel MABUTABOX rempli et les conditions générales acceptées, BUTAGAZ confirmera l’accès à l’espace web personnel MABUTABOX par e-mail, lequel contiendra un lien de confirmation pour confirmer l’enregistrement.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le CLIENT aura accès à la plate-forme dès que son inscription sera validée. L’accès aux consommations d’énergie via la plate-forme sera possible dès l’installation du kit BUTABOX effectuée et dès que le présent avenant aura été réceptionné par le service administratif du Distributeur Régional du CLIENT.</p><br/>
+    	<br/>
+    	<h1>6.	Mise à disposition de l’antenne de jauge RTU</h1>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’antenne de jauge RTU est mise à disposition du CLIENT, par BUTAGAZ, à titre de prêt à usage pendant la durée du présent avenant. L’antenne de jauge est la propriété incessible, inaliénable et insaisissable de BUTAGAZ. Cette mise à disposition est consentie à titre gratuit. Seuls des frais de mise en service vous seront facturés après la première mise en place, conformément au barème V2P ou au barème Services+ en vigueur.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Au terme du présent avenant, l’antenne sera désactivée et restera sur la citerne de gaz.</p><br/>
+    	<br/>
+    	
+    	<div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div>
+    	
+    	<h1>7.	Conditions financières et de paiement</h1>
+    	<br/>
+    	<h3>7.1 PRIX DU SERVICE SUIVI DE CONSOMMATION BUTABOX ET DES PRESTATIONS ASSOCIEES</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Les prix de l’ensemble des prestations figurant au barème V2P ou Services+ pourront être révisés chaque année en fonction notamment de l’indice du Coût de Travail Horaire – tous salariés – des Industries Mécaniques et Electriques publié par l’INSEE et de l’Indice CNL Distribution avec Conducteur et notamment Carburant publié par la Fédération des Entreprise de transport et Logistique de France.</p><br/>
+    	<br/>
+    	7.1.1 KIT BUTABOX
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le kit BUTABOX est facturé conformément au barème V2P ou au barème Services+ en vigueur.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;BUTAGAZ demeure propriétaire des produits livrés jusqu’à leur paiement parfait par le Client. Les dispositions ci-dessus ne font pas obstacle, dès la livraison des produits, au transfert au Client des risques de perte ou de détérioration des produits soumis à réserve de propriété ainsi que des dommages qu'ils pourraient occasionner.</p><br/>
+    	<br/>
+    	7.1.2 FRAIS D’INSTALLATION DU KIT BUTABOX
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Les frais d’installation sont facturés conformément au barème V2P ou au barème Services+ en vigueur.</p><br/>
+    	<br/>
+    	7.1.3 ACCES L’ESPACE PRIVE MABUTABOX
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le prix de l’abonnement est facturé barème V2P ou au barème Services+ en vigueur.</p><br/>
+    	<br/>
+    	
+    	<h3>7.2 MODE DE PAIEMENT</h3>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le paiement des factures est comptant sans escompte à réception de votre facture.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Lors de la conclusion du Contrat, vous disposez de la possibilité de choisir, dans les Conditions Particulières, votre mode de paiement et pouvez le modifier à tout moment par simple courrier adressé à votre Distributeur Régional. A défaut, vous serez supposé avoir opté pour le prélèvement bancaire automatique.</p><br/>
+		<p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<STRONG>&raquo;</STRONG>&nbsp;&nbsp;&nbsp;Si vous optez pour le paiement par prélèvement bancaire automatique : vous devez renvoyer à votre Distributeur Régional un Relevé d’Identité Bancaire et le mandat SEPA dûment rempli. Le prélèvement de votre compte bancaire s’effectuera 8 jours à date de facture. En cas de réclamation sur la somme qui vous sera prélevée, vous devez présenter votre réclamation à votre Distributeur Régional. Le remboursement de la somme qui vous aurait été éventuellement facturée par erreur sera déduit sur votre prochaine facture ou restituée par virement bancaire. Vous vous engagez à prévenir dans les plus brefs délais votre Distributeur Régional de toute modification de vos coordonnées bancaires.</p><br/>
+		<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;<STRONG>L’abonnement à l’accès l’espace web personnel mabutabox est facturé semestriellement à date fixe</STRONG>, et au prorata temporis pour les mois non complet.</p><br/>
+		<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le CLIENT est responsable du paiement de l’ensemble des sommes dues au titre du Contrat. <STRONG>A défaut de paiement</STRONG>, BUTAGAZ se réserve le droit d’appliquer des pénalités de retard, quinze (15) jours après une mise en demeure adressée par lettre recommandée avec accusé de réception, restée sans effet. Le montant de ces pénalités de retard résultera de l’application d’un taux d’intérêt égal à trois fois le taux de l’intérêt légal. Si cette mise en demeure restait  infructueuse, BUTAGAZ se réserve le droit de suspendre l’accès à la plate-forme après en avoir dûment informé le CLIENT au terme d’un courrier qui précisera dans quel délai cette suspension interviendra et/ou de résilier le Contrat dans les conditions précisées à l’article 10 des présentes. En cas de suspension des livraisons, le CLIENT reste tenu de l’ensemble de ses obligations contractuelles.</p><br/>
+		<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le barème V2P ou le barème Services+ en vigueur est joint au présent avenant. Les barèmes BUTAGAZ en vigueur sont tenus à votre disposition chez le Distributeur Régional BUTAGAZ et consultables sur notre site Internet www.butagaz.fr.</p><br/>
+		<br/>
+		
+		<div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div>
+		
+    	<h1>8.	Garantie</h1>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le kit BUTABOX bénéficie de la garantie légale de conformité (L211-1 et suivant du Code de la Consommation) et de la garantie contre les vices cachés (articles 1641 et suivants du Code Civil), permettant à l'Utilisateur de renvoyer les produits livrés défectueux ou non conformes.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Article L211-4 du Code de la Consommation : Le vendeur est tenu de livrer un bien conforme au contrat et répond des défauts de conformité existant lors de la délivrance. Il répond également des défauts de conformité résultant de l'emballage, des instructions de montage ou de l'installation lorsque celle-ci a été mise à sa charge par le contrat ou a été réalisée sous sa responsabilité.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Article L211-5 du Code de la Consommation : Pour être conforme au contrat, le bien doit :</p><br/>
+		<p align="justify">1) Etre propre à l'usage habituellement attendu d'un bien semblable et, le cas échéant :</p><br/>
+		<p align="justify">- correspondre à la description donnée par le vendeur et posséder les qualités que celui-ci a présentées à l'acheteur sous forme d'échantillon ou de modèle ;</p><br/>
+		<p align="justify">- présenter les qualités qu'un acheteur peut légitimement attendre eu égard aux déclarations publiques faites par le vendeur, par le producteur ou par son représentant, notamment dans la publicité ou l'étiquetage ;</p><br/>
+		<p align="justify">2) Ou présenter les caractéristiques définies d'un commun accord par les parties ou être propre à tout usage spécial recherché par l'acheteur, porté à la connaissance du vendeur et que ce dernier a accepté.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Article L211-12 du Code de la Consommation : L'action résultant du défaut de conformité se prescrit par deux ans à compter de la délivrance du bien.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Article 1641 du Code Civil : Le vendeur est tenu de la garantie à raison des défauts cachés de la chose vendue qui la rendent impropre à l'usage auquel on la destine, ou qui diminuent tellement cet usage, que l'acheteur ne l'aurait pas acquise, ou n'en aurait donné qu'un moindre prix, s'il les avait connus.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Article 1648 al 1er du Code Civil : L'action résultant des vices rédhibitoires doit être intentée par l'acquéreur dans un délai de deux ans à compter de la découverte du vice.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;BUTAGAZ est libérée de ses obligations de livraison en cas de force majeure. BUTAGAZ décline toute responsabilité quant à l’utilisation impropre ou non conforme à leur destination des produits que le client a commandés.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L'impossibilité totale ou partielle d'utiliser les produits notamment pour cause d'incompatibilité de matériel ne peut donner lieu à un dédommagement, un remboursement ou une mise en cause de la responsabilité de BUTAGAZ.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Ne sont notamment pas couverts par la garantie : Les dommages engageant la responsabilité d’un tiers ou résultant d’une faute intentionnelle ou dolosive ; Les frais d’entretien et la réparation des dommages consécutifs à un mauvais entretien, à une utilisation ou à une installation non conforme aux prescriptions du fabricant ;  Les erreurs de branchement ou de mise en service; Les dommages ayant pour origine : les actes de malveillance ou une cause externe à l’appareil (choc, chute, vol, virus, sabotage); la mauvaise utilisation, l’erreur de manipulation. Les dommages esthétiques n’altérant pas le bon fonctionnement de l’appareil, sauf si lesdits dommages sont consécutifs à un événement garanti par le contrat.</p><br/>
+    	<br/>
+    	
+    	<h1>9.	Durée de l’option « Suivi de consommation Butabox »</h1>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;L’option « Suivi de consommation Butabox », est accordée pour une durée indéterminée. Le CLIENT peut y mettre fin à tout moment en prévenant son Distributeur Régional par lettre recommandée avec avis de réception,  moyennant le respect d’un préavis de deux (2) mois.</p><br/>
+    	<br/>
+    	
+    	<div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div>
+    	
+    	<h1>10.	Fin du contrat</h1>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Chaque partie peut demander la résiliation du contrat pour inexécution par l’autre partie de l’une quelconque de ses obligations, trente (30) jours après une mise en demeure adressée par lettre recommandée avec accusé de réception, restée sans effet.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;BUTAGAZ se réserve le droit d’invoquer cette clause résolutoire en cas de non-paiement par le CLIENT de ses factures dans les conditions précitées, de non-respect de l’exclusivité d’approvisionnement par le CLIENT, ou pour des raisons de sécurité, notamment en cas de modification de l’environnement de l’implantation de la citerne du fait du CLIENT, d’accès périlleux au domicile du CLIENT, de non obtention par le CLIENT d’une « dérogation de tonnage » accordée par l’administration pour permettre aux camions de livraison le passage sur une route déclarée « à tonnage limité », ou de non obtention de la requalification pour une citerne propriété client. En cas d’impératifs de sécurité, le délai du préavis de résiliation pourra être ramené à huit (8) jours.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;La résiliation du contrat de fourniture gaz propane et prestation d’entretien entrainera de plein droit la résiliation du présent avenant.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;La résiliation de l’option « Suivi de consommation Butabox » ou la renonciation à l’option « Suivi de consommation Butabox » n’entraîne pas la résiliation du contrat de fourniture gaz propane.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Conformément aux articles L121-20 à L121-26 du Code de la consommation, vous disposez de la faculté de renoncer à l’avenant option « Suivi de consommation Butabox » dans un délai de sept (7) jours à partir la plus tardive des deux dates suivantes : soit la date de réception par le service administratif du Distributeur Régional du CLIENT cet avenant signé soit la date de livraison du kit BUTABOX. Une fois ce délai expiré, le CLIENT sera réputé avoir accepté le Contrat BUTAGAZ et être lié par ses termes. Les services complémentaires qui auraient été réalisés à la date d’annulation tels que l’installation ne pourront faire l’objet d’annulation ou de rétractation.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le droit ou la possibilité d’échange ou de remboursement ne s’applique que si le produit est renvoyé en parfait état de revente, emballé dans son emballage d'origine en parfait état, complet et ne présentant aucune trace de choc, de dysfonctionnement ou de trace manifeste d’utilisation. BUTAGAZ se réserve le droit de refuser l’échange ou le remboursement si les produits reçus en retour ne respectent pas ces conditions. Tout retour, sans exception, doit faire préalablement l’objet d’un écrit (courriel, télécopie, ou courrier postal) et de l’obtention automatique d’un numéro de retour auprès du service après-vente de BUTAGAZ. Il ne s’agit pas d’une demande d’autorisation, mais d’une garantie indispensable pour assurer un retour en toute traçabilité et sécurité pour le Client. BUTAGAZ indiquera alors au Client la démarche à suivre. BUTAGAZ se réserve le droit de refuser un retour sur ses entrepôts, si celui-ci ne lui a pas été notifié ou ne suit pas les instructions préalables. Un retour ne respectant pas cette procédure et dont le ou les colis seraient égaré(s) pendant le transport ne pourra être pris en compte par BUTAGAZ. Aucune indemnité, ni remboursement ne saurait alors être demandé par le Client qui n’aurait pas suivi les instructions du service clients dans le cadre d’une annulation de commande et/ ou d’une rétractation.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;La rétractation entre la date de réception de la commande et les 7 jours légaux est définie par la Loi. Cette rétractation peut-être effectuée sans justification sur tout ou partie de la Commande du Client, sous réserve des conditions définies ci-dessus. Dans ce cas : le Client doit contacter le service client de BUTAGAZ afin de l’informer de cette annulation préalablement à toute réexpédition de Produit, en indiquant le ou les produits concernés. Une confirmation écrite sera demandée au Client, par courriel, par télécopie, ou par voie postale, afin d’éviter toute annulation par une autre personne que le Client. Ce contact préalable permet de communiquer au Client la procédure à suivre pour le retour ainsi que les documents à joindre au colis afin d’assurer la traçabilité et ainsi un bon retour ; les frais de retour sont à la charge du Client. Le remboursement intervient au plus tard dans les 30 jours suivant l’exercice du droit de rétractation, la réexpédition des colis pouvant être faite auparavant.</p><br/>
+    	<br/>
+    	
+    	<div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div>
+    	
+    	<h1>11.	Données à caractère personnel</h1>
+    	<br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;BUTAGAZ prend les mesures propres à assurer la protection et la confidentialité des informations nominatives qu’elle détient ou qu’elle traite dans le respect des dispositions de la Loi n°78-17 du 6 janvier 1978, relative à l’informatique, aux fichiers et aux libertés.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Les informations recueillies dans le cadre de la conclusion du Contrat BUTAGAZ font l’objet d’un traitement informatique. Elles sont utilisées par BUTAGAZ ou son Distributeur Régional pour la gestion du compte client.</p><br/>
+    	<p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;Le CLIENT dispose d’un droit d’accès, de rectification et de suppression auprès de votre Distributeur Régional ou de : BUTAGAZ Service Clients – 47-53 rue Raspail – 92594 Levallois-Perret Cedex.</p><br/>
+    	<br/>
+    	<p align="justify">Toutes les autres clauses et conditions du contrat de fourniture de gaz propane en citerne non modifiées par le présent avenant gardent leur plein et entier effet.</p>
+    	
+		<br/><br/><br/>
+		Nom et prénom du CLIENT :
+		<br/><br/>
+    	Adresse :
+    	<br/><br/>
+    	Code Postal :
+    	<br/><br/>
+    	Ville :
+    	<br/><br/>
+    	Référence Client Butagaz :
+    	<br/><br/>
+    	Fait en double exemplaire, à&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;, le&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/
+    	<br/><br/><br/><br/><br/>
+    	
+    	
+    	<!--<div class="ButagazCachet" style="float:left; width: 63%;">
+		  <p>pour Butagaz : votre distributeur régional</p>
+		  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>                
+		</div>
+		 <div class="ButagazCachet" style="float:left; width: 33%; border-left:none">
+		  <p>Pour BUTAGAZ</p>
+		  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>                
+		</div> -->
+		
+		
+		 <div class="ButagazCachet" style="float:left; width: 63%;">
+	     	<p> Pour Butagaz: votre Distributeur Régional:</p>
+	        <br/>
+	        <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+	        <br/>
+	        <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+        </div>
+        
+		<div class="ButagazCachet" style="float:left; width: 33%; border-left:none">
+		  <p>Pour le CLIENT
+			 <br/>
+			 (à faire précéder de la mention manuscrite « Bon pour accord »)</p>
+		  <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>                
+		</div>
+    	
+    </div>
+
+</div>
+
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

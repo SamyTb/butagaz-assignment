@@ -1,0 +1,179 @@
+<apex:page standardController="CUSAGE__c" extensions="VFC_CommandesUsages" showHeader="true" sidebar="false" tabStyle="CUSAGE__c">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    
+    <style type="text/css">
+        .empty-column-content {
+            display: none;
+        }
+            
+
+        .divTotal{
+        background-color:rgb(23, 151, 192) !important;color:#FFFFFF !important;font-size: .9em;
+          font-weight: bold;
+          font-family: Arial,Helvetica,sans-serif;
+          padding: 5px 2px 4px 5px;
+          width:30%;
+        }
+
+        .total{
+        background-color:#FFFFFF !important;color:#000000 !important;font-size: 1em;
+          font-weight: bold;
+          font-family: Arial,Helvetica,sans-serif;
+          padding: 5px 2px 4px 5px;
+          width:50%;
+          height:11pt;
+          text-align: left;
+        }
+ 
+    </style>
+    
+    <script>
+        var $dialog;
+        $(document).ready(function() {
+        $dialog = $("#dialog-modal")
+            .dialog({
+                autoOpen: false,
+                height: 150,
+                width: 250,
+                modal: true,
+                closeOnEscape: false,
+                resizable: false
+            });
+        });
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            return false;
+        }
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+
+        $(function() {
+ 
+    		$("form").bind("keypress", function(e) {
+            	if (e.keyCode == 13) CallSaveBtn();
+      		});
+ 
+		});        
+    </script>
+
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}"/>
+        </div>
+    </div>    
+        
+   <apex:form > 
+    	<apex:actionFunction action="{!saveBtn}" name="CallSaveBtn"/>    
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>       
+        <apex:sectionheader title="{!$Label.Commande_Usages}" subtitle="{!oAccount.AccountNumber}"/>
+        <apex:pageblock id="idBlockIssue" rendered="{!bIssue}">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+        </apex:pageblock>
+
+        <apex:pageblock id="idBlock" rendered="{!NOT(bIssue)}">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.CUsages_calculate_cost}" action="{!calcCost}" rerender="idBlock" status="modalStatus"/> 
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!saveBtn}" rerender="idBlock"  status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}" status="modalStatus"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+            <apex:pageblocksection >
+                <apex:outputField value="{!CUSAGE__c.Account__c}"/>
+                <apex:inputField value="{!CUSAGE__c.Date_de_Commande__c}" required="true"/>  
+                <apex:outputField value="{!CUSAGE__c.Name}"/>
+                <apex:inputField value="{!CUSAGE__c.Date_de_livraison__c}" required="true"/>
+                <apex:inputField value="{!CUSAGE__c.N_commande_client__c}" />
+                <apex:inputField value="{!CUSAGE__c.Satut__c}" required="true"/>
+                <apex:inputField value="{!CUSAGE__c.Contact__c}" required="true"/>
+              
+            </apex:pageblocksection>
+            
+            <!-- Articles Usages -->
+           <apex:pageblock tabStyle="Item__c">
+                <apex:pageblocksection title="{!$Label.Usages_Products}" collapsible="true" columns="1">                               
+                    <apex:pageblocktable value="{!lCUSAGEArticles}" var="line">   
+                    
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Name.label}" style="width:40%;text-align: left!important;"
+                         rendered="{!line.Article__r.Type__c != 'Services Usages'}">
+                            <apex:outputfield value="{!line.Article__r.Name}" style="width:100%;" />
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Name.label}" style="width:40%;text-align: left!important;background-color:#e3f3ff!important;"
+                         rendered="{!line.Article__r.Type__c == 'Services Usages'}">
+                            <apex:outputfield value="{!line.Article__r.Name}" style="width:100%;" />
+                        </apex:column>  
+
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Gencode__c.label}" style="width:15%;text-align: left!important;"
+                         rendered="{!line.Article__r.Type__c != 'Services Usages'}">
+                            <apex:outputfield value="{!line.Article__r.Gencode__c}" style="width:100%;" />
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Name.label}" style="width:15%;text-align: left!important;background-color:#e3f3ff!important;"
+                         rendered="{!line.Article__r.Type__c == 'Services Usages'}">
+                        </apex:column>  
+                        
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Quantite__c.label}" style="width:15% !important;" 
+                         rendered="{!line.Article__r.Type__c != 'Services Usages'}">
+                            <apex:inputfield value="{!line.Quantite__c}"  style="width:50%"/>                            
+                        </apex:column> 
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Quantite__c.label}" style="width:15% !important;background-color:#e3f3ff!important;" 
+                         rendered="{!line.Article__r.Type__c == 'Services Usages'}">
+                        </apex:column> 
+                        
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Prix_unitaire__c.label}" style="width:15% !important;"                         
+                         rendered="{!line.Article__r.Type__c != 'Services Usages'}">
+                            <apex:inputfield value="{!line.Prix_unitaire__c}" style="width:50%"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Prix_unitaire__c.label}" style="width:15% !important;background-color:#e3f3ff!important;"                          
+                         rendered="{!line.Article__r.Type__c == 'Services Usages'}">
+                            <apex:inputfield value="{!line.Prix_unitaire__c}" style="width:50%"/>                            
+                        </apex:column>
+                        
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Total_Article__c.label}" style="width:15% !important;" 
+                         rendered="{!line.Article__r.Type__c != 'Services Usages'}">
+                            <apex:outputfield value="{!line.Total_Article__c}" style="width:50%"/>                            
+                        </apex:column>  
+                        <apex:column headervalue="{!$ObjectType.CUSAGE_Article__c.Fields.Total_Article__c.label}" style="width:15% !important;background-color:#e3f3ff!important;" 
+                         rendered="{!line.Article__r.Type__c == 'Services Usages'}">
+                            <apex:outputfield value="{!line.Total_Article__c}" style="width:50%"/>                            
+                        </apex:column>  
+                        
+                    </apex:pageblocktable>                  
+                    <!--  Total -->     
+                    <apex:inputHidden value="{!CUSAGE__c.Total_Quantite__c}"/>
+                    <apex:inputHidden value="{!CUSAGE__c.Total_Prix__c}"/>                  
+                    <table style="width:100%;background-color:rgb(23, 151, 192) !important;" >
+                        <tr>
+                            <td style="width:40.3%">
+                                 <div class="divTotal"> Total : </div>
+                            </td>
+                            <td style="width:15.3%">
+                            </td>                           
+                            <td style="width:14.7%">
+                                <div class="total" >{!oCUSAGE.Total_Quantite__c}</div>
+                            </td>
+                            <td style="width:15.3%">
+                            </td>
+                            <td style="width:14.7%">
+                                <div class="total">{!oCUSAGE.Total_Prix__c}  €</div>
+                            </td>          
+                        </tr>
+                    </table>                
+                    
+                </apex:pageblocksection>
+            </apex:pageblock>
+            
+        </apex:pageblock>  
+        
+
+
+    </apex:form> 
+</apex:page>

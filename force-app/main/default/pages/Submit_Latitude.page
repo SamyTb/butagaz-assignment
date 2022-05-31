@@ -1,0 +1,7 @@
+<apex:page standardController="Quote" tabStyle="Quote" >
+    <flow:interview name="LAT_MAIN" finishLocation="{!'/'&Quote.Id}">
+        <apex:param name="Quote_Id" value="{!quote.Id}"/>
+        <apex:param name="DEBUG" value="false"/>
+        <apex:param name="RequestApproval" value="true"/>
+    </flow:interview>
+</apex:page>

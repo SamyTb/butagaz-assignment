@@ -1,0 +1,222 @@
+<apex:page standardController="Lead" renderAs="pdf" applyHtmlTag="false" language="fr" showHeader="false">
+    <html>
+    <head>
+        <style type="text/css">
+            @page {
+                @top-center {
+                    content: element(headerText);
+                }
+                @top-left {
+                    content: element(headerImg);
+                }
+                @bottom-center {
+                    content: "Page " counter(page) " sur " counter(pages);
+                }
+                /*margin: 35px 50px 50px;*/
+                margin-top: 130px;
+                margin-bottom: 80px;
+            }
+            div.headerText {
+                padding: 10px;
+                position: running(headerText);
+                color:gray;
+            }
+            /*border-bottom: solid 1px;*/
+            div.headerImg {
+                padding: 10px;
+                position: running(headerImg);
+            }
+        </style>
+    </head>
+    
+    <div class="headerImg">
+        <apex:image style="float: left;" url="{!$Resource.test}" width="180" height="75"/>
+    </div>
+    <div class="headerText" style="text-align:center;">
+        <br/><br/><br/>
+        <p>Fourniture de granulés de bois BUTAGAZ</p>
+    </div>
+    
+    <!--************************* GDB OFFER PDF *************************-->
+    <body>
+        
+        <div id="topImage" style="float: right;">
+            <apex:image url="/servlet/servlet.FileDownload?file=0151l0000004rVQ" style="height: 320px; width: 230px;"/>
+        </div>
+        <br/><br/>
+        <div id="user">
+            {!$User.FirstName}&nbsp;{!$User.LastName}<br/>
+            Chargé de clientèle – Les Granulés de Bob<br/>
+            relationclient@granulesbois.butagaz.fr<br/>
+            {!$User.Phone}
+        </div>
+        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <div id="title">
+            <h1>Proposition commerciale</h1>
+            <p><apex:outputText value="{0,date,dd/MM/yyyy}"><apex:param value="{!today()}" /> </apex:outputText></p>
+        </div>
+        
+        
+        <h3>Fourniture de granulés de bois</h3>
+        <br/>
+        <apex:outputField value="{!Lead.Company}"/>
+        <p>A l’attention de M.&nbsp;<apex:outputField value="{!Lead.LastName}"/></p>
+        <apex:outputField value="{!Lead.Account_Street_Name__c}"/><br/>
+        <apex:outputField value="{!Lead.Account_City_Postal_Code__r.Name}"/><br/>
+        
+        <!-- Page 2 -->
+        <div style="page-break-before:always;"/>
+        <h3>1. LE CONTEXTE</h3>
+        <p>Dans le cadre de son activité de distribution de pellets, Butagaz vous propose plusieurs solutions pour enrichir votre prestation d’installation de poêles à granulés par :</p>
+        <ul style="list-style-type:none">
+            <li>-   de la fourniture de produit de qualité Premium garanti 100% résineux</li>
+            <li>-   la livraison à domicile grâce à du matériel adapté</li>
+            <li>-   un stock décentralisé géré par Butagaz</li>
+        </ul>
+        
+        <h3>2. NOS PRODUITS</h3>
+        <p>Les Granulés Butagaz sont fabriqués en France, sont issus de forêts de résineux gérées durablement (PEFC), sont 100 % naturels et sont certifiés DIN Plus.</p>
+        <p>Notre service Qualité Produit vérifie en outre mensuellement ce haut niveau de qualité pour assurer une durée de vie maximale des appareils, un entretien et une consommation de pellets réduite au minimum.</p>
+        <p>Ils sont disponibles en conditionnement de 8 et 15 kg sur palette de 126 ou 66 sacs respectivement.</p>
+        <p>En choisissant de distribuer les Granulés Butagaz, vous choisissez l’assurance d’un produit Premium, d’une marque à forte notoriété et dont la qualité de service est plébiscitée par 95% de ses clients.</p>
+        <p>Caractéristiques techniques a minima :</p>
+        
+        <div id="topImage3" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+            <apex:image url="/servlet/servlet.FileDownload?file=01557000004nGtE" style="height: 300px; width: 400px;"/>
+        </div>
+        
+        
+        
+        <!-- <div id="topImage2" style="display: block; margin-left: auto; margin-right: auto; width: 60%;">
+            <apex:image url="/servlet/servlet.FileDownload?file=0151l0000004rVL" style="height: 300px; width: 300px;"/>
+        </div>
+        
+        <p>Les Granulés Butagaz sont fabriqués en France, sont 100 % naturels, issus de forêts de résineux gérées durablement (PEFC), et sont certifiés DIN Plus.</p>
+        <p>Notre service Qualité Produit vérifie en outre mensuellement ce haut niveau de qualité pour assurer une durée de vie maximale des appareils, un entretien et une consommation de pellets réduite au minimum.</p>  
+        <p>Ils sont disponibles en conditionnement de 8 et 15 kg sur palette de 126 ou 66 sacs respectivement.</p>
+        <p>Dimensions des palettes : 80x120x180 cm ou 100x100x180 cm</p>
+        <p>Site web : <a href="https://granulesbois.butagaz.fr" target="_blank">https://granulesbois.butagaz.fr</a></p>
+        <p>Caractéristiques a minima :</p><br/> -->
+        
+        <!-- Page 3 -->
+        <div style="page-break-before:always;"/>
+        
+        <p style="color:red;">La palette de 66 sacs de 15 kg :</p>
+        <div style="background-color:silver;">
+            <p><span style="text-decoration: underline;">L’incontournable</span>
+            <br/>
+            BUTAGAZ renouvelle ce conditionnement classique en apportant une touche familiale et attachante grâce à sa marque « Les Granulés de Bob », du nom notre ours bleu, la mascotte de l’entreprise.</p>
+        </div>
+        
+        <div id="topImage4" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+            <apex:image url="/servlet/servlet.FileDownload?file=01557000004mdIj"  width="330" height="240"/>
+        </div>      
+        
+        <p style="color:red;">La palette de 126 sacs de 8 kg :</p>
+        <div style="background-color:silver;">
+            <p><span style="text-decoration: underline;">Un sac de pellet original et pratique</span>
+            <br/>
+            Ce conditionnement original a déjà convaincu de nombreux clients par son côté pratique et plus léger à porter.</p>
+        </div>
+        
+        <div id="topImage5" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
+            <apex:image url="/servlet/servlet.FileDownload?file=01557000004mdIi"  width="330" height="240"/>
+        </div>
+        
+        <p>Dimensions des palettes : 80x120x180 cm ou 100x100x180 cm</p>
+        <p>Site web : <a href="https://granulesbois.butagaz.fr" target="_blank">https://granulesbois.butagaz.fr</a></p>
+        
+        
+        <!-- Page 4 -->
+        <div style="page-break-before:always;"/>
+        
+        <p>En choisissant de distribuer les Granulés Butagaz, vous choisissez l’assurance d’un produit Premium, d’une marque à forte notoriété et dont la qualité de service est plébiscitée par 95% de nos clients.</p>
+        <p>La campagne de communication pour le lancement de nos offres multi-énergies (gaz naturel, électricité, granulés de bois) a commencé début octobre, selon les dispositifs suivants :</p>
+        <ul style="list-style-type:none">
+            <li>-   diffusion de spots TV sur des chaines grand public (TF1, M6) aux heures de grande écoute autour des journaux télévisés de 20h</li>
+            <li>-   insertion presse dans les magazines spécialisés en Maison et Rénovation et en Presse Quotidienne Régionale</li>
+            <li>-   bannières web et achat de mots-clés sur Google</li>
+        </ul>
+        <br/>
+        
+        <!-- 
+        <apex:outputPanel layout="block" rendered="{!IF($CurrentPage.parameters.isPrescriber=='true',true,false)}">
+            <p>Prescriber = {!$CurrentPage.parameters.isPrescriber}</p>
+        </apex:outputPanel>
+        <apex:outputPanel layout="block" rendered="{!IF($CurrentPage.parameters.isReseller=='true',true,false)}">
+            <p>Reseller = {!$CurrentPage.parameters.isReseller}</p>
+        </apex:outputPanel>
+        -->
+        
+        
+        <!-- Page 5 -->
+        <div style="page-break-before:always;"/>
+        
+        <h3>3. PROPOSITION COMMERCIALE DE FOURNITURE DE GRANULES</h3>
+        
+        <p><b>Nos solutions :</b></p>
+        
+        <p><b>1/ Code promotion mis à disposition, achat direct par le client sur le site Butagaz, livraison à domicile par Butagaz</b></p>
+        
+        <p>Dans cette solution, vous donnez à votre client le code promo qui vous est propre, et qui lui permet de commander directement sur notre site web.</p>
+        <p>Des flyers vous seront remis pour distribution à vos clients, expliquant où commander et avec quel code promo.</p>
+        <p>Le client bénéficie de nos services, comme le paiement en 3x sans frais et la livraison en 2x pour plus d’une palette achetée.</p>
+        <p>Le code promo utilisé permet de vous faire bénéficier d’une commission fixe à chaque fois que votre client passe commande sur notre site. La commission est versée mensuellement ou trimestriellement, selon les volumes, et est conditionnée à l’utilisation de votre code promo pour chaque commande.</p>
+        <p>Une convention de partenariat fixant les modalités de facturation sera signée entre les 2 parties, valable 1 an sans engagement de volume.</p>
+        <br/>
+        <p>Commission :<span style="float: right;">10 €HT/commande</span></p>
+        <br/>
+        
+        <p><b>2/ Un stock réservé sur le dépôt de notre prestataire logistique, livraison à domicile par Butagaz, facturation à votre entreprise des palettes livrées</b></p>
+        
+        <p>On peut réserver sur notre dépôt une quantité de palettes correspondant à 2 mois d’activité. Cela vous permet d’offrir une palette de granulés à vos clients, sans avoir à gérer la livraison.</p>
+        <p>Après transmission par vos soins de l’adresse de livraison, nous prenons RDV avec le client pour une livraison à domicile. Nous livrons sous 2 semaines maximum.</p>
+        <p>Vous êtes ensuite facturés par Butagaz de la palette livrée.</p>
+        <br/>
+        <p>Prix de la palette de 15 kg livrée chez les clients :<span style="float: right;">XXX €HT/palette</span></p>
+        <p>Prix de la palette de 8 kg livrée chez les clients :<span style="float: right;">XXX €HT/palette</span></p>
+        
+        <p>Conditions valables 1 mois</p>
+        <p>TVA à 10%</p>
+        <p>Conditions de paiement : facturation à la livraison, paiement à XXX jours date de facture</p>
+        <br/>
+        <p>Fait le&nbsp;<apex:outputText value="{0,date,dd/MM/yyyy}"><apex:param value="{!today()}"/></apex:outputText>, à Levallois Perret</p>
+        <br/>
+        <p style="float: right;">{!$User.FirstName}&nbsp;{!$User.LastName}</p>
+        
+        
+        <!-- Page 6 -->
+        <div style="page-break-before:always;"/>
+        
+        <h3 style="text-align:center;">Réponse à renvoyer par mail :</h3>
+        <h3 style="text-align:center;">relationclient@granulesbois.butagaz.fr</h3>
+        <br/><br/><br/><br/>
+        
+        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}"/>&nbsp;&nbsp;<b>Offre 1 : Je souhaite recevoir la convention de partenariat</b><br/>
+        <p style="margin-left: 30px;">Date de mise en place souhaitée : ____/____/________ </p>
+        <p style="font-size: smaller;">Une convention de partenariat fixant les modalités de facturation sera signée entre les 2 parties, valable 1 an sans engagement de volume.</p>
+        <br/><br/>
+        
+        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}"/>&nbsp;&nbsp;<b>Offre 2 : Je demande la livraison des palettes à domicile par Butagaz</b><br/>
+        <p style="margin-left: 30px;">Nombre de palettes à réserver : __________ palettes de 66 sacs de 15 kg à XXX €HT/palette</p>
+        <p style="margin-left: 30px;">Nombre de palettes à réserver : __________ palettes de 126 sacs de 8 kg à XXX €HT/palette</p>
+        <p style="font-size: smaller;">Tous les montants s’entendent TVA à 10%</p>
+        <br/><br/>
+        
+        <!-- <p>Le :</p> -->
+        <div style="float: left;">Le :</div>
+        <div style="float: right;margin-right: 200px;">Cachet de l’entreprise :</div>
+        <br/><br/><br/><br/>
+        
+        <p>Nom et Signature du représentant :</p>
+        <br/><br/><br/><br/><br/>
+        <p style="text-align:center;font-size: smaller;">BUTAGAZ SAS au capital de 195 225 000 euros, siège social 47/53 rue Raspail, 92594 Levallois-Perret Cedex</p>
+        <p style="text-align:center;font-size: smaller;">SIREN n°402 960 397 00048, RCS de Nanterre</p>
+        
+        
+    </body>
+    
+    <!-- <div class="footer"><div>Footer For All But Cover Page: Page <span class="pagenumber"/> of <span class="pagecount"/></div> -->
+    
+    </html>
+</apex:page>

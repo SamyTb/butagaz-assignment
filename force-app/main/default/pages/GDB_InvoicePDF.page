@@ -1,0 +1,178 @@
+<apex:page standardController="GDB_Invoice__c" renderAs="pdf" applyHtmlTag="false" language="fr" showHeader="false" extensions="GDB_InvoicePDFController">
+    <html>
+    <head>
+        <apex:stylesheet value="{!$Resource.GDB_Invoice_CSS_Style}" />
+    </head>
+    <!--************************* GDB INVOICE PDF *************************-->
+    <body>
+        <!-- Document Body -->
+        <div id="facture">
+            <div class="container">
+                <apex:image url="{!$Resource.GDB_Ecom + '/GDB_Ecom/img/logofacture.png'}" width="550" height="130" />
+                <div id="adresse">
+                    <p>{!GDB_Invoice__c.gdb_billing_salutation__c} {!GDB_Invoice__c.gdb_billing_lastname__c} {!GDB_Invoice__c.gdb_billing_firstname__c}</p>
+                    <p>{!GDB_Invoice__c.gdb_billing_address1__c}</p>
+                    <p>{!GDB_Invoice__c.gdb_billing_address2__c}</p>
+                    <p>{!GDB_Invoice__c.gdb_billing_address3__c}</p>
+                    <p>{!GDB_Invoice__c.gdb_billing_zip__c} {!GDB_Invoice__c.gdb_billing_city__c}</p>
+                </div>
+                <div id="col-info">
+                    <div class="title">{!$Label.GDB_invoice_references}</div>
+                    <div class="padding15">
+                        <strong>{!$Label.GDB_invoice_holder}</strong>
+                        <p>{!GDB_Invoice__c.gdb_billing_salutation__c} {!GDB_Invoice__c.gdb_billing_lastname__c} {!GDB_Invoice__c.gdb_billing_firstname__c}</p>
+                        <strong>{!$Label.GDB_invoice_shipping_address}</strong>
+                        <p>{!GDB_Invoice__c.gdb_shipping_address1__c}</p>
+                        <p>{!GDB_Invoice__c.gdb_shipping_address2__c}</p>
+                        <p>{!GDB_Invoice__c.gdb_shipping_address3__c}</p>
+                        <p>{!GDB_Invoice__c.gdb_shipping_zip__c} {!GDB_Invoice__c.gdb_shipping_city__c}</p>
+                        <strong>{!$Label.GDB_invoice_shipping_date}</strong>
+                        <p><apex:outputText value="{0,date,dd/MM/yyyy}"><apex:param value="{!GDB_Invoice__c.gdb_shipping_date__c}" /> </apex:outputText></p>
+                        <strong>{!$Label.GDB_invoice_shipping_method}</strong>
+                        <p>{!GDB_Invoice__c.gdb_shipping_method_name__c}</p>
+                        <strong>{!$Label.GDB_invoice_account_number}</strong>
+                        <p>{!GDB_Invoice__c.gdb_Account__r.AccountNumber}</p>
+                        <strong>{!$Label.GDB_invoice_order_no}</strong>
+                        <p>{!GDB_Invoice__c.gdb_Order__r.gdb_orderNo__c}</p>
+                        <strong>{!$Label.GDB_invoice_email}</strong>
+                        <p>{!GDB_Invoice__c.gdb_email__c}</p>
+                        <strong>{!$Label.GDB_invoice_payment_method}</strong>
+                        <p>{!$Label.GDB_invoice_credit_card}</p>
+                        <p>
+                            <apex:outputText rendered="{!GDB_Invoice__c.gdb_Order__r.gdb_multiple_payment__c}" >{!$Label.GDB_invoice_payment_mulitple_time}</apex:outputText>
+                            <apex:outputText rendered="{! !GDB_Invoice__c.gdb_Order__r.gdb_multiple_payment__c}" >{!$Label.GDB_invoice_payment_one_time}</apex:outputText>
+                        </p>
+                        <div class="explication padding15"><apex:outputText rendered="{!GDB_Invoice__c.gdb_Order__r.gdb_multiple_payment__c}" >{!$Label.GDB_invoice_payment_deadline}</apex:outputText></div>
+                    </div>
+                </div>
+                <div id="col-order">
+                    <div class="title">{!$Label.GDB_invoice_title_order} &nbsp;<apex:outputText value="{0,date,dd/MM/yyyy}"><apex:param value="{!GDB_Invoice__c.gdb_Invoice_Date__c}" /> </apex:outputText><br></br> {!$Label.GDB_invoice_no} {!GDB_Invoice__c.gdb_sap_invoice_no__c}</div>
+                    <div class="padding15">
+                        <table id="resume" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <th>{!$Label.GDB_invoice_designation}</th>
+                                <th>{!$Label.GDB_invoice_quantity}</th>
+                                <th>{!$Label.GDB_invoice_unit_price}<br/>{!$Label.GDB_invoice_net_price}</th>
+                                <th>{!$Label.GDB_invoice_unit_price}<br/>{!$Label.GDB_invoice_gross_price}</th>
+                                <th>{!$Label.GDB_invoice_tax}</th>
+                                <th>{!$Label.GDB_invoice_amount}<br/>{!$Label.GDB_invoice_gross_price}</th>
+                            </tr>
+                            <apex:repeat value="{!Products}" var="item">
+                                <tr>
+                                    <td>{!item.Article_Name__c}</td>
+                                    <td>{!item.gdb_quantity__c}</td>
+                                    <td>{!item.gdb_unit_net_price__c}</td>
+                                    <td>{!item.gdb_unit_gross_price__c}</td>
+                                    <td>{!item.gdb_unit_tax__c}</td>
+                                    <td>{!item.gdb_total_gross_price__c}</td>
+                                </tr>
+                            </apex:repeat>
+                            <tr>
+                                <td>{!GDB_Invoice__c.gdb_shipping_method_name__c}</td>
+                                <td>{!$Label.GDB_invoice_quantity_one}</td>
+                                <td>{!GDB_Invoice__c.gdb_shipping_method_price__c - GDB_Invoice__c.gdb_shipping_method_tax__c}</td>
+                                <td>{!GDB_Invoice__c.gdb_shipping_method_price__c}</td>
+                                <td>{!GDB_Invoice__c.gdb_shipping_method_tax__c}</td>
+                                <td>{!GDB_Invoice__c.gdb_shipping_method_price__c}</td>
+                            </tr>
+                            <apex:variable var="v" value="" rendered="{!NOT(ISBLANK(GDB_Invoice__c.gdb_discount_name__c))}">
+                            <tr>
+                                <td>{!GDB_Invoice__c.gdb_discount_name__c}</td>
+                                <td>{!$Label.GDB_invoice_quantity_one}</td>
+                                <td>{!(GDB_Invoice__c.gdb_discount_price__c - GDB_Invoice__c.gdb_discount_tax__c) * -1}</td>
+                                <td>{!GDB_Invoice__c.gdb_discount_price__c * -1}</td>
+                                <td>{!GDB_Invoice__c.gdb_discount_tax__c * -1}</td>
+                                <td>{!GDB_Invoice__c.gdb_discount_price__c * -1}</td>
+                            </tr>
+                            </apex:variable>
+                            <tr class="totalLine">
+                                <td>{!$Label.GDB_invoice_total}</td>
+                                <td></td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td>
+                                    <apex:outputText value="{0, number, ######0.00}">
+                                        <apex:param value="{!GDB_Invoice__c.gdb_total_price_ttc__c}" />
+                                    </apex:outputText> {!CurrencySymbol}
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="prix" class="padding15">
+                            <table cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td>{!$Label.GDB_invoice_total_net_amount}</td>
+                                    <td>
+                                        <apex:outputText value="{0, number, ######0.00}">
+                                            <apex:param value="{!GDB_Invoice__c.gdb_total_price_ht__c}" />
+                                        </apex:outputText> {!CurrencySymbol}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>{!$Label.GDB_invoice_tax}</td>
+                                    <td>
+                                        <apex:outputText value="{0, number, ######0.00}">
+                                            <apex:param value="{!GDB_Invoice__c.gdb_total_tax__c}" />
+                                        </apex:outputText> {!CurrencySymbol}
+                                    </td>
+                                </tr>
+                                <tr class="totalLine">
+                                    <td>{!$Label.GDB_invoice_total_gross_amount}</td>
+                                    <td>
+                                        <apex:outputText value="{0, number, ######0.00}">
+                                            <apex:param value="{!GDB_Invoice__c.gdb_total_price_ttc__c}" />
+                                        </apex:outputText> {!CurrencySymbol}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="padding40">
+                    <div id="contact">
+                        <div class="title">{!$Label.GDB_invoice_contact_us}</div>
+                        <div class="padding15">
+                            <table>
+                                <tr>
+                                    <th><apex:image url="{!$Resource.GDB_Ecom + '/GDB_Ecom/img/form_tel.png'}"/>{!$Label.GDB_invoice_contact_by_phone}</th>
+                                    <th>{!$Label.GDB_invoice_contact_by_internet}</th>
+                                    <th>{!$Label.GDB_invoice_contact_by_mail}</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p>{!$Label.GDB_invoice_contact_for_calling}</p>
+                                        <p>{!$Label.GDB_invoice_contact_number_phone}</p>
+                                        <p>{!$Label.GDB_invoice_contact_days}</p>
+                                        <p>{!$Label.GDB_invoice_contact_no_surcharged_call}</p>
+                                    </td>
+                                    <td>
+                                        <p>{!$Label.GDB_invoice_contact_send_request}</p>
+                                        <p>{!$Label.GDB_invoice_contact_website}</p>
+                                        <p>{!$Label.GDB_invoice_contact_facebook}</p>
+                                        <p>{!$Label.GDB_invoice_contact_twitter}</p>
+                                    </td>
+                                    <td class="vertical-align-top">
+                                        <p>{!$Label.GDB_invoice_contact_customer_service}</p>
+                                        <p>{!$Label.GDB_invoice_contact_customer_service_address}</p>
+                                        <p>{!$Label.GDB_invoice_contact_customer_service_mail}</p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="footer">
+                    {!$Label.GDB_invoice_company_information}
+                </div>
+            </div>
+        </div>
+    </body>
+
+    </html>
+</apex:page>

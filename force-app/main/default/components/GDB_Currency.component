@@ -1,0 +1,20 @@
+<apex:component controller="GDB_CurrencyController" access="global">
+    <apex:attribute name="currencyCode"
+                    type="String"
+                    assignTo="{!currencyISOCode}"
+                    description="The currency ISO code"/>
+
+    <apex:attribute name="amount"
+                    type="Decimal"
+                    assignTo="{!amountValue}"
+                    description="The amount."/>
+
+    <span class="currency_block">
+        <span class="{!IF(amountValue == null, 'slds-hide hide', '')}">
+            <apex:outputText value="{!formattedAmountValue}" />
+        </span>
+        <span class="{!IF(amountValue == null, '', 'slds-hide hide')}">
+            {!currencyISOCode}
+        </span>
+    </span>
+</apex:component>

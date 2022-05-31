@@ -1,0 +1,11 @@
+<apex:page standardController="PTL__c" showHeader="False" sidebar="false"  >
+
+
+
+ 
+<apex:relatedList rendered="{!IF(PTL__c.Concurrent_3__c!=null,'','none')}"  subject="{!PTL__c.Concurrent_3__c}"   list="Butagaz_Stocks_Installed__r"/> 
+
+
+
+
+</apex:page>

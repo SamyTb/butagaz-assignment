@@ -1,0 +1,59 @@
+<apex:component >
+	
+	<!-- Annulation du contrat BUTAGAZ -->
+    <div class="contractSection" Style="page-break-before:always"> 
+    	<!--<p>----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+    	<br/><br/><br/><br/><br/><br/>-->
+        <h1>Bon de rétractation</h1>
+        <br/><br/>
+        <!--<p class="spaceBefore" align="justify">Veuillez compléter et renvoyer le présent formulaire uniquement si vous souhaitez vous rétracter du contrat <span style="color:#D32833;">(l’expédier au plus tard le
+            quatorzième jour à partir du jour de la conclusion du contrat ou, si ce délai expire normalement un samedi, un dimanche ou un jour férié
+            ou chômé, le premier jour ouvrable suivant).</span></p>-->
+        <p class="spaceBefore" align="justify">Veuillez compléter et renvoyer le présent formulaire uniquement si vous souhaitez vous rétracter du contrat (l’expédier au plus tard le
+            quatorzième jour à partir du jour de la conclusion du contrat ou, si ce délai expire normalement un samedi, un dimanche ou un jour férié
+            ou chômé, le premier jour ouvrable suivant).</p>
+        <br/>
+        <p class="spaceBefore" align="justify"><strong>A l’attention de BUTAGAZ SAS, 47-53, rue Raspail, 92594 LEVALLOIS-PERRET CEDEX :</strong></p>
+        <br/>
+        <p class="spaceBefore">
+        	<strong>Je vous notifie par la présente ma rétractation du contrat portant sur la fourniture de gaz en citerne :</strong>
+        </p>
+        <br/>
+        <p class="spaceBefore">
+        	<strong>Conclu le (date d’achat) : __/__/____</strong>
+        </p>
+        <br/>
+        <p class="spaceBefore">
+            <strong>Votre Nom : ___________________________________________________________________________________</strong>
+        </p>
+        <br/>
+        <p class="spaceBefore">
+            <strong>Votre Adresse : ________________________________________________________________________________</strong>
+        </p>
+        <br/>
+        <p class="spaceBefore">
+            <strong>______________________________________________________________________________________________</strong>
+        </p>
+        <br/><br/><br/>
+    </div>          
+    <table>
+        <tr>
+            <td colspan="1">
+                <p align="justify">
+                    Fait le :   __/__/____ 
+                </p>                
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="spaceBefore" align="justify">
+                    Signature du client : 
+                </p>                    
+            </td>
+        </tr>
+        <!--<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>-->
+        
+    </table>
+
+</apex:component>

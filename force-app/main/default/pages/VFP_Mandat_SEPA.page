@@ -1,0 +1,175 @@
+<apex:page standardController="Quote" renderAs="pdf" language="fr" showHeader="false">
+
+<html>
+    <head>
+        <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+
+            <style type="text/css" media="all">
+            
+            </style>
+    </head>
+</html>
+
+<!--************************* Mandat SEPA *************************-->
+<body>
+<Div id="containerMandatSEPA" >
+
+    <div class="footerRight">
+        <p align="right">Référence Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>             
+    </div> 
+    
+    <!-- Document Header -->  
+    <!-- <apex:image url="{!$Resource.test}" width="180" height="75"/> -->
+    
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+    
+    
+    <div style="page-break-inside: avoid;">
+        
+        <table align="left" width="98%" page-break-inside="avoid">
+                <tr>
+                    <td style="font-size:14pt; font-weight:bold; vertical-align:top;">
+                        <p align="left"><span style="font-size:14pt; font-weight:bold;">MANDAT DE PRELEVEMENT SEPA</span></p>
+                        <h3>Type de mandat : CORE</h3>
+                        <h3>Nature du prélèvement : récurrent / répétitif</h3>
+                    </td>
+                    <td style="width: 30%;text-align:right;">
+                        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:7pt; height: 20px; padding: 2pt;">
+                        &nbsp;</td>
+                </tr>
+        </table>
+        <br/><br/>
+        
+        <table align="left" width="98%" page-break-inside="avoid">
+                <tr>
+                    <td style="font-size:10pt; height: 20px; padding: 2pt;">
+                        Merci de compléter les informations ci-dessous avec les codes IBAN et BIC sans espaces qui figurent sur votre RIB :</td>
+                </tr>
+                <tr>
+                    <td style="font-size:4pt; height: 10px; padding: 2pt;">
+                        &nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="font-size:10pt; height: 20px; padding: 2pt; font-weight:bold;">
+                        BIC: </td>
+                </tr>
+                <tr>
+                    <td style="font-size:4pt; height: 10px; padding: 2pt;">
+                        &nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="font-size:10pt; height: 20px; padding: 2pt; font-weight:bold;">
+                        IBAN: </td>
+                </tr>
+                <tr>
+                    <td style="font-size:4pt; height: 10px; padding: 2pt;">
+                        &nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="font-size:10pt; height: 20px; padding: 2pt;">
+                        &nbsp;</td>
+                    <td style="font-size:10pt; height: 20px; padding: 2pt; font-weight:bold; width: 41%; ">
+                        Identifiant créancier SEPA : {!Quote.Opportunity.Account.Mandataire__r.Identifiant_Creancier_SEPA__c}
+                    </td>
+                </tr>
+                <tr>
+                    <td style="font-size:4pt; height: 10px; padding: 2pt;">
+                        &nbsp;</td>
+                </tr>
+        </table>
+        <p align="justify">&nbsp;</p>
+        
+        <table style="border-width:1px; border-style:solid;" align="left" width="98%" page-break-inside="avoid">
+                <tr>
+                    <td style="height: 20px; padding: 2pt; border-width:1px; border-style:solid;">
+                        <br/>
+                        <p align="left" style="font-weight:bold;">Coordonnées client</p><br/>
+                        <!-- <apex:outputfield value="{!Quote.Contact.Salutation}"/>&nbsp;{!Quote.Contact.FirstName}&nbsp;{!Quote.Contact.LastName}<br/>
+                        <apex:outputfield value="{!Quote.Opportunity.DO_Street_N__c}"/>&nbsp;<apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>&nbsp;<apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Street_name__c}"/><br/>
+                        <apex:outputfield value="{!Quote.Opportunity.DO_Lieu_dit__c}"/><br/> -->
+                        
+                        <!-- IF a Postal code and a city are filled THEN display it-->
+                        <!-- <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+                                      value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext> -->
+                        <!-- ELSE display City_Postal_Code__r.Name -->
+                        <!-- <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" 
+                                      value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext><br/> -->
+                        <br/>
+                    </td>
+                    <!-- <td style="height: 20px; width: 40%; padding: 2pt; border-width:1px; border-style:solid;">
+                        <br/>
+                        <p align="left" style="font-weight:bold;">Butagaz</p><br/>
+                        47-53 rue Raspail<br/>
+                        <br/>
+                        92300 LEVALLOIS PERRET<br/>
+                        FRANCE<br/>
+                        <br/>
+                    </td> -->
+                    <td style="height: 20px; width: 41%; padding: 2pt; border-width:1px; border-style:solid;">
+                        <br/>
+                        <p align="left" style="font-weight:bold;"><apex:outputfield value="{!Quote.Opportunity.Account.Mandataire__r.Name}"/></p><br/>
+                        <apex:outputfield value="{!Quote.Opportunity.Account.Mandataire__r.Client_support_Address__c}"/><br/>
+                        <br/>
+                        <apex:outputfield value="{!Quote.Opportunity.Account.Mandataire__r.Client_support_CP__c}"/>&nbsp;<apex:outputfield value="{!Quote.Opportunity.Account.Mandataire__r.Client_support_City__c}"/><br/>
+                        FRANCE<br/>
+                        <br/>
+                    </td>
+                </tr>
+        </table>
+        <br/>
+        <br/>
+        
+        <table align="left" width="98%" page-break-inside="avoid" border="0">
+            <tr>
+                <td colspan="2" style="height: 40px; padding: 2pt;" border="0">
+                    Les Parties conviennent d’un commun accord d’appliquer le délai de paiement expressément convenu entre elles dans le contrat qui les lie.
+                </td>
+            </tr>
+        </table>
+        
+        <table align="left" width="98%" page-break-inside="avoid" border="0">
+                <tr border="0" >
+                    <td style="height: 20px; padding: 2pt; font-weight:bold;" border="0">
+                        Référence unique du mandat : {!Quote.Client_Code__c}</td>
+                    <td style="height: 20px; width: 30%; padding: 2pt; font-weight:bold;" border="0">
+                        </td>
+                </tr>
+                <tr border="0" >
+                    <td style="height: 20px; padding: 2pt; font-weight:bold;" border="0">
+                        &nbsp;</td>
+                    <td style="height: 20px; width: 30%; padding: 2pt;" border="0">
+                        &nbsp;</td>
+                    <!-- <td style="height: 20px; width: 30%; padding: 2pt;" border="0">
+                        Signature :</td> -->
+                </tr>
+                
+                <tr border="0" >
+                    <td style="font-size:7pt; height: 50px; padding: 2pt; text-align: justify;" border="0">
+                        <p style="text-align-last: left;">En signant ce formulaire de mandat, vous autorisez (A) Butagaz à envoyer des instructions à votre banque pour débiter votre compte, et (B) votre banque à débiter votre compte conformément aux instructions de Butagaz. Vous bénéficiez du droit d'être remboursé par votre banque selon les conditions décrites dans la convention que vous avez passée avec elle. Une demande de remboursement doit être présentée dans les 8 semaines suivant la date de débit de votre compte pour un prélèvement autorisé, sans tarder et au plus tard dans les 13 mois en cas de prélèvement non autorisé.</p>
+                        <br/>
+                        <br/>
+                        Note : Vos droits concernant le présent mandat sont expliqués dans un document que vous pouvez obtenir auprès de votre banque.
+                    </td>
+                    <!-- <td style="height: 50px; width: 30%; padding: 2pt; border-width:1px; border-style:solid;">
+                        &nbsp;</td> -->
+                </tr>
+                
+                <div class ="ClientSignature" Style=" page-break-inside:avoid">
+                
+                </div>
+        </table>
+        
+    </div>  
+    
+    <!-- <div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div> -->
+           
+    <div class="clear"></div>
+      
+
+</div>  
+</body>
+</apex:page>

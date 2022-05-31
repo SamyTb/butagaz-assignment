@@ -1,0 +1,394 @@
+<apex:page language="fr" showHeader="false" sidebar="false" standardController="Quote" renderas="pdf" extensions="VFC_Quotelineitem_01" standardStylesheets="false">
+
+    <div id="containerGEBRE" Style="page-break-before:always;">
+            
+        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        <div class="footerRight">
+            <p align="right">Référence Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>          
+        </div>  
+        <div class="footer">
+            <p>{!$Label.Contract_ref_GEBRE}{!IF(isSE=='true',' SE','')}</p>
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+          </div>
+        <div class="clear"></div>
+
+        <div class="quoteBody">
+            <div>
+              <h1>Contrat de fourniture de gaz en bouteille pour un Revendeur Agréé<br/> CONDITIONS PARTICULI&Egrave;RES&nbsp; DU CONTRAT</h1>
+            </div>
+            
+            <h1>Client signataire</h1>
+            <table class="ButagazHorizontalTable">
+                <tr><td><strong>Référence Client :</strong>&nbsp;</td><td>{!Quote.Client_Code__c}</td></tr>
+                <apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c='PRO'}">
+                  <tr><td><strong>Raison Sociale :</strong>&nbsp;</td><td><apex:outputfield value="{!Quote.Opportunity.DO_Salutation__c}"/>&nbsp;{!Quote.Opportunity.DO_Name__c}</td></tr>
+                </apex:outputpanel>
+                <apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c='PRO' && Quote.DO_Groupement__c!=''}">
+                  <tr><td><strong>Centrale :</strong>&nbsp;</td><td>{!Quote.DO_Groupement__r.Name}</td></tr>
+                </apex:outputpanel>
+                <apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c='PRO' && Quote.Opportunity.Enseigne__c!=''}">
+                  <tr><td><strong>Enseigne :</strong>&nbsp;</td><td>{!Quote.Opportunity.Enseigne__r.Label_Enseigne__c}</td></tr>
+                </apex:outputpanel>
+                <apex:outputpanel rendered="{!Quote.Opportunity.Project_market_type__c!='PRO'}">
+                  <tr><td><strong>Particulier :</strong>&nbsp;</td><td><apex:outputfield value="{!Quote.Opportunity.DO_Salutation__c}"/>&nbsp;{!Quote.Opportunity.DO_Name__c}</td></tr>
+                </apex:outputpanel>
+                <br/>
+                <tr><td><strong>Adresse :</strong>&nbsp;</td><td>{!Quote.Opportunity.DO_Street_n__c}&nbsp;<apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp;<apex:outputfield value="{!Quote.Opportunity.DO_Street_type__c}"/>&nbsp;{!Quote.Opportunity.DO_Street_name__c}<br/>
+                <apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/><br/>
+                {!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}             
+                {!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}
+                </td></tr>
+            </table>
+        
+            <br/>
+            
+            <h2>Contact</h2>
+            <table class="ButagazHorizontalTable">
+                <tr><td><strong><span class="field">Nom et Prénom :</span></strong>&nbsp;<apex:outputfield value="{!Quote.Contact.salutation}"/>&nbsp; {!Quote.Contact.LastName}&nbsp;{!Quote.Contact.FirstName}</td></tr>           
+                <tr><td><strong><span class="field">Fonction :</span></strong>&nbsp;{!Quote.Contact.Quality__c}</td></tr>   
+                <tr><td><strong><span class="field">Téléphone portable :</span></strong>&nbsp;{!Quote.Contact_Mobile_Phone__c}</td></tr> 
+                <tr><td><strong><span class="field">Téléphone travail :</span></strong>&nbsp;{!Quote.Contact.Phone}</td></tr> 
+               <!-- <tr><td><strong><span class="field">E-mail :&nbsp;</span></strong>
+                              <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == FALSE}" 
+                              value="{!Quote.Opportunity.DO_Email__c}"></apex:outputtext> 
+                               <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == TRUE}" 
+                              value="Pas d'email"></apex:outputtext>        
+                </td></tr>-->
+                
+                 <tr><td colspan="3"><span class="field">
+                    <!-- Pas d'email -->
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == TRUE}" 
+                    value="Pas d'e-mail"></apex:outputtext>  
+                                   
+                   
+                      <!-- Email Principal --> 
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email__c != '' }" 
+                    value="E-mail principal : {!Quote.Opportunity.DO_Email__c}"></apex:outputtext> <br/>
+                    <br/>
+                    
+                    <!-- Email complémentaire --> 
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email_2__c!= '' }" 
+                    value="E-mail complémentaire : {!Quote.Opportunity.DO_Email_2__c}"></apex:outputtext> <br/>
+                    
+                    
+                    <p><br/>Vous avez choisi de recevoir par e-mail, SMS et courrier, des informations, des offres et des bons plans : </p>  <br/>
+                    
+                 <p align="justify" style="display:{!IF((Quote.Opportunity.Account.Optin_1__c == true || Quote.Opportunity.Account.Optin_2__c = true)  ,'','None')}">
+                 
+                    <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!Quote.Opportunity.Account.Optin_1__c=true  || Quote.Opportunity.Account.Optin_2__c=true }"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les produits et services en lien avec le gaz en bouteille Butagaz"/>
+                         
+                   </p> 
+                   
+                   
+                   <p align="justify" style="display:{!IF((Quote.Opportunity.Account.Optin_1__c == false && Quote.Opportunity.Account.Optin_2__c = false)  ,'','None')}">
+                 
+                    <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Opportunity.Account.Optin_1__c=false && Quote.Opportunity.Account.Optin_2__c=false}"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les produits et services en lien avec le gaz en bouteille Butagaz"/>
+                         
+                   </p> 
+                   
+                   
+                   
+                    <p align="justify" style="display: {!IF( Quote.Opportunity.Account.Optin_Partenaires__c == true ,'','None')}">
+                        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!Quote.Opportunity.Account.Optin_Partenaires__c = true}"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les autres produits et services du Groupe Butagaz *"/> 
+                    </p>
+                    
+                    <p align="justify" style="display: {!IF( Quote.Opportunity.Account.Optin_Partenaires__c == false ,'','None')}">
+                        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Opportunity.Account.Optin_Partenaires__c = false}"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les autres produits et services du Groupe Butagaz *"/> 
+                   </p>
+                    <br/>
+                    <p>{!$Label.VFP_ALL_CPV_GroupeBTZ}</p>
+                    <br/>
+                    <p>
+                    <b><p>{!$Label.VFP_ALL_CPV_ChoixClient}</p></b>
+                    </p>
+                    </span>       
+                </td></tr>
+                <!--MLC 20180914 DEMAT -->
+                <br/><br/>
+                <tr><td colspan="3">
+                    <span style="font-weight:bold">
+                    
+                             
+               <!-- Email 1 renseigné  et email 2 vide  et DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c ==''   )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+              
+              
+                <!--les emails sont renseignés et les DEMAT sont cochés  OK --> 
+                  <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c !='')  && (Quote.Opportunity.DEMAT1__c== TRUE && Quote.Opportunity.DEMAT2__c== TRUE)}" 
+                  value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+               
+                <!--les emails sont renseignés et l'un des DEMAT est coché OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c !='')  && (Quote.Opportunity.DEMAT1__c== FALSE || Quote.Opportunity.DEMAT2__c== FALSE)}" 
+                  value="Vous acceptez d’être informé par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+               
+                                         
+                  
+                <!-- Email 1 renseigné  et email 2 vide  et DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c ==''  && Quote.Opportunity.DEMAT1__c== TRUE )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+               
+                      
+                  
+                <!-- Email 1 renseigné  et email 2 vide  et pas DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c ==''  && Quote.Opportunity.DEMAT1__c== FALSE)}" 
+                 value="Vous acceptez d’être informé par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+              
+              
+              
+                  
+                <!-- Email 2 renseigné  et email 1 vide  et DEMAT 2 coché   --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c !=''  && Quote.Opportunity.DEMAT2__c== TRUE )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+               
+                      
+                  
+                <!-- Email 2 renseigné  et email 2 vide  et DEMAT 2 pas  coché   --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c !=''  && Quote.Opportunity.DEMAT2__c== FALSE)}" 
+                 value="Vous acceptez d’être informé par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+             
+             
+                  
+                    </span>         
+             </td></tr>
+            </table>
+            <table class="ButagazHorizontalTable">
+                <tr><td colspan="3">
+                  <span class="value">
+                      <!-- {!IF(Quote.Opportunity.DO_Optin_1__c, 
+                       'Non, je ne souhaite pas être informé(e) des nouveautés BUTAGAZ par e-mail.', 
+                       'Oui, je souhaite être informé(e) des nouveautés BUTAGAZ par e-mail.')} -->
+                      <p>En concluant un contrat de Revendeur Agréé de bouteilles de gaz avec BUTAGAZ, vous acceptez de recevoir des informations et des offres, sauf si vous vous y opposez en écrivant à votre Distributeur ou dans votre Espace Client sur Butagaz.fr.</p>
+                  </span>
+                </td></tr>
+            </table>
+            <!--  {!IF(Quote.Contact.HasOptedOutOfEmail, 
+              'Non, je ne souhaite pas être informé(e) des nouveautés BUTAGAZ par e-mail.', 
+              'Oui, je souhaite être informé(e) des nouveautés BUTAGAZ par e-mail.')}             
+                -->       
+                <div class="contractSection" Style="page-break-after:always" />  
+             <h1>Données de livraison</h1>
+             <table class="ButagazHorizontalTable">  
+                <tr><td><strong>Mode de livraison :</strong>&nbsp;</td><td><Apex:outputField value="{!Quote.Shipping_Condition__c}"/></td></tr>
+                <tr><td><strong>Adresse de livraison :</strong>&nbsp;</td><td>{!Quote.Opportunity.Street_number_project__c}&nbsp;<apex:outputfield value="{!Quote.Opportunity.Number_extention_project__c}"/>,&nbsp;<apex:outputfield value="{!Quote.Opportunity.Street_type_project__c}"/>&nbsp;{!Quote.Opportunity.Street_name_project__c}<br/>
+                <apex:outputtext rendered="{!Quote.Opportunity.Lieu_dit_Project__c !=null && Quote.Opportunity.Lieu_dit_Project__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.Lieu_dit_Project__c}"/><br/>
+                
+                    {!Quote.Opportunity.Project_City_Postal_Code__r.Name}
+                </td></tr>                                    
+             </table>
+             
+
+             <h1>Données commerciales</h1>
+             <table class="ButagazHorizontalTable">
+                  <tr><td><strong>Date de début du contrat :&nbsp;</strong></td><td><apex:outputtext value="{!PrettyDate}"/></td></tr>                       
+                  <tr><td><strong>Consommation annuelle estimée :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.Estimated_Consumption__c}"/>&nbsp;UB (Unité Bouteille) </td></tr>
+                  <apex:outputpanel rendered="{!Quote.DO_Groupement__c!=''}">
+                    <tr><td><strong>Nom de la centrale :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.DO_Groupement__r.Name}"/></td></tr>                
+                    <tr><td><strong>Code du magasin :&nbsp;</strong></td><td>{!Quote.DO_Adherent_Central_Number__c}</td></tr>
+                  </apex:outputpanel>
+                  <apex:outputpanel rendered="{!Quote.Opportunity.Enseigne__c!=''}">
+                    <tr><td><strong>Nom de l'enseigne :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.Opportunity.Enseigne__r.Label_Enseigne__c}"/></td></tr>                
+                  </apex:outputpanel>
+                  <tr><td><strong>Barème {!ScaleGEB} tranche :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.Product_Scale__c}"/></td></tr>
+                  <tr><td><strong>Mode de paiement :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.DO_Payment_method__c}"/></td></tr>
+                  <tr><td><strong>Délai de paiement :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.Payment_spread__c}"/></td></tr>
+                  <apex:outputpanel rendered="{!Quote.Remise_en_pourcentage__c!='' && Quote.Remise_en_pourcentage__c!='0 %'}">
+                    <tr><td colspan="2"><strong>Offre spéciale pour la mise en stock des charges (1ère livraison) :</strong></td></tr>
+                    <tr><td><strong>Remise en % :&nbsp;</strong></td><td><Apex:outputField value="{!Quote.Remise_en_pourcentage__c}"/></td></tr>
+                    <tr><td><strong>Sur les formats suivants :&nbsp;</strong></td><td><apex:outputText escape="false"  value="{!SUBSTITUTE(Quote.Bouteilles__c,';','<br/>')}"/></td></tr>
+                  </apex:outputpanel>
+                  <apex:outputpanel rendered="{!Quote.Opportunity.Account_Billed__c!=''}">
+                    <tr><td><strong>Nom de facturation :&nbsp;</strong></td><td>{!Quote.Opportunity.Billed_Name__c}<br/>                             
+                    </td></tr>
+                    <tr><td><strong>Adresse de facturation :&nbsp;</strong></td><td>{!Quote.Opportunity.Billed_Street_N__c}&nbsp;{!Quote.Opportunity.Billed_Street_type__c}&nbsp;{!Quote.Opportunity.Billed_Street_name__c}<br/>
+                        {!IF(Quote.Opportunity.Billed_Postal_Code__c !=null && Quote.Opportunity.Billed_City__c != '', Quote.Opportunity.Billed_Postal_Code__c &' ' &Quote.Opportunity.Billed_City__c, '')}             
+                        {!IF(Quote.Opportunity.Billed_Postal_Code__c == null && Quote.Opportunity.Billed_City__c == '', Quote.Opportunity.Billed_City_Postal_Code__r.Name, '')}                             
+                    </td></tr>
+                  </apex:outputpanel>            
+             </table>  
+                    
+              <apex:pageblock rendered="{!Quote.Saut_de_tranche__c!='0'}">
+                    <h1>Clause Particulière</h1>    
+                    <p class="spaceBefore" align="justify"> 
+                        Selon les Conditions Particulières de ce Contrat, le <strong>Revendeur Agréé</strong> est facturé du prix du gaz selon le barème {!ScaleGEB} en vigueur (cf barème ci-joint), celui-ci étant susceptible de varier à la hausse comme à la baisse conformément aux Conditions Générales du Contrat. 
+                    </p>
+                    <p class="spaceBefore" align="justify"> 
+                        Le barème {!ScaleGEB} établit des tranches de facturation suivant la consommation annuelle en Unités Bouteilles Butagaz (UB) du <strong>Revendeur Agréé</strong>. La consommation en Unités Bouteilles (UB) du <strong>Revendeur Agréé</strong> étant susceptible de varier d’une année sur l’autre, ceci peut avoir comme effet de faire changer le <strong>Revendeur Agréé</strong> de tranche de facturation selon le barème {!ScaleGEB}.
+                    </p>
+                    <p class="spaceBefore" align="justify">
+                        Chaque année au 1er Janvier, <strong>Butagaz</strong> constatera la consommation réelle en Unités Bouteilles Butagaz (UB) du <strong>Revendeur Agréé</strong> sur l’année passée, et facturera le <strong>Revendeur Agréé</strong> au titre des livraisons sur l’année suivante dans la tranche du barème {!ScaleGEB} correspondant. 
+                    </p>
+                    <p class="spaceBefore" align="justify">
+                        Compte tenu du volume potentiel de vente d’Unités Bouteilles (UB) Butagaz sur l’année déterminé par les Parties, le <strong>Revendeur Agréé</strong> devrait être facturé par Butagaz dans la tranche correspondante du barème {!ScaleGEB} pour l’année à venir. 
+                    </p>
+                    <p class="spaceBefore" align="justify">
+                        Par dérogation à ce qui précède et aux conditions du Contrat, <strong>Butagaz</strong> accepte, à titre exceptionnel, de faire bénéficier le <strong>Revendeur Agréé</strong>, à compter de la signature du présent contrat jusqu’au 31 Décembre de l’année en cours, de la facturation dans la tranche <strong>{!Quote.Tranche_finale__c}</strong> du barème {!ScaleGEB} en lieu et place de la tranche <strong>{!Quote.Opportunity.Account.Price_Group__c}</strong> telle que prévue pour l’année à venir, et ce, quelque soit la consommation réelle en Unités Bouteilles (UB) Butagaz du <strong>Revendeur Agréé</strong> durant la période de cet avantage commercial. 
+                    </p>
+                    <p class="spaceBefore" align="justify">
+                        A l’issue de la période durant laquelle cet avantage commercial est conconti, il sera appliqué automatiquement au <strong>Revendeur Agréé</strong> les conditions tarifaires strictes du Contrat. Ce dernier sera dès lors facturé pour les livraisons futures dans la tranche du barème {!ScaleGEB} correspondant à sa consommation réelle en Unités Bouteilles (UB) Butagaz sur l’année passée telle que constatée par <strong>BUTAGAZ</strong>.
+                    </p>
+                    <p class="spaceBefore" align="justify">
+                        Le bénéfice de cet avantage commercial étant accordé par <strong>Butagaz</strong> au <strong>Revendeur Agréé</strong> en considération de la personne de ce dernier, cet avantage commercial n’est pas transférable à un tiers ou à des ayants droit, sauf accord écrit de <strong>Butagaz</strong>.
+                    </p>
+                    <p class="spaceBefore" align="justify">
+                        En cas de vente par le <strong>Revendeur Agréé</strong> de son point de vente, le nouveau propriétaire qui souhaiterait conclure avec <strong>Butagaz</strong> un contrat de revendeur agréé Butagaz ne pourrait en aucun cas se prévaloir du bénéfice de l’avantage commercial susvisé. 
+                    </p>                
+            </apex:pageblock>
+            
+            <!--************************* Informations de contact pour signature électronique *************************-->
+            <!-- <div class="contractSection" layout="block" style="page-break-inside:avoid;" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}"> -->
+            <!-- <div class="contractSection" style="page-break-before:always;" rendered="{!isSE=='true'}"> -->
+            <!-- <div class="contractSection" layout="block" style="page-break-inside:avoid;" rendered="{!IF(isSE=='true',true,false)}"> -->
+            <div class="contractSection" layout="block" style="page-break-before:always; page-break-inside:avoid; page-break-after:always; display:{!if(isSE=='true',"block","none")};">
+                <apex:outputPanel layout="block" style="page-break-inside:avoid;">
+                    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                    <p class="nospace">Votre Contact :&nbsp; {!Quote.CreatedBy.Name}</p>
+                    <div class="ButagazSignature">
+                        <div class="ButagazCachet">
+                            <p>Pour Butagaz: votre Distributeur:</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="{!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value="{!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                        </div>
+                    </div>
+                </apex:outputPanel>
+            </div>
+            
+            <!--************************* Plan d'implantation *************************-->
+  
+            <!--<apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF(ScalesGEB.size>0,true,false)}">
+                  <apex:image url="{!$Resource.test}" width="180" height="75"/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+                  <br/>
+              
+                  <p style="text-align: center;">
+                        <span style="font-size:26px;"><strong>Barême</strong></span></p>
+                  <p align="center">
+                  
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <apex:repeat value="{!ScalesGEB}" var="att">                      
+                              <div style="width:100%;">
+                                  <p align="center">
+                                      <img src="{!URLFOR($Action.Attachment.Download, att.id)}" style="width:600px;height:600px;"/>
+                                  </p>
+                              </div>
+                        </apex:repeat>
+                  </p>
+            </apex:outputPanel>-->
+
+            <!--<div class="contractSection" layout="block" style="page-break-before:always;">-->
+            <div layout="block" style="page-break-inside:avoid;">
+              <apex:repeat value="{!ScalesGEBDoc}" var="doc">
+                    <div style="width:100%;">
+                          <p align="center">
+                                <apex:image url="/servlet/servlet.FileDownload?file={!doc.id}" style="height: 91%; width: 91%;"/>
+                          </p>
+                    </div>
+              </apex:repeat>
+            </div>
+
+
+
+            <!--<div class="contractSection" Style="page-break-inside:avoid">-->
+            <div class="contractSection" layout="block" style="page-break-inside:avoid; display:{!if(isSE!='true',"block","none")};">
+                <div class="Signatures">
+                    <h1>Signatures</h1>
+                    <!--<h1>{!IF(isSE!='true', 'Signatures', 'Acceptation des conditions')}</h1>-->
+                     <p class="spaceBefore" align="justify">
+                        Le Revendeur Agréé reconnaît expressément avoir pris connaissance des Conditions Générales du présent Contrat ({!$Label.Contract_ref_GEBRE}{!IF(isSE=='true',' SE','')}) qui font partie intégrante du 
+                        Contrat remis ce jour et en avoir accepté l’intégralité des clauses. Il en est de même des autres documents listés en sommaire et du barème en vigueur à la 
+                        remis à la signature du Contrat. Le Revendeur Agréé déclare par ailleurs avoir parfaite connaissance du caractère évolutif, pendant toute la durée du Contrat, du barème
+                         qui lui a été communiqué lors de la signature du Contrat. 
+                     </p>
+                     <br/><br/>                 
+                    <p class="spaceBefore"><strong>Fait en deux exemplaires originaux</strong></p>
+                    <div class="bigSpaceAfter"><p>&nbsp;</p></div>    
+                    <div class="clear"></div>
+
+                    <div class="ButagazSignature">                
+                        <p class="nospace">Votre Contact : {!Quote.CreatedBy.Name}</p>
+                        <br/>                  
+                        <br/>
+                        <p class="SpaceBefore">&nbsp;</p>
+                        <br/>
+                        <p class="SpaceBefore">&nbsp;</p>
+                        <br/>
+                        <p class="SpaceBefore">&nbsp;</p>
+                        <br/>                       
+                        <div class="bigSpaceAfter"><p>Signature :</p></div>
+
+                        <p>&nbsp;</p> 
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                        <div class="ButagazCachet">
+                            <p> Pour Butagaz: votre Distributeur:</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                        </div>
+                    </div>  
+                    
+                    
+                    <div class="ClientSignature">                 
+                        <p class=" nospace "> Client Signataire :&nbsp; <apex:outputfield value="{!Quote.Contact.salutation}"/>&nbsp; {!Quote.Contact.LastName}&nbsp;{!Quote.Contact.FirstName}</p>
+                        <br/>                  
+                        <br/>
+                        <!--<div style="display: {!IF(isSE!='true','','None')}">-->
+                            <p class="SpaceBefore">Date d’impression du contrat :&nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                            <br/>
+                            <p class="SpaceBefore">Date de début de contrat :&nbsp; <apex:outputtext value="{!Quote.Opportunity.Contract_Start_Date__c}"/> </p>
+                            <br/>
+                            <p class="SpaceBefore">Date de Signature :&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                            <br/>
+                            <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                            <br/>
+                            <div class="bigSpaceAfter"><p>Signature &nbsp;(1):</p></div>                            
+                    
+                            <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                            
+                            <div class="ButagazCachet">
+                                <p> Cachet commercial Revendeur Agréé</p>
+                                <br/>
+                                <p>&nbsp;</p>
+                                <br/>
+                                <p>&nbsp;</p>                    
+                            </div>                        
+                        <!--</div>-->
+                    </div>
+                    <!--<div style="display: {!IF(isSE=='true','','None')}">
+                        <p>Document signé électroniquement.</p>
+                    </div>-->
+                                   
+                </div>
+                <div class="clear"/>
+            </div>
+             
+        </div>
+    </div>
+</apex:page>

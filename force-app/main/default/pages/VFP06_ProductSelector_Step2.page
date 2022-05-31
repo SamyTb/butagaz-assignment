@@ -1,0 +1,552 @@
+<apex:page standardcontroller="Quote" extensions="VFC06_ProductSelector" id="page" tabStyle="Quote">
+
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    
+    <style>  
+        .activeTab {background-color: #E5C130; font-weight:bold; color:white; background-image:none;  font-size:13px;} 
+        .inactiveTab { background-color: #EEEEEE; color:black; background-image:none; font-weight:normal;font-size:13px;} 
+        .smallActiveTab {background-color: #DDB929; font-weight:bold; color:white; background-image:none;  font-size:11px;} 
+        .smallInactiveTab { background-color: #EEEEEE; color:black; background-image:none; font-weight:normal;font-size:11px;} 
+        .infield {width: 90px}
+    </style>
+    
+    <script type="text/javascript"> 
+      $.noConflict();
+
+        function startStatus(){
+    
+            $dialog.dialog('open');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+    
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+    </script>
+
+    <script>
+        function ChangeDot(fieldid) {
+            var searchInputId = 'div[id='+fieldid+']'; 
+            var local = '{!LocalCurrencyFormat}';
+            if(local == 'fr_FR'){           
+                    var inputValueBefore = jQuery(searchInputId).children('input').val();
+                    var inputValueAfter = inputValueBefore.replace(/\./g, ',');
+                    jQuery(searchInputId).children('input').val(inputValueAfter);           
+            }                          
+        }
+    </script>
+    
+    <apex:sectionheader title="{!oQuote.Name}" subtitle="{!$Label.pricing_subtitle_step2}"/>
+    <apex:form id="form">
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+        <apex:pageblock mode="maindetail"  id="pageBlockOppty">
+            <apex:pagemessages />
+
+            <apex:pageblockbuttons location="Top" >
+                
+                <apex:actionstatus id="QuoteCancel">
+                    <apex:facet name="start">
+                        <apex:commandbutton value="{!$Label.pricing_cancel}" disabled="true"/>
+                    </apex:facet>
+                    <apex:facet name="stop">
+                        <apex:commandbutton value="{!$Label.pricing_cancel}" action="{!cancel}"  status="modalStatus" />
+                    </apex:facet>
+                </apex:actionstatus>
+                
+                <apex:actionstatus id="QuoteBack">
+                    <apex:facet name="start">
+                        <apex:commandbutton value="{!$Label.pricing_back}" disabled="true"/>
+                    </apex:facet>
+                    <apex:facet name="stop">
+                        <apex:commandbutton value="{!$Label.pricing_back}" onclick="startStatus();" action="{!navigateToStep1Bis}" />
+                    </apex:facet>
+                </apex:actionstatus>
+
+                <apex:actionstatus id="QuoteSaveStatus">
+                    <apex:facet name="stop">
+                    <apex:commandbutton value="{!$Label.pricing_save}" action="{!SaveForm}"  status="modalStatus" rendered="{!hasSelectedProducts && PTLsOK && AbleToSave==true && onlyShowMode==false}">
+                    </apex:commandbutton>
+                    </apex:facet>
+                    <apex:facet name="start">
+                        <apex:commandbutton value="{!$Label.pricing_save}" disabled="true"/>
+                    </apex:facet>
+                </apex:actionstatus>
+
+            </apex:pageblockbuttons>
+        </apex:pageblock>
+
+            
+    <apex:pageBlock title="{!$Label.pricing_rebates}" id="resultsBlock1">
+        <apex:tabpanel switchType="client" id="tabPanelLignesDevis" tabClass="smallActiveTab" inactiveTabClass="smallInactiveTab" >
+            <apex:tab label="{!$Label.pricing_productInfo}">
+                <apex:pageBlockTable value="{!lPendingLineItemsView}" var="QLIView">
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.Name}" />
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column value="{!QLIView.QLI.Quote_PTL__r.PTL_Label__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.Family}" />
+                    <apex:column value="{!QLIView.QLI.Ger_consumption__c}" rendered="{!usesGerConsumption}" />
+                    <apex:column value="{!QLIView.QLI.Quantity}" />
+                    <apex:column value="{!QLIView.QLI.Quantity_Unit__c}" />
+                    <apex:column value="{!QLIView.QLI.Amount_Unit__c}" />
+                    <!-- Display monthly or annual Price --> 
+                    <apex:column headerValue="{!$ObjectType.QuoteLineItem.fields.Price_List_HT__c.label}">
+                        <apex:outputField value="{!QLIView.QLI.Price_List_HT__c}" rendered="{!NOT(QLIView.QLI.PricebookEntry.Product2.MonthlyPriceDisplay__c)}" />
+                        <apex:outputText value="{0, number, 0.00 €}" rendered="{!QLIView.QLI.PricebookEntry.Product2.MonthlyPriceDisplay__c}">
+                            <apex:param value="{!(QLIView.QLI.Price_List_HT__c/12)}" />
+                        </apex:outputText>
+                    </apex:column>
+                    <apex:column headerValue="{!$ObjectType.QuoteLineItem.fields.Price_List_TTC__c.label}">
+                        <apex:outputField value="{!QLIView.QLI.Price_List_TTC__c}" rendered="{!NOT(QLIView.QLI.PricebookEntry.Product2.MonthlyPriceDisplay__c)}" />
+                        <apex:outputText value="{0, number, 0.00 €}" rendered="{!QLIView.QLI.PricebookEntry.Product2.MonthlyPriceDisplay__c}">
+                            <apex:param value="{!(QLIView.QLI.Price_List_TTC__c/12)}" />
+                        </apex:outputText>
+                    </apex:column>
+                    <!-- End Display monthly or annual Price -->
+                    <apex:column value="{!QLIView.QLI.VAT_Percentage__c}" />
+                    <apex:column value="{!QLIView.QLI.Pricing_Unit__c}" />
+                    
+                    <!-- <apex:column value="{!QLIView.QLI.Transport_Increase_HT__c}" /> -->
+                    <apex:column headerValue="Majoration Transport HT" rendered="{!AND(NOT(isGEBCONS),NOT(isGrosVrac) , NOT(isGPLc))}">
+                        <apex:inputField value="{!QLIView.QLI.Transport_Increase_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', oQuote.Product_Scale__c == 'V3PL', onlyShowMode == false )}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Transport_Increase_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', oQuote.Product_Scale__c != 'V3PL', onlyShowMode == true )}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    <!-- <apex:column value="{!QLIView.QLI.Transport_Increase_TTC__c}" /> -->
+                    <apex:column headerValue="Majoration Transport TTC" rendered="{!AND(NOT(isGEBCONS),NOT(isGrosVrac) , NOT(isGPLc))}">
+                        <apex:inputField value="{!QLIView.QLI.Transport_Increase_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', oQuote.Product_Scale__c == 'V3PL', onlyShowMode == false )}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Transport_Increase_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', oQuote.Product_Scale__c != 'V3PL', onlyShowMode == true )}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                </apex:pageBlockTable> 
+            </apex:tab>
+
+            <apex:tab label="{!$Label.pricing_rebatesGroupement}" rendered="{!NOT(isGECPack)}">
+                <apex:variable value="{!0}" var="index"/> 
+                <apex:pageBlockTable value="{!lPendingLineItemsView}" var="QLIView">
+                    <apex:column headervalue="{!$ObjectType.Product2.Fields.Name.label}">
+                        <apex:outputField value="{!QLIView.QLI.PricebookEntry.Product2.Name}"/>
+                         <apex:variable value="{!index+1}" var="index"/>    
+                    </apex:column>                
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column value="{!QLIView.QLI.Quote_PTL__r.PTL_Label__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.Family}" />
+                    <apex:column value="{!QLIView.QLI.Ger_consumption__c}" rendered="{!usesGerConsumption}" />
+                    <apex:column value="{!QLIView.QLI.Quote.DO_Groupement__r.AccountNumber}" />
+                    <apex:column value="{!QLIView.QLI.Amount_Unit__c}" />
+                    
+                    <!-- NEW BUSINESS RULES FOR All GROUPEMENT REBATES : DISABLED ALL THE GROUPEMENT REBATE EXCEPT THE GROUPEMENT RCE HT/TTC DEPENDING IF WE ARE DOM/PRO -->
+                    <apex:column value="{!QLIView.QLI.Group_Commercial_Rebate_HT__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column value="{!QLIView.QLI.Group_Commercial_Rebate_TTC__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column value="{!QLIView.QLI.Group_Cyclical_Rebate_HT__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column headerValue="{!$Label.group_qty_rebate} {!$Label.pricing_HT}" value="{!QLIView.QLI.Group_Commercial_Rebate_HT__c}" rendered="{!isGEBCONS}"/>                    
+                    <apex:column value="{!QLIView.QLI.Group_Cyclical_Rebate_TTC__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column headerValue="{!$Label.group_qty_rebate} {!$Label.pricing_TTC}" value="{!QLIView.QLI.Group_Commercial_Rebate_TTC__c}" rendered="{!isGEBCONS}"/>                    
+                    <apex:column value="{!QLIView.QLI.Group_Cyclical_Rebate_lenght_in_months__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column headerValue="{!$Label.group_rce_rebate} {!$Label.pricing_HT}" rendered="{!NOT(isGEBCONS)}">
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_Group_RCE_HT">  
+                        <apex:inputField value="{!QLIView.QLI.Group_RCE_Rebate_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', QLIView.hasFamilyOfTypeProduct, onlyShowMode == false )}" 
+                            styleClass="infield" onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_Group_RCE_HT')" 
+                        />
+                      </div>  
+                        <apex:outputField value="{!QLIView.QLI.Group_RCE_Rebate_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', NOT(QLIView.hasFamilyOfTypeProduct), onlyShowMode == true )}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+
+                    <apex:column headerValue="{!$Label.group_rce_rebate} {!$Label.pricing_TTC}" rendered="{!NOT(isGEBCONS)}">
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_Group_RCE_TTC">   
+                        <apex:inputField value="{!QLIView.QLI.Group_RCE_Rebate_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', QLIView.hasFamilyOfTypeProduct, onlyShowMode == false )}" 
+                            styleClass="infield"  onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_Group_RCE_TTC')"
+                        />
+                       </div> 
+                        <apex:outputField value="{!QLIView.QLI.Group_RCE_Rebate_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', NOT(QLIView.hasFamilyOfTypeProduct), onlyShowMode == true )}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    <!-- FOLLOW OLD BUSINESS RULES THAT IS ACTUALLY OBSOLETE -->
+                    
+                    <!-- Remise Commerciale Groupement -->                    
+                    <!--<apex:column headerValue="{!$Label.group_commercial_rebate} ({!$Label.pricing_HT})" >
+                        <apex:inputField value="{!QLIView.QLI.Group_Commercial_Rebate_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', NOT(QLIView.RCOMToDisable))}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Group_Commercial_Rebate_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', QLIView.RCOMToDisable)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+
+                    <apex:column headerValue="{!$Label.group_commercial_rebate} ({!$Label.pricing_TTC})" >
+                        <apex:inputField value="{!QLIView.QLI.Group_Commercial_Rebate_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', NOT(QLIView.RCOMToDisable))}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Group_Commercial_Rebate_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', QLIView.RCOMToDisable)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>-->
+                    
+                    <!-- Remise Conjoncturelle Groupement -->   
+                    <!--<apex:column headerValue="{!$Label.group_cyclical_rebate} ({!$Label.pricing_HT})" >
+                        <apex:inputField value="{!QLIView.QLI.Group_Cyclical_Rebate_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', NOT(QLIView.RCONJToDisable))}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Group_Cyclical_Rebate_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', QLIView.RCONJToDisable)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+
+                    <apex:column headerValue="{!$Label.group_cyclical_rebate} ({!$Label.pricing_TTC})" >
+                        <apex:inputField value="{!QLIView.QLI.Group_Cyclical_Rebate_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', NOT(QLIView.RCONJToDisable))}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Group_Cyclical_Rebate_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', QLIView.RCONJToDisable)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    <apex:column headerValue="{!$Label.group_cyclical_rebate_length}" >
+                        <apex:inputField value="{!QLIView.QLI.Group_Cyclical_Rebate_lenght_in_months__c}" 
+                            rendered="{!NOT(QLIView.RCONJToDisable)}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Group_Cyclical_Rebate_lenght_in_months__c}" 
+                            rendered="{QLIView.RCONJToDisable}" 
+                            styleClass="infield"
+                        />
+                    </apex:column> -->
+            
+                </apex:pageBlockTable>
+            </apex:tab>
+           
+            <apex:tab label="{!$Label.pricing_rebates}"> 
+                <apex:variable value="{!0}" var="index"/>               
+                <apex:pageBlockTable value="{!lPendingLineItemsView}" var="QLIView">
+                    <apex:column headervalue="{!$ObjectType.Product2.Fields.Name.label}">
+                        <apex:outputField value="{!QLIView.QLI.PricebookEntry.Product2.Name}"/>
+                         <apex:variable value="{!index+1}" var="index"/>    
+                    </apex:column>
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column value="{!QLIView.QLI.Quote_PTL__r.PTL_Label__c}" rendered="{!NOT(isGEBCONS)}"/>
+                    <apex:column value="{!QLIView.QLI.PricebookEntry.Product2.Family}" />
+                    <apex:column value="{!QLIView.QLI.Ger_consumption__c}" rendered="{!usesGerConsumption}" />
+                    <apex:column value="{!QLIView.QLI.Amount_Unit__c}" />
+
+                    <!-- Remise Commerciale -->
+                    <apex:column headerValue="{!$Label.pricing_commercialRebate} {!$Label.pricing_HT}" rendered="{!NOT(isGEBCONS) &&NOT(isGECECOCFT) }"> <!--// MLC 20180104  retirer && NOT(isGECPack)-->
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_RCOM_HT">                                 
+                        <apex:inputField value="{!QLIView.QLI.Commercial_Rebate_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', NOT(QLIView.RCOMToDisable), onlyShowMode == false)}" 
+                            styleClass="infield" onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_RCOM_HT')" 
+                        />
+                      </div>
+                        <apex:outputField value="{!QLIView.QLI.Commercial_Rebate_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', QLIView.RCOMToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+
+                    <apex:column headerValue="{!$Label.pricing_commercialRebate} {!$Label.pricing_TTC}" rendered="{!NOT(isGEBCONS) &&NOT(isGECECOCFT) && NOT(isGECOPTIMO) }"> <!--// MLC 20180104  retirer && NOT(isGECPack) // 20210129 -->
+                     <div id="{!round(index,0)}_{!QLIView.QLI.id}_RCOM_TTC"> 
+                        <apex:inputField value="{!QLIView.QLI.Commercial_Rebate_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', NOT(QLIView.RCOMToDisable), onlyShowMode == false)}" 
+                            styleClass="infield"  onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_RCOM_TTC')"
+                        />
+                     </div>   
+                        <apex:outputField value="{!QLIView.QLI.Commercial_Rebate_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', QLIView.RCOMToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+
+                    <!-- Remise Conjoncturelle -->
+                    <apex:column headerValue="{!$Label.pricing_cyclicalRebate} {!$Label.pricing_HT}" rendered="{!NOT(isGECPack && (OptyProjectType='CREA' || OptyProjectType='EXTE') )}" ><!--// MLC 20200727 ajout de la condition sur fide // 20210406 ajout SUCC-->
+                     <!--    <apex:column headerValue="{!$Label.pricing_cyclicalRebate} {!$Label.pricing_HT}" rendered="{!NOT(isGECECOCFT) && NOT(isGECOPTIMO) && (OptyProjectType!='FIDE' || )  }" >--> 
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_RCONJ_HT">
+                        <apex:inputField value="{!QLIView.QLI.Cyclical_Rebate_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', NOT(QLIView.RCONJToDisable), onlyShowMode == false)}" 
+                            styleClass="infield"  onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_RCONJ_HT')"
+                        />
+                       </div> 
+                        <apex:outputField value="{!QLIView.QLI.Cyclical_Rebate_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', QLIView.RCONJToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    <apex:column headerValue="{!$Label.pricing_cyclicalRebate} {!$Label.pricing_TTC}" rendered="{!AND(NOT(isGECOPTIMO),NOT(isGECPack && (OptyProjectType='CREA' || OptyProjectType='EXTE')))}" > <!--// MLC 20200727 ajout de la condition sur fide // 20210406 ajout SUCC-->
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_RCONJ_TTC">                     
+                        <apex:inputField value="{!QLIView.QLI.Cyclical_Rebate_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', NOT(QLIView.RCONJToDisable), onlyShowMode == false)}" 
+                            styleClass="infield"  onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_RCONJ_TTC')"
+                        />
+                      </div>  
+                        <apex:outputField value="{!QLIView.QLI.Cyclical_Rebate_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', QLIView.RCONJToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    
+                    <apex:column headerValue="{!$Label.pricing_cyclicalRebateMonths}" rendered="{!AND(NOT(isGEBCONS) ,NOT(isGECOPTIMO), NOT(isGECPack && (OptyProjectType='CREA' || OptyProjectType='EXTE')))}"> <!--// MLC 20200727 ajout de la condition sur fide-->
+                        <apex:inputField value="{!QLIView.QLI.Cyclical_Rebate_Months__c}" 
+                            rendered="{!AND(NOT(QLIView.RCONJToDisable), onlyShowMode == false)}" 
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLIView.QLI.Cyclical_Rebate_Months__c}" 
+                            rendered="{!OR(QLIView.RCONJToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    <!-- RCE -->
+                    <!-- <apex:column headerValue="{!$Label.pricing_RCERebate} ({!$Label.pricing_HT})" rendered="{!NOT(isGEBCONS)&&NOT(isGECECOCFT)}"> -->
+                    <apex:column headerValue="{!$Label.pricing_RCERebate} ({!$Label.pricing_HT})" rendered="{!AND( NOT(isGEBCONS),   NOT(isGECECOCFT  && OptyProjectType!='FIDE' ) )}">
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_RCE_HT">  
+                        <apex:inputField value="{!QLIView.QLI.RCE_Rebate_HT__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'HT', NOT(QLIView.RCEToDisable), onlyShowMode == false)}" 
+                            styleClass="infield"  onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_RCE_HT')"
+                        /> 
+                      </div>                        
+                        <apex:outputField value="{!QLIView.QLI.RCE_Rebate_HT__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'TTC', QLIView.RCEToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+
+                    <apex:column headerValue="{!$Label.pricing_RCERebate} ({!$Label.pricing_TTC})" rendered="{!AND( NOT(isGEBCONS),  NOT( isGECECOCFT  && OptyProjectType!='FIDE' ) )}">  <!--  NOT(isGECOPTIMO), MLC 20210129 -->
+                      <div id="{!round(index,0)}_{!QLIView.QLI.id}_RCE_TTC">    
+                        <apex:inputField value="{!QLIView.QLI.RCE_Rebate_TTC__c}" 
+                            rendered="{!AND(oQuote.Tax_model__c == 'TTC', NOT(QLIView.RCEToDisable), onlyShowMode == false)}" 
+                            styleClass="infield"  onchange="ChangeDot('{!round(index,0)}_{!QLIView.QLI.id}_RCE_TTC')"
+                        />
+                      </div>  
+                        <apex:outputField value="{!QLIView.QLI.RCE_Rebate_TTC__c}" 
+                            rendered="{!OR(oQuote.Tax_model__c == 'HT', QLIView.RCEToDisable, onlyShowMode == true)}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    <apex:column headervalue="Mois offerts" rendered="{!isGECPack}" value="{!QLIView.QLI.Offered_Months__c}">
+                        <!--  <apex:outputField value="{!oQuote.Action_Commerciale__r.Offered_Months__c}"/>-->
+                    </apex:column>
+                    
+                    <!--
+                    <apex:column headervalue="Mois abo. offerts" rendered="{!isGECPack}" value="{!QLIView.QLI.Offered_Redevance_Nb_Months__c}">
+                    </apex:column>
+                    -->
+                    
+                    <apex:column headervalue="TAEG TTC">
+                        <apex:outputField value="{!QLIView.QLI.TAEG_Amount_TTC__c}" 
+                            rendered="{!QLIView.hasFamilyOfTypeProduct}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    <apex:column headervalue="TAEG %">
+                        <apex:outputField value="{!QLIView.QLI.TAEG_Percentage__c}" 
+                            rendered="{!QLIView.hasFamilyOfTypeProduct}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                    
+                                    
+                </apex:pageBlockTable>
+            </apex:tab>
+            <apex:tab label="{!$Label.tank_informations}" rendered="{!renderTabTank}">
+                <apex:pageBlockTable value="{!lPendingTankLineItems}" var="QLI">
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Name}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column value="{!QLI.Quote_PTL__r.PTL_Label__c}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Family}" />
+                    <apex:column headerValue="{!$Label.placing_options}" >
+                        <apex:outputField value="{!QLI.Tank_Placing_Options__c}" styleClass="infield" />
+                    </apex:column>
+                    <apex:column headerValue="{!$Label.mis_a_disposition}" >
+                        <apex:outputField value="{!QLI.Mis_Disposition__c}" styleClass="infield" />
+                    </apex:column>
+                </apex:pageBlockTable> 
+            </apex:tab>
+           
+            <apex:tab label="Informations citernes client" rendered="{!renderTabTankClient}">           
+                <apex:pageBlockTable value="{!lPendingTankLineItems}" var="QLI">
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Name}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column headerValue="{!$Label.mis_a_disposition}" >
+                        <apex:outputField value="{!QLI.Mis_Disposition__c}" styleClass="infield" />
+                    </apex:column>
+                    
+                    <apex:column headerValue="N° de série">     
+                        <apex:inputField value="{!QLI.Customer_Owned_Tank_Serial_Number__c}" 
+                            rendered="{!AND(QLI.Mis_Disposition__c == 'Customer Owned Tank', onlyShowMode == false)}"
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLI.Customer_Owned_Tank_Serial_Number__c}" 
+                            rendered="{!onlyShowMode == true}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="Libellé"> 
+                        <apex:inputField value="{!QLI.Customer_Owned_Tank_Name__c}" 
+                            rendered="{!AND(QLI.Mis_Disposition__c == 'Customer Owned Tank', onlyShowMode == false)}"
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLI.Customer_Owned_Tank_Name__c}" 
+                            rendered="{!onlyShowMode == true}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="Capacité de la Citerne (kg)"> 
+                        <apex:inputField value="{!QLI.Customer_Owned_Tank_Capacity__c}" 
+                            rendered="{!AND(QLI.Mis_Disposition__c == 'Customer Owned Tank', onlyShowMode == false)}"
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLI.Customer_Owned_Tank_Capacity__c}" 
+                            rendered="{!onlyShowMode == true}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="Constructeur">    
+                        <apex:inputField value="{!QLI.Brand__c}" 
+                            rendered="{!AND(QLI.Mis_Disposition__c == 'Customer Owned Tank', onlyShowMode == false)}"
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLI.Brand__c}" 
+                            rendered="{!onlyShowMode == true}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="Date d’épreuve initiale"> 
+                        <apex:inputField value="{!QLI.Customer_Owned_Tank_Appr_Date__c}" 
+                            rendered="{!AND(QLI.Mis_Disposition__c == 'Customer Owned Tank', onlyShowMode == false)}"
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLI.Customer_Owned_Tank_Appr_Date__c}" 
+                            rendered="{!onlyShowMode == true}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    <apex:column headerValue="Ré épreuve décennale avant le">   
+                        <apex:inputField value="{!QLI.Customer_Owned_Tank_ReApprBefore_Date__c}" 
+                            rendered="{!AND(QLI.Mis_Disposition__c == 'Customer Owned Tank', onlyShowMode == false)}"
+                            styleClass="infield"
+                        />
+                        <apex:outputField value="{!QLI.Customer_Owned_Tank_ReApprBefore_Date__c}" 
+                            rendered="{!onlyShowMode == true}" 
+                            styleClass="infield"
+                        />
+                    </apex:column>
+                    
+                </apex:pageBlockTable>
+            </apex:tab>
+            
+            
+            
+            <!--
+            <apex:tab label="{!$Label.Replacement_information}" rendered="{!renderTabGotFromSAP}">
+                <apex:pageBlockTable value="{!lPendingGotFromSAPExceptEquipementLineItems}" var="QLI">
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Name}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column value="{!QLI.Quote_PTL__r.PTL_Label__c}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Family}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Sub_Type__c}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Payment_type__c}" />
+                    <apex:column headerValue="{!$Label.Remplacement}">
+                        <apex:inputField value="{!QLI.Remplacement__c}" styleClass="infield" rendered="{!onlyShowMode == false}"/>
+                        <apex:outputField value="{!QLI.Remplacement__c}" styleClass="infield" rendered="{!onlyShowMode == true}"/>                            
+                    </apex:column>    
+                </apex:pageBlockTable> 
+            </apex:tab>  
+              -->          
+            <apex:tab label="{!$Label.deconsignation_replacement_information}" rendered="{!renderTabGotFromSAP}">
+                <apex:pageBlockTable value="{!lPendingGotFromSAPExceptEquipementLineItems}" var="QLI">
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Name}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.ProductCode}" />
+                    <apex:column value="{!QLI.Quote_PTL__r.PTL_Label__c}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Family}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Sub_Type__c}" />
+                    <apex:column value="{!QLI.PricebookEntry.Product2.Payment_type__c}" />
+                    <apex:column headerValue="{!$Label.Remplacement}" rendered="{!NOT(isGECDOM) && NOT(isGECPack)}">
+                        <apex:inputField value="{!QLI.Remplacement__c}" styleClass="infield" rendered="{!onlyShowMode == false}"/>
+                        <apex:outputField value="{!QLI.Remplacement__c}" styleClass="infield" rendered="{!onlyShowMode == true}"/>                            
+                    </apex:column>    
+                    <apex:column headerValue="{!$Label.deconsignation}">
+                        <apex:inputField value="{!QLI.Deconsignation__c}" styleClass="infield" rendered="{!onlyShowMode == false}"/>
+                        <apex:outputField value="{!QLI.Deconsignation__c}" styleClass="infield" rendered="{!onlyShowMode == true}"/>                            
+                    </apex:column>    
+                </apex:pageBlockTable> 
+            </apex:tab>
+        </apex:tabpanel>
+    </apex:pageBlock>
+</apex:form>
+    
+        <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}" style="display:none">
+            <div>
+                <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+                 <apex:outputText value="{!$Label.pricing_popup_message_wait}" />
+            </div>
+        </div>
+    
+        <script>
+          var $dialog;
+          var $validationOutputDialog;
+          jQuery(document).ready(function($) {
+                $(function() {
+                
+                $dialog =jQuery("#dialog-modal")
+                    .dialog({
+                        autoOpen: false,
+                        height: 150,
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false
+                });
+                
+                $validationOutputDialog =jQuery("#validationOutputBox")
+                    .dialog({
+                        autoOpen: false,
+                        modal: true,
+                        closeOnEscape: true,
+                        resizable: false,
+                        buttons: [
+                            {
+                                text: "Ok",
+                                click: function() { $(this).dialog("close");}
+                            }
+                        ] ,
+                        width: 450
+                });
+                
+            });
+          });
+    </script>
+</apex:page>

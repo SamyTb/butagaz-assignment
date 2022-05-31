@@ -1,0 +1,15 @@
+<apex:page >
+  <!-- Begin Default Content REMOVE THIS -->
+  <div id="containerNOPRINT3">
+  
+  
+  
+                          <h1>GESTE COMMERCIAL : RIEN A IMPRIMER</h1>
+                          <p> Vous avez choisi le réengagement client "Geste commercial" dans le devis, il n'y a donc rien à imprimer</p>
+  
+  
+  
+  
+  </div>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

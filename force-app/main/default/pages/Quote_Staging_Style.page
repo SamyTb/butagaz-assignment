@@ -1,0 +1,308 @@
+<apex:page standardController="Quote" showHeader="false" standardStylesheets="false">
+    <html>
+    <body>
+    <style type="text/css" media="all">
+
+
+        /* Reset CSS */
+        
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,
+        dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed, 
+        figure, figcaption, footer, header, hgroup, 
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+          margin: 0;
+          padding: 0;
+          border: 0;
+          font-size: 100%;
+          font: inherit;
+          vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure, 
+        footer, header, hgroup, menu, nav, section {
+          display: block;
+        }
+        body {
+          line-height: 1;
+        }
+        ol, ul {
+          list-style: none;
+        }
+        blockquote, q {
+          quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+          content: '';
+          content: none;
+        }
+        
+        /* Specific printing styles */
+        body {
+          font-family: "Arial", "Helvetica", sans-serif;
+          font-size: 10pt;
+        }
+        
+        h1 {
+            font-size: 14pt;
+            font-weight: bold;
+            background-color: #8DB3E2;
+            text-decoration: none;
+            border:#000000 solid 1px;
+            text-align: center;
+            padding: 2pt;
+            width: 98%;
+            margin: 18pt 0 12pt 0;
+        }
+        
+        h2 {
+          font-size: 12pt;
+          font-weight: bold;
+          margin: 12pt 0 12pt 0;
+          padding: 2pt;
+        }
+        
+        h3 {
+          font-size: 10pt;
+          font-weight: bold;
+          margin: 6pt 0 10pt 0;
+          padding: 2pt;
+        }
+        h4 {
+          font-size: 9pt;
+          font-weight: bold;
+          margin: 6pt 0 8pt 0;
+          padding: 2pt;
+        }
+         h5 {
+          font-size: 8pt;
+          font-weight: bold;
+          margin: 6pt 0  6pt 0;
+          padding: 2pt;
+        }
+        
+        strong {
+          font-weight: bold;
+        }
+        
+        table {
+          margin: 6pt 0 0 0;
+          border-collapse: collapse;
+          border-spacing: 0;
+          
+        }
+       
+                
+        
+        
+        .spaceBefore {
+          margin-top: 12pt;
+        }
+        
+        .ButagazTable {
+            color: #000;
+            text-decoration: none;
+            border:#000000 solid 1px;
+            align: left;
+            width: 98%
+        }
+        
+        .square, .circle {
+          margin: 0 0 0 10pt;
+          padding: 0 0 0 10pt;
+        }
+        .square {
+          list-style:square;
+        }
+        .circle {
+          list-style:circle;
+        }
+        .smallWidth {
+          width: 10%;
+        }
+        .number {
+          width: 10%;
+          text-align: right;
+        }
+        
+        .ButagazTable td, th {
+            padding: 2pt;
+            font-size: 8pt;
+            border: #000000 solid 1px;
+              
+        }
+        
+        .ButagazHorizontalTable {
+          border: none;
+        }
+        
+        .ButagazHorizontalTable th {
+          font-size: 8pt;
+          font-weight: bold;
+          border: none;
+          text-align: left;
+        }
+        
+        .ButagazTable td {
+          border-top: none;
+          
+        }
+        
+        .ButagazTable th {
+            background-color: #cccccc;
+            font-weight: bold;
+            text-align: center;
+            border: #000000 solid 1px;
+            
+        }
+        .ButagazTableHeader {
+            font-size: 10pt;
+            margin: 0;
+            padding: 0
+        }
+        .emphasis {
+            font-weight: bold;
+        }
+        
+        p.nospace {
+            margin: 0px;
+        }
+        
+        .smallNote {
+            font-size: 8pt;
+            font-style: italic;
+        }
+        
+        .clear {
+           height: 100;
+           font-size: 12px;
+           margin: 0;
+           padding: 0;
+           clear: both;
+        }
+        
+        .Signatures {
+          width: 100%;
+          margin-top: 48pt;
+        }
+        
+        .Signatures p{
+          font-size: 10pt;
+          margin: 0pt;
+        }
+        
+        .contractSection {
+          margin-top: 18pt;
+          display: block;
+        }
+        
+        .contractSectionWithPageBreakAfter {
+          page-break-after: always;
+        }
+        
+        .ButagazSignature {
+          float: left;
+          width: 48%;
+        }
+        
+        .ClientSignature {
+          float: left;
+          width: 48%;
+        }
+        
+        
+        .header {
+            margin-top: 10pt;
+        }
+        
+        .quoteBody {
+            margin-top: 200pt;
+            /*background-color: #eeeeee;*/
+            padding: 0;
+            margin: 0;
+        }
+        
+        .dateDevis {
+            float: right;
+            width: 47%;
+        }
+        
+        .ButagazAddress, .ClientAddress {
+            /*border:#000000 solid 1px;*/
+            padding: 0;
+            margin: 0;
+            font-size: 10pt;
+            float: left;
+            width: 47%;
+            margin: 1% 0 1% 1%;
+        }
+        
+        .clientAddress {
+          width: 49%;
+        }
+        .ButagazAddress p, .ClientAddress p {
+          margin: 0px;
+        }
+        
+        .ButagazAddress .smallNote {
+          font-size: 8pt;
+          font-style: normal;
+        }
+        
+        .ClientAddress {
+            float: right;
+        }
+        
+       .footer {                
+                    display: block;             
+                    padding: 5px;               
+                    position: running(footer);          
+                }
+        
+        #containerGECPRO, #containerGECDOM, #containerGrosVrac, #containerGER,#containerGECDOM_IDEOSOLO {
+           margin: 0;
+           padding: 0;
+           width: 100%;
+           /*background-color: #fc9;*/
+        }
+        
+        #containerGECPRO {
+          display: {!IF(Quote.Opportunity.Account.Activity_Domain__r.Name='GEC - Gaz en citerne' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Account.Market_Type__c='PRO', '', 'none')}; 
+        }
+        
+        #containerGECDOM {
+          display: {!IF(Quote.Activity_Domain_Opportunity__c='GEC - Gaz en citerne' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Market_type__c='DOM'
+          &&Quote.Opportunity.RecordType.Name=='GEC DOM', '', 'none')};
+        }
+        
+        #containerGECDOM_IDEOSOLO {
+          display: {!IF(Quote.Activity_Domain_Opportunity__c='GEC - Gaz en citerne' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Market_type__c='DOM'
+          && AND ( Quote.Opportunity.RecordType.Name=='GEC DOM SOLO',Quote.Opportunity.RecordType.Name=='GEC DOM IDEO'), '', 'none')};
+        }
+        
+        #containerGrosVrac {
+          display: {!IF(Quote.Direct_Client__c='Gros Vrac', '', 'none')};
+        }
+        
+        #containerGER {
+          display: {!IF(Quote.Activity_Domain_Opportunity__c='GER - Gaz en réseau', '', 'none')};
+        }
+        
+        
+
+        
+       
+        
+    </style>
+    </body>
+    </html>
+</apex:page>

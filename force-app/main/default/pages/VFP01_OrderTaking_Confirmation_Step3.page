@@ -1,0 +1,136 @@
+<apex:page standardController="Order__c" extensions="VFC01_OrderTaking_Simulation" tabStyle="Order__c" wizard="false">
+      <apex:sectionHeader title="{!VpageTitle}" subtitle="{!$Label.confirmation_step3}"/> 
+      <apex:outputText value="{!$Label.validation_step2_required}" rendered="{!NOT(detailsController.VdetailsStepDone)}"  /> 
+      <apex:pageMessages rendered="{!NOT(VsucessControl)}"/>
+      <apex:form rendered="{!AND(VsucessControl, detailsController.VdetailsStepDone)}">
+          <apex:pageBlock title="{!VpageTitle}" id="confirmationStep">
+          <apex:pageMessages />
+          <apex:pageBlockSection >
+              <apex:outputText label="{!$Label.current_user}" value="{!userCRM}"/>
+              <apex:pageBlockSectionItem rendered="true"/>
+              <apex:outputField value="{!order.Name}"/>
+         </apex:pageBlockSection>
+          <apex:pageBlockSection title="{!$Label.account_section_name}" id="accountSection">
+                          <apex:outputField value="{!contract.Account.AccountNumber}"/> 
+                          <apex:outputField value="{!contract.Mandataire__r.Name}"/> 
+                          <apex:outputField value="{!contract.Account.Name}"/>                  
+                          <apex:outputField value="{!contract.Account.Sensible_Client__c}"/> 
+                          <!-- <apex:outputField label="Point d\'expédition/MDT" value="{!contract.PTL__r.Code_division__c}" /> -->
+                          <apex:outputField value="{!order.Dispatching_point__c}"/>
+                          <apex:outputField value="{!contract.PTL__r.Code_division_value__c}" /> 
+                          <apex:outputField value="{!order.Command_center__c}"/>
+                          <apex:pageBlockSectionItem rendered="true"/>
+                          <apex:outputField value="{!contract.Account.Email__c}"/>
+                          <apex:outputField value="{!contract.Account.Email_2__c}"/>
+                          <apex:outputField value="{!contract.Account.No_E_mail__c}"/>
+                          <script>twistSection(document.getElementById("{!$Component.accountSection}").childNodes[0].childNodes[0]);</script> 
+              </apex:pageBlockSection>
+                   
+          <apex:pageBlockSection title="PTL" id="ptlSection">
+                       <apex:outputField value="{!contract.PTL__r.Name}"/>
+                       <apex:outputField value="{!contract.PTL__r.Activity_Domain__r.Name}"/>
+                       <apex:outputField value="{!contract.PTL__r.Address__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Code_branche__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Code_branche_value__c}"/>
+                       <apex:outputField value="{!contract.Equipement__r.Article__r.Name}"/>
+                       <apex:outputField label="{!$Label.product_label}" value="{!contract.Product__r.Name}"/>
+                       <apex:outputField value="{!contract.Equipement__r.Capacity_Tank__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Mobile_Phone_Number__c}"/> 
+                       <apex:outputField value="{!contract.PTL__r.Phone__c}"/> 
+                       <apex:outputField value="{!contract.PTL__r.Work_Phone_Number__c}"/>
+                       <script>twistSection(document.getElementById("{!$Component.ptlSection}").childNodes[0].childNodes[0]); </script>
+          </apex:pageBlockSection>
+          
+          <apex:pageBlockSection title="{!$Label.order_section_name}">
+                           <apex:outputText label="{!$Label.break_count}" value="{!breakCount}"/>
+                           <apex:outputText label="{!$Label.last_break_date}" value="{!lastBreakDate}"/>
+                           <apex:outputText label="{!$Label.autonomy}" value="{!autonomy}"/>
+                           <apex:outputText label="{!$Label.calculated_autonomy}" value="{!autonomyCalculated}"/>
+                           <apex:outputText value="{!order.Meter_Before_Delivery__c}"/>                   
+                           <apex:outputField value="{!order.Breakdown__c}"/>
+                           <apex:outputText label="{!$Label.quantity} {!quantity_uom}" value="{!quantity}"/>
+                           <apex:outputText label="{!$Label.amount} TTC {!amount_currency}" value="{!amount}"/>
+                           <apex:outputField value="{!order.Order_Date_and_Time__c}"/>
+                           
+                          <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.order_origin}"/>
+                               <apex:outputText value="{!detailsController.prettyPrintOrderOrigin}"/>
+                          </apex:pageBlockSectionItem>
+                          <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.cust_call}"/>
+                               <apex:outputText value="{!detailsController.prettyPrintCustCall}"/>
+                          </apex:pageBlockSectionItem>
+                          <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.reference}"/>
+                               <apex:outputText value="{!detailsController.reference}"/>
+                          </apex:pageBlockSectionItem>
+                          <apex:outputText value="{!order.Order_Type2__c}"/>
+                          <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.prefilling}"/>
+                               <c:outputcheckbox value="{!detailsController.preFilling}"/>
+                          </apex:pageBlockSectionItem>
+                          <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.majoration}"/>
+                               <c:outputcheckbox value="{!detailsController.majoration}"/>
+                          </apex:pageBlockSectionItem>      
+                      </apex:pageBlockSection>
+                      <apex:pageBlockSection title="{!$Label.delivery_section_name}">
+                          
+                          <apex:outputField value="{!order.Earliest_Delivery_Date__c}"/>
+                          
+                           <apex:outputField value="{!order.Latest_Delivery_Date__c}"/>
+                           <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.moment_del}" />
+                               <apex:outputText value="{!detailsController.prettyPrintMoment}"/>
+                           </apex:pageBlockSectionItem>
+                           <apex:pageBlockSectionItem rendered="true"/>
+                           <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.reason_delay_delivery}"/>
+                               <apex:outputText value="{!detailsController.prettyPrintReasonDelay}"/>
+                           </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.contact_mode}" />
+                               <apex:outputText value="{!detailsController.prettyPrintMedContact}"/>
+                           </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.cust_text1}"/>
+                               <apex:outputText value="{!detailsController.texteClient1}"/>
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.cust_text2}"/>
+                               <apex:outputText value="{!detailsController.texteClient2}" />
+                            </apex:pageBlockSectionItem>   
+                           <!-- delivery_man_message__c : texte chauffeur de commande (0) -->
+                           <apex:outputField value="{!order.Delivery_Man_Message__c}" style="width: 85%;"/>
+                           <apex:pageBlockSectionItem >  
+                               <apex:outputLabel value="{!$Label.driver_text1}"/>
+                               <apex:outputText value="{!detailsController.texteChauffeur1}" />
+                           </apex:pageBlockSectionItem>    
+                           <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.driver_text2}"/>
+                               <apex:outputText value="{!detailsController.texteChauffeur2}" />
+                           </apex:pageBlockSectionItem>
+                      </apex:pageBlockSection>
+                      <apex:pageBlockSection title="{!$Label.access_section_name}">
+                           <apex:outputField value="{!contract.PTL__r.Limitation_of_Vehicle__c}"/>
+                           <apex:outputField value="{!contract.PTL__r.Limitation_of_Tonnage__c}"/>
+                           <apex:outputText label="{!$Label.limitation_value}" value="{!detailsController.valeurLimitation}"/>
+                           <apex:pageBlockSectionItem >
+                                   <apex:outputLabel value="{!$Label.remote_terminal}"/>
+                                   <c:outputcheckbox value="{!detailsController.borneDeporte}"/>
+                            </apex:pageBlockSectionItem> 
+                           <apex:outputField value="{!contract.PTL__r.Temporary_dispensation__c}"/>
+                           <apex:pageBlockSectionItem >
+                                   <apex:outputLabel value="{!$Label.half_load}"/>
+                                   <c:outputcheckbox value="{!detailsController.miCharge}"/>
+                              </apex:pageBlockSectionItem> 
+                           <apex:outputField value="{!contract.PTL__r.Permanent_dispensation__c}"/>
+                           <apex:outputField value="{!contract.PTL__r.Date_at_the_End_of_Dispensation__c}"/>
+                           <apex:outputText label="{!$Label.shipping_conditions}" value="{!detailsController.conditionLivraison}"/>
+                      </apex:pageBlockSection>
+                      <apex:pageBlockButtons style="font-size:10pt;">
+                           <apex:commandButton value="{!$Label.finish_button_label}" disabled="false" action="{!detailsController.terminerButt}" title="{!$Label.see_order_onsfdc_message}"/>
+                       </apex:pageBlockButtons>
+           </apex:pageBlock>
+       </apex:form>  
+</apex:page>

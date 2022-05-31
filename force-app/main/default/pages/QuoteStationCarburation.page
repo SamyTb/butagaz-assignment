@@ -1,0 +1,322 @@
+<apex:page showHeader="false" sidebar="false" standardController="Quote" renderas="pdf" extensions="VFC_Quotelineitem_01" standardStylesheets="false">
+
+<div id="containerStationCarburation">
+  <div class="footer"> <p>DISTRINORD GAZ –  CS 50229 – 55, rue Sully 80047 Amiens Cedex 1</p>
+<p>Société par actions simplifiée au capital de 197 000 €---
+Siren 433 325 479 – Rcs Amiens – APE 515A</p> </div>
+
+  <div class="header">
+    <div class="ButagazAddress">
+      <p>Distrinord Gaz</p>
+      <p>&nbsp;</p>
+      <p>Prestataire pour le compte de Butagaz</p>
+    </div>
+    <div class="ClientAddress">
+      <apex:image url="{!$Resource.test}" width="180" height="65"/>
+      <p>Société {!Quote.Opportunity.DO_Name__c}</p>
+      
+      
+      <p>A l'attention de&nbsp;: {!Quote.Contact.FirstName}&nbsp;{!Quote.Contact.LastName}</p>
+      
+      <p> {!Quote.Opportunity.DO_Street_n__c},&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; {!Quote.Opportunity.DO_Street_name__c}</p>
+      <!-- IF a Postal code and a city are filled THEN display it-->
+     <p><apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+      value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext></p>
+    <!-- ELSE display City_Postal_Code__r.Name -->
+    <p> <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" 
+      value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br /></p>
+
+
+    </div>
+    <div class="clear"></div>
+    <div class="dateDevis">
+      Amiens, le {!PrettyDate}
+    </div> 
+  </div> 
+
+  <div class="quoteBody">
+    <div class="contractSection">
+      <p><Apex:outputfield value="{!Quote.Contact.Salutation}"/>&nbsp;{!Quote.Contact.FirstName}&nbsp;{!Quote.Contact.LastName}</p>
+      <p>Suite à votre souhait de recevoir une proposition de notre part, nous avons le plaisir de 
+        vous transmettre notre meilleure offre commerciale. </p>
+    </div>
+
+    <div class="contractSection">
+      <h1>Proposition commerciale de fourniture de propane<br/>et mise à disposition de matériel GPL Butagaz</h1>
+   </div>
+   <h2>1. L’installation </h2>
+   <p align="justify"> Dans le cadre de la mise en place d’un nouveau contrat, BUTAGAZ vous propose de vous fournir les matériels suivants pour le site de {!Quote.Opportunity.Project_City_Postal_Code__r.Name} :</p>
+
+   <h3>Mise a disposition du matériel Butagaz</h3>
+
+   <h2>Citerne(s)</h2>
+    <table class="ButagazTable">
+         <tr>
+           
+           <th>Point livré</th>
+           <th>Quantité</th>
+           <th>Citerne(s)</th>
+           <th>Mise à disposition</th>
+         </tr>
+         <apex:repeat value="{!quoteLineItems}" var="line">
+           <tr>
+             
+             <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td> 
+              <td class="number">{!line.Quantity}</td>
+             <td>{!line.pricebookentry.Name}</td>
+             <td><Apex:outputField value="{!line.Mis_Disposition__c}"/></td>
+             
+           </tr>
+         </apex:repeat>
+        </table>   
+ 
+	<h2>Services, options et accessoires</h2>
+     <table class="ButagazTable">
+         <tr>
+           <th>Point livré </th>
+          
+           <th>Article(s)</th>
+           
+           <th>Quantité</th>
+           <th>Unité</th>
+         </tr>
+         <apex:repeat value="{!Service}" var="line">
+           <tr>
+             <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+            
+             <td>{!line.pricebookentry.Name}</td>
+             <td class="number">{!line.Quantity}</td>
+             <td class="number">{!line.F_Quantity_Unit__c}</td> 
+           </tr>
+         </apex:repeat>
+         <apex:repeat value="{!Redevence}" var="line">
+           <tr>
+             <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+            
+             <td>{!line.pricebookentry.Name}</td>
+             <td class="number">{!line.Quantity}</td>
+             <td class="number">{!line.F_Quantity_Unit__c}</td> 
+           </tr>
+         </apex:repeat>
+         <apex:repeat value="{!OtherEquipment}" var="line">
+           <tr>
+             <td>{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+            
+             <td>{!line.pricebookentry.Name}</td>
+             <td class="number">{!line.Quantity}</td>
+             <td class="number">{!line.F_Quantity_Unit__c}</td> 
+           </tr>
+         </apex:repeat>
+       </table>
+       <br/>
+<p Class="spaceBefore" align="justify">En outre, Butagaz vous propose d'installer: 
+ <ul class="circle">
+	<li Class="spaceBefore">Un groupe de pompage d’un débit nominal de 3 m3/H maxi (SIHI 3106)</li>
+	<li>Une borne de distribution sur châssis métallique entièrement équipée conforme à la réglementation actuelle (1 seule borne par station)</li>
+	<li>Travaux de Tuyauteries : liaisons entre réservoir et groupe de pompage</li>
+	<li>La liaison entre groupe de pompage et la borne de distribution</li>
+	<li>Un système complet de télé-jauge permettant la gestion des stocks à distance par BUTAGAZ afin d’optimiser vos livraisons et d’atteindre l’objectif zéro rupture.</li>
+ </ul>
+</p> 
+
+<p Class="spaceBefore" align="justify">
+L’ensemble du matériel de stockage et de distribution qui sera confié par BUTAGAZ au Client seront équipés de tous les accessoires prescrits par la réglementation en vigueur.</p>   
+
+<h2>2. Le volume prévisionnel  </h2>  
+
+<p>En fonction du nombre de chariots elevateurs présents sur site, votre consommation annuelle est estimée à {!TEXT(Quote.Sum_PTL_Consumption__c)} Tonnes de propane à usage carburation.</p>     
+
+<h2>3. Durée du contrat   </h2>  
+
+<p>Dans l’hypothèse où votre société réserve à BUTAGAZ l’exclusivité de la fourniture de propane carburation, BUTAGAZ vous propose un contrat d’une durée de {!Quote.Contract_duration__c} ans.
+</p>
+
+<h2 Style="page-break-before:always">4. La maintenance et l’entretien de la station carburation    </h2>  
+
+
+<p Class="spaceBefore" align="justify">BUTAGAZ prend à sa charge pour la citerne et pour le distributeur l’entretien et les réparations consécutives aux usures en utilisation normale.
+</p>
+
+<p Class="spaceBefore"><u>Pour la maintenance préventive des citernes :</u></p>
+
+<p Class="spaceBefore" align="justify">Les visites préventives effectuées par BUTAGAZ sont triennales (un technicien se déplace sur site pour vérifier la corrosion, l’étanchéité et la soupape qui est l’organe de sécurité) et décennales (ré-épreuves du réservoir avec mise en eau du stockage, vérification intérieur…).</p>
+
+<p  Class="spaceBefore"><u>Pour la maintenance curative des stations carburations :</u></p>
+
+<p>
+       <ul class="circle">
+           <li Class="spaceBefore">Un centre d’appel réceptionne toutes les demandes de maintenance. Il est joignable de 7h00 à 20h00 tous les jours, sauf les dimanches et jours fériés au 01 49 46 82 10. Ce centre gère le suivi et trace toutes les demandes d’intervention,</li>
+           <li>Les sociétés de maintenance interviennent entre 8h00 et 18h00 tous les jours du lundi au samedi, sauf les dimanches et jours fériés. En dehors de ces horaires, contacter le N° d’urgence Butagaz au 0 800 338 686 qui fera intervenir le service professionnel d’assistance pour mise en sécurité si besoin,</li>
+           <li>En cas de panne bloquante : le prestataire de BUTAGAZ intervient sur site sous 10H ouvrées,</li>
+           <li>En cas de panne non bloquante : le prestataire de BUTAGAZ intervient sur site sous 30H ouvrées.</li>
+         </ul>
+</p>
+
+
+<h2>5. Les commandes et la gestion administrative :    </h2>  
+<p>La gestion administrative et logistique du contrat est confiée à notre filiale LOGIGAZ Nord :</p>
+<p><strong>Société LOGIGAZ NORD</strong></p>
+<p>55, rue Sully</p>
+<p>CS50229</p>
+<p>80047 Amiens Cedex 1.</p>
+<p>Service clientèle : 01 76 64 32 22</p>
+<p>Service livraison : 01 76 64 32 69 	Fax : 01 57 67 95 66</p>
+<p Class="spaceBefore">Les stockages sont équipés de télé-jauge, permettant au dispatch de déclencher les livraisons en temps utiles.</p>
+
+<p>Les opérations de ravitaillement du stockage seront effectuées sous la responsabilité de Butagaz. </p>
+
+
+<h2>6. Contrôle qualité  :    </h2>  
+
+<p>
+Nos transporteurs sont certifiés « Transport Matières Dangereuses » Norme ISO 9001/2000. Les chauffeurs sont qualifiés et ont reçu la formation et les instructions nécessaires pour la conduite de véhicules transportant du GPL.</p>
+
+<p Class="spaceBefore">Le gaz propane à usage carburation destiné aux chariots élévateurs livré sera conforme aux caractéristiques définies par les spécifications officielles en vigueur.</p>
+
+
+<h2>7. HSSE supplémentaire  :    </h2> 
+
+       <ul class="circle">
+           <li>Une visite annuelle de contrôle de l’installation est organisée aux frais de BUTAGAZ pour vérifier la sécurité de l’installation et sa conformité,</li>
+           <li>Mise en place d’une électrovanne en sortie liquide du gaz propane,</li>
+           <li>Installation par BUTAGAZ à ses frais d’une alarme visuelle et sonore pour alerter le personnel sur place en cas de problème,</li>
+           <li>Formation des caristes et des techniciens sur site effectuée par notre Assistant Sécurité Clientèle.</li>
+         </ul>
+
+<h2 Style="page-break-before:always">8. Les travaux : </h2>
+<p><u>Seront à la charge de la société BUTAGAZ :</u></p> 
+<p>
+       <ul class="circle">
+           <li Class="spaceBefore">la mise en place de la citerne,</li>
+           <li>l’entretien de la citerne (visites triennales et décennales) pendant toute la période contractuelle,</li>
+           <li>mise en place des panneaux réglementaires et consignes de sécurité,</li>
+           <li>l’élaboration du dossier de déclaration à la Préfecture.</li>
+         </ul> 
+</p>
+
+<p Class="spaceBefore"><u>Seront à la charge du CLIENT:</u></p>
+<p>
+       <ul class="circle">
+           <li Class="spaceBefore">l’envoi à la Préfecture du dossier de déclaration,</li>
+           <li>les travaux de génie civil,</li>
+           <li>les travaux d’électricité : alimentation générale jusqu’au point d’implantation de l’armoire électrique,</li>
+           <li>Liaisons entre armoire, groupe de pompage et borne de distribution compris sur châssis,</li>
+           <li>les frais relatifs aux dispositions de sécurité et de lutte contre l’incendie pour répondre à la réglementation en vigueur (2 extincteurs à poudre homologués réf. NF MIH 89 C),</li>
+           <li>les frais de clôture autours de la citerne.</li>
+         </ul> 
+</p>
+
+
+<h2>9. Conditions Commerciales  : </h2>
+
+<h2>A. Prix produit, maintenance et entretien des citernes et du poteau de distribution</h2>
+         
+    <h3>Tarif lissé</h3>
+
+    <p class="spaceBefore">Proposition commerciale basée sur le barème {!Quote.Product_Scale__c} de Butagaz pour le prix du produit:  </p>
+
+      <table class="ButagazTable">
+        <tr>
+          <th> Point livré</th>
+          <th>Article(s)</th>
+          <th class="smallWidth">Unité de facturation</th>
+          <th>Prix barème EURO HT  </th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle EURO HT</th>
+          <th class="smallWidth">Prix net<br/>EURO HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Durée de la remise Conj. (Mois)</th>          
+        </tr>
+        <apex:repeat value="{!Produits}" var="line">
+          <tr>
+            <td class="smallWidth">{!IF(line.Quote_PTL__r.PTL_Name__c!='',line.Quote_PTL__r.PTL_Name__c,line.Quote_PTL__r.PTL_Label__c)}</td>
+           
+            <td >{!line.pricebookentry.Name}</td>
+            <!--<td class="smallWidth">{!line.F_Quantity_Unit__c}</td>-->
+            <td class="smallWidth">{!IF(line.pricebookentry.Name='Propane Gaz en Citerne','',line.F_Quantity_Unit__c)}</td>
+               
+            <td class="number;smallWidth"  >{!IF(line.Price_List_HT__c=0,'',TEXT(ROUND(line.Price_List_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_HT__c=0,'',TEXT(ROUND(line.Commercial_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_HT__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_HT__c,2)))}</td>
+            <td class="number;smallWidth">	{!line.New_Price_HT__c}</td>
+            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_Months__c,2)))}</td>        
+          </tr>
+        </apex:repeat>
+      </table>
+    
+
+    <div class="contractSection" Style="page-break-inside:avoid" style="display:{!IF(Quote.T_LAT_ALL_ALL_ALL_RCE_HT_REAL__c > 0, '', 'none')}">
+      <h2>B. Aide financière</h2>
+      <p>Pour ce projet, nous pourrons vous attribuer une Aide Financière, d’un montant total de {!Quote.T_LAT_ALL_ALL_ALL_RCE_HT_REAL__c}&nbsp; € HT. </p>
+      
+      <p Class="spaceBefore">Elle vous sera accordée afin de couvrir tout ou une partie des travaux d'installation.</p>
+      <p>Elle vous sera versée soit:</p>
+      <ul class="circle">
+        <li>sous forme d'avoir gaz sur le premier plein,</li>
+        <li>à réception de votre facture.</li>
+      </ul>
+      
+      <p>Mais dans les deux cas, uniquement après la réception de la fin du chantier.</p>
+
+      </div>    
+
+    <div  Style="page-break-inside:avoid">
+  		<h2>Commentaires</h2>
+		<p Class="spaceBefore"> <apex:outputtext value="{!Quote.Description}"/></p>
+      
+        <div class="Signatures" Style=" page-break-inside:avoid">
+   
+            <h1> Contacts et Signatures</h1>
+                          <p class="spaceBefore">Cette proposition commerciale est valable jusqu’au {!PrettyExpirationDate}.</p>
+                          <p class="spaceBefore"> Nous restons à votre disposition pour tout complément d'information sur ce projet.</p> 
+    		<div class="bigSpaceAfter"><p>&nbsp;</p></div>
+    
+            <div class="clear"></div>
+   
+            <div class="ButagazSignature"  Style=" page-break-inside:avoid">
+                
+                     <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                     <p class="nospace">email&nbsp;: {!Quote.CreatedBy.Email}</p>
+                     <br/>
+                     <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter"><p>Signature:</p></div>
+
+                    <div class="ButagazCachet"  Style=" page-break-inside:avoid">
+                    <p> Pour Butagaz: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="Société LOGIGAZ NORD<br/> 55, rue Sully <br/> CS50229 <br/> 80047 Amiens Cedex 1"/></p>
+                      <br/>
+                    </div>
+               </div>  
+                    
+                    
+              <div class="ClientSignature"  Style=" page-break-inside:avoid">
+                 
+                 <p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+                  <br/>
+                  
+                  <br/>
+                  <p class="SpaceBefore">Date d’impression : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                  <br/>
+                  <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                  <br/>
+                  <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                  <br/>
+                   
+                  <p>Signature &nbsp;(1):</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                </div> 
+
+            </div>
+            
+    </div>
+
+	</div>	
+	</div>  
+</apex:page>

@@ -1,0 +1,15 @@
+<apex:page >
+  <!-- Begin Default Content REMOVE THIS -->
+  <div id="containerNOPRINT">
+  
+  
+  
+                          <h1>VOTRE DEVIS N'EST PAS APPROUVE</h1>
+                          <p>Vous ne pouvez pas imprimer un devis ou un contrat tant que les latitudes n'ont pas été approuvées/validées</p>
+  
+  
+  
+  
+  </div>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

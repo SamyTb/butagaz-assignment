@@ -1,0 +1,275 @@
+<apex:page controller="IT_AutomatedTestSetup_Controller" title="Automated Test Setup">
+<apex:form >
+
+<apex:pageBlock title="Automated Test Setup">
+
+<apex:pageMessages />
+
+<apex:pageBlockSection title="Scheduled Jobs" columns="1">
+	<apex:outputPanel rendered="{!hasScheduledJobs}">
+		IT_TestRunner and IT_TestRunnerResults jobs have been <a href="/08e">scheduled.</a>
+	</apex:outputPanel>
+	<apex:outputPanel rendered="{!NOT(hasScheduledJobs)}">
+		<div>
+			<p>Click the button to setup the following Scheduled Jobs:</p>
+			<ol>
+				<li>
+                    IT_TestRunner -&nbsp;
+                    <apex:selectList multiselect="false" value="{!testHour}" size="1">
+                        <apex:selectOption itemValue="0" itemLabel="00"/>
+                        <apex:selectOption itemValue="1" itemLabel="01"/>
+                        <apex:selectOption itemValue="2" itemLabel="02"/>
+                        <apex:selectOption itemValue="3" itemLabel="03"/>
+                        <apex:selectOption itemValue="4" itemLabel="04"/>
+                        <apex:selectOption itemValue="5" itemLabel="05"/>
+                        <apex:selectOption itemValue="6" itemLabel="06"/>
+                        <apex:selectOption itemValue="7" itemLabel="07"/>
+                        <apex:selectOption itemValue="8" itemLabel="08"/>
+                        <apex:selectOption itemValue="9" itemLabel="09"/>
+                        <apex:selectOption itemValue="10" itemLabel="10"/>
+                        <apex:selectOption itemValue="11" itemLabel="11"/>
+                        <apex:selectOption itemValue="12" itemLabel="12"/>
+                        <apex:selectOption itemValue="13" itemLabel="13"/>
+                        <apex:selectOption itemValue="14" itemLabel="14"/>
+                        <apex:selectOption itemValue="15" itemLabel="15"/>
+                        <apex:selectOption itemValue="16" itemLabel="16"/>
+                        <apex:selectOption itemValue="17" itemLabel="17"/>
+                        <apex:selectOption itemValue="18" itemLabel="18"/>
+                        <apex:selectOption itemValue="19" itemLabel="19"/>
+                        <apex:selectOption itemValue="20" itemLabel="20"/>
+                        <apex:selectOption itemValue="21" itemLabel="21"/>
+                        <apex:selectOption itemValue="22" itemLabel="22"/>
+                        <apex:selectOption itemValue="23" itemLabel="23"/>
+                    </apex:selectList> :&nbsp;
+                    <apex:selectList multiselect="false" value="{!testMinutes}" size="1">
+                        <apex:selectOption itemValue="0" itemLabel="00"/>
+                        <apex:selectOption itemValue="1" itemLabel="01"/>
+                        <apex:selectOption itemValue="2" itemLabel="02"/>
+                        <apex:selectOption itemValue="3" itemLabel="03"/>
+                        <apex:selectOption itemValue="4" itemLabel="04"/>
+                        <apex:selectOption itemValue="5" itemLabel="05"/>
+                        <apex:selectOption itemValue="6" itemLabel="06"/>
+                        <apex:selectOption itemValue="7" itemLabel="07"/>
+                        <apex:selectOption itemValue="8" itemLabel="08"/>
+                        <apex:selectOption itemValue="9" itemLabel="09"/>
+                        <apex:selectOption itemValue="10" itemLabel="10"/>
+                        <apex:selectOption itemValue="11" itemLabel="11"/>
+                        <apex:selectOption itemValue="12" itemLabel="12"/>
+                        <apex:selectOption itemValue="13" itemLabel="13"/>
+                        <apex:selectOption itemValue="14" itemLabel="14"/>
+                        <apex:selectOption itemValue="15" itemLabel="15"/>
+                        <apex:selectOption itemValue="16" itemLabel="16"/>
+                        <apex:selectOption itemValue="17" itemLabel="17"/>
+                        <apex:selectOption itemValue="18" itemLabel="18"/>
+                        <apex:selectOption itemValue="19" itemLabel="19"/>
+                        <apex:selectOption itemValue="20" itemLabel="20"/>
+                        <apex:selectOption itemValue="21" itemLabel="21"/>
+                        <apex:selectOption itemValue="22" itemLabel="22"/>
+                        <apex:selectOption itemValue="23" itemLabel="23"/>
+                        <apex:selectOption itemValue="24" itemLabel="24"/>
+                        <apex:selectOption itemValue="25" itemLabel="25"/>
+                        <apex:selectOption itemValue="26" itemLabel="26"/>
+                        <apex:selectOption itemValue="27" itemLabel="27"/>
+                        <apex:selectOption itemValue="28" itemLabel="28"/>
+                        <apex:selectOption itemValue="29" itemLabel="29"/>
+                        <apex:selectOption itemValue="30" itemLabel="30"/>
+                        <apex:selectOption itemValue="31" itemLabel="31"/>
+                        <apex:selectOption itemValue="32" itemLabel="32"/>
+                        <apex:selectOption itemValue="33" itemLabel="33"/>
+                        <apex:selectOption itemValue="34" itemLabel="34"/>
+                        <apex:selectOption itemValue="35" itemLabel="35"/>
+                        <apex:selectOption itemValue="36" itemLabel="36"/>
+                        <apex:selectOption itemValue="37" itemLabel="37"/>
+                        <apex:selectOption itemValue="38" itemLabel="38"/>
+                        <apex:selectOption itemValue="39" itemLabel="39"/>
+                        <apex:selectOption itemValue="40" itemLabel="40"/>
+                        <apex:selectOption itemValue="41" itemLabel="41"/>
+                        <apex:selectOption itemValue="42" itemLabel="42"/>
+                        <apex:selectOption itemValue="43" itemLabel="43"/>
+                        <apex:selectOption itemValue="44" itemLabel="44"/>
+                        <apex:selectOption itemValue="45" itemLabel="45"/>
+                        <apex:selectOption itemValue="46" itemLabel="46"/>
+                        <apex:selectOption itemValue="47" itemLabel="47"/>
+                        <apex:selectOption itemValue="48" itemLabel="48"/>
+                        <apex:selectOption itemValue="49" itemLabel="49"/>
+                        <apex:selectOption itemValue="50" itemLabel="50"/>
+                        <apex:selectOption itemValue="51" itemLabel="51"/>
+                        <apex:selectOption itemValue="52" itemLabel="52"/>
+                        <apex:selectOption itemValue="53" itemLabel="53"/>
+                        <apex:selectOption itemValue="54" itemLabel="54"/>
+                        <apex:selectOption itemValue="55" itemLabel="55"/>
+                        <apex:selectOption itemValue="56" itemLabel="56"/>
+                        <apex:selectOption itemValue="57" itemLabel="57"/>
+                        <apex:selectOption itemValue="58" itemLabel="58"/>
+                        <apex:selectOption itemValue="59" itemLabel="59"/>
+                    </apex:selectList>,&nbsp;
+                    <apex:selectList multiselect="false" value="{!testStartDay}" size="1">
+                        <apex:selectOption itemValue="MON" itemLabel="Monday"/>
+                        <apex:selectOption itemValue="TUE" itemLabel="Tuesday"/>
+                        <apex:selectOption itemValue="WED" itemLabel="Wednesday"/>
+                        <apex:selectOption itemValue="THU" itemLabel="Thursday "/>
+                        <apex:selectOption itemValue="FRI" itemLabel="Friday"/>
+                        <apex:selectOption itemValue="SAT" itemLabel="Saturday"/>
+                        <apex:selectOption itemValue="SUN" itemLabel="Sunday"/>
+                    </apex:selectList>&nbsp;-&nbsp;
+                    <apex:selectList multiselect="false" value="{!testEndDay}" size="1" >
+                        <apex:selectOption itemValue="MON" itemLabel="Monday"/>
+                        <apex:selectOption itemValue="TUE" itemLabel="Tuesday"/>
+                        <apex:selectOption itemValue="WED" itemLabel="Wednesday"/>
+                        <apex:selectOption itemValue="THU" itemLabel="Thursday "/>
+                        <apex:selectOption itemValue="FRI" itemLabel="Friday" />
+                        <apex:selectOption itemValue="SAT" itemLabel="Saturday"/>
+                        <apex:selectOption itemValue="SUN" itemLabel="Sunday"/>
+                    </apex:selectList> - Starts all Automated Test Runs</li>
+				<li>IT_TestRunnerResults -&nbsp;
+                    <apex:selectList multiselect="false" value="{!emailHour}" size="1">
+                        <apex:selectOption itemValue="0" itemLabel="00"/>
+                        <apex:selectOption itemValue="1" itemLabel="01"/>
+                        <apex:selectOption itemValue="2" itemLabel="02"/>
+                        <apex:selectOption itemValue="3" itemLabel="03"/>
+                        <apex:selectOption itemValue="4" itemLabel="04"/>
+                        <apex:selectOption itemValue="5" itemLabel="05"/>
+                        <apex:selectOption itemValue="6" itemLabel="06"/>
+                        <apex:selectOption itemValue="7" itemLabel="07"/>
+                        <apex:selectOption itemValue="8" itemLabel="08"/>
+                        <apex:selectOption itemValue="9" itemLabel="09"/>
+                        <apex:selectOption itemValue="10" itemLabel="10"/>
+                        <apex:selectOption itemValue="11" itemLabel="11"/>
+                        <apex:selectOption itemValue="12" itemLabel="12"/>
+                        <apex:selectOption itemValue="13" itemLabel="13"/>
+                        <apex:selectOption itemValue="14" itemLabel="14"/>
+                        <apex:selectOption itemValue="15" itemLabel="15"/>
+                        <apex:selectOption itemValue="16" itemLabel="16"/>
+                        <apex:selectOption itemValue="17" itemLabel="17"/>
+                        <apex:selectOption itemValue="18" itemLabel="18"/>
+                        <apex:selectOption itemValue="19" itemLabel="19"/>
+                        <apex:selectOption itemValue="20" itemLabel="20"/>
+                        <apex:selectOption itemValue="21" itemLabel="21"/>
+                        <apex:selectOption itemValue="22" itemLabel="22"/>
+                        <apex:selectOption itemValue="23" itemLabel="23"/>
+                    </apex:selectList> :&nbsp;
+                    <apex:selectList multiselect="false" value="{!emailMinutes}" size="1">
+                        <apex:selectOption itemValue="0" itemLabel="00"/>
+                        <apex:selectOption itemValue="1" itemLabel="01"/>
+                        <apex:selectOption itemValue="2" itemLabel="02"/>
+                        <apex:selectOption itemValue="3" itemLabel="03"/>
+                        <apex:selectOption itemValue="4" itemLabel="04"/>
+                        <apex:selectOption itemValue="5" itemLabel="05"/>
+                        <apex:selectOption itemValue="6" itemLabel="06"/>
+                        <apex:selectOption itemValue="7" itemLabel="07"/>
+                        <apex:selectOption itemValue="8" itemLabel="08"/>
+                        <apex:selectOption itemValue="9" itemLabel="09"/>
+                        <apex:selectOption itemValue="10" itemLabel="10"/>
+                        <apex:selectOption itemValue="11" itemLabel="11"/>
+                        <apex:selectOption itemValue="12" itemLabel="12"/>
+                        <apex:selectOption itemValue="13" itemLabel="13"/>
+                        <apex:selectOption itemValue="14" itemLabel="14"/>
+                        <apex:selectOption itemValue="15" itemLabel="15"/>
+                        <apex:selectOption itemValue="16" itemLabel="16"/>
+                        <apex:selectOption itemValue="17" itemLabel="17"/>
+                        <apex:selectOption itemValue="18" itemLabel="18"/>
+                        <apex:selectOption itemValue="19" itemLabel="19"/>
+                        <apex:selectOption itemValue="20" itemLabel="20"/>
+                        <apex:selectOption itemValue="21" itemLabel="21"/>
+                        <apex:selectOption itemValue="22" itemLabel="22"/>
+                        <apex:selectOption itemValue="23" itemLabel="23"/>
+                        <apex:selectOption itemValue="24" itemLabel="24"/>
+                        <apex:selectOption itemValue="25" itemLabel="25"/>
+                        <apex:selectOption itemValue="26" itemLabel="26"/>
+                        <apex:selectOption itemValue="27" itemLabel="27"/>
+                        <apex:selectOption itemValue="28" itemLabel="28"/>
+                        <apex:selectOption itemValue="29" itemLabel="29"/>
+                        <apex:selectOption itemValue="30" itemLabel="30"/>
+                        <apex:selectOption itemValue="31" itemLabel="31"/>
+                        <apex:selectOption itemValue="32" itemLabel="32"/>
+                        <apex:selectOption itemValue="33" itemLabel="33"/>
+                        <apex:selectOption itemValue="34" itemLabel="34"/>
+                        <apex:selectOption itemValue="35" itemLabel="35"/>
+                        <apex:selectOption itemValue="36" itemLabel="36"/>
+                        <apex:selectOption itemValue="37" itemLabel="37"/>
+                        <apex:selectOption itemValue="38" itemLabel="38"/>
+                        <apex:selectOption itemValue="39" itemLabel="39"/>
+                        <apex:selectOption itemValue="40" itemLabel="40"/>
+                        <apex:selectOption itemValue="41" itemLabel="41"/>
+                        <apex:selectOption itemValue="42" itemLabel="42"/>
+                        <apex:selectOption itemValue="43" itemLabel="43"/>
+                        <apex:selectOption itemValue="44" itemLabel="44"/>
+                        <apex:selectOption itemValue="45" itemLabel="45"/>
+                        <apex:selectOption itemValue="46" itemLabel="46"/>
+                        <apex:selectOption itemValue="47" itemLabel="47"/>
+                        <apex:selectOption itemValue="48" itemLabel="48"/>
+                        <apex:selectOption itemValue="49" itemLabel="49"/>
+                        <apex:selectOption itemValue="50" itemLabel="50"/>
+                        <apex:selectOption itemValue="51" itemLabel="51"/>
+                        <apex:selectOption itemValue="52" itemLabel="52"/>
+                        <apex:selectOption itemValue="53" itemLabel="53"/>
+                        <apex:selectOption itemValue="54" itemLabel="54"/>
+                        <apex:selectOption itemValue="55" itemLabel="55"/>
+                        <apex:selectOption itemValue="56" itemLabel="56"/>
+                        <apex:selectOption itemValue="57" itemLabel="57"/>
+                        <apex:selectOption itemValue="58" itemLabel="58"/>
+                        <apex:selectOption itemValue="59" itemLabel="59"/>
+                    </apex:selectList>,&nbsp;
+                    <apex:selectList multiselect="false" value="{!emailStartDay}" size="1">
+                        <apex:selectOption itemValue="MON" itemLabel="Monday"/>
+                        <apex:selectOption itemValue="TUE" itemLabel="Tuesday"/>
+                        <apex:selectOption itemValue="WED" itemLabel="Wednesday"/>
+                        <apex:selectOption itemValue="THU" itemLabel="Thursday "/>
+                        <apex:selectOption itemValue="FRI" itemLabel="Friday"/>
+                        <apex:selectOption itemValue="SAT" itemLabel="Saturday"/>
+                        <apex:selectOption itemValue="SUN" itemLabel="Sunday"/>
+                    </apex:selectList>&nbsp;-&nbsp;
+                    <apex:selectList multiselect="false" value="{!emailEndDay}" size="1" >
+                        <apex:selectOption itemValue="MON" itemLabel="Monday"/>
+                        <apex:selectOption itemValue="TUE" itemLabel="Tuesday"/>
+                        <apex:selectOption itemValue="WED" itemLabel="Wednesday"/>
+                        <apex:selectOption itemValue="THU" itemLabel="Thursday "/>
+                        <apex:selectOption itemValue="FRI" itemLabel="Friday" />
+                        <apex:selectOption itemValue="SAT" itemLabel="Saturday"/>
+                        <apex:selectOption itemValue="SUN" itemLabel="Sunday"/>
+                    </apex:selectList> - Emails results of all completed Automated Test Runs</li>
+			</ol>
+		</div>
+		<apex:commandButton value="Schedule Jobs" action="{!scheduleJobs}"/>
+	</apex:outputPanel>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection title="Automated Test Run" columns="1">
+	<apex:outputPanel rendered="{!hasTestRun}">
+		<apex:outputLink value="{!testRunLink}">Automated Test Run</apex:outputLink> has been created.
+	</apex:outputPanel>
+	<apex:outputPanel rendered="{!NOT(hasTestRun)}">
+		<div style="margin-bottom: 1em;">
+			<p>Click the button to create an Automated Test Run.</p>
+			<p>This will run all classes named *Test and email the results to the current user.</p>
+			<p>You can adjust these settings in the Automated Test Run tab.</p>
+		</div>
+		<apex:commandButton value="Create Automated Test Run" action="{!createTestRun}"/>
+	</apex:outputPanel>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection title="Try it!">
+<p>Click the button to run the Automated Test Run.</p>
+<apex:outputText value="Running Tests..." rendered="{!isRunning}" style="font-weight: bold;"/>
+<apex:commandButton value="Run Tests" rendered="{!NOT(isRunning)}" action="{!run}"/>
+
+<p><strong>Wait a few minutes</strong> and then click the button to email the results to yourself.</p>
+<apex:outputText value="Emailing Results..." rendered="{!isEmailing}" style="font-weight: bold;"/>
+<apex:commandButton value="Email Results" rendered="{!NOT(isEmailing)}" action="{!email}"/>
+
+<p>The Scheduled Jobs will send you a similar email each night.</p>
+</apex:pageBlockSection>
+
+<apex:pageBlockSection title="Troubleshooting" columns="1">
+
+<p><strong><a href="https://help.salesforce.com/HTViewSolution?id=000176020&amp;language=en_US">Email Privileges Revoked message when sending mass emails from Production or Sandbox</a></strong></p>
+
+<p>If you created a sandbox after the Spring '13 release, go to 
+<a href="/email/admin/editOrgEmailSettings.apexp">Your Name > Setup > Email Administration > Deliverability</a> 
+and choose <strong>Access Level: All Emails.</strong></p>
+</apex:pageBlockSection>
+
+</apex:pageBlock>
+
+</apex:form>
+</apex:page>

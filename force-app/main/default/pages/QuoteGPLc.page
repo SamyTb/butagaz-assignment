@@ -1,0 +1,442 @@
+<apex:page standardController="Quote" renderas="pdf" showHeader="false" extensions="VFC_Quotelineitem_01" standardStylesheets="false">
+<!--************************* GPLc ACTIVITY DOMAIN**********************************************************************************************************-->   
+<!--************************* GPLc ACTIVITY DOMAIN**********************************************************************************************************-->   
+<!--************************* GPLc ACTIVITY DOMAIN**********************************************************************************************************-->   
+
+
+<div id="containerGPLC">
+<apex:image url="{!$Resource.test}" width="180" height="75"/>
+      <div class="footer"> 
+
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre - APE 4671Z</p>
+      </div>
+      
+  <div class="header">
+      
+            <div class="ButagazAddress">
+              <!--<p>Butagaz Siège : 47-53 rue Raspail</p>
+              <p>92594 LEVALLOIS PERRET CEDEX</p>
+              <p>put this in side remarks</p>
+              
+              <p class="smallNote">Société par Actions Simplifiée au capital de 195 225 000€</p>
+              <p class="smallNote">Siret 402 960 397 00048 - RCS Nanterre - APE 4671Z</p>-->
+              <p>{!Quote.Opportunity.DO_Mandataire__r.Name}</p>
+              <p> {!Quote.Opportunity.DO_Mandataire__r.Headquarters_address__c}</p>
+              <p> {!Quote.Opportunity.DO_Mandataire__r.Headquarters_CP__c}&nbsp;{!Quote.Opportunity.DO_Mandataire__r.Headquarters_City__c}</p>
+             
+              
+            </div>
+    
+            <div class="ClientAddress">
+           
+              <p>{!Quote.Opportunity.DO_Salutation__c} {!Quote.Opportunity.DO_Name__c}</p>
+              <p>{!Quote.Opportunity.DO_Street_N__c},<Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/>&nbsp; {!Quote.Opportunity.DO_Street_name__c}</p>
+              <p>{!IF(Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != '', Quote.Opportunity.DO_Postal_Code__c &' ' &Quote.Opportunity.DO_City__c, '')}</p>
+              <p>{!IF(Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == '', Quote.Opportunity.DO_City_Postal_Code__r.Name, '')}</p>
+              <p>{!Quote.Opportunity.DO_Country__c}</p>
+            </div>
+
+        <div class="clear"></div>
+        <!-- <apex:outputText value="{!Quote.Opportunity_PTL__r.PTL__r.Name}"/></apex:outputText> -->
+    
+            <div class="dateDevis">
+              Date du Devis&nbsp;:&nbsp;{!PrettyDate}
+            </div> 
+  </div>
+ 
+
+  <div class="clear"></div>
+
+    <div class="quoteBody">
+        <div class="contractSection">
+              <h1>Proposition Commerciale GPLc</h1>
+              <br/>
+              <p>Suite à votre souhait de recevoir une proposition de notre part, nous avons le plaisir de vous transmettre notre meilleure offre commerciale.</p>
+     
+        </div> 
+      
+    
+
+        <div class="contractSection">
+          <h1>Informations Clients</h1>
+              
+             <p>Propriétaire: &nbsp;{!Quote.Opportunity.DO_Name__c}</p> 
+             <p style="display: {!IF(Quote.Opportunity.DO_Work_Phone_Number__c != '','','none')}"> Tél Fixe: &nbsp;{!Quote.Opportunity.DO_Work_Phone_Number__c}</p> 
+             <p style="display: {!IF(Quote.Opportunity.DO_Mobile_Phone_Number__c != '','','none')}"> Mobile: &nbsp;{!Quote.Opportunity.DO_Mobile_Phone_Number__c}</p> 
+             <p style="display: {!IF(Quote.Opportunity.DO_Fax__c != '','','none')}"> Fax: &nbsp;        {!Quote.Opportunity.DO_Fax__c}</p>               
+             <p style="display: {!IF(Quote.Opportunity.DO_Email__c != '','','none')}"> E-mail:&nbsp;{!Quote.Opportunity.DO_Email__c}</p> 
+             <!-- <p> {!IF(Quote.Opportunity.DO_Optin_1__c=true,'Oui, je souhaite être informé(e) des nouveautés Butagaz par mail.','Non, je ne souhaite pas être informé(e) des nouveautés BUTAGAZ par mail.')}</p> -->
+             <p>En concluant un contrat de fourniture de gaz propane avec BUTAGAZ, vous acceptez de recevoir des informations et des offres, sauf si vous vous y opposez en écrivant à votre Distributeur Régional ou dans votre Espace Client sur Butagaz.fr.</p>
+      
+      <h1>Choix du matériel à installer</h1>
+      
+      <h2> Point Livré et Emplacement de(s) citerne(s)</h2>
+
+      <table class="ButagazTable">
+        <tr>
+          <th>Point livré</th>
+          <th>Adresse</th>
+          <th>Usage(s)</th>
+        </tr>
+        <apex:repeat value="{!QUOTEPTLS}" var="line">
+          <tr>
+            <td>{!line.Opportunity_PTL__r.PTL_Name__c}</td>
+            <td><p>{!line.Opportunity_PTL__r.PTL_Street_number__c}&nbsp;<apex:outputField value="{!Line.Opportunity_PTL__r.PTL_Number_extention__c}"/>&nbsp;<apex:outputField value="{!Line.Opportunity_PTL__r.PTL_Street_type__c}"/>&nbsp;{!line.Opportunity_PTL__r.PTL_Street_name__c}</p>
+             <p>{!line.Opportunity_PTL__r.PTL_City_Postal_Code__r.Name}</p></td>
+            <td><apex:outputField value="{!line.RPTL_Purposes__c}"/></td></tr>
+        </apex:repeat>
+      </table>
+     </div>
+   </div>
+
+    <div class="contractSection">
+      
+        <h3> Citerne(s)</h3>
+
+            <table class="ButagazTable">
+                <tr>
+                  <th>Quantité</th>
+                  <th>Point livré</th>
+                  <th> Nombre </th>
+                  <th>Citerne</th>
+                  <th>Mise à disposition</th>
+                  <th colspan=" 1" style="display:{!if(Quote.Customer_Owned_Tanks__c!=0,'', 'none')}" >Information Complémentaire</th>
+        
+                  <th>Emplacement</th>
+                  
+                </tr>
+                <apex:repeat value="{!quoteLineItems}" var="line">
+                  <tr>
+                    <td class="number">{!line.Quantity}</td>
+                    <td>{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Name__c}</td> 
+                     <td>{!line.F_Product_Code__c}</td> 
+                    <td>{!line.pricebookentry.Name}</td>
+                    <td><Apex:outputField value="{!line.Mis_Disposition__c}"/></td>
+                    <td style="display:{!if(OR(line.Mis_Disposition__c='Customer Owned Tank',line.Mis_Disposition__c='Tank sold by BTZ'),'', 'none')}"> 
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Citerne </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Name__c}</p>
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> N de serie </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Serial_Number__c}</p>
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Capacité </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Capacity__c} </p>
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Date d'epreuve initiale </STRONG>:&nbsp;{!line.Customer_Owned_Tank_Appr_Date__c}</p>
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Re epreuve decennale avant le </STRONG>:&nbsp;{!line.Customer_Owned_Tank_ReApprBefore_Date__c}</p>
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}"><STRONG> Constructeur </STRONG>:&nbsp;{!line.Brand__c}</p><br/>
+                <p style="display:{!if(line.Mis_Disposition__c='Customer Owned Tank','', 'none')}">La requalification périodique de votre citerne vous sera facturée selon le barème V2P (1) en vigueur au jour de la requalification</p>
+                <p style="display:{!if(line.Mis_Disposition__c='Tank sold by BTZ','','none')}">Vous avez la possibilité d’acheter une citerne BUTAGAZ selon le barème MADV ci-joint. Les conditions de vente de la citerne BUTAGAZ feront l’objet d’un contrat de vente spécifique</p>
+              </td>
+                    <td> {!line.Tank_Placing_Type__c}</td>
+                    
+                  </tr>
+                </apex:repeat>
+               </table>
+     </div>
+
+    <div class="contractSection">
+      <h3 class="ButagazTableHeader">MATERIEL APPARTENANT A BUTAGAZ ET MIS A LA DISPOSITION DU CLIENT  </h3>
+      <br/>
+      <h3 class="ButagazTableHeader">Services, options et accessoires</h3>
+               <table class="ButagazTable">
+                <tr>
+                  <th>Point livré </th>
+                  <!-- <th>Nombre </th> -->
+                  <th>Article(s)</th>
+                  <th>Quantité</th>
+                  <th>Unité</th>
+                </tr>
+                <apex:repeat value="{!Service}" var="line">
+                  <tr>
+                    <td>{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Name__c}</td>
+                     <!-- <td>{!line.F_Product_Code__c}</td> --> 
+                    <td>{!line.pricebookentry.Name}</td>
+                    <td class="number">{!line.Quantity}</td>
+                    <td class="number">{!line.Quantity_Unit__c}</td> 
+                  </tr>
+                </apex:repeat>
+                <apex:repeat value="{!OtherEquipment}" var="line">
+                  <tr>
+                    <td>{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Name__c}</td>
+                     <!-- <td>{!line.F_Product_Code__c}</td> --> 
+                    <td>{!line.pricebookentry.Name}</td>
+                    <td class="number">{!line.Quantity}</td>
+                    <td class="number">{!line.Quantity_Unit__c}</td> 
+                  </tr>
+                </apex:repeat>
+              </table>
+      <br/>
+      
+      <div style="display:{!if(Redevence.size > 0,'', 'none')}">
+      <h3 class="ButagazTableHeader">Redevance(s)</h3>
+              <table class="ButagazTable">
+                <tr>
+                  <th> Point livré </th>
+                  <th> Nombre </th>
+                  <th>Article(s)</th>
+                  <th>Quantité</th>
+                  <th>Unité</th>
+                </tr>
+                <apex:repeat value="{!Redevence}" var="line">
+                  <tr>
+                    <td>{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Name__c}</td>
+                     <td>{!line.F_Product_Code__c}</td> 
+                    <td>{!line.pricebookentry.Name}</td>
+                    <td class="number">{!line.Quantity}</td>
+                    <td class="number">{!line.Quantity_Unit__c}</td> 
+                  </tr>
+                </apex:repeat>
+              </table>
+      </div>
+                  <br/>
+                  <br/>
+     </div> 
+     
+     <!-- div style="display:{!IF(OR(Quote.Opportunity.Users__c='Oil dealer',Quote.Opportunity.Users__c='Retail dealer'), '', 'none')}">
+
+         <p >  -  Type de station pour les clients « revendeurs pétroliers et grande distribution » :</P>
+                <p>?    Volucompteur un pistolet</p>
+                <p>?    Volucompteur deux pistolets</p>
+                <p>?    Volucompteur « low cost » un pistolet</p>
+                <br/> 
+    
+     </div -->
+     
+     <!-- div style="display:{!IF(OR(Quote.Opportunity.Users__c='Collectivity users',Quote.Opportunity.Users__c='Company users'), '', 'none')}">
+                 <p>  -    Type de station pour les clients « utilisateurs collectivités ou entreprises » :</p>
+                        <p>?    Distributeur sans comptage</p>
+                        <p>?    Privative simple</p>
+                        <br/>
+     </div -->
+     <div>   
+     
+                <p align="justify">
+                        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Opportunity.X24_24__c}"/>
+                        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!Quote.Opportunity.X24_24__c=false}"/>
+                        &nbsp; Le client souhaite installer un système 24h/24.</p>
+                        <br/>
+                <ul class="circle">
+                  <li>Appareil de télémétrie permettant au dispatch de déclencher les livraisons en temps utiles</li>
+                  <li>Les raccordements gaz depuis la citerne jusqu’à la station</li>
+                </ul>
+                <!-- p>  -    Appareil de télémétrie permettant au dispatch de déclencher les livraisons en temps utiles</p>
+                <p>  -    Les raccordements gaz depuis la citerne jusqu’à la station.</p -->
+     
+                   
+    </div>
+
+     <div class="contractSection" style="page-break-inside:avoid">
+   
+              <h1>Offre Commerciale</h1>
+                <br/> 
+                <p>BUTAGAZ s’engage à confier au CLIENT au titre de prêt usage la matériel évoqué ci-dessus en contrepartie de :</p> 
+                <br/>
+                <p><STRONG>VOLUME DE CONSOMMATION de GPL carburant PAR AN</STRONG> : {!ROUND((Quote.Sum_PTL_Consumption__c * $Setup.OrganizationSettings__c.Tonne_to_m3__c) * 1000,0)} Litres, soit {!ROUND((Quote.Sum_PTL_Consumption__c * $Setup.OrganizationSettings__c.Tonne_to_m3__c),0)} m3</p>
+                <p>(1 000 Litres = 1 m3). Exemple : 150 000 litres = 150 m3.</p>
+                <br/>
+                <p class="nospace"><strong>DUREE DE CONTRAT&nbsp;:&nbsp;</strong>{!Quote.Contract_Duration__c} An(s)</p>
+                <br/>
+                <p class="nospace"><strong>Soit une consommation totale pour la durée du contrat de:</strong>&nbsp;{!VALUE(Quote.Contract_Duration__c) * ROUND((Quote.Sum_PTL_Consumption__c * $Setup.OrganizationSettings__c.Tonne_to_m3__c),0)} m3</p>
+                <BR/>
+                
+                <table class="ButagazTable">
+        <tr>
+          <th> Point livré</th>
+          <th> Nombre </th>
+          <th>Produit(s)</th>
+          <th class="smallWidth">Unité de facturation</th>
+          <th>Prix barème HT</th>
+          <th style="display:{!if(OR(pricingQuoteVisibilityRCERebate,pricingQuoteVisibilityCommercialRebate,pricingQuoteVisibilityCyclicalRebate,pricingQuoteVisibilityGroupementRebate,pricingQuoteVisibilityGroupCommercialRebate,pricingQuoteVisibilityGroupCyclicalRebate), 'table-cell', 'none')};">Prix net facturé HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};">Remise Commerciale  EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle EUR HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conj. (Mois)</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">Remise Groupement HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};">Remise Commerciale Groupement HT</th>
+          <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Groupement Conj. (Mois)</th>
+          
+        </tr>
+        <apex:repeat value="{!Produits}" var="line">
+              <tr>
+                <td class="smallWidth">{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Name__c}</td>
+                <td>{!line.F_Product_Code__c}</td> 
+                <td class="smallWidth">{!line.pricebookentry.Name}</td>
+                
+                <td class="smallWidth">{!line.Quantity_Unit__c}</td>
+                <td class="number;smallWidth">{!IF(line.Price_List_HT__c=0,'',TEXT(line.Price_List_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(OR(pricingQuoteVisibilityRCERebate,pricingQuoteVisibilityCommercialRebate,pricingQuoteVisibilityCyclicalRebate,pricingQuoteVisibilityGroupementRebate,pricingQuoteVisibilityGroupCommercialRebate,pricingQuoteVisibilityGroupCyclicalRebate), 'table-cell', 'none')};">{!IF(line.New_Price_HT__c=0,'',TEXT(line.New_Price_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_HT__c=0,'',TEXT(line.Commercial_Rebate_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_HT__c=0,'',TEXT(line.RCE_Rebate_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_HT__c=0,'',TEXT(line.Cyclical_Rebate_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(line.Cyclical_Rebate_Months__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(line.Group_Commercial_Rebate_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Group_Commercial_Rebate_HT__c=0,'',TEXT(line.Group_Commercial_Rebate_HT__c))}</td>
+                <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_lenght_in_months__c=0,'',TEXT(line.Group_Cyclical_Rebate_lenght_in_months__c))}</td>
+    
+              </tr>
+        </apex:repeat>
+      </table>
+                
+                
+      </div>
+      
+      <h1>MAINTENANCE et ENTRETIEN DE LA STATION-SERVICE</h1>
+      
+          <p>L’ensemble du matériel de stockage est la propriété de BUTAGAZ et sera confié au CLIENT  au titre de prêt à usage et est équipé de tous les accessoires prescrits par la réglementation en vigueur.</p>
+          <br/>
+          <p>BUTAGAZ en assurera l’entretien et les réparations consécutives lié à l’usure normale du matériel de stockage et de distribution.</p>
+          <br/>
+          <p>Un centre d’appel réceptionne toutes les demandes de maintenance qui est joignable au <STRONG>01.49.46.89.53</STRONG> tous les jours de 7h à 20h sauf les dimanches et jours fériés.</p>
+          <br/>
+          <p>En dehors de ces horaires, le CLIENT peut contacter le N° d’urgence BUTAGAZ au <STRONG>0 800 338 686</STRONG> pour faire intervenir le service professionnel d’assistance pour mise en sécurité si besoin.</p>
+          <br/>
+          <p>En cas de <STRONG>panne bloquante</STRONG>, le prestataire de BUTAGAZ intervient sur site <STRONG>sous 10H ouvrées</STRONG></p>
+          <p>En cas de <STRONG>panne non bloquante</STRONG>, le prestataire de BUTAGAZ intervient sur site <STRONG>sous 30H ouvrées</STRONG></p>
+          
+          <br/>
+          <p>Le produit sera livré au client par camion citerne gros porteur d’une capacité de 20 Tonnes. Les opérations de ravitaillement du stockage seront effectuées sous la responsabilité de Butagaz.</p>
+      
+          <br/>
+          <p><strong>Contrôle qualité:</strong></p>
+          <p>Nos transporteurs sont certifiés « Transport Matières Dangereuses » Norme ISO 9001/2000. Les chauffeurs sont qualifiés et ont reçu la formation et les instructions nécessaires pour la conduite de véhicules transportant du GPL.</p>
+          <p>Le GPL carburant livré sera conforme aux caractéristiques définies par les spécifications officielles en vigueur.</p>
+          <p>Voici un tableau récapitulatif de la maintenance BUTAGAZ préventive et de mise en conformité:</p>
+          <br/>
+          
+          <table class="ButagazTable">
+            <tr align = "center">
+              <th></th>
+              <th>Intervenant</th>
+              <th>Réglementaire</th>
+              <th>Périodicité</th>
+            </tr>
+            <tr align = "center">
+                <td><strong>Visite préventive</strong></td>
+                <td>TOKHEIM</td>
+                <td>+ BUTAGAZ *</td>
+                <td>1 an</td>
+            </tr>
+            <tr align = "center">
+                <td><strong>Conformité électrique installation</strong></td>
+                <td>DEKRA</td>
+                <td>OUI côté client  mais BUTAGAZ s’en charge</td>
+                <td>1 an</td>
+            </tr>
+            <tr align = "center">
+                <td><strong>Contrôle de bruit</strong></td>
+                <td>DEKRA</td>
+                <td>OUI</td>
+                <td>3 ans</td>
+            </tr>
+            <tr align = "center">
+                <td><strong>Contrôle HSE</strong></td>
+                <td>DEKRA</td>
+                <td>+ BUTAGAZ*</td>
+                <td>1 an</td>
+            </tr>
+            <tr align = "center">
+                <td><strong>Contrôle détecteur de gaz (si présent)</strong></td>
+                <td>OLDHAM</td>
+                <td>OUI</td>
+                <td>1 an</td>
+            </tr>
+            <tr align = "center">
+                <td><strong>Contrôle conformité débit</strong></td>
+                <td>MESTROLE</td>
+                <td>OUI</td>
+                <td>1 an</td>
+            </tr>
+            <tr align = "center">
+                <td><strong>Contrôle revêtement des tuyauteries enterrées</strong></td>
+                <td>TECHNIPIPE</td>
+                <td>+ BUTAGAZ*</td>
+                <td>3 ans</td>
+            </tr>
+          </table>
+          
+          <br/>
+          <p>+ BUTAGAZ * : La réglementation ne l’exige pas mais BUTAGAZ le fait à ses frais </p>
+      
+          <br/>
+          <div style="page-break-inside:avoid">
+              <p><strong>Les travaux:</strong></p>
+              <!-- p>Seront à la charge de la société BUTAGAZ:</p>
+              <p>  - la mise en place des deux citernes et des équipements qui sont mis à disposition par BUTAGAZ<br/>
+                   - l’entretien des citernes (visites triennales et décennales) pendant toute la période contractuelle<br/>
+                   - les raccordements gaz<br/>
+                   - la mise en place des panneaux réglementaires et consignes de sécurité<br/>
+                   - la formation du personnel  en lien avec la distribution GPL Carburant si besoin<br/>
+                   - l’élaboration du dossier de déclaration
+              </p -->
+              <p>Seront à la charge de la société BUTAGAZ:</p>
+                <ul class="circle">
+                  <li>la mise en place des deux citernes et des équipements qui sont mis à disposition par BUTAGAZ</li>
+                  <li>l’entretien des citernes (visites triennales et décennales) pendant toute la période contractuelle</li>
+                  <li>les raccordements gaz</li>
+                  <li>la mise en place des panneaux réglementaires et consignes de sécurité</li>
+                  <li>la formation du personnel  en lien avec la distribution GPL Carburant si besoine</li>
+                  <li>l’élaboration du dossier de déclaration</li>
+                </ul>
+          </div>
+      
+          <br/>
+          <div style="page-break-inside:avoid">
+              <p>Seront à la charge du CLIENT:</p>
+              <ul class="circle">
+                  <li>l’envoi à la Préfecture du dossier de déclaration</li>
+                  <li>les travaux de Génie Civil</li>
+                  <li>les frais relatifs aux dispositions de sécurité et de lutte contre l’incendie pour répondre à la réglementation en vigueur (2 extincteurs à poudre homologués réf. NF MIH 89 C)</li>
+                  <li>la clôture du stockage de 2 m de haut avec une porte d’accès cadenassée</li>
+              </ul>
+          </div>
+      
+     <div style="page-break-inside:avoid">
+      <h1>Durée de Validité</h1>
+      <p>Cette proposition  est valable jusqu'au {!PrettyExpirationDate}.</p> 
+     </div>
+     <div class="Signatures" style="page-break-inside:avoid">
+       <div class="ButagazSignature">
+                 <p class="nospace">CE/AC/CC: {!Quote.CreatedBy.Name}</p>
+                 <p class="nospace">email&nbsp;: {!Quote.CreatedBy.Email}</p>
+                 <br/>
+                 
+        <table border="0" width="95%">  
+            <tr>
+                <td width="40%">
+                    <apex:outputtext styleClass="line" value="Pour: {!Quote.Opportunity.DO_Mandataire__r.Name} 
+                     votre Distributeur Régional:"/>
+                </td>
+                <td width="15%">&nbsp;</td>
+                <td width="50%" rowspan="3">
+                    <table class="ButagazTableWithBorder">
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<apex:outputtext styleClass="line" value="Cachet du Distributeur Régional"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <br/><br/><br/><br/><br/><br/><br/><br/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        </table>
+        
+        </div>
+        
+        <div class="ClientSignature">
+          <p class="nospace">Nom et prénom du client&nbsp;: {!Quote.Opportunity.DO_Name__c}</p>
+          <br/>
+          
+          <br/>
+          <p class="nospace">Date: {!PrettyDate} </p>
+          <p>et signature&nbsp;:</p>
+          <br/>
+          <br/>
+          <p> Un exemplaire de chaque barème susvisé est joint au présent devis. Le présent document est sans valeur contractuelle et ne peut en aucun cas se substituer à la conclusion d’un contrat de fourniture de gaz propane en citerne avec Butagaz. Les tarifs indiqués dans cette proposition sont valables pendant la période de validité du présent devis, sauf modification des barèmes susvisés. »</p>
+          
+          </div>
+      </div>
+    </div>
+
+          
+
+
+
+
+</apex:page>

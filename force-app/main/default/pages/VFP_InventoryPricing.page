@@ -1,0 +1,269 @@
+<apex:page standardController="Inventory_Pricing__c" extensions="VFC_InventoryPricing" showHeader="true" sidebar="false">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+    <script>
+        var $dialog;
+        $(document).ready(function() {
+        $dialog = $("#dialog-modal")
+            .dialog({
+                autoOpen: false,
+                height: 150,
+                width: 250,
+                modal: true,
+                closeOnEscape: false,
+                resizable: false
+            });
+        });
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            return false;
+        }
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+    </script>
+    
+    <script>
+        function ChangeDot(fieldid) {
+        	var searchInputId = 'div[id='+fieldid+']'; 
+            var local = '{!LocalCurrencyFormat}';  
+            if((local == 'fr_FR') || (local == 'fr_FR_EURO') || (local == 'fr')){      	    
+            		var inputValueBefore = jQuery(searchInputId).children('input').val();
+            		var inputValueAfter = inputValueBefore.replace(/\./g, ',');
+            		jQuery(searchInputId).children('input').val(inputValueAfter);			
+            }                          
+        }
+    </script>
+
+     <script>
+        function CheckPrixIndiff(ifChecked,fieldid) {
+        	var checkStatus = ifChecked;
+			if(checkStatus == true){
+				jQuery('div[id='+fieldid+']').children('input').attr('checked', true);
+				var pricefieldId =fieldid+'_price_';
+				jQuery('div[id^='+pricefieldId+']').each(function(e) {
+					copyFromBTZ(true,$(this).attr('id'));
+				}); 					    								
+			}			                       
+        }
+    </script>
+
+     <script>
+        function copyFromBTZ(ifChecked,fieldid) {
+        	var checkStatus = ifChecked;
+			if(checkStatus == true){
+			    var codeArticle = fieldid.split('_')[2];
+			    var BTZfieldId = 'Butagaz_price_'+codeArticle;
+				var BTZArticlePrice = jQuery('div[id='+BTZfieldId+']').children('input').val();
+				jQuery('div[id='+fieldid+']').children('input').val(BTZArticlePrice);
+			}			                       
+        }
+    </script> 
+
+     <script>
+        function copyValue(fieldid) {
+        	var codeArticle = fieldid.split('_')[2];
+			if(codeArticle == 'BD'){
+				var Gid = fieldid.split('_')[0]+'_price_'+'G';
+				var BDPrice = jQuery('div[id='+fieldid+']').children('input').val();
+				jQuery('div[id='+Gid+']').children('input').val(BDPrice);
+			}
+			
+			if(codeArticle == 'CB'){
+				var CPid = fieldid.split('_')[0]+'_price_'+'CP';
+				var CBPrice = jQuery('div[id='+fieldid+']').children('input').val();
+				jQuery('div[id='+CPid+']').children('input').val(CBPrice);
+			}				                       
+        }
+    </script>  
+ 	
+ 	   
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}"/>
+        </div>
+    </div>    
+    
+    <apex:form >
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+		
+        <apex:sectionheader title="{!$Label.inventory_pricing}" subtitle="{!oPTL.Name}"/>
+        <apex:pageblock id="idBlockIssue" rendered="{!bIssue}">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+        </apex:pageblock>
+        <apex:pageblock id="idBlock" rendered="{!NOT(bIssue)}">
+            <apex:pagemessages escape="false"/>
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.diff_prix_button_label}" action="{!calcPriceDifferentialBtn}" rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!saveBtn}" rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}" status="modalStatus"/>
+            </apex:pageblockbuttons>
+            <apex:pageblocksection >
+                <apex:outputField value="{!Inventory_Pricing__c.PTL__c}"/>
+                <apex:inputField value="{!Inventory_Pricing__c.Inventory_Date__c}"/>
+            </apex:pageblocksection>
+            <!-- Butagaz Brand -->
+            <apex:pageblock tabStyle="Item__c">
+                <apex:repeat value="{!lBrandArticle_Butagaz}" var="brand">
+                    <apex:pageblocksection title="{!brand.oIPBrand.Brand__r.Name__c}" collapsible="true" columns="1">
+                        <apex:pageblocksection columns="2">
+                            <apex:inputcheckbox value="{!brand.oIPBrand.Presence__c}"/>
+                            <apex:inputfield value="{!brand.oIPBrand.Release_Date__c}"/>
+                            <apex:inputfield value="{!brand.oIPBrand.Delivery_Frequency__c}"/>
+                        </apex:pageblocksection>
+                        <apex:pageblocktable value="{!brand.lIPArticles}" var="line">
+                            <apex:column headervalue="{!$ObjectType.Item__c.Fields.Name.label}" style="width:25%;">
+                                <apex:outputfield value="{!line.Article__r.Name}" style="width:100%" />
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Presence__c.label}">
+                                <apex:inputfield value="{!line.Presence__c}"/>
+                            </apex:column>
+                            <!--<apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Bottle_Number__c.label}">
+                                <apex:outputfield value="{!line.Bottle_Number__c}"/>
+                            </apex:column>-->
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Charging_Price__c.label}" style="width:80px;">
+                                <div id="Butagaz_price_{!line.Article__r.Code_Article__c}">                                 
+                                	<apex:inputfield onchange="ChangeDot('Butagaz_price_{!line.Article__r.Code_Article__c}');
+                                							copyValue('Butagaz_price_{!line.Article__r.Code_Article__c}');" 
+                                	value="{!line.Charging_Price__c}" style="width:80px;"/>
+                            	</div>
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Prix_indiferencie__c.label}">
+                            </apex:column>                             
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.BTZ_Price_Differential__c.label}">
+                                <apex:outputfield value="{!line.BTZ_Price_Differential__c}"/>
+                            </apex:column>   
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Release_Date__c.label}">
+                                <apex:inputfield value="{!line.Release_Date__c}"/>
+                            </apex:column>                                            
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion__c.label}">
+                                <apex:inputfield value="{!line.Promotion__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion_Start_Date__c.label}">
+                                <apex:inputfield value="{!line.Promotion_Start_Date__c}"/>
+                            </apex:column>                  
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion_End_Date__c.label}">
+                                <apex:inputfield value="{!line.Promotion_End_Date__c}"/>
+                            </apex:column>                          
+               
+                        </apex:pageblocktable>
+                    </apex:pageblocksection>
+                </apex:repeat>
+            </apex:pageblock>
+            <!-- National Brands -->
+            <apex:pageblock title="{!$Label.national_brand}" tabStyle="Inventory_Pricing__c">
+                <apex:repeat value="{!lBrandArticle_National}" var="brand">
+                    <apex:pageblocksection title="{!brand.oIPBrand.Brand__r.Name__c}" collapsible="true" columns="1">
+                        <apex:pageblocksection columns="2">
+                            <apex:inputcheckbox value="{!brand.oIPBrand.Presence__c}"/>
+                            <apex:inputfield value="{!brand.oIPBrand.Release_Date__c}"/>
+                            <apex:inputfield value="{!brand.oIPBrand.Delivery_Frequency__c}"/>
+                            <apex:inputfield onchange="CheckPrixIndiff(this.checked,'{!brand.oIPBrand.Brand__r.id}');" value="{!brand.oIPBrand.Prix_indiferencie__c}"/>
+                        </apex:pageblocksection>
+                        <apex:pageblocktable value="{!brand.lIPArticles}" var="line">
+                            <apex:column headervalue="{!$ObjectType.Item__c.Fields.Name.label}" style="width:25%;">
+                                <apex:outputfield value="{!line.Article__r.Name}" style="width:100%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Presence__c.label}">
+                                <apex:inputfield value="{!line.Presence__c}"/>
+                            </apex:column>
+                            <!--<apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Bottle_Number__c.label}" style="width:80px;">
+                                <apex:inputfield value="{!line.Bottle_Number__c}" style="width:80px;"/>
+                            </apex:column>-->
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Charging_Price__c.label}" style="width:80px;">
+                                <div id="{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}">                                 
+                                	<apex:inputfield onchange="ChangeDot('{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}');
+                                							copyValue('{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}');" 
+                                	value="{!line.Charging_Price__c}" style="width:80px;"/>
+                            	</div>
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Prix_indiferencie__c.label}">                            	   
+                                <div id="{!brand.oIPBrand.Brand__r.id}"> 	                              
+	                            	<apex:inputfield onchange="copyFromBTZ(this.checked,'{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}');" value="{!line.Prix_indiferencie__c}" rendered="{!line.Article__r.No_BTZ__c==false}"/>
+                           		</div>	
+                            </apex:column>                               
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.BTZ_Price_Differential__c.label}">
+                                <apex:outputfield value="{!line.BTZ_Price_Differential__c}"/>
+                            </apex:column>    
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Release_Date__c.label}">
+                                <apex:inputfield value="{!line.Release_Date__c}"/>
+                            </apex:column>                      
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion__c.label}">
+                                <apex:inputfield value="{!line.Promotion__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion_Start_Date__c.label}">
+                                <apex:inputfield value="{!line.Promotion_Start_Date__c}"/>
+                            </apex:column>                  
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion_End_Date__c.label}">
+                                <apex:inputfield value="{!line.Promotion_End_Date__c}"/>
+                            </apex:column>
+                        </apex:pageblocktable>
+                    </apex:pageblocksection>
+                </apex:repeat>
+            </apex:pageblock>    
+            <!-- Distributor Brand -->
+            <apex:pageblock title="{!$Label.distributor_brand}" tabStyle="Inventory_Pricing_Brand__c">
+                <apex:repeat value="{!lBrandArticle_Distributor}" var="brand">
+                    <apex:pageblocksection title="{!brand.oIPBrand.Brand__r.Name__c}" collapsible="true" columns="1">
+                        <apex:pageblocksection columns="2">
+                            <apex:inputcheckbox value="{!brand.oIPBrand.Presence__c}"/>
+                            <apex:inputfield value="{!brand.oIPBrand.Release_Date__c}"/>
+                            <apex:inputfield value="{!brand.oIPBrand.Delivery_Frequency__c}"/>
+                            <apex:inputfield onchange="CheckPrixIndiff(this.checked,'{!brand.oIPBrand.Brand__r.id}');" value="{!brand.oIPBrand.Prix_indiferencie__c}"/>
+                        </apex:pageblocksection>
+                        <apex:pageblocktable value="{!brand.lIPArticles}" var="line">
+                            <apex:column headervalue="{!$ObjectType.Item__c.Fields.Name.label}" style="width:25%;">
+                                <apex:outputfield value="{!line.Article__r.Name}" style="width:100%;"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Presence__c.label}">
+                                <apex:inputfield value="{!line.Presence__c}"/>
+                            </apex:column>
+                            <!--<apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Bottle_Number__c.label}" style="width:80px;">
+                                <apex:inputfield value="{!line.Bottle_Number__c}" style="width:80px;"/>
+                            </apex:column>-->
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Charging_Price__c.label}" style="width:80px;">
+                                <div id="{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}">                                 
+                                	<apex:inputfield onchange="ChangeDot('{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}');
+                                							copyValue('{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}');" 
+                                	value="{!line.Charging_Price__c}" style="width:80px;"/>
+                            	</div>
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Prix_indiferencie__c.label}">                            	   
+                                <div id="{!brand.oIPBrand.Brand__r.id}"> 	                              
+	                            	<apex:inputfield onchange="copyFromBTZ(this.checked,'{!brand.oIPBrand.Brand__r.id}_price_{!line.Article__r.Code_Article__c}');" value="{!line.Prix_indiferencie__c}" rendered="{!line.Article__r.No_BTZ__c==false}"/>
+                           		</div>	
+                            </apex:column>                                
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.BTZ_Price_Differential__c.label}">
+                                <apex:outputfield value="{!line.BTZ_Price_Differential__c}"/>
+                            </apex:column>  
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Release_Date__c.label}">
+                                <apex:inputfield value="{!line.Release_Date__c}"/>
+                            </apex:column>                      
+                 
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion__c.label}">
+                                <apex:inputfield value="{!line.Promotion__c}"/>
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion_Start_Date__c.label}">
+                                <apex:inputfield value="{!line.Promotion_Start_Date__c}"/>
+                            </apex:column>                  
+                            <apex:column headervalue="{!$ObjectType.Inventory_Pricing_Article__c.Fields.Promotion_End_Date__c.label}">
+                                <apex:inputfield value="{!line.Promotion_End_Date__c}"/>
+                            </apex:column>                                          
+                        </apex:pageblocktable>
+                    </apex:pageblocksection>
+                </apex:repeat> 
+            </apex:pageblock>                       
+        </apex:pageblock>
+        <!-- <apex:inputHidden value="{!Inventory_Pricing__c.Id}"/> -->
+        <apex:inputHidden value="{!Inventory_Pricing__c.PTL__c}"/>
+    </apex:form>
+</apex:page>

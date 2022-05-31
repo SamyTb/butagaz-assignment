@@ -1,0 +1,66 @@
+<apex:page standardController="Account" 
+           id="accountPourConsole" 
+           extensions="VFC_Console_VueSynthetiqueCompte" 
+           showHeader="false" 
+           standardStylesheets="false"
+           
+           docType="html-5.0"
+           applyBodyTag="False"
+           applyHtmlTag="False"
+          
+           >
+    
+  <head>
+  <title>{! Account.Name }</title>
+  <apex:slds /> 
+
+</head>
+
+
+    
+    <body class="slds-scope slds-wrap ">
+        
+        <div class="slds-grid slds-gutters"   >
+            <div class="{!if(demandeEstEncours,'slds-col slds-show ','slds-col slds-hide')}"  >
+                <div class="slds-notify slds-notify_toast slds-theme_warning" style ="min-width:.9rem;" role="status">
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_small  ">
+                        <svg class="slds-icon slds-icon_small" >
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#case')}"></use>
+                        </svg>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">Des demandes sont en cours.</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="{!if(opptyEstEnCours,'slds-col slds-show','slds-col slds-hide')}" >
+                <div class="slds-notify slds-notify_toast slds-theme_warning " style ="min-width:.9rem;" role="status">
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_small  " >
+                        <svg class="slds-icon slds-icon_small" >
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#opportunity')}"></use>
+                        </svg>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">Des opportunités sont en cours.</h2>
+                    </div>
+                </div>
+            </div>       
+           <div class="{!if(commandeEncours,'slds-col slds-show','slds-col slds-hide')}"  > 
+             <!--<div class="slds-col slds-hide"  > a remettre en commentaire-->
+                <div class="slds-notify slds-notify_toast  slds-theme_warning" style ="min-width:.9rem;" role="status">
+                    <span class="slds-icon_container slds-icon-utility-warning slds-m-right_small   ">
+                        <svg class="slds-icon slds-icon_small" >
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#orders')}"></use>
+                        </svg>
+                    </span>
+                    <div class="slds-notify__content">
+                        <h2 class="slds-text-heading_small ">Des commandes sont en cours.</h2>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </body>
+    
+    
+</apex:page>

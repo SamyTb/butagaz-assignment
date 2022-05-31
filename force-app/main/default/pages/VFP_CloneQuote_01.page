@@ -1,0 +1,10 @@
+<apex:page standardController="Quote" extensions="VFC_CloneQuote_01" action="{!CloneQuote}">
+    <apex:form >
+        <apex:pageBlock title="Problème(s) lors du clonage" >
+            <apex:pageMessages />
+            <apex:pageBlockButtons location="bottom">
+                <apex:commandButton action="{!back}" value="Retour"/>
+            </apex:pageBlockButtons>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

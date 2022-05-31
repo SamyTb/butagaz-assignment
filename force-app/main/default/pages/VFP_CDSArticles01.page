@@ -1,0 +1,5 @@
+<apex:page standardController="CDS_Article__c" extensions="VFC_CDSArticles01" showHeader="true" sidebar="false" action="{!getCDSPage}">
+
+	
+
+</apex:page>

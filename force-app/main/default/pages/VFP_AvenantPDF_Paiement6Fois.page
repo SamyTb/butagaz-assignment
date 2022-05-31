@@ -1,0 +1,264 @@
+<apex:page standardController="Quote" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<!--************************* OPTION: Paiement 6 fois *************************-->
+<div id="containerPaiment6fois" Style="page-break-before:always">
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    <div>
+        <h1>Avenant au contrat pour l’échelonnement de paiement du prix des services prévus dans le Pack Maison Neuve<br/>« Paiement 6 fois sans frais »</h1>
+    </div>         
+    <br/>
+
+    <!-- Entre le Client et Butagaz -->
+    <div class="contractSection">
+        <h1>Entre le Client et Butagaz</h1>
+        
+        <p align="justify">
+			Vous avez signé un contrat de fourniture de gaz propane en citerne et prestations d’entretien Butagaz Pack Maison Neuve et vous souhaitez régler le prix des services prévus dans ce Pack et facturés selon le barème V2.P en vigueur à la date de facturation en plusieurs fois. Avec l’Avenant « Paiement 6 fois sans frais », Butagaz vous offre la possibilité d’échelonner le paiement de du prix de vos services, en 6 fois.
+        </p><br/>
+
+    </div>
+
+    <!-- Les conditions de l'Option « Paiement 2 fois » -->
+    <div class="contractSection">
+        <h1>Les conditions de l'Option « Paiement 6 fois sans frais »</h1>
+        
+        <p align="justify">Cette offre concerne exclusivement le paiement du prix des services prévus dans votre contrat de fourniture de gaz propane en citerne Butagaz Pack Maison Neuve, et facturés selon le barème V2.P en vigueur à la date de facturation. Elle s’appliquera à compter de votre prochaine facture de services et pour chaque facturation ultérieure de services, sauf rétractation de votre part dans le délai de 14 jours après la date de signature du présent avenant, ou renonciation à la présente offre selon les modalités ci-dessous. Le montant total de la facture des services Butagaz prévus dans le Pack Maison Neuve sera divisé en 6 mensualités. Deux factures vous seront établies par an.</p>
+    </div>
+    
+    <!-- Ouverture de l'Option « Paiement 2 fois » -->
+    <div class="contractSection">
+        <h1>Ouverture de l'Option « Paiement 6 fois sans frais »</h1>
+        
+        <p>Butagaz se réserve de donner son accord après étude de votre dossier.</p>
+    </div>
+
+    <!-- coût de l'option « Paiement 2 fois » et modalités de paiement -->
+    <div class="contractSection">
+        <h1>Coût de l’Option « Paiement 6 fois sans frais » et modalités de paiement</h1>
+        
+        <p align="justify">(1) Le coût de cette Option est actuellement : aucun frais supplémentaires ne vous sera facturé en plus de vos factures de services prévus dans votre contrat Pack Maison Neuve ; cette Option étant en effet gratuite.</p>
+        <p align="justify">Le coût de cette Option pourra être revu par Butagaz, laquelle vous préviendra par écrit de toute modification. Si dans le cadre du Contrat de fourniture de gaz en citerne Pack Maison Neuve que vous avez conclu avec Butagaz vous avez opté pour le service Alerte prix par mail, vous recevrez cette information par mail. Si vous n’avez pas souhaité bénéficier de l’Alerte prix ou que vous avez opté pour l’Alerte prix par SMS, Butagaz vous préviendra par courrier postal. En cas de hausse du coût de l’Option « Paiement 6 fois », vous serez libre de refuser le nouveau tarif en exerçant votre faculté de renonciation à l’Option « Paiement 6 fois » par courrier dans un délai de 15 jours après réception du courrier vous informant de la modification.</p><br/>
+        <p align="justify">(2) Les prélèvements sur votre compte bancaire ou postal commenceront le 8 du mois suivant votre réception de la facture des services prévus et facturés selon le barème V2.P en vigueur à la date de facturation. Ces prélèvements se succèderont tous les 8 des mois suivants jusqu’à la 6ème échéance.</p>
+        <p align="justify">Vous joindrez au présent avenant une demande de prélèvement accompagnant vos coordonnées bancaires ou postales. En cas de modification de votre domiciliation bancaire ou postale, vous nous communiquerez vos nouvelles coordonnées un mois à l’avance.</p><br/>
+        <p align="justify">(3) Vous recevez une facture par courrier avec le montant des échéances prélevées, lequel sera égal à la valeur de votre facture de services prévus dans le Pack Maison Neuve (facturés selon le barème V2.P en vigueur à la date de facturation) divisée par 6, étant précisé que les 5 premières échéances ne comporteront pas d’arrondi, lequel sera reporté sur la dernière échéance.</p><br/>
+        <p align="justify">(4) En cas de prélèvement rejeté, vous perdez de plein droit le bénéfice de cette offre 15 jours après une mise en demeure restée infructueuse et les sommes restant dues deviendront immédiatement exigibles, sans mise en demeure. Les livraisons suivantes devront être réglées au comptant sans escompte à réception de facture.</p><br/>
+        <p align="justify">(5) A aucun moment le solde des sommes à régler à Butagaz, y compris les échéances de cette offre, ne peut dépasser 500 € TTC.</p>
+   		<p align="justify">Si, par exemple, une facture de services fait dépasser ce solde, Butagaz se réserve le droit de vous demander de régler au comptant les sommes excédant ce solde de 500 € TTC.</p><br/>
+    	<p align="justify">(6) A tout moment, vous avez la possibilité de régler vos factures de services prévus dans le Contrat BUTAGAZ Pack Maison Neuve au comptant et/ou de régler de manière anticipée le montant de vos échéances à venir.</p>	
+    </div>
+
+    <!-- Faculté de rétractation sous 14 jours à l’Option « Paiement 6 fois sans frais » -->
+    <div class="contractSection">
+        <h1>Faculté de rétractation sous 14 jours à l’Option « Paiement 6 fois sans frais »</h1>
+        
+        <p align="justify">Vous avez un délai de 14 jours à compter de l’acceptation du présent avenant pour exercer votre faculté de rétractation de l’Option « Paiement 6 fois », soit par courrier libre, soit en retournant le bordereau de rétractation ci-dessous. Le règlement des factures de services prévus dans le Pack Maison Neuve intervient alors au comptant.</p>
+    </div> 
+    
+    <!-- Faculté de renonciation à tout moment à l’Option « Paiement 6 fois sans frais » -->
+    <div class="contractSection">
+        <h1>Faculté de renonciation à tout moment à l’Option « Paiement 6 fois sans frais »</h1>
+        
+        <p align="justify">Vous pouvez renoncer à l’Option « Paiement 6 fois » à tout moment par courrier avec accusé de réception, et moyennant un préavis de un mois.</p>
+        <p align="justify">A partir de ce moment, vous réglerez vos prochaines factures de services prévus dans le Pack Maison Neuve au comptant conformément au contrat de fourniture de gaz propane en citerne Butagaz Pack Maison Neuve. Les échéances de l’Option « Paiement 6 fois » concernant les déjà opérées seront prélevées conformément au présent avenant jusqu’à parfait paiement. A tout moment, vous pouvez solder par anticipation le montant des échéances à venir ; dans ce cas, aucun frais ne vous sera réclamé.</p>
+    </div>  
+
+    <!-- Durée -->
+    <div class="contractSection">
+        <h1>Durée</h1>
+        
+        <p align="justify">La facilité de paiement, Option « Paiement 6 fois », est accordée pour la durée de votre contrat de fourniture de gaz propane en citerne et prestation d’entretien BUTAGAZ Pack Maison Neuve.</p>
+    </div>
+    
+    <!-- Conditions de résiliation de l’Option « Paiement 6 fois sans frais » -->
+    <div class="contractSection">
+        <h1>Conditions de résiliation de l’Option « Paiement 6 fois sans frais »</h1>
+        
+        <p align="justify">a) A votre initiative à tout moment sous réserve de respecter un préavis de un (1) mois, notifié par courrier recommandé avec accusé de réception à BUTAGAZ.</p><br/>
+        <p align="justify">b) Par BUTAGAZ, à tout moment sous réserve de respecter un préavis de un (1) mois notifié par courrier avec accusé de réception.</p><br/>
+        <p align="justify">c) De plein droit et sans préavis de part ou d'autre :</p>
+        <p>
+          <!-- - En cas de suppression par le CLIENT de son autorisation de prélèvement automatique,<br/>-->
+        - En cas de suppression par le CLIENT de son mandat de prélèvement SEPA  automatique,
+        - En cas de rejet d’un prélèvement non régularisé 15 jours après une mise en demeure,<br/>
+        - En cas de résiliation du contrat de fourniture de gaz en citerne BUTAGAZ Pack Maison Neuve,<br/>
+        </p>
+        <p align="justify">
+        - En cas de changement de Pack dans le cadre de son contrat de fourniture de gaz propane en citerne BUTAGAZ pour un Pack autre que le Pack Maison Neuve, quels quʼen soient les motifs, le présent avenant sera résilié de plein droit à la date du changement de Pack. De nouvelles modalités d’échelonnement de paiement pourront être proposées par BUTAGAZ au CLIENT aux conditions indiquées dans le contrat de fourniture de gaz du CLIENT.        
+        </p>
+    </div>
+    
+    <!-- Conséquences de la résiliation -->
+    <div class="contractSection" style=" page-break-inside: avoid" >
+        <h1>Conséquences de la résiliation</h1>
+        
+        <p align="justify">En cas de résiliation de l’Option « Paiement 6 fois », pour quelque raison que ce soit, un arrêté de compte sera dressé par Butagaz.
+						   Si le solde est débiteur, le CLIENT dispose d’un délai de 15 jours à compter de la date de réception de l’arrêté de compte, pour le régler. En cas de solde créditeur, celui-ci sera remboursé au CLIENT dans un délai maximum de 15 jours après réception de l’arrêté de compte par le CLIENT. Les factures de services prévus dans le Pack Maison Neuve (facturés selon le barème V2.P en vigueur à la date de facturation) seront réglées au comptant.</p>
+        <p align="justify">La résiliation de l’Option « Paiement 6 fois » ou la renonciation à l’Option « Paiement 6 fois » n’entraîne pas la résiliation du contrat de fourniture de gaz en citerne BUTAGAZ Pack Maison Neuve, lequel s’exécutera selon ses Conditions Générales et Particulières.</p>   
+    </div>
+
+    <!-- Contentieux -->
+ 
+    
+  <div style="page-break-before:always">
+  
+       <div class="contractSection">
+        <h1>Contentieux</h1>
+        
+        <p align="justify">Suivant l’article L. 311-52 du Code de la consommation :</p>
+        <p align="justify">« Le tribunal d’instance connaît des litiges nés de l’application du présent chapitre. Les actions en paiement engagées devant lui à l’occasion de la défaillance de l’emprunteur doivent être formées dans les deux ans de l’évènement qui leur a donné naissance à peine de forclusion. Cet évènement est caractérisé par :</p>
+ 		<p>
+ 		- Le non-paiement des sommes dues à la suite de la résiliation du contrat ou de son terme;<br/>
+ 		- Ou le premier incident de paiement non régularisé;<br/>
+ 		- Ou le dépassement non régularisé du montant total du crédit consenti dans le cadre d’un contrat de crédit renouvelable;<br/>
+ 		- Ou le dépassement, au sens du 11° de l’article L. 311-1, non régularisé à l’issue du délai prévu à l’article L. 311-47.
+ 		</p>
+ 		<p align="justify">Lorsque les modalités de règlement des échéances impayées ont fait l’objet d’un réaménagement ou d’un rééchelonnement, le point de départ du délai de forclusion est le premier incident non régularisé intervenu après le premier aménagement ou rééchelonnement conclu entre les intéressés ou après adoption du plan conventionnel de redressement prévu à l’article L. 331-6 ou après décision de la commission imposant les mesures prévues à l’article L. 331-7 ou la décision du juge de l’exécution homologuant les mesures prévues à l’article L. 331-7-1. »</p><br/>	   
+    	<p align="justify">Conformément aux termes de l’article L. 315-1 du Code Monétaire et Financier vous êtes informé de la possibilité d’ouverture d’une procédure de médiation gratuite. Dans le cadre de cette procédure le médiateur est tenu de statuer dans un délai de 2 mois à compter de sa saisine.</p>
+    	<p align="justify">ACP – 61 rue Taitbout – 75436 Paris Cedex 09</p>
+    	<p align="justify">DGCCRF – 59 bd Vincent-Auriol – 75703 Paris Cedex 13</p>
+    </div>
+    
+    <!-- Autres clauses -->
+    <div class="contractSection">
+        <p align="justify"><span class="field">Toutes les autres clauses et conditions du contrat de fourniture de gaz propane en citerne et prestations d’entretien BUTAGAZ Pack Maison Neuve non modifiées par le présent avenant gardent leur plein et entier effet.</span></p>
+    </div>  
+    
+    <br/>
+        <div>
+
+                <div class="ButagazSignature">
+                
+                     <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                     <p class="nospace">&nbsp;</p>
+                     <p class="nospace">&nbsp;</p>
+                   <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter"><p>Signature:</p></div>
+                     
+                          
+                     
+                    <div class="ButagazCachet">
+                    <p> Pour Butagaz: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                                
+         
+          
+                </div>
+                <br/>
+                
+                <div class="ClientSignature">
+                 
+                 <p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+                  <br/>
+                  
+                  <br/>
+                  <p class="SpaceBefore">Date d’impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                  <br/>
+                  <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                  <br/>
+                  <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                  <br/>
+                   
+                  <p>Signature &nbsp;(1):</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «Bon pour accord»</p>
+                </div> 
+                <br/> 
+                
+            </div> 
+           </div>  
+             
+    
+    <div class="contractSection" Style=" page-break-before: always">       
+        <p align="center"><span class="smallNote">Conformément à la législation en vigueur vous avez la possibilité de renoncer à cette option dans un délai de 14 jours.</span></p>
+    </div>
+    
+    <div style="height:20px; border-top:1px dashed #000000; margin-top:20px;"/>
+
+    <!-- Bordereau de rétractation -->
+    <div class="contractSection">
+        <h1>Bordereau de rétractation</h1>
+        
+        <table border="0" width="95%">  
+            <tr>
+                <td width="40%">
+                    <apex:outputtext styleClass="line" value="A renvoyer de préférence par lettre recommandée dans le délai
+                    de 14 jours à compter de la signature du présent avenant à l'adresse
+                    de votre Distributeur Régional:"/>
+                    <br/>
+                    
+                    <br/>
+                    <br/> 
+                    <br/>  
+                </td>
+                <td width="10%">&nbsp;</td>
+                <td width="50%" rowspan="5">
+                    <table class="ButagazTableWithBorder" width="100%" >
+                        <tr>
+                            <td padding="18pt">&nbsp;
+                            <apex:outputfield Value="{!Quote.Opportunity.Project_Mandataire__c}"/>
+                            <br/> 
+                            <br/> 
+                                             
+                    
+                            
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        </table>
+    </div>
+    
+    <div>
+        <table border="0" width="95%">
+            <tr><td colspan="3"><span class="field">Code client Butagaz: </span><span class="value">{!Quote.Opportunity.DO_AccountNumber__c}</span></td></tr>
+            <tr><td colspan="3"><span class="field">Nom et prénom du CLIENT: </span><span class="value">{!Quote.Opportunity.DO_NAme__c}</span></td></tr>
+            <tr><td colspan="3"><span class="field">Adresse: </span><span class="value">{!Quote.Opportunity.DO_Street_n__c}&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> {!Quote.Opportunity.DO_Street_name__c}</span></td></tr>
+            <tr><td colspan="3">
+                <!-- IF a Postal code and a city are filled THEN display it-->
+                <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+                <!-- ELSE display City_Postal_Code__r.Name -->
+                <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br />
+                
+            </td></tr>
+        </table>
+    </div>  
+    
+    <br/>
+    <div>
+        <p align="justify"><apex:outputtext value="Je déclare renoncer à lʼOption de Butagaz « Paiement 6 fois sans frais » pour l’échelonnement de paiement sans frais supplémentaires du prix des services prévus dans le contrat BUTAGAZ Pack Maison Neuve que jʼavais accepté le __/__/____"/></p>
+    </div>
+    <br/>
+    <div>
+        <p align="justify">
+            <apex:outputtext styleClass="line" value="Date: __/__/____"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+        </p>
+        <p>et Signature&nbsp;:(1)</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+    </div>
+     
+</div>    
+<!--************************* END OPTION: Paiement 6 fois *************************-->
+
+</apex:page>

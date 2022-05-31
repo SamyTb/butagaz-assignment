@@ -1,0 +1,312 @@
+<apex:page standardController="Quote" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+
+<div id="containerContratGECDOMIDEOSOLO" Style="page-break-before:always">
+
+    <div class="footerRight">
+    <p align="right">Référence Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>
+     
+              
+                          
+    </div>
+    <div class="footer">{!$Label.Contract_Ref_GECDOM_IDEO_SOLO}{!IF(isSE=='true', ' SE','')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+        <p >Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+    </div>
+
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    <apex:pageblock rendered="{!Quote.Payment_spread__c=='ZL03' || Quote.Payment_spread__c=='ZK03'}">
+        <div>
+            <h1>Contrat pour la souscription de l'option étalement de paiement des factures de gaz en 3 fois</h1>
+        </div>  
+    </apex:pageblock>       
+    <br/>
+    <apex:pageblock rendered="{!Quote.Payment_spread__c=='ZL06'|| Quote.Payment_spread__c=='ZK06' }">
+        <div>
+            <h1>Contrat pour la souscription de l'option étalement de paiement des factures de gaz en 6 fois</h1>
+        </div>  
+    </apex:pageblock>   
+    <apex:pageblock rendered="{!Quote.Payment_spread__c=='ZL10'|| Quote.Payment_spread__c=='ZK10' }">
+        <div>
+            <h1>Contrat pour la souscription de l'option étalement de paiement des factures de gaz en 10 fois</h1>
+        </div>  
+    </apex:pageblock>
+   <!--  <apex:pageblock rendered="{!Quote.Payment_spread__c=='ZK12' || Quote.Payment_spread__c=='ZF12' }">
+        <div>
+            <h1>Contrat pour la souscription de l'option étalement de paiement 12 mois</h1>
+        </div>  
+    </apex:pageblock>  -->      
+    <br/>
+    
+ 
+    <h1>1. Entre le CLIENT et BUTAGAZ</h1>
+    <br/>
+    <!-- <p align="justify">BUTAGAZ et le CLIENT ont conclu un contrat de fourniture de gaz propane en citerne BUTAGAZ et le CLIENT souhaite bénéficier du suivi de ses consommations d’énergie. Avec l’option « suivi de consommation Butabox », BUTAGAZ offre la possibilité au CLIENT  de suivre ses consommations d’énergie (gaz propane, électricité).</p>
+    <br/> -->
+    
+    <p align="justify">BUTAGAZ, S.A.S. au capital de 195 225 000 €, immatriculée au Registre du Commerce et des Sociétés de Nanterre sous le numéro 402 960 397, dont le siège social est au 47-53, rue Raspail - 92594 LEVALLOIS-PERRET Cedex,
+    ci-après dénommée « BUTAGAZ »</p>
+        
+    <br/>
+    <p align="justify">D'une part,</p>
+    <br/>
+    
+    
+    <table border="0" width="95%">
+         
+        <tr><td colspan="3">Monsieur/Madame : &nbsp;  <Apex:outputField value="{!Quote.Opportunity.Account.Salutation}"/>&nbsp;  {!Quote.Opportunity.Account.Name}</td></tr>
+        <tr><td colspan="3">
+        <span class="field">Adresse: </span>
+        <span class="value">{!Quote.Opportunity.DO_Street_n__c}&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; {!Quote.Opportunity.DO_Street_name__c}</span>                   
+        </td></tr>
+        <tr><td colspan="3">
+        <span class="value"><apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/></span>
+        </td></tr>                
+        <tr><td colspan="3">
+         <!-- IF a Postal code and a city are filled THEN display it-->
+          <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}"
+           value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+        <!-- ELSE display City_Postal_Code__r.Name -->
+         <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}"
+         value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br />
+        <tr><td colspan="3"><br /></td></tr>   
+        </td></tr>
+    </table><br/>
+    <p align="justify">ci-après dénommé le « CLIENT »</p>
+    
+    <p align="justify">BUTAGAZ et le CLIENT ci-après dénommés, ensemble, les « Parties » ou, individuellement, une « Partie »</p><br/>
+    <p align="justify">Les Parties ont signé un contrat de fourniture de gaz propane en citerne. Le CLIENT souhaite régler ses </p>
+    <p align="justify">livraisons de gaz en plusieurs fois. Le CLIENT a donc souscrit l’option paiement échelonné qui lui permet d’obtenir un étalement de paiement pour chacune de ses livraisons en gaz propane dans le cadre de son contrat de fourniture de gaz propane en citerne conclu avec BUTAGAZ. Chaque étalement de paiement constitue un crédit à la consommation soumis aux dispositions des articles L311-1 et suivant du code de la consommation. Les conditions du crédit accordé pour chaque livraison sont spécifiées dans l’échéancier adressé suite à chaque livraison et qui répondent aux conditions du présent contrat.</p>
+ <!-- <p align="justify">
+ </p>
+<br/>
+<p align="justify">Et</p>
+<br/>
+<table border="0" width="95%">
+         
+<tr><td colspan="3">Monsieur/Madame : &nbsp;  <Apex:outputField value="{!Quote.Opportunity.Account.Salutation}"/>&nbsp;  {!Quote.Opportunity.Account.Name}</td></tr>
+<tr><td colspan="3">
+<span class="field">Adresse: </span>
+<span class="value">{!Quote.Opportunity.DO_Street_n__c}&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; {!Quote.Opportunity.DO_Street_name__c}</span>                   
+</td></tr>
+<tr><td colspan="3">
+<span class="value"><apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/></span>
+</td></tr>                
+<tr><td colspan="3"> -->
+ <!-- IF a Postal code and a city are filled THEN display it-->
+ <!--  <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" -->
+ <!--   value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>-->
+<!-- ELSE display City_Postal_Code__r.Name -->
+<!--  <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}"--> 
+<!--  value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br />
+<tr><td colspan="3"><br /></td></tr>   
+</td></tr>
+</table><br/>
+    <p align="justify">ci-après dénommé le « CLIENT »</p>-->
+    
+    <br/>
+    
+                
+        
+        
+    <!-- crédit à la consommation -->
+    
+     <div  class= "ButagazCadre" Style="page-break-inside:avoid">
+        <p align="justify">Type de crédit : crédit à la consommation</p><br/>
+        <p align="justify">Montant total du crédit : le montant total du crédit est pour chaque livraison égal au montant total dû pour la livraison concernée. A aucun moment le solde des sommes à régler à Butagaz, y compris les intérêts et autres frais liés au crédit, ne peut dépasser 2000 €. Si, par exemple, une livraison fait dépasser ce solde, Butagaz se réserve le droit de demander au CLIENT de régler au comptant les sommes excédant ce solde de 2000 €
+        </p><br/>     
+        <p align="justify">Conditions de mise à disposition des fonds : </p><br/> 
+        <p  align="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL10'||Quote.Payment_spread__c=='ZK10','','None')}"> Durée du contrat de crédit : 10 mois</p>
+        <p  align="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL06'||Quote.Payment_spread__c=='ZK06','','None')}"> Durée du contrat de crédit : 6 mois</p>
+        <p  align="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL03'||Quote.Payment_spread__c=='ZK03','','None')}"> Durée du contrat de crédit : 3 mois</p>    
+    
+        <br/>
+        <p align="justify">Montant des échéances : le montant des échéances est précisé dans l’échéancier adressé suite à chaque livraison</p><br/>
+        <p align="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL10'||Quote.Payment_spread__c=='ZK10','','None')}"> Nombres d'échéances : 10 mois</p>
+        <p align="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL06'||Quote.Payment_spread__c=='ZK06','','None')}"> Nombres d'échéances : 6 mois</p>
+        <p align="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL03'||Quote.Payment_spread__c=='ZK03','','None')}"> Nombres d'échéances : 3 mois</p><br/>   
+        <p align ="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL03'||Quote.Payment_spread__c=='ZL06'||Quote.Payment_spread__c=='ZL10','','None')}">Périodicité des échéances : Mensuelles prélevées le 08 de chaque mois.</p>
+        <p align ="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZK03'||Quote.Payment_spread__c=='ZK06'||Quote.Payment_spread__c=='ZK10','','None')}">Périodicité des échéances : Mensuelles prélevées le 12 de chaque mois.</p>
+        <p align ="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZL03'||Quote.Payment_spread__c=='ZL06'||Quote.Payment_spread__c=='ZL10','','None')}">Le premier prélèvement intervient le 08 du mois en cours au moment de la livraison ou le 08 du mois suivant.</p>
+        <p align ="justify" Style="display:{!IF(Quote.Payment_spread__c=='ZK03'||Quote.Payment_spread__c=='ZK06'||Quote.Payment_spread__c=='ZK10','','None')}">Le premier prélèvement intervient le 12 du mois en cours au moment de la livraison ou le 12 du mois suivant.</p>
+        <p align="justify">Taux débiteur : le taux débiteur applicable à la signature du présent avenant est de 0 %.</p><br/> 
+        <p align="justify">Taux annuel effectif global : Le taux annuel effectif global applicable à la signature du présent avenant est de 0 %. </p><br/>
+        <p align="justify">Montant total dû : le montant total dû est précisé dans l’échéancier adressé suite à chaque livraison. Frais liés à l’exécution du contrat de crédit : les frais sont spécifiés dans l’échéancier adressé suite à chaque livraison. A la date de la signature du présent Contrat, les frais s’élèvent à  0 euro(s) par livraison. </p><br/>
+        <p align="justify">Produit financé : livraison de gaz propane dans le cadre du contrat de fourniture de gaz propane BUTAGAZ dont le prix est indiqué dans l’échéancier pour chaque livraison conformément au barème applicable. </p><br/>
+        <p align="justify">Le taux débiteur, et les frais liés à l’exécution du contrat de crédit et ainsi que le taux annuel effectif global seront révisables annuellement par BUTAGAZ. BUTAGAZ informera du nouveau taux et/ou des nouveaux frais applicables avant toute nouvelle livraison suivant la révision par courrier ou par e-mail.</p><br/>        
+     </div>
+    
+     <div class="contractSection" Style="page-break-before:avoid">
+       <h1> 2. Modalités de remboursement par l’emprunteur </h1>
+        <br/>
+        <p align="justify"> Le CLIENT remboursera les échéances selon l’échéancier qui sera adressé suite à chaque livraison. </p>
+        <h1> 3. Conditions d'acceptation ou de rétractation du contrat de crédit</h1>
+        <br/>
+        <h3> 3.1 Conclusion du contrat de crédit</h3>
+        <p align="justify"> En souscrivant le présent avenant le CLIENT opte pour le paiement échelonné pour chacune de ses livraisons et accepte donc pour chacune de ses livraisons l’offre de crédit qui lui a été proposée  conformément aux termes du présent Contrat et des modifications de taux ou de frais éventuels qui lui auront été notifiés préalablement à chaque livraison. Si le CLIENT souhaite pour une livraison donnée payer au comptant il devra alors le notifier expressément par écrit à BUTAGAZ préalablement à sa commande. Sauf résiliation anticipée, le présent avenant restera en vigueur pendant toute la durée du contrat de fourniture de gaz conclu entre le CLIENT et BUTAGAZ.</p>
+        <br/>
+        <p align="justify"> Il est rappelé que le crédit accepté par le CLIENT ne devient parfait qu'à la double condition que ledit CLIENT n'ait pas usé de sa faculté de rétractation et que BUTAGAZ ait fait connaître au CLIENT sa décision d'accorder le crédit, dans un délai de sept jours. L’envoi de l’échéancier au CLIENT suite à livraison signifiera l’accord de BUTAGAZ sur le crédit pour la livraison concernée.</p>
+        <br/>
+        <p align="justify"> Le paiement de la première échéance ne pourra en aucun cas intervenir moins de 8 jours après l’émission de l’échéancier. </p>
+        <br/>
+        <h3> 3.2 Droit de rétractation</h3>
+          <br/>
+        <p align="justify"> Le CLIENT a un droit de rétraction de 14 jours à compter de l'acceptation du présent contrat pour exercer sa faculté de rétractation de l'Option « Etalement de paiement », soit par courrier libre, soit en retournant le bordereau de rétractation joint aux présentes. Le règlement des livraisons interviendra alors au comptant. </p>
+        <p align="justify"> Pour les documents signés électroniquement, le client peut renvoyer le bon de rétractation présent sur son contrat, au format numérique par mail, ou en l'imprimant et en le renvoyant par La Poste à l'adresse indiquée au verso. </p>
+        <br/>
+        <h1> 4. Exécution du contrat de credit</h1>
+        <br/>
+        <h3> 4.1 Prélèvement </h3>
+        <br/>
+        <p align="justify"> Le CLIENT joindra au présent contrat une demande de prélèvement accompagnant ses coordonnées bancaires ou postales. En cas de modification de sa domiciliation bancaire ou postale, BUTAGAZ lui communiquera ses nouvelles coordonnées un mois à l'avance.</p>
+        <br/>
+        <h3> 4.2 Modalités de remboursement anticipé </h3>
+        <br/>
+        <p align="justify"> Le CLIENT paiera alors le montant de la livraison restant à payer et devra régler les intérêts cumulés sur le montant de la livraison depuis la date à laquelle le crédit lui a été consenti (soit la date de l’échéancier) jusqu'à la date à laquelle le montant total de la livraison a été remboursée, sans qu’aucune indemnité ne soit due.</p>
+        <br/>
+        <h3> 4.3 Résiliation du contrat de crédit </h3>
+        <br/>
+        <h3> &nbsp;&nbsp;&nbsp;&nbsp;4.3.1 Conditions de résiliation </h3>
+        <br/>
+        <p align="justify">Le CLIENT peut renoncer à l'Option « Etalement de paiement » à tout moment par courrier avec accusé de réception, et moyennant un préavis de un mois. A partir de ce moment, le CLIENT règlera ses prochaines livraisons au comptant conformément au contrat de fourniture de gaz propane en citerne Butagaz. Les échéances de l'Option « Etalement de paiement » concernant les livraisons déjà opérées seront prélevées conformément au présent avenant jusqu'à parfait paiement. BUTAGAZ peut résilier le présent avenant  de plein droit et sans préavis de part ou d'autre : </p>
+        <br/>
+        <p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;En cas de suppression par le CLIENT de son mandat de prélèvement SEPA automatique,</p><br/>
+        <p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;En cas de rejet d'un prélèvement non régularisé 15 jours après une mise en demeure</p><br/>
+        <p align="justify">&bull;&nbsp;&nbsp;&nbsp;&nbsp;En cas de résiliation du contrat de fourniture de gaz en citerne BUTAGAZ.</p><br/>
+        <br/>
+        <h3> &nbsp;&nbsp;&nbsp;&nbsp;4.3.2 Conséquences de la résiliation </h3>
+        <br/>
+        <p align="justify">En cas de résiliation de l'Option « Etalement de paiement », pour quelle que raison que ce soit, un arrêté de compte sera dressé par BUTAGAZ. Si le solde est débiteur, le CLIENT dispose d'un délai de 15 jours à compter de la date de réception de l'arrêté de compte, pour le régler. En cas de solde créditeur, celui-ci sera remboursé au CLIENT dans un délai maximum de 15 jours après réception de l'arrêté de compte par le CLIENT.
+        Les livraisons seront réglées au comptant. La résiliation de l'Option « Etalement de paiement » ou la renonciation à l'Option « Etalement de paiement » n'entraînent pas la résiliation du contrat de fourniture, lequel s'exécutera au comptant. 
+        </p>
+        <br/>
+        <h3> 4.4 Tableau d’amortissement </h3>
+        <br/>
+        <p align="justify">Le CLIENT peut  recevoir un relevé sous la forme d'un tableau d'amortissement, à sa demande et sans frais, à tout moment durant toute la durée du contrat</p>
+        <br/>
+        <p align="justify"> Le tableau indique les montants, périodes et conditions des échéances ainsi que la ventilation de chaque échéance entre l'amortissement du capital, les intérêts calculés sur la base du taux débiteur et, le cas échéant, les coûts additionnels. </p>
+        <br/>
+        <h1>5 Traitement des litiges </h1>
+        <br/>
+        <p align="justify">Article R312-35 du code de la consommation</p>
+        <br/>
+        <p align="justify">Le tribunal d'instance connaît des litiges nés de l'application du présent chapitre [chapitre relatif au crédit à la consommation]. Les actions en paiement engagées devant lui à l'occasion de la défaillance de l'emprunteur doivent être formées dans les deux ans de l'événement qui leur a donné naissance à peine de forclusion. Cet événement est caractérisé par :</p>
+        <br/>
+        <p align="justify">-&nbsp;le non-paiement des sommes dues à la suite de la résiliation du contrat ou de son terme ;</p>
+        <p align="justify">-&nbsp;ou le premier incident de paiement non régularisé ;</p>
+        <p align="justify">-&nbsp;ou le dépassement non régularisé du montant total du crédit consenti dans le cadre d'un contrat de crédit renouvelable ;</p>
+        <p align="justify">-&nbsp;ou le dépassement, au sens du 13° de l'article L. 311-1, non régularisé à l'issue du délai prévu à l'article L. 312-93. </p>
+        <br/>
+        <p align="justify">Lorsque les modalités de règlement des échéances impayées ont fait l'objet d'un réaménagement ou d'un rééchelonnement, le point de départ du délai de forclusion est le premier incident non régularisé intervenu après le premier aménagement ou rééchelonnement conclu entre les intéressés ou après adoption du plan conventionnel de redressement prévu à l'article L. 732-1 ou après décision de la commission imposant les mesures prévues à l'article L. 733-1 ou la décision du juge de l'exécution homologuant les mesures prévues à l'article L. 733-7.</p>
+        
+        
+     </div>
+     
+     <div Style=" page-break-inside: avoid">
+      
+         
+                <h1>6 Signatures </h1>
+     
+                    <div class="clear"></div>
+
+                    <div class="ButagazSignature">
+                         <p class="nospace">Votre Contact :&nbsp; {!Quote.Opportunity.Owner.Name}</p>
+                         <!--<p class="nospace">e-mail&nbsp;: {!Quote.CreatedBy.Email}</p>-->
+                         <br/>
+                         <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter" style="display: {!IF(isSE!='true','','None')}"><p>Signature :</p></div>
+                     
+                     
+                          
+                     
+                    <div class="ButagazCachet">
+                    <p> Pour Butagaz : votre Distributeur Régional :</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                                
+                               
+         
+          
+                    </div>
+                    
+                    <div class="ClientSignature">
+                          <p class="nospace">Nom et prénom du client&nbsp;: {!Quote.Opportunity.DO_Name__c}</p>
+                          <br/>
+                          <p class="SpaceBefore" style="display: {!IF(isSE!='true','','None')}">Date : <apex:outputtext value="__/__/____"/> </p>
+                          <p>{!IF(isSE!='true', 'et Signature(1) :','Document signé électroniquement.')}</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p style="display: {!IF(isSE!='true','','None')}"> (1) Signature à faire précéder de la mention manuscrite  lu et approuvé</p>
+
+                    </div> 
+       
+        
+          
+              
+            
+                </div>
+         <div class="clear"><p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Un exemplaire de chaque barème susvisé est joint au présent devis.</p>
+         <p> Le présent document est sans valeur contractuelle et ne peut en aucun cas se substituer à la conclusion d'un contrat de fourniture de gaz propane en citerne avec Butagaz.</p>
+          <p Style="display: {!IF(Quote.DO_groupement__r.GR_CENTRALISED_INVOICING__c=false,'','none')}"> Les tarifs indiqués dans cette proposition sont valables pendant la période de validité du présent devis, sauf modification des barèmes susvisés. </p>
+          
+        </div>  
+     
+      <div  Style="page-break-before:always">
+          <h3> Droit de rétractation </h3>
+          <br/>
+          <p align="justify">Vous avez le droit de vous rétracter du présent avenant de paiement sans donner de motif dans un délai de quatorze jours.
+          Le délai de rétractation expire quatorze jours après le jour la conclusion du contrat.
+          </p>
+          <br/>
+          <p align="justify">Pour exercer le droit de rétractation, vous devez nous notifier votre décision de rétractation du présent contrat au moyen d’une déclaration dénuée d’ambiguïté (par exemple, lettre envoyée par la poste, télécopie ou courrier électronique). Vous pouvez utiliser le modèle de formulaire de rétractation mais ce n’est pas obligatoire. La charge de la preuve de l'exercice du droit de rétractation pèse sur le consommateur, nous vous recommandons donc d’utiliser un moyen traçable (exemple : lettre recommandée avec accusé de réception). Nous vous rappelons que le fait de signer électroniquement votre contrat n'emporte pas signature de ce bon de rétractation.
+          </p>
+          <br/>
+          <p align="justify">Pour que le délai de rétractation soit respecté, il suffit que vous transmettiez votre communication relative à l’exercice du droit de rétractation avant l’expiration du délai de rétractation.
+          </p>
+          <br/>
+          <p align="justify">En cas de rétractation de votre part du présent contrat, nous vous rembourserons tous les paiements reçus de vous, sans retard excessif et, en tout état de cause, au plus tard quatorze jours à compter du jour où nous sommes informés de votre décision de rétractation du présent contrat. Nous procéderons au remboursement en utilisant le même moyen de paiement que celui que vous aurez utilisé pour la transaction initiale, sauf si vous convenez expressément d’un moyen différent; en tout état de cause, ce remboursement n’occasionnera pas de frais pour vous.
+          </p>
+          <br/>
+        
+     </div> 
+     <br/>
+     <p>----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>
+        
+      <div  class= "ButagazCadre" Style="page-break-inside:avoid">
+        <h3>Bordereau de rétractation à l'option étalement de paiement.</h3><br/>
+        <p align="justify">A renvoyer au plus tard quatorze jours après la date de signature du contrat pour la souscription de l’option étalement de paiement</p><br/><br/>
+        <p align="justify">Lorsque le crédit sert exclusivement à financer la fourniture de biens particuliers ou la prestation de services particuliers, que le contrat de crédit mentionne, et que vous avez opté, par demande écrite signée et datée, pour la livraison ou la fourniture immédiate du bien ou de la prestation de services, ce délai de rétractation expire à la date à laquelle le bien est livré ou le service fourni, sans pouvoir excéder quatorze jours, ni être inférieur à trois jours, sauf en cas de vente ou de démarchage à domicile : dans ce cas-là, le délai de rétractation est de quatorze jours, quelle que soit la date de livraison du bien.</p><br/> <br/>
+        <p align="justify">Le délai commence à courir à compter de la date de signature du présent contrat pour la souscription de l’option étalement de paiement.</p><br/><br/>
+        <p align="justify">La présente rétractation n'est valable que si elle est adressée, lisiblement et parfaitement remplie, avant l'expiration des délais rappelés ci-dessus, par lettre recommandée avec accusé de réception, à l'adresse suivante : Butagaz - Service Clients – 47/53 rue Raspail, 92594 Levallois-Perret Cedex</p><br/><br/>
+        <p align="justify">Je soussigné (nom / prénom), ............................................., déclare renoncer au contrat pour la souscription de l’option étalement de paiement et ainsi à l'offre de crédit d’un montant maximal de 2000 euros que j'avais acceptée le (date de la signature du contrat) ......................... pour étaler le prix de mes livraisons en gaz propane dans le cadre de mon contrat de fourniture de gaz propane en citerne conclu avec BUTAGAZ.</p><br/><br/>
+        <p align="justify">Fait le :  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Signature du client : &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p><br/>
+        
+      </div>
+      <!-- <div  Style="page-break-before:always">
+     	<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+      
+      
+      	<p>----------------------------------------------------------------------------------------------------------------------------------------------------------------</p>   
+        <br/>
+        <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:32px;" >BUTAGAZ</span></p><br/><br/>
+        <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:24px;" >SERVICE CLIENTS</span></p><br/><br/>
+        <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:24px;" >47/53 rue Raspail</span></p><br/> <br/>
+        <p align="center"><span style="display:block; text-align:center; font-weight:bold; letter-spacing:4px; font-size:24px;" >92594 Levallois-Perret Cedex</span></p><br/><br/>
+         
+     
+      </div> -->
+      
+    
+      <div class="clear">
+      </div> 
+    
+ </div>
+ </apex:page>

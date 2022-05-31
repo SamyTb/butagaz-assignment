@@ -1,0 +1,20 @@
+<apex:page standardController="Event">
+    <apex:includeLightning />
+    <apex:includeScript value="/lightning/lightning.out.js" />
+
+
+    <div id="lightning"/>
+
+    <script>
+        var eventId = "{!$CurrentPage.parameters.recordId}";
+ 
+        $Lightning.use("c:bobVisites_app", function() {
+          $Lightning.createComponent("c:bobVisites_menu",
+          { "recordId" : eventId},
+          "lightning",
+          function(cmp) {
+            // do some stuff
+          });
+        });
+    </script>
+</apex:page>

@@ -1,0 +1,6 @@
+<apex:page standardController="Commercial_Objectives__c" showHeader="False" sidebar="false"  >
+<apex:iframe src="https://cs7.salesforce.com/01ZM00000000GLd?isdtp=mn" height="900" width="80%" frameborder="true"/>
+<apex:iframe src="https://cs7.salesforce.com/01ZM00000000GLi?isdtp=mn" height="900" width="80%" frameborder="true"/>
+
+
+</apex:page>

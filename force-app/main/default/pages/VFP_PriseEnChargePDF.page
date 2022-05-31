@@ -1,0 +1,593 @@
+<apex:page standardController="PEC__c" showHeader="false" renderas="pdf" extensions="VFC_PriseEnCharge01">
+    <apex:stylesheet value="{!$Resource.PEC_Style}"/> 
+    <apex:form >
+        <!-- Document Header -->
+        <div class="header">
+            <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        </div>        
+        <!-- Document Footer -->
+        <div class="footer">
+            <p>Butagaz Siège : 47-53 rue Raspail --- 92594 LEVALLOIS PERRET CEDEX </p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z </p>
+        </div>           
+         <!-- Document Title-->   
+         <div >
+            <h1 style="line-height: 30px;margin: 0pt 0 0pt 0;">PRISE EN CHARGE DE MATÉRIEL</h1>                
+         </div>          
+        <!-- Contract Section-->   
+        <table>
+            <tr>
+                <td width="68%"><apex:outputField value="{!PEC__c.name}"/></td>
+                <td>Date de la PEC :&nbsp;<apex:outputField value="{!PEC__c.PEC_Date__c}"/></td>
+            </tr>           
+            <tr>
+                <td>
+                    <p class="spaceBefore">
+                        Nom du Client :&nbsp;<apex:outputField value="{!PEC__c.Account__r.Name}"/>
+                    </p>
+                </td>
+                <td>Référence Client :&nbsp;<apex:outputField value="{!PEC__c.Account__r.ExternalID__c}"/></td>
+            </tr>    
+            <tr>
+                <td colspan="2"> 
+                    <p class="spaceBefore">Adresse :&nbsp;                  
+                         {!IF(PEC__c.Account__r.Street_Number__c!=null,PEC__c.Account__r.Street_Number__c,PEC__c.Account__r.Street_N__c&' '&PEC__c.Account__r.Street_type__c&' '&PEC__c.Account__r.Street_name__c )}, &nbsp;
+                         
+                         {!IF(PEC__c.Account__r.City_Postal_Code__r.name!=null,PEC__c.Account__r.City_Postal_Code__r.name,PEC__c.Account__r.City__c&' '&PEC__c.Account__r.Postal_Code__c )}.
+                     </p>               
+                </td>
+            </tr>
+         </table>   
+         <br/>     
+         <p class="spaceBefore">Je soussigné, &nbsp; <apex:outputField value="{!PEC__c.Contact__r.Salutation}"/> &nbsp; <apex:outputField value="{!PEC__c.Contact__r.name}"/>, reconnais avoir reçu du distributeur ci-dessous agissant au nom et pour le compte de la SAS BUTAGAZ, le matériel suivant : </p>
+
+        <br/>
+        <!-- Articles Section-->       
+        <!-- Bottles -->
+        <apex:pageblock rendered="{!RenderBouteillesInstalles}" tabStyle="Item__c">        
+            <h2 class="ButagazTableHeader;" style="margin: 0pt 0 0pt 0;">{!$Label.Bottles}</h2>
+            <apex:outputpanel rendered="{!oAccount.Channel__c == 'CS'}"> 
+                <table class="ButagazTable" >
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>     
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="background-color: #FFFFFF;border:#FFFFFF solid 1px;"></th> <!-- Layout Cell -->
+                            <th colspan="2" style="font-size: 9pt;">STOCK MIS EN PRET</th>
+                            <th colspan="2" style="font-size: 9pt;">STOCK CONSIGNE</th>
+                        </tr>           
+                        <tr>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Name.label}</th>            
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Unit_Cost__c.label}<br/>en €</th>
+                            
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_pret__c.label}</th>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Total_CostP__c.label}<br/>en €</th>
+    
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_consigne__c.label}</th>   
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Total_CostC__c.label}<br/>en €</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!ListBouteillesInstalles}" var="line">
+                            <tr>
+                                <td style="width:18%;">{!line.Article__r.Name} ({!line.Article__r.Code_Article__c})</td>              
+                                <td class="currency">{!line.Unit_Cost__c}</td>
+                                
+                                <td class="currency">{!line.Stock_PEC_pret__c}</td> 
+                                <td class="currency">{!line.Total_CostP__c}</td>
+    
+                                <td class="currency">{!line.Stock_PEC_consigne__c}</td>
+                                <td class="currency">{!line.Total_CostC__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody >
+                    <tbody>
+                        <tr>
+                            <th colspan="6" style="background-color: #FFFFFF;width:10pt;"></th>
+                        </tr>               
+                        <tr>
+                            <th style="font-size: 8pt;">Sous Total Bouteilles:</th>
+                            <th  style="background-color: #FFFFFF;"/>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_pret_B__c}
+                                <apex:inputHidden value="{!PEC__c.Total_pret_B__c}"/>                           
+                            </th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cost_pretB__c}  €
+                                <apex:inputHidden value="{!PEC__c.Total_cost_pretB__c}"/>                           
+                            </th>    
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cons_B__c}
+                                <apex:inputHidden value="{!PEC__c.Total_cons_B__c}"/>
+                            </th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cost_ConsB__c} €
+                                <apex:inputHidden value="{!PEC__c.Total_cost_ConsB__c}"/>
+                            </th>  
+                        </tr>
+                    </tbody>    
+                </table>
+                <p class="spaceBefore" align="justify">Les montants de consignation peuvent varier et sont donnés à titre indicatif, reportez-vous au barème en vigueur.</p>                
+                 
+            </apex:outputpanel>
+            
+            <apex:outputpanel rendered="{!oAccount.Channel__c != 'CS'}">
+                <table class="ButagazTable" >
+                    <colgroup>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                    </colgroup>     
+                    <thead>
+                        <tr>
+                            <th style="width:40% !important;background-color: #FFFFFF;border:#FFFFFF solid 1px;"></th> <!-- Layout Cell -->
+                            <th  style="width:30% !important;font-size: 9pt;">STOCK MIS EN PRET</th>
+                            <th  style="width:30% !important;font-size: 9pt;">STOCK CONSIGNE</th>
+                        </tr>           
+                        <tr>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Name.label}</th>            
+                            
+    
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_pret__c.label}</th>
+                                
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_consigne__c.label}</th>   
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!ListBouteillesInstalles}" var="line">
+                            <tr>
+                                <td>{!line.Article__r.Name} ({!line.Article__r.Code_Article__c})</td>              
+                                
+    
+                                <td class="number">{!line.Stock_PEC_pret__c}</td> 
+    
+    
+                                <td class="number">{!line.Stock_PEC_consigne__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody >
+                    <tbody>
+                        <tr>
+                            <th colspan="3" style="background-color: #FFFFFF;width:10pt;"></th>
+                        </tr>               
+                        <tr>
+                            <th style="font-size: 8pt;">Sous Total Bouteilles</th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_pret_B__c}
+                                <apex:inputHidden value="{!PEC__c.Total_pret_B__c}"/>
+                            </th>  
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cons_B__c}
+                                <apex:inputHidden value="{!PEC__c.Total_cons_B__c}"/>
+                            </th>
+                        </tr>
+                    </tbody>    
+                </table> 
+            </apex:outputpanel>         
+            <BR/>
+        </apex:pageblock>
+        
+        <!-- Casiers -->
+        <apex:pageblock rendered="{!RenderCasiersInstalles}" tabStyle="Item__c">
+            <h2 class="ButagazTableHeader;" style="margin: 0pt 0 0pt 0;">{!$Label.Racks}</h2>       
+            <apex:outputpanel rendered="{!oAccount.Channel__c == 'CS'}">
+                <table class="ButagazTable" >
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>     
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="background-color: #FFFFFF;border:#FFFFFF solid 1px;"></th> <!-- Layout Cell -->
+                            <th colspan="2" style="font-size: 9pt;">MATERIEL MIS EN PRET</th>
+                            <th colspan="2" style="font-size: 9pt;">MATERIEL VENDU</th>
+                        </tr>           
+                        <tr>
+                            <th>Type de casier</th>            
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Unit_Cost__c.label}<br/>en € HT</th>
+                            
+
+                            <th>Matériel en prêt</th>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Total_CostP__c.label}<br/>en € HT</th>
+                               
+                            <th>Matériel vendu</th>   
+                            <th>Total coût vendu<br/>en € HT</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!ListCasiersInstalles}" var="line">
+                            <tr>
+                                <td style="width:18%;">{!line.Article__r.Code_Article__c}</td>              
+                                <td class="currency">{!line.Unit_Cost__c}</td>
+                                
+
+                                <td class="currency">{!line.Stock_PEC_pret__c}</td> 
+                                <td class="currency">{!line.Total_CostP__c}</td>
+
+
+                                <td class="currency">{!line.Stock_PEC_consigne__c}</td>
+                                <td class="currency">{!line.Total_CostC__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody >
+                    <tbody>
+                        <tr>
+                            <th colspan="6" style="background-color: #FFFFFF;width:10pt;"></th>
+                        </tr>               
+                        <tr>
+                            <th style="font-size: 8pt;">Sous Total Casiers:</th>
+                            <th style="background-color: #FFFFFF;"/>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_pret_C__c}
+                                <apex:inputHidden value="{!PEC__c.Total_pret_C__c}"/>                           
+                            </th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cost_pretC__c}  €
+                                <apex:inputHidden value="{!PEC__c.Total_cost_pretC__c}"/>                           
+                            </th>    
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cons_C__c}
+                                <apex:inputHidden value="{!PEC__c.Total_cons_C__c}"/>
+                            </th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cost_ConsC__c} €
+                                <apex:inputHidden value="{!PEC__c.Total_cost_ConsC__c}"/>
+                            </th>  
+                        </tr>
+                    </tbody>    
+                </table> 
+            </apex:outputpanel>
+            
+            <apex:outputpanel rendered="{!oAccount.Channel__c != 'CS'}">
+                <table class="ButagazTable" >
+                    <colgroup>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                    </colgroup>     
+                    <thead>
+                        <tr>
+                            <th style="width:40% !important;background-color: #FFFFFF;border:#FFFFFF solid 1px;"></th> <!-- Layout Cell -->
+                            <th style="width:30% !important;font-size: 9pt;">MATERIEL MIS EN PRET</th>
+                            <th style="width:30% !important;font-size: 9pt;">MATERIEL VENDU</th>
+                        </tr>           
+                        <tr>
+                            <th>Type de casier</th>            
+                            
+
+                            <th>Matériel en prêt</th>
+                            
+      
+                            <th>Matériel vendu</th>   
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!ListCasiersInstalles}" var="line">
+                            <tr>
+                                <td>{!line.Article__r.Code_Article__c}</td>              
+                                
+
+                                <td class="number">{!line.Stock_PEC_pret__c}</td> 
+
+
+                                <td class="number">{!line.Stock_PEC_consigne__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody >
+                    <tbody>
+                        <tr>
+                            <th colspan="3" style="background-color: #FFFFFF;width:10pt;"></th>
+                        </tr>               
+                        <tr>
+                            <th style="font-size: 8pt;">Sous Total Casiers:</th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_pret_C__c}
+                                <apex:inputHidden value="{!PEC__c.Total_pret_C__c}"/>
+                            </th>  
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cons_C__c}
+                                <apex:inputHidden value="{!PEC__c.Total_cons_C__c}"/>
+                            </th>
+                        </tr>
+                    </tbody>    
+                </table> 
+            </apex:outputpanel>
+            <br />
+        </apex:pageblock>   
+ 
+        <!-- Autre Matériel -->
+        <apex:pageblock rendered="{!RenderAMInstalles}" tabStyle="Item__c">
+            <h2 class="ButagazTableHeader;" style="margin: 0pt 0 0pt 0;">{!$Label.Other_Material}</h2>       
+            <apex:outputpanel rendered="{!oAccount.Channel__c == 'CS'}">
+                <table class="ButagazTable" >
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                        <col/>
+                    </colgroup>     
+                    <thead>
+                        <tr>
+                            <th colspan="2" style="background-color: #FFFFFF;border:#FFFFFF solid 1px;"></th> <!-- Layout Cell -->
+                            <th colspan="2" style="font-size: 9pt;">MATERIEL MIS EN PRET</th>
+                            <th colspan="2" style="font-size: 9pt;">MATERIEL VENDU</th>
+                        </tr>           
+                        <tr>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Name.label}</th>            
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Unit_Cost__c.label}<br/>en € HT</th>
+                            
+
+                            <th>Matériel en prêt</th>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Total_CostP__c.label}<br/>en € HT</th>
+                               
+                            <th>Matériel vendu</th>   
+                            <th>Total coût vendu<br/>en € HT</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!ListAMInstalles}" var="line">
+                            <tr>
+                                <td style="width:18%;">{!line.Article__r.Code_Article__c}</td>              
+                                <td class="currency">{!line.Unit_Cost__c}</td>
+                                
+
+                                <td class="currency">{!line.Stock_PEC_pret__c}</td> 
+                                <td class="currency">{!line.Total_CostP__c}</td>
+
+
+                                <td class="currency">{!line.Stock_PEC_consigne__c}</td>
+                                <td class="currency">{!line.Total_CostC__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody >
+                    <tbody>
+                        <tr>
+                            <th colspan="6" style="background-color: #FFFFFF;width:10pt;"></th>
+                        </tr>               
+                        <tr>
+                            <th style="font-size: 8pt;">Sous Total Autre Matériel:</th>
+                            <th style="background-color: #FFFFFF;"/>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_pret_AM__c}
+                                <apex:inputHidden value="{!PEC__c.Total_pret_AM__c}"/>                           
+                            </th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cost_pretAM__c}  €
+                                <apex:inputHidden value="{!PEC__c.Total_cost_pretAM__c}"/>                           
+                            </th>    
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cons_AM__c}
+                                <apex:inputHidden value="{!PEC__c.Total_cons_AM__c}"/>
+                            </th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cost_consAM__c} €
+                                <apex:inputHidden value="{!PEC__c.Total_cost_consAM__c}"/>
+                            </th>  
+                        </tr>
+                    </tbody>    
+                </table> 
+            </apex:outputpanel>
+            
+            <apex:outputpanel rendered="{!oAccount.Channel__c != 'CS'}">
+                <table class="ButagazTable" >
+                    <colgroup>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                    </colgroup>
+                    <colgroup>
+                        <col/>
+                    </colgroup>     
+                    <thead>
+                        <tr>
+                            <th style="width:40% !important;background-color: #FFFFFF;border:#FFFFFF solid 1px;"></th> <!-- Layout Cell -->
+                            <th style="width:30% !important;font-size: 9pt;">MATERIEL MIS EN PRET</th>
+                            <th style="width:30% !important;font-size: 9pt;">MATERIEL VENDU</th>
+                        </tr>           
+                        <tr>
+                            <th>{!$ObjectType.PEC_Article__c.Fields.Name.label}</th>            
+                            
+
+                            <th>Matériel en prêt</th>
+                            
+      
+                            <th>Matériel vendu</th>   
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:repeat value="{!ListAMInstalles}" var="line">
+                            <tr>
+                                <td style="width:20%;">{!line.Article__r.Code_Article__c}</td>              
+                                
+
+                                <td class="number">{!line.Stock_PEC_pret__c}</td> 
+
+
+                                <td class="number">{!line.Stock_PEC_consigne__c}</td>
+                            </tr>
+                        </apex:repeat>
+                    </tbody >
+                    <tbody>
+                        <tr>
+                            <th colspan="3" style="background-color: #FFFFFF;width:10pt;"></th>
+                        </tr>               
+                        <tr>
+                            <th style="font-size: 8pt;">Sous Total Autre Matériel:</th>
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_pret_AM__c}
+                                <apex:inputHidden value="{!PEC__c.Total_pret_AM__c}"/>
+                            </th>  
+                            <th style="background-color: #FFFFFF;">
+                                {!oPEC.Total_cons_AM__c}
+                                <apex:inputHidden value="{!PEC__c.Total_cons_AM__c}"/>
+                            </th>
+                        </tr>
+                    </tbody>    
+                </table> 
+            </apex:outputpanel>
+            <br />
+        </apex:pageblock> 
+         
+        <h2>PRISE EN CHARGE DE MATÉRIEL</h2>
+           
+        <!-- Last Prise en Charge -->
+        <apex:inputHidden value="{!PEC__c.Last_PEC__c}"/>
+        <apex:pageblock rendered="{!PEC__c.Last_PEC__c  == null}">
+            <p>Ceci est une première Prise en Charge.</p>
+        </apex:pageblock>
+        <apex:pageblock rendered="{!PEC__c.Last_PEC__c  != null}">
+            <p>Ce document annule et remplace les précédents. Date de la dernière prise en charge:&nbsp;&nbsp;       
+            <apex:outputText value="{!LastPecDate}" /> </p>
+        </apex:pageblock>
+        <p class="spaceBefore">Ce document sera nul si raturé.</p>
+        
+        <!--<div class="contractSection" Style="page-break-inside:avoid" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',false,true)}">-->
+        <!--<div class="contractSection" Style="page-break-inside:avoid" layout="block" style="display:{!if($CurrentPage.parameters.isSE!='true',"block","none")};">-->
+        <!--<div class="contractSection" Style="page-break-inside:avoid" layout="block" rendered="{!$CurrentPage.parameters.isSE!='true'}">-->
+        <div class="contractSection" layout="block" style="page-break-inside:avoid; display:{!if(isSE!='true',"block","none")};">
+            <div class="Signatures">
+                <h1>Signatures</h1>
+                <!--<h1>{!IF(isSE!='true', 'Signatures', 'Acceptation des conditions')}</h1>-->
+                   <BR/><BR/>
+                <div class="clear"></div>
+
+                <div class="ButagazSignature">                
+                    <p class="nospace">Votre Contact :&nbsp; {!PEC__c.CreatedBy.Name}</p>
+                        <br/>                  
+                        <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>                       
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                       <p>&nbsp;</p> 
+                       <p>&nbsp;</p>
+                       <p>&nbsp;</p>
+                        <div class="ButagazCachet">
+                            <p> Pour Butagaz: votre Distributeur:</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="  {!PEC__c.Account__r.T_Mandataire_Address__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value=" {!PEC__c.Account__r.T_Mandataire_RCS__c}"/></p>                    
+                        </div>
+                </div>  
+                   
+                   
+                <div class="ClientSignature">                 
+                        <p class=" nospace "> Client Signataire :&nbsp; <apex:outputField value="{!PEC__c.Contact__r.Salutation}"/> &nbsp; <apex:outputField value="{!PEC__c.Contact__r.name}"/></p>
+                        <br/>                  
+                        <br/>
+                        <!--<div style="display: {!IF(isSE!='true','','None')}">-->
+                            <p class="SpaceBefore">Date d’impression de la Prise en Charge :&nbsp;<apex:outputtext value="{!TodayDate}"/> </p>
+                            <br/>
+                            <p class="SpaceBefore">Date de Signature :&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                            <br/>
+                            <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                            <br/>
+                            <p class="SpaceBefore">Signature &nbsp;(1):</p>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+                            <br/>
+               
+                            <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                            <p>&nbsp;</p>
+                            <div class="ButagazCachet">
+                                <p>Cachet commercial Client</p>
+                                <br/>
+                                <p>&nbsp;</p>
+                                <br/>
+                                <p>&nbsp;</p>                    
+                            </div> 
+                        <!--</div>
+                        <div style="display: {!IF(isSE=='true','','None')}">
+                            <p>Document signé électroniquement.</p>
+                        </div>-->
+                                           
+                </div> 
+                               
+            </div>
+                <div class="clear"/>
+        </div>
+                    
+        <apex:inputHidden value="{!PEC__c.Status__c}"/> 
+
+        <!--************************* Page de CGU pour signature électronique *************************-->
+        <div class="contractSection" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+            <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.displayCGUSE=='true',true,false)}">
+                <c:CGU_SignatureElectroniquePDF />
+            </apex:outputPanel>
+            <apex:outputPanel layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <p class="nospace">Votre Contact :&nbsp; {!PEC__c.CreatedBy.Name}</p>
+                <div class="ButagazSignature">
+                    <div class="ButagazCachet">
+                        <p>Pour Butagaz: votre Distributeur:</p>
+                        <br/>
+                        <p><apex:outputtext escape="False" value="{!PEC__c.Account__r.T_Mandataire_Address__c}"/></p>
+                        <br/>
+                        <p><apex:outputfield value="{!PEC__c.Account__r.T_Mandataire_RCS__c}"/></p>                    
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </div>
+
+    </apex:form>
+
+
+    <!--************************* Page de signature pour signature électronique *************************-->
+    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+        <c:SignaturePDF nbSig="{!$CurrentPage.parameters.nbSig}" withdrawalText="{!$CurrentPage.parameters.withdrawalText}"/>
+    </apex:outputPanel>
+
+</apex:page>

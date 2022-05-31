@@ -1,0 +1,412 @@
+<apex:page standardController="PEC__c" extensions="VFC_PriseEnCharge01" showHeader="true" sidebar="false" tabStyle="PEC__c">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+    <script>
+        var $dialog;
+        $(document).ready(function() {
+        $dialog = $("#dialog-modal")
+            .dialog({
+                autoOpen: false,
+                height: 150,
+                width: 250,
+                modal: true,
+                closeOnEscape: false,
+                resizable: false
+            });
+        });
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            return false;
+        }
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+        
+        $(function() {
+ 
+    		$("form").bind("keypress", function(e) {
+            	if (e.keyCode == 13) CallSaveBtn();
+      		});
+ 
+		});        
+    </script>
+    <style type="text/css">
+        .empty-column-content {
+            display: none;
+        }
+            
+        .headerRow .headerCons {
+            background-color:#e39321 !important;color:#FFFFFF !important;       
+        }
+        .headerRow .headerPret{background-color:rgb(23, 151, 192) !important;color:#FFFFFF !important;
+        }
+        .divPTotal{
+        background-color:rgb(23, 151, 192) !important;color:#FFFFFF !important;font-size: .9em;
+          font-weight: bold;
+          font-family: Arial,Helvetica,sans-serif;
+          padding: 5px 2px 4px 5px;
+          width:150px;
+        }
+        
+        .divCTotal{
+        background-color:#e39321 !important;color:#FFFFFF !important;font-size: .9em;
+          font-weight: bold;
+          font-family: Arial,Helvetica,sans-serif;
+          padding: 5px 2px 4px 5px;
+          width:180px;
+        }
+        
+        .total{
+        background-color:#FFFFFF !important;color:#000000 !important;font-size: .9em;
+          font-weight: bold;
+          font-family: Arial,Helvetica,sans-serif;
+          padding: 5px 2px 4px 5px;
+          width:80px;
+          height:11pt;
+          text-align: left;
+        }
+        
+        .totalPrix{
+        background-color:#FFFFFF !important;color:#000000 !important;font-size: .9em;
+          font-weight: bold;
+          font-family: Arial,Helvetica,sans-serif;
+          padding: 5px 2px 4px 5px;
+          width:80px;
+          height:11pt;
+          text-align: center;
+        }
+        
+        .dataCell {
+            text-align: center !important;      
+        }
+    
+    </style>
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}"/>
+        </div>
+    </div>    
+        
+   <apex:form >  
+    	<apex:actionFunction action="{!saveBtn}" name="CallSaveBtn"/>
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>       
+        <apex:sectionheader title="{!$Label.Prise_en_Charge}" subtitle="{!oAccount.AccountNumber}"/>
+        <apex:pageblock id="idBlockIssue" rendered="{!bIssue}">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!save}" rendered="{!bValidated}"/> 
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}"/>               
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+            <apex:pageblock rendered="{!bValidated}">
+            	<apex:pageblocksection >	
+            		<apex:inputField value="{!PEC__c.Status__c}" required="true"/>                
+            	</apex:pageblocksection>
+            </apex:pageblock>            
+        </apex:pageblock>
+
+        <apex:pageblock id="idBlock" rendered="{!NOT(bIssue)}">
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.PEC_calculate_cost}" action="{!calcCost}" rerender="idBlock" status="modalStatus"/> 
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!saveBtn}" rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}" status="modalStatus"/>
+            </apex:pageblockbuttons>
+            <apex:pageblocksection >
+                <apex:outputField value="{!PEC__c.Account__c}"/>
+                <apex:outputField value="{!oAccount.Channel__c}"/>
+                <apex:outputField value="{!PEC__c.Name}"/>
+                <apex:inputField value="{!PEC__c.PEC_Date__c}"/>                
+                <apex:outputField value="{!PEC__c.Last_PEC__c}" rendered="{!PEC__c.Last_PEC__c  != null}"/>
+                <apex:outputField value="{!PEC__c.Last_PEC_Date__c}" rendered="{!PEC__c.Last_PEC__c  != null}"/>
+                <apex:inputField value="{!PEC__c.Contact__c}" required="true"/>
+                <apex:inputField value="{!PEC__c.Status__c}" required="true"/>                
+            </apex:pageblocksection>
+            
+            <!-- PEC of Bottles -->
+            <apex:pageblock tabStyle="Item__c">
+                <apex:pageblocksection title="{!$Label.Bottles}" collapsible="true" columns="1">                               
+                    <apex:pageblocktable value="{!lPECBouteilles}" var="line" rendered="{!RenderBouteilles}">                             
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Name.label}" style="width:25%;text-align: left!important;">
+                            {!line.Article__r.Name} ({!line.Article__r.Code_Article__c})
+                        </apex:column>        
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Unit_Cost__c.label}" rendered="{!oAccount.Channel__c == 'CS'}"  style="width:80px !important;">
+                            <apex:inputfield value="{!line.Unit_Cost__c}" style="width:80px !important;"/>                            
+                        </apex:column>  
+                        <!-- Data for articles in "pret" -->
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_SAP_pret__c.label}" headerclass="headerPret">
+                           <apex:outputfield value="{!line.Stock_SAP_pret__c}" style="width:80px !important;"/>                              
+                        </apex:column>                          
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_pret_Last_PEC__c.label}" headerclass="headerPret" >
+                            <apex:outputText value="{!line.Stock_pret_Last_PEC__c}"  style="width:80px !important;"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_pret__c.label}" headerclass="headerPret" >
+                            <apex:inputfield value="{!line.Stock_PEC_pret__c}" style="width:80px !important;"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Total_CostP__c.label}" rendered="{!oAccount.Channel__c == 'CS'}"  headerclass="headerPret" >
+                            <apex:outputfield value="{!line.Total_CostP__c}" style="width:80px !important;"/>                            
+                        </apex:column>
+                        <!-- Data for articles "consigne" -->
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_SAP_consigne__c.label}" headerclass="headerCons">
+                           <apex:outputfield value="{!line.Stock_SAP_consigne__c}" style="width:80px !important;"/>                              
+                        </apex:column>                          
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_cons_Last_PEC__c.label}" headerclass="headerCons">
+                            <apex:outputText value="{!line.Stock_cons_Last_PEC__c}" style="width:80px !important;" />                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_consigne__c.label}" headerclass="headerCons"> 
+                            <apex:inputfield value="{!line.Stock_PEC_consigne__c}" style="width:80px !important;"/>                          
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Total_CostC__c.label}" rendered="{!oAccount.Channel__c == 'CS'}" headerclass="headerCons">
+                            <apex:outputfield value="{!line.Total_CostC__c}" style="width:80px !important;" />                            
+                        </apex:column>                              
+                    </apex:pageblocktable>                  
+                    <!-- Sous Total "Consommateur"-->
+                    <apex:outputpanel rendered="{!oAccount.Channel__c == 'CS'}"> 
+                        <table style="margin-left:38% !important;">
+                            <tr>
+                                <td>
+                                     <div class="divPTotal"> Sous Total prêt Bouteilles: </div>
+                                </td>
+                                <td>
+                                    <div class="total" >{!oPEC.Total_pret_B__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_pret_B__c}"/>
+                                </td>
+                                <td>
+                                    <div class="totalPrix">{!oPEC.Total_cost_pretB__c}  €</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cost_pretB__c}"/>
+                                </td>
+                                <td style="width:65px"/>
+                                <td>
+                                     <div class="divCTotal"> Sous Total consigné Bouteilles: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_cons_B__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cons_B__c}"/>
+                                </td>
+                                <td>
+                                    <div class="totalPrix">{!oPEC.Total_cost_ConsB__c} €</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cost_ConsB__c}"/>
+                                </td>                                                                   
+                            </tr>
+                        </table>
+                    </apex:outputpanel> 
+                    <!-- Sous Total "Revendeur" -->
+                    <apex:outputpanel rendered="{!oAccount.Channel__c != 'CS'}"> 
+                        <table style="margin-left:40% !important;">
+                            <tr>
+                                <td>
+                                     <div class="divPTotal"> Sous Total prêt Bouteilles: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_pret_B__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_pret_B__c}"/>
+                                </td>
+                                <td style="width:198px"/>
+                                <td>
+                                     <div class="divCTotal"> Sous Total consigné Bouteilles: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_cons_B__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cons_B__c}"/>
+                                </td>                                                              
+                            </tr>
+                        </table>
+                    </apex:outputpanel> 
+                    
+                </apex:pageblocksection>
+            </apex:pageblock>
+            
+            <!-- PEC of Racks -->
+            <apex:pageblock tabStyle="Item__c">
+                <apex:pageblocksection title="{!$Label.Racks}" collapsible="true" columns="1">                               
+                    <apex:pageblocktable value="{!lPECCasiers}" var="line" rendered="{!RenderCasiers}">                             
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Name.label}" style="width:25%;text-align: left!important;">
+                            <apex:outputfield value="{!line.Article__r.Code_Article__c}" style="width:100%" />
+                        </apex:column>        
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Unit_Cost__c.label}" rendered="{!oAccount.Channel__c == 'CS'}"  style="width:80px !important;">
+                            <apex:inputfield value="{!line.Unit_Cost__c}" style="width:80px !important;"/>                            
+                        </apex:column>  
+                        <!-- Data for articles in "pret" -->
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_SAP_pret__c.label}" headerclass="headerPret">
+                           <apex:outputfield value="{!line.Stock_SAP_pret__c}" style="width:80px !important;"/>                              
+                        </apex:column>                          
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_pret_Last_PEC__c.label}" headerclass="headerPret" >
+                            <apex:outputText value="{!line.Stock_pret_Last_PEC__c}"  style="width:80px !important;"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_pret__c.label}" headerclass="headerPret" >
+                            <apex:inputfield value="{!line.Stock_PEC_pret__c}" style="width:80px !important;"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Total_CostP__c.label}" rendered="{!oAccount.Channel__c == 'CS'}"  headerclass="headerPret" >
+                            <apex:outputfield value="{!line.Total_CostP__c}" style="width:80px !important;"/>                            
+                        </apex:column>
+                        <!-- Data for articles "consigne" -->
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_SAP_consigne__c.label}" headerclass="headerCons">
+                           <apex:outputfield value="{!line.Stock_SAP_consigne__c}" style="width:80px !important;"/>                              
+                        </apex:column>                          
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_cons_Last_PEC__c.label}" headerclass="headerCons">
+                            <apex:outputText value="{!line.Stock_cons_Last_PEC__c}" style="width:80px !important;" />                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_consigne__c.label}" headerclass="headerCons"> 
+                            <apex:inputfield value="{!line.Stock_PEC_consigne__c}" style="width:80px !important;"/>                          
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Total_CostC__c.label}" rendered="{!oAccount.Channel__c == 'CS'}" headerclass="headerCons">
+                            <apex:outputfield value="{!line.Total_CostC__c}" style="width:80px !important;" />                            
+                        </apex:column>                              
+                    </apex:pageblocktable>                  
+                    <!-- Sous Total "Consommateur"-->
+                    <apex:outputpanel rendered="{!oAccount.Channel__c == 'CS'}"> 
+                        <table style="margin-left:38% !important;">
+                            <tr>
+                                <td>
+                                     <div class="divPTotal"> Sous Total prêt Casiers: </div>
+                                </td>
+                                <td>
+                                    <div class="total" >{!oPEC.Total_pret_C__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_pret_C__c}"/>
+                                </td>
+                                <td>
+                                    <div class="totalPrix">{!oPEC.Total_cost_pretC__c}  €</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cost_pretC__c}"/>
+                                </td>
+                                <td style="width:65px"/>
+                                <td>
+                                     <div class="divCTotal"> Sous Total consigné Casiers: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_cons_C__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cons_C__c}"/>
+                                </td>
+                                <td>
+                                    <div class="totalPrix">{!oPEC.Total_cost_ConsC__c} €</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cost_ConsC__c}"/>
+                                </td>                                                                   
+                            </tr>
+                        </table>
+                    </apex:outputpanel> 
+                    <!-- Sous Total "Revendeur" -->
+                    <apex:outputpanel rendered="{!oAccount.Channel__c != 'CS'}"> 
+                        <table style="margin-left:40% !important;">
+                            <tr>
+                                <td>
+                                     <div class="divPTotal"> Sous Total prêt Casiers: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_pret_C__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_pret_C__c}"/>
+                                </td>
+                                <td style="width:198px"/>
+                                <td>
+                                     <div class="divCTotal"> Sous Total consigné Casiers: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_cons_C__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cons_C__c}"/>
+                                </td>                                                              
+                            </tr>
+                        </table>
+                    </apex:outputpanel> 
+                    
+                </apex:pageblocksection>
+            </apex:pageblock>
+
+            <!-- PEC of Autre Matériel -->
+            <apex:pageblock tabStyle="Item__c">
+                <apex:pageblocksection title="{!$Label.Other_Material}" collapsible="true" columns="1">                               
+                    <apex:pageblocktable value="{!lPECAutresMateriels}" var="line" rendered="{!RenderAutreMateriel}">                             
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Name.label}" style="width:25%;text-align: left!important;">
+                            <apex:outputfield value="{!line.Article__r.Code_Article__c}" style="width:100%" />
+                        </apex:column>        
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Unit_Cost__c.label}" rendered="{!oAccount.Channel__c == 'CS'}"  style="width:80px !important;">
+                            <apex:inputfield value="{!line.Unit_Cost__c}" style="width:80px !important;"/>                            
+                        </apex:column>  
+                        <!-- Data for articles in "pret" -->
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_SAP_pret__c.label}" headerclass="headerPret">
+                           <apex:outputfield value="{!line.Stock_SAP_pret__c}" style="width:80px !important;"/>                              
+                        </apex:column>                          
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_pret_Last_PEC__c.label}" headerclass="headerPret" >
+                            <apex:outputText value="{!line.Stock_pret_Last_PEC__c}"  style="width:80px !important;"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_pret__c.label}" headerclass="headerPret" >
+                            <apex:inputfield value="{!line.Stock_PEC_pret__c}" style="width:80px !important;"/>                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Total_CostP__c.label}" rendered="{!oAccount.Channel__c == 'CS'}"  headerclass="headerPret" >
+                            <apex:outputfield value="{!line.Total_CostP__c}" style="width:80px !important;"/>                            
+                        </apex:column>
+                        <!-- Data for articles "consigne" -->
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_SAP_consigne__c.label}" headerclass="headerCons">
+                           <apex:outputfield value="{!line.Stock_SAP_consigne__c}" style="width:80px !important;"/>                              
+                        </apex:column>                          
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_cons_Last_PEC__c.label}" headerclass="headerCons">
+                            <apex:outputText value="{!line.Stock_cons_Last_PEC__c}" style="width:80px !important;" />                            
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Stock_PEC_consigne__c.label}" headerclass="headerCons"> 
+                            <apex:inputfield value="{!line.Stock_PEC_consigne__c}" style="width:80px !important;"/>                          
+                        </apex:column>
+                        <apex:column headervalue="{!$ObjectType.PEC_Article__c.Fields.Total_CostC__c.label}" rendered="{!oAccount.Channel__c == 'CS'}" headerclass="headerCons">
+                            <apex:outputfield value="{!line.Total_CostC__c}" style="width:80px !important;" />                            
+                        </apex:column>                              
+                    </apex:pageblocktable>                  
+                    <!-- Sous Total "Consommateur"-->
+                    <apex:outputpanel rendered="{!oAccount.Channel__c == 'CS'}"> 
+                        <table style="margin-left:35.8% !important;">
+                            <tr>
+                                <td>
+                                     <div class="divPTotal" style="width:180px"> Sous Total prêt Autre Matériel: </div>
+                                </td>
+                                <td>
+                                    <div class="total" >{!oPEC.Total_pret_AM__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_pret_AM__c}"/>
+                                </td>
+                                <td>
+                                    <div class="totalPrix">{!oPEC.Total_cost_pretAM__c}  €</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cost_pretAM__c}"/>
+                                </td>
+                                <td style="width:30px"/>
+                                <td>
+                                     <div class="divCTotal" style="width:200px"> Sous Total consigné Autre Matériel: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_cons_AM__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cons_AM__c}"/>
+                                </td>
+                                <td>
+                                    <div class="totalPrix">{!oPEC.Total_cost_consAM__c} €</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cost_consAM__c}"/>
+                                </td>                                                                   
+                            </tr>
+                        </table>
+                    </apex:outputpanel> 
+                    <!-- Sous Total "Revendeur" -->
+                    <apex:outputpanel rendered="{!oAccount.Channel__c != 'CS'}"> 
+                        <table style="margin-left:38% !important;">
+                            <tr>
+                                <td>
+                                     <div class="divPTotal" style="width:180px"> Sous Total prêt Autre Matériel: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_pret_AM__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_pret_AM__c}"/>
+                                </td>
+                                <td style="width:170px"/>
+                                <td>
+                                     <div class="divCTotal" style="width:200px"> Sous Total consigné Autre Matériel: </div>
+                                </td>
+                                <td>
+                                    <div class="total">{!oPEC.Total_cons_AM__c}</div>
+                                    <apex:inputHidden value="{!PEC__c.Total_cons_AM__c}"/>
+                                </td>                                                              
+                            </tr>
+                        </table>
+                    </apex:outputpanel> 
+                    
+                </apex:pageblocksection>
+            </apex:pageblock>
+            
+        </apex:pageblock>   
+            
+    </apex:form> 
+</apex:page>

@@ -1,0 +1,174 @@
+<apex:page standardController="CDS__c" extensions="VFC_ControleDesStocks01" showHeader="true" sidebar="false" tabStyle="CDS__c">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+
+    <script>
+        var $dialog;
+        $(document).ready(function() {
+        $dialog = $("#dialog-modal")
+            .dialog({
+                autoOpen: false,
+                height: 150,.
+                width: 250,
+                modal: true,
+                closeOnEscape: false,
+                resizable: false
+            });
+        });
+        
+        function startStatus(){
+            $dialog.dialog('open');
+            return false;
+        }
+    
+        function stopStatus(){
+            $dialog.dialog('close');
+            return false;
+        }
+
+        $(function() {
+ 
+    		$("form").bind("keypress", function(e) {
+            	if (e.keyCode == 13) CallSaveBtn();
+      		});
+ 
+		});        
+    </script>
+    <style type="text/css">
+    .empty-column-content {
+        display: none;
+    }
+     
+    
+    </style>
+    
+    <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.pricing_popup_message_wait}"/>
+        </div>
+    </div>    
+    
+    <apex:form >
+       <apex:actionFunction action="{!saveBtn}" name="CallSaveBtn"/>
+       <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>       
+       <apex:sectionheader title="{!$Label.CDS}" subtitle="{!oAccount.AccountNumber}"/>
+        <apex:pageblock id="idBlockIssue" rendered="{!bIssue}">          
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!save}" rendered="{!bValidated}"/> 
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}"/>               
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+            <apex:pageblock rendered="{!bValidated}">
+            	<apex:pageblocksection >	
+            		<apex:inputField value="{!CDS__c.Status__c}" required="true"/>
+                    <apex:inputField value="{!CDS__c.Prise_en_Charge__c}" rendered="{!displayPEC}"/>                
+            	</apex:pageblocksection>
+            </apex:pageblock>                         
+        </apex:pageblock>
+
+        <apex:pageblock id="idBlock" rendered="{!NOT(bIssue)}">        
+            <apex:pageblockbuttons >
+                <apex:commandbutton value="{!$Label.CDS_Calculer_resultat}" action="{!calcResultBtn}" rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.save_button_label}" action="{!saveBtn}" rerender="idBlock" status="modalStatus"/>
+                <apex:commandbutton value="{!$Label.back_button_label}" action="{!cancel}" status="modalStatus"/>
+            </apex:pageblockbuttons>
+            <apex:pagemessages escape="false"/>
+            <apex:pageblocksection >
+                <apex:outputField value="{!CDS__c.Account__c}"/>
+                <apex:inputField value="{!CDS__c.CDS_Date__c}"/>
+                <apex:inputField value="{!CDS__c.Contact__c}" required="true"/>
+                <apex:inputField value="{!CDS__c.Status__c}" required="true"/>    
+                <apex:inputField value="{!CDS__c.Prise_en_Charge__c}"/>
+            </apex:pageblocksection>
+             <apex:pageblock tabStyle="Item__c">
+                    <apex:pageblocksection title="{!$Label.Bottles}" collapsible="true" columns="1"> 
+                        <apex:pageblocktable value="{!lCDSBouteilles}" var="line" rendered="{!RenderBouteilles}">
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Name.label}" >
+                                {!line.Article__r.Name} ({!line.Article__r.Code_Article__c})
+                            </apex:column>        
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Stock_PEC__c.label}" style="text-align: center!important;">
+                               <apex:outputfield value="{!line.Stock_PEC__c}"/>                              
+                            </apex:column>                               
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Stock_effectif__c.label}">
+                                <apex:inputfield value="{!line.Stock_effectif__c}" style="width:60px"/>                            
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Consignation__c.label}" style="text-align: center!important;">
+                                <apex:inputfield value="{!line.Consignation__c}"/>                            
+                            </apex:column>                          
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Valeur_Consignation__c.label}">
+                                <apex:inputfield value="{!line.Valeur_Consignation__c}" style="width:130px"/>                            
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Deconsignation__c.label}" style="text-align: center!important;">
+                                <apex:inputfield value="{!line.Deconsignation__c}"/>                            
+                            </apex:column>                          
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Valeur_Deconsignation__c.label}">
+                                <apex:inputfield value="{!line.Valeur_Deconsignation__c}" style="width:140px"/>                            
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Stock_Reel__c.label}" style="text-align: center!important;"> 
+                                <apex:outputfield value="{!line.Stock_Reel__c}"/>                            
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Resultat_CDS__c.label}" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Resultat_CDS__c}"/>                            
+                            </apex:column> 
+                            <!--FLA DEBUT RAINBOW LOT 2-->
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Compensation_Excedents__c.label}" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Compensation_Excedents__c}"/>                            
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Non_Facture_Excedents__c.label}" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Non_Facture_Excedents__c}"/>                            
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Compensation_Manquants__c.label}" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Compensation_Manquants__c}"/>                            
+                            </apex:column> 
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Consignation_Manquants__c.label}" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Consignation_Manquants__c}"/>                            
+                            </apex:column> 
+                            <!--FLA FIN RAINBOW LOT 2-->
+                        </apex:pageblocktable> 
+                    </apex:pageblocksection>
+            </apex:pageblock>
+            <apex:pageblock tabStyle="Item__c">
+                    <apex:pageblocksection title="{!$Label.Racks}" collapsible="true" columns="1"> 
+                        <apex:pageblocktable value="{!lCDSCasiers}" var="line" rendered="{!RenderCasiers}">
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Name.label}" style="width:30%;">
+                                {!line.Article__r.Code_Article__c}
+                            </apex:column>        
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Stock_PEC__c.label}" style="width:15%;text-align: center!important;">
+                               <apex:outputfield value="{!line.Stock_PEC__c}"/>                              
+                            </apex:column>                               
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Stock_effectif__c.label}" style="width:15%;">
+                                <apex:inputfield value="{!line.Stock_effectif__c}"/>                            
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Stock_Reel__c.label}" style="width:15%;text-align: center!important;">
+                                <apex:outputfield value="{!line.Stock_Reel__c}"/>                            
+                            </apex:column>
+                            <apex:column headervalue="{!$ObjectType.CDS_Article__c.Fields.Resultat_CDS__c.label}" style="width:15%;text-align: center!important;">
+                                <apex:outputfield value="{!line.Resultat_CDS__c}"/>                            
+                            </apex:column>
+                            <!--FLA DEBUT RAINBOW LOT 2-->
+                            <apex:column headervalue="Excédant" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Non_Facture_Excedents__c}"/>                            
+                            </apex:column> 
+                            <apex:column headervalue="Manquants" style="text-align: center!important;">
+                                <apex:outputfield value="{!line.Consignation_Manquants__c}"/>                            
+                            </apex:column> 
+                            <!--FLA FIN RAINBOW LOT 2-->
+                        </apex:pageblocktable> 
+                    </apex:pageblocksection>
+            </apex:pageblock>
+            
+         <apex:pageblock tabStyle="Item__c">
+            <apex:pageblocksection title="Observations" collapsible="true" columns="1"> 
+                <apex:inputfield value="{!CDS__c.Observations__c }" label="" style="width:50%;height:80px;" />
+            </apex:pageblocksection>
+         </apex:pageblock>
+            
+         </apex:pageblock> 
+           
+
+       
+   </apex:form>     
+    
+</apex:page>

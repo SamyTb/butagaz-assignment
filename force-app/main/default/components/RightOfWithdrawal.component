@@ -1,0 +1,25 @@
+<apex:component >
+	<!-- Attribute definitions -->
+	<apex:attribute name="clientType" description="Owner or Renter."
+        type="String" required="true"/>
+
+	<div id="containerRightOfWithdrawal" Style=" page-break-inside:avoid">
+    
+    	<div class="contractSection">
+
+    		<h1>Droit de rétractation</h1>
+        	<br/>
+
+        	<p align="justify">
+        	{!IF(clientType=='Owner', 'Par dérogation aux Conditions Générales, et dans ', 'Dans ')} les limites posées par l'article L221-3 du code de la consommation, vous avez le droit de vous rétracter du présent contrat sans donner de motif dans un délai de quatorze jours. Le délai de rétractation expire quatorze jours après le jour de la conclusion du contrat. Pour exercer le droit de rétractation, vous devez nous notifier votre décision de rétractation au moyen d’une déclaration dénuée d’ambiguïté (par exemple, lettre envoyée par la poste ou courrier électronique, au service client de BUTAGAZ, 47/53 rue Raspail, 92 594 Levallois-Perret Cedex). Vous pouvez utiliser le modèle de formulaire de rétractation joint en annexe des présentes mais ceci n’est pas obligatoire. 
+			Pour que le délai de rétractation soit respecté, il suffit que vous transmettiez votre communication relative à l’exercice du droit de rétractation avant l’expiration du délai de rétractation.</p><br/>
+
+			<p align="justify">En cas de rétractation de votre part du présent contrat, nous vous rembourserons le paiement reçu de vous, sans retard excessif et, en tout état de cause, au plus tard quatorze jours à compter du jour où nous sommes informés de votre décision de rétractation du présent contrat. Nous procéderons au remboursement en utilisant le même moyen de paiement que celui que vous aurez utilisé pour la transaction initiale, sauf si vous convenez expressément d’un moyen différent ; en tout état de cause, ce remboursement n'occasionnera pas de frais pour vous.
+			Vous devrez nous laisser venir repomper le gaz restant, sans retard excessif et, en tout état de cause, au plus tard quatorze jours après que vous nous aurez communiqué votre décision de rétractation du présent contrat. 
+			Si vous avez demandé de commencer la fourniture de gaz pendant le délai de rétractation, vous devrez nous payer un montant proportionnel à ce qui vous a été fourni jusqu’au moment où vous nous avez informé de votre rétractation du présent contrat, par rapport à l’ensemble des prestations fournies au contrat.</p><br/>
+
+    	</div>
+
+    </div>
+
+</apex:component>

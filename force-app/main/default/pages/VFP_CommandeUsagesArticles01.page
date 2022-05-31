@@ -1,0 +1,5 @@
+<apex:page standardController="CUSAGE_Article__c" extensions="VFC_CommandeUsagesArticle01" showHeader="true" sidebar="false" action="{!getCUSAGESPage}">
+
+	
+
+</apex:page>

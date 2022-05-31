@@ -1,0 +1,160 @@
+<apex:page standardController="Order__c" language="fr" showHeader="false" extensions="GDB_Split_OrdersController" standardStylesheets="false" cache="false">
+    <apex:includeScript value="{!$Resource.GDB_JQuery}"/>
+    <apex:includeScript value="{!$Resource.GDB_JQuery_UI}"/>
+    <apex:includeScript value="{!$Resource.GDB_Split_Order_JS}"/>    
+    <apex:stylesheet value="{!$Resource.GDB_Split_Order_CSS}" />
+    <apex:variable var="toValidate" value="{!isOrderToValidate}" />
+    <apex:slds />
+    <apex:form >
+        <div class="slds-scope">
+            <div class="slds-grid slds-wrap slds-grid_pull-padded slds-size_12-of-12">
+                <div class="slds-p-horizontal_xx-small slds-size_12-of-12 col_head slds-p-bottom_small">
+                    <div class="slds-p-vertical_small">
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">{!$Label.GDB_order}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">Date</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.Name}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small"><apex:outputText value="{0,date,dd/MM/yyyy HH:mm}"><apex:param value="{!Order__c.Order_Date_and_Time__c}" /> </apex:outputText></p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">{!$Label.GDB_order_billing_address}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">{!$Label.GDB_order_shipping_address}</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_billing_address1__c}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_shipping_address1__c}</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_billing_address2__c}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_shipping_address2__c}</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_billing_address3__c}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_shipping_address3__c}</p>
+                            </div>
+                        </div>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_billing_zip__c} {!Order__c.gdb_billing_city__c}</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_4-of-8">
+                                <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!Order__c.gdb_shipping_zip__c} {!Order__c.gdb_shipping_city__c}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-p-horizontal_xx-small slds-size_8-of-12 col_head slds-p-bottom_small">
+                    <p class="slds-text-heading_medium slds-text-align_center slds-text-color_inverse">{!$Label.GDB_order} {!Order__c.Name}</p>
+                    <div class="slds-p-horizontal_small">
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                            <div class="slds-p-horizontal_small slds-size_1-of-12">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">ID</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_3-of-12">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">Nom</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_2-of-12">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">Quantité initiale</p>
+                            </div>
+                            <div class="slds-p-horizontal_small slds-size_2-of-12">
+                                <p class="slds-text-heading_small slds-text-title_caps slds-text-align_center slds-p-top_small">Quantité restante</p>
+                            </div>
+                        </div>
+
+                        <apex:repeat value="{!parentOrderAndChilds}" var="parent" rows="1">
+                            <apex:outputText value="{!parent.gdb_shipping_price__c}" style="visibility: hidden;"/>
+                            <apex:outputText value="{!parent.gdb_shipping_tax__c}" style="visibility: hidden;"/>
+                            <apex:outputText value="{!parent.gdb_discount_price__c}" style="visibility: hidden;"/>
+                            <apex:repeat value="{!parent.Articles_dans_Commande__r}" var="itemParent">
+                                <apex:outputText value="{!itemParent.gdb_unit_net_price__c}" style="visibility: hidden;"/>
+                                <apex:outputText value="{!itemParent.gdb_unit_gross_price__c}" style="visibility: hidden;"/>
+                                <apex:outputText value="{!itemParent.gdb_unit_tax__c}" style="visibility: hidden;"/>
+                                <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                                    <div class="slds-p-horizontal_small slds-size_1-of-12">
+                                        <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!itemParent.gdb_sku__c}</p>
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_3-of-12">
+                                        <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">{!itemParent.Article_Name__c}</p>
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_2-of-12">
+                                        <p class="slds-text-heading_small slds-text-align_center slds-p-top_small" id="{!'val-init:' + itemParent.gdb_sku__c}">{!FLOOR(itemParent.Quantity__c)}</p>
+                                    </div>
+                                    <div class="slds-p-horizontal_small slds-size_2-of-12">
+                                        <p class="slds-text-heading_small slds-text-align_center slds-p-top_small">
+                                            <strong id="{!'val-rest:' + itemParent.gdb_sku__c}"></strong>
+                                        </p>
+                                    </div>
+                                </div>
+                            </apex:repeat>
+                        </apex:repeat>
+                    </div>
+                </div>
+                <apex:repeat value="{!parentOrderAndChilds}" var="childOrder" first="1">
+                    <div class="slds-size_2-of-12 col_head">
+                        <p class="slds-text-heading_medium slds-text-align_center slds-text-color_inverse">{!$Label.GDB_order} {!childOrder.Name}</p>
+
+                        <div class="slds-p-horizontal_small">
+                            <div class="slds-grid slds-wrap slds-grid_pull-padded">
+                                <div class="slds-p-horizontal_small slds-size_3-of-7 slds-p-top_small">
+                                    <p class="slds-text-title_caps">{!$Label.GDB_order_quantity}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <apex:repeat value="{!childOrder.Articles_dans_Commande__r}" var="childItems">
+                        <apex:outputText value="{!childItems.gdb_sku__c}" style="visibility: hidden;"/>
+                        <div class="slds-grid slds-wrap slds-grid_pull-padded" id="{!'childQty:' + childItems.gdb_sku__c}">
+                            <div class="slds-p-horizontal_small slds-size_3-of-7 slds-p-top_small">
+                                <span class="btn-option">
+                                    <strong id="{!'btnLess:' + childItems.gdb_sku__c}">-</strong>
+                                </span>
+                                <apex:inputText size="3" id="chg-value" value="{!childItems.Quantity__c}" disabled="false"/>
+                                <span class="btn-option">
+                                    <strong id="{!'btnMore:' + childItems.gdb_sku__c}">+</strong>
+                                </span>
+                            </div>
+                        </div>
+                        </apex:repeat>
+                    </div>
+                </apex:repeat>
+            </div>
+            
+            <div class="slds-size_12-of-12 slds-p-top_small slds-p-left_small slds-text-align_center">
+                    <apex:pageBlock >
+                        <apex:pageMessage severity="error" />
+                        <apex:pageMessages />
+                    </apex:pageBlock>
+            </div>
+            
+            <div class="slds-size_12-of-12 slds-p-top_small slds-p-left_small slds-text-align_center">
+                <apex:commandButton styleClass="slds-button slds-button_brand" action="{!validate}" value="{!$Label.GDB_order_validate}" rendered="{!toValidate}"/>
+                <apex:commandButton styleClass="slds-button slds-button_brand" action="{!backToOrder}" value="{!$Label.GDB_order_back}"/>
+            </div>
+            
+        </div>
+    </apex:form>
+</apex:page>

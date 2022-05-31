@@ -1,0 +1,93 @@
+<apex:page standardController="CDS__c" extensions="VFC_Send_To_SAP_Wrapper" action="{!init}">
+<apex:slds />
+    
+<br/>
+
+<apex:outputpanel rendered="{!NOT(bBackOffice)}">
+    <strong>
+        <apex:pageMessage severity="Error" strength="3" 
+            summary="Vous devez faire partie du groupe Back Office. Veuillez vous rapprocher de votre service contrat.">
+        </apex:pageMessage>
+    </strong>
+</apex:outputpanel>
+
+<apex:outputpanel rendered="{!bdisplaySpinner}">    
+<div class="slds-scope">
+    <br/><br/>
+       
+    <apex:form id="form" style="height: 50px;">
+        <!-- SPINNER -->
+                <div id="spinner" class="slds-spinner_container slds-is-relative" >
+                    <div role="status" class="slds-spinner slds-spinner--large slds-spinner--brand">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+        <!-- / SPINNER -->
+    </apex:form>
+    <div style="text-align:center;">
+        <strong>Veuillez patientez ...</strong>
+    </div>
+</div>
+</apex:outputpanel>
+
+<!--DEBUT BACK OFFICE-->
+<apex:outputpanel rendered="{!bBackOffice}">    
+<!--DEBUT SPINNER-->
+<apex:outputpanel rendered="{!NOT(bdisplaySpinner)}">    
+<!--statut different de signé-->
+<apex:outputpanel rendered="{!NOT(bStatut)}">
+    <strong>
+        <apex:pageMessage severity="Error" strength="3" 
+            summary="Vous ne pouvez pas envoyer un CDS à SAP avec un statut différent de 'Signé'.">
+        </apex:pageMessage>
+    </strong>
+</apex:outputpanel>
+
+<!--statut égal signé et pas envoyé et pas d'erreur-->
+<apex:outputpanel rendered="{!NOT(bErrorSAP)}">
+    <apex:outputpanel rendered="{!NOT(bDejaEnvoyeSAP)}">
+        <apex:outputpanel rendered="{!bStatut}">
+            <strong>
+                <apex:pageMessage severity="confirm" strength="3" 
+                    summary="Votre CDS à été envoyé à SAP avec succès.">
+                </apex:pageMessage>
+            </strong>
+        </apex:outputpanel>
+    </apex:outputpanel>
+</apex:outputpanel>
+
+<!--bDejaEnvoyeSAP trois transactions deja OK-->
+<apex:outputpanel rendered="{!bDejaEnvoyeSAP}">
+    <strong>
+        <apex:pageMessage severity="Info" strength="3" 
+            summary="Votre CDS a déjà été envoyé à SAP.">
+        </apex:pageMessage>
+    </strong>
+</apex:outputpanel>
+
+<!--bErrorSAP-->
+<apex:outputpanel rendered="{!bErrorSAP}">
+    <strong>
+        <apex:pageMessage severity="Error" strength="3" 
+            summary="Une erreur est survenue lors de l'envoi à SAP.">
+        </apex:pageMessage>
+
+        <apex:outputpanel rendered="{!bdisplayError}">
+            <u>
+                <apex:pageMessage severity="Info" strength="3" 
+                    summary="{!labelListError}">
+                </apex:pageMessage>
+            </u>
+            <apex:repeat value="{!lMessageError}" var="listStr" id="theRepeat">
+                <apex:pageMessage severity="Warning" strength="3" summary="{!listStr}">
+                </apex:pageMessage>
+            </apex:repeat>
+        </apex:outputpanel>
+    </strong>  
+    
+</apex:outputpanel>
+</apex:outputpanel> <!--fin spinner = false-->
+</apex:outputpanel><!--DEBUT BACK OFFICE-->
+</apex:page>

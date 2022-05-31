@@ -1,0 +1,240 @@
+<apex:page standardController="Order__c" extensions="VFC01_OrderTaking_Simulation" tabStyle="Order__c" wizard="false">
+<apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+<apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+<apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+ 
+ <style>
+     .dim_inputField_TextArea {width:100px;}
+ </style>
+ <script>
+    function confirmCancel() {
+        var isCancel = confirm("{!$Label.popup_message_quit}");
+        if (isCancel) return true;
+        return false;
+    }
+    function startStatus(){
+        
+        $dialog.dialog('open');
+        // prevent the default action, e.g., following a link
+        return false;
+    }
+        
+        
+    function stopStatus(){
+        $dialog.dialog('close');
+        // prevent the default action, e.g., following a link
+        return false;
+    }
+    
+    function controllingEnterPress(e){
+            var code;
+            if (!e) var e = window.event;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            if(code == 13){
+                var target = e.target || e.srcElement;
+                if (e.stopPropagation) {
+                  e.stopPropagation();
+                }else{
+                  e.cancelBubble = true;
+                }
+                if(e.preventDefault){
+                  e.preventDefault();
+                }else{
+                  e.returnValue= false;
+                }
+                target.blur();                
+            }
+    }
+    
+    function setFocusOnLoad() {}
+    
+    
+ </script>
+    
+  <apex:sectionHeader title="{!VpageTitle}" subtitle="{!$Label.details_step2}"/>
+  <apex:outputText value="{!$Label.validation_step1_required}" rendered="{!NOT(VsimulationStepDone)}"  />   
+  <apex:pageMessages rendered="{!NOT(VsucessControl)}"/>
+  <apex:form rendered="{!AND(VsucessControl, VsimulationStepDone)}">
+  <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+      <apex:pageBlock title="{!VpageTitle}" id="detailsStep">
+           <apex:pageMessages showDetail="false"/>
+           <apex:pageBlockSection >
+              <apex:outputText label="{!$Label.current_user}" value="{!userCRM}"/>
+              <apex:pageBlockSectionItem rendered="true"/>
+              <apex:outputField value="{!order.Name}"/>    
+           </apex:pageBlockSection>
+          <apex:pageBlockSection title="{!$Label.account_section_name}" id="accountSection">
+                          <apex:outputField value="{!contract.Account.AccountNumber}"/> 
+                          <apex:outputField value="{!contract.Mandataire__r.Name}"/> 
+                          <apex:outputField value="{!contract.Account.Name}"/>                  
+                          <apex:outputField value="{!contract.Account.Sensible_Client__c}"/> 
+                          <!-- <apex:outputField label="Point d\'expédition/MDT" value="{!contract.PTL__r.Code_division__c}" /> -->
+                          <apex:outputField value="{!order.Dispatching_point__c}"/>
+                          <apex:outputField value="{!contract.PTL__r.Code_division_value__c}" /> 
+                          <apex:outputField value="{!order.Command_center__c}"/>
+                          <apex:pageBlockSectionItem rendered="true"/>
+                          <apex:outputField value="{!contract.Account.Phone}"/>
+                          <apex:outputField value="{!contract.Account.Email__c}"/>
+                          <apex:outputField value="{!contract.Account.Work_Phone_Number__c}"/>
+                          <apex:outputField value="{!contract.Account.Email_2__c}"/>
+                          <apex:outputField value="{!contract.Account.Mobile_Phone_Number__c}"/>
+                          <apex:outputField value="{!contract.Account.No_E_mail__c}"/>
+                          <script>twistSection(document.getElementById("{!$Component.accountSection}").childNodes[0].childNodes[0]);</script> 
+              </apex:pageBlockSection>
+                   
+          <apex:pageBlockSection title="PTL" id="ptlSection">
+                       <apex:outputField value="{!contract.PTL__r.Name}"/>
+                       <apex:outputField value="{!contract.PTL__r.Activity_Domain__r.Name}"/>
+                       <apex:outputField value="{!contract.PTL__r.Address__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Code_branche__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Code_branche_value__c}"/>
+                       <apex:outputField value="{!contract.Equipement__r.Article__r.Name}"/>
+                       <apex:outputField label="{!$Label.product_label}" value="{!contract.Product__r.Name}"/>
+                       <apex:outputField value="{!contract.Equipement__r.Capacity_Tank__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Phone__c}"/> 
+                       <apex:pageBlockSectionItem rendered="true"/>
+                       <apex:outputField value="{!contract.PTL__r.Work_Phone_Number__c}"/>
+                       <apex:pageBlockSectionItem rendered="true"/>
+                       <apex:outputField value="{!contract.PTL__r.Mobile_Phone_Number__c}"/>
+                       <script>twistSection(document.getElementById("{!$Component.ptlSection}").childNodes[0].childNodes[0]); </script>
+          </apex:pageBlockSection>
+           <apex:pageBlockSection title="{!$Label.order_section_name}">
+                        
+                       <apex:outputText label="{!$Label.break_count}" value="{!breakCount}"/>
+                       <apex:outputText label="{!$Label.last_break_date}" value="{!lastBreakDate}"/>
+                       <apex:outputText label="{!$Label.autonomy}" value="{!autonomy}"/>
+                       <apex:outputText label="{!$Label.calculated_autonomy}" value="{!autonomyCalculated}"/>
+                       <apex:outputText value="{!order.Meter_Before_Delivery__c}"/>                   
+                       <apex:outputField value="{!order.Breakdown__c}"/>
+                       <apex:outputText label="{!$Label.quantity} {!quantity_uom}" value="{!quantity}"/>
+                       <apex:outputText label="{!$Label.amount} TTC {!amount_currency}" value="{!amount}"/>
+                       <apex:inputField value="{!order.Order_Date_and_Time__c}" id="order_date_and_time" onkeypress="controllingEnterPress(event);"/>
+                       <apex:pageBlockSectionItem >
+                           <apex:outputLabel value="{!$Label.order_origin}" for="orderOrigin"/>
+                           <apex:selectList title="{!$Label.order_origin}" id="orderOrigin" value="{!detailsController.orderOrigin}" multiselect="false" size="1">
+                               <apex:selectOptions value="{!detailsController.OrderOriginOptions}"/>
+                           </apex:selectList>   
+                       </apex:pageBlockSectionItem>
+                       <apex:pageBlockSectionItem >
+                           <apex:outputLabel value="{!$Label.cust_call}" for="rappelClient"/>
+                           <apex:selectList title="{!$Label.cust_call}" id="rappelClient" value="{!detailsController.rappelClient}" multiselect="false" size="1">
+                               <apex:selectOptions value="{!detailsController.rappelClientOptions}"/>
+                           </apex:selectList>   
+                       </apex:pageBlockSectionItem>
+                       <apex:inputText label="{!$Label.reference}" value="{!detailsController.reference}" maxlength="20" onkeypress="controllingEnterPress(event);"/>
+                       <apex:inputField value="{!order.Order_Type2__c}" id="orderType"/>                              
+                       <apex:pageBlockSectionItem rendered="true"/>
+                       
+                       <apex:inputCheckbox label="{!$Label.prefilling}" value="{!detailsController.preFilling}" disabled="{!detailsController.preFillingDisabled}"/>
+                       <apex:inputCheckbox label="{!$Label.majoration}" value="{!detailsController.majoration}" disabled="{!detailsController.majorationDisabled}"/>
+                       
+                       <script>document.getElementById('{!$Component.orderType}').disabled = {!detailsController.orderTypeDisabled};</script> 
+
+                   </apex:pageBlockSection>
+                   <apex:pageBlockSection title="{!$Label.delivery_section_name}" id="deliverySection">
+                       <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!$Label.earliest_proposed_date}" for="datesEarliestProposed"/>  
+                            <apex:selectRadio title="{!$Label.earliest_proposed_date}" id="datesEarliestProposed" value="{!detailsController.dateLivraisonEarliestChoosed}" layout="pageDirection" required="false" immediate="true">
+                                <apex:selectOptions value="{!detailsController.datesLivraisonEarliestProposedOptions}"/>
+                                <apex:actionSupport action="{!detailsController.updateDatePickerLivraisonTot}" event="onchange" reRender="deliverySection" status="modalStatus" />
+                            </apex:selectRadio>       
+                       </apex:pageBlockSectionItem>
+                       <apex:pageBlockSectionItem rendered="true" id="picker1">
+                           <apex:outputLabel value="{!$Label.other_date_choice}" for="datePickerEarliest"/>
+                           <apex:inputField id="datePickerEarliest" value="{!order.Earliest_Delivery_Date__c}" onkeypress="controllingEnterPress(event);"/>                 
+                       </apex:pageBlockSectionItem>                      
+             
+                       <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!$Label.latest_proposed_date}" for="datesLatestProposed"/>  
+                            <apex:selectRadio title="{!$Label.latest_proposed_date}" id="datesLatestProposed" value="{!detailsController.dateLivraisonLatestChoosed}" layout="pageDirection" required="false" immediate="true">
+                                <apex:selectOptions value="{!detailsController.datesLivraisonLatestProposedOptions}" />
+                                <apex:actionSupport action="{!detailsController.updateDatePickerLivraisonTard}" event="onchange" reRender="deliverySection" status="modalStatus"/>
+                            </apex:selectRadio>                
+                       </apex:pageBlockSectionItem>
+                       <apex:pageBlockSectionItem rendered="true" id="picker2">
+                           <apex:outputLabel value="{!$Label.other_date_choice}" for="datePickerLatest"/>
+                           <apex:inputField id="datePickerLatest" value="{!order.Latest_Delivery_Date__c}" onkeypress="controllingEnterPress(event);"/>
+                       </apex:pageBlockSectionItem>
+                                              
+                       <!-- <apex:inputField value="{!order.Latest_Delivery_Date__c}"/> -->
+                       <apex:pageBlockSectionItem >
+                           <apex:outputLabel value="{!$Label.moment_del}" for="periode"/>
+                           <apex:selectList title="{!$Label.moment_del}" id="periode" value="{!detailsController.periode}" multiselect="false" size="1">
+                               <apex:selectOptions value="{!detailsController.PeriodeOptions}"/>
+                           </apex:selectList>   
+                       </apex:pageBlockSectionItem>
+                       <apex:pageBlockSectionItem rendered="true"/>
+                       <apex:pageBlockSectionItem >
+                           <apex:outputLabel value="{!$Label.reason_delay_delivery}" for="raisonreport"/>
+                           <apex:selectList title="{!$Label.reason_delay_delivery}" id="raisonreport" value="{!detailsController.raisonReport}" multiselect="false" size="1">
+                               <apex:selectOptions value="{!detailsController.RaisonReportOptions}"/>
+                           </apex:selectList>   
+                       </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem >
+                           <apex:outputLabel value="{!$Label.contact_mode}" for="modecontact"/>
+                           <apex:selectList title="{!$Label.contact_mode}" id="modecontact" value="{!detailsController.modeContact}" multiselect="false" size="1">
+                               <apex:selectOptions value="{!detailsController.ModeContactOptions}"/>
+                           </apex:selectList>   
+                       </apex:pageBlockSectionItem>
+                       <apex:inputText label="{!$Label.cust_text1}" value="{!detailsController.texteClient1}" maxlength="70" style="width: 90%;" disabled="false" onkeypress="controllingEnterPress(event);"/>
+                       <apex:inputText label="{!$Label.cust_text2}" value="{!detailsController.texteClient2}" maxlength="70" style="width: 90%;" disabled="false" onkeypress="controllingEnterPress(event);"/>
+                       <!-- delivery_man_message__c : texte chauffeur de commande (0) -->
+                       <apex:inputField value="{!order.Delivery_Man_Message__c}" style="width: 90%;" onkeypress="controllingEnterPress(event);"/>
+                       <apex:outputText label="{!$Label.driver_text1}" value="{!detailsController.texteChauffeur1}"/>
+                       <apex:outputText label="{!$Label.driver_text2}" value="{!detailsController.texteChauffeur2}"/>
+                        
+                        <script>document.getElementById('{!$Component.picker1.datePickerEarliest}').disabled = {!detailsController.inputDatePickerLivraisonTotDisabled};</script>
+                        <script>document.getElementById('{!$Component.picker2.datePickerLatest}').disabled = {!detailsController.inputDatePickerLivraisonTardDisabled};</script>
+                   </apex:pageBlockSection>
+                   <apex:pageBlockSection title="{!$Label.access_section_name}">
+                       <apex:outputField value="{!contract.PTL__r.Limitation_of_Vehicle__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Limitation_of_Tonnage__c}"/>
+                       <apex:outputText label="{!$Label.limitation_value}" value="{!detailsController.valeurLimitation}"/>
+                       <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.remote_terminal}"/>
+                               <c:outputcheckbox value="{!detailsController.borneDeporte}"/>
+                        </apex:pageBlockSectionItem> 
+                       <apex:outputField value="{!contract.PTL__r.Temporary_dispensation__c}"/>
+                       <apex:pageBlockSectionItem >
+                               <apex:outputLabel value="{!$Label.half_load}"/>
+                               <c:outputcheckbox value="{!detailsController.miCharge}"/>
+                          </apex:pageBlockSectionItem> 
+                       <apex:outputField value="{!contract.PTL__r.Permanent_dispensation__c}"/>
+                       <apex:outputField value="{!contract.PTL__r.Date_at_the_End_of_Dispensation__c}"/>                      
+                       <apex:outputText label="{!$Label.shipping_conditions}" value="{!detailsController.conditionLivraison}"/>
+                   </apex:pageBlockSection>
+                   <apex:pageBlockButtons style="font-size:10pt;">
+                       <apex:commandButton value="{!$Label.annuler_button} {!typeOperationLabel}" disabled="false" action="{!cancelButt}" onclick="return confirmCancel()" immediate="true"/> 
+                       <apex:commandButton value="{!$Label.back_button_label}" disabled="false" action="{!detailsController.retourButt}" title="{!$Label.back_step_message}"/>
+                       <apex:commandButton value="{!$Label.save_button_label}" action="{!detailsController.sauverButt}" title="{!$Label.sapcall_save_message}" onclick="startStatus();" />
+                   </apex:pageBlockButtons>                  
+      </apex:pageBlock>
+      </apex:form>
+      <div id="dialog-modal" title="{!$Label.operation_inprogress_message}" style="display:none">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.popup_message_wait}" /> 
+        </div>
+      </div>
+    
+    <script>
+          var $dialog;
+          jQuery(document).ready(function($) {
+                $(function() {
+                
+                $dialog =jQuery("#dialog-modal")
+                    .dialog({
+                        autoOpen: false,
+                        height: 150,
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false,
+                });
+    
+            });
+          });      
+    
+     </script>   
+       
+</apex:page>

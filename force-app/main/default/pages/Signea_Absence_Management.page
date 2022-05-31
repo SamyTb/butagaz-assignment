@@ -1,0 +1,52 @@
+<apex:page controller="Signea_Absence_Management" lightningStylesheets="false" docType="html-5.0" >
+    
+    <apex:slds />
+    
+    <apex:sectionheader title="Gestion des absences Signea" subtitle="Liste des circuits en attente de visa"/>
+    <apex:pageMessages id="mainMsg" showDetail="false" rendered="true"/>
+    
+    <apex:form id="form" rendered="True">
+        
+        <br/><br/><br/>
+        <div align="center">
+            <apex:selectList value="{!selectedUserId}" size="1">
+                <apex:selectOptions value="{!userOptions}"/>
+                <apex:actionSupport event="onchange" reRender="ViewBlock"/>
+            </apex:selectList>
+        </div>
+        <br/><br/><br/>
+        
+        
+        <apex:pageBlock title="" id="ViewBlock">
+            <!-- No item selected in list -->
+            <!-- <div align="center">
+                <apex:outputText value="Veuillez sélectionner un utilisateur" rendered="{!OR(selectedUserId==null, selectedUserId=='None')}"/>
+            </div> -->
+            
+            <br/>
+            <!-- No record -->
+            <div align="center">
+                <apex:outputText value="Pas de circuits de signature en attente de visa" rendered="{!AND(selectedUserId!=null, circuitsList.size=0)}"/>
+            </div>
+            <!-- Users list -->
+            <!-- <apex:pageBlockTable value="{!circuitsList}" var="circuit" rendered="{!AND(selectedUserId!=null, circuitsList.size!=0)}"> -->
+            <apex:pageBlockTable value="{!circuitsList}" var="circuit" rendered="{!circuitsList.size!=0}">
+                <apex:column headervalue="Utilisateur" value="{!circuit.Signea__Circuit__r.CreatedBy.Name}"/>
+                <apex:column headervalue="Circuit">
+                    <apex:outputLink target="_blank" value="/{!circuit.Signea__Circuit__r.Id}">{!circuit.Signea__Circuit__r.Name} - {!circuit.Signea__Circuit__r.Signea__Description__c}</apex:outputLink>
+                </apex:column>
+                <apex:column headervalue="Date de lancement" value="{!circuit.Signea__Circuit__r.CreatedDate}"/>
+                <apex:column headervalue="Date d'expiration" value="{!circuit.Signea__Circuit__r.Signea__Expiration_Date__c}"/>
+                <!-- <apex:column headervalue="Statut" value="{!circuit.Signea__Circuit__r.Signea__Status__c}"/> -->
+                <apex:column headervalue="Lien vers Contralia">
+                    <apex:outputLink target="_blank" value="{!circuit.Signea__URL__c}">Lien</apex:outputLink>
+                </apex:column>
+            </apex:pageBlockTable>
+
+
+        </apex:pageBlock>
+        
+    </apex:form>
+    
+    
+</apex:page>

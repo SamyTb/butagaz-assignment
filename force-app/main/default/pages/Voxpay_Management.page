@@ -1,0 +1,336 @@
+<apex:page standardcontroller="Account" extensions="VoxpayMgr" lightningStylesheets="false" docType="html-5.0" > <!-- action="{!initializePage}" -->
+    
+    <style>
+        div.params {
+            display:grid;
+            grid-template-columns: max-content max-content;
+            column-gap:5px;
+            row-gap:20px;
+            justify-content: center;
+        }
+        div.params label       { text-align: right; }
+        div.params label:after { content: ":"; }
+        
+        
+        
+        
+    </style>
+    
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script>
+        function makeClickToCall(cinematicId, phoneNumber){
+            console.log("cinematic id = ".concat(cinematicId));
+            console.log("hasMessages = ".concat(hasMessages));
+            console.log("fccApiEndpoint = ".concat(fccApiEndpoint));
+            
+            /*if(cinematicId == 1){
+                console.log("Start calling FCC API 1");
+                console.log(phoneNumber);
+                const strPlus = '+';
+                $.ajax({
+                    method: "GET",
+                    url: "https://api-mediation.flexiblecontactcenter.orange-business.com/clickToCall",
+                    data: { phoneNumber: strPlus.concat(phoneNumber) , transfer: true, autoswitch: true, autowrapup: true},
+                    xhrFields: { withCredentials: true }
+                }).done(function( data ) {
+                    console.log("Click to call done 1");
+                    
+                    $.ajax({
+                        method: "GET",
+                        url: "https://api-mediation.flexiblecontactcenter.orange-business.com/clickToCall",
+                        data: { phoneNumber: strPlus.concat(phoneNumber) },
+                        xhrFields: { withCredentials: true }
+                    }).done(function( data ) {
+                        console.log("Click to call done 2");
+                        
+                        CallPostPayment();
+                        //setTimeout(CallPostPayment(), 5000);
+                        
+                    });
+                });
+            }else{
+                console.log("CallPostPaymentNoPhone");
+                CallPostPayment();
+            }*/
+            
+            if(hasMessages == 'false') {
+            
+                if(cinematicId == 1){
+                    console.log("Start calling FCC API 1");
+                    console.log(phoneNumber);
+                    const strPlus = '+';
+                    /*url: "https://api-mediation.flexiblecontactcenter.orange-business.com/clickToCall"*/
+                    $.ajax({
+                        method: "GET",
+                        url: fccApiEndpoint,
+                        data: { phoneNumber: strPlus.concat(phoneNumber), transfer: true, autoswitch: true, autowrapup: true},
+                        xhrFields: { withCredentials: true }
+                    }).done(function( data ) {
+                        console.log("Click to call done 1");
+                        console.log(data );
+                        
+                        setTimeout(function(){ makeClickToCall2(phoneNumber); }, 5000);
+                    }).fail(function(request, status, error) {
+                        console.log("Error : Click to call done 1");
+                        console.log(request.responseText);
+                        console.log(status);
+                        console.log(error);
+                    });
+                }else{
+                    console.log("CallPostPaymentNoPhone");
+                    CallPostPayment_JS();
+                }
+                
+            }
+            
+        }
+        
+        function makeClickToCall2(phoneNumber){
+            console.log("Start calling FCC API 2");
+            console.log(phoneNumber);
+            const strPlus = '+';
+            $.ajax({
+                method: "GET",
+                url: fccApiEndpoint,
+                data: { phoneNumber: strPlus.concat(phoneNumber) },
+                xhrFields: { withCredentials: true }
+            }).done(function( data ) {
+                console.log("Click to call done 2");
+                console.log(data );
+                
+                setTimeout(function(){ CallCheckCallTransfer_JS(); }, 15000);
+                
+            }).fail(function(request, status, error) {
+                console.log("Error : Click to call done 2");
+                console.log(request.responseText);
+                console.log(status);
+                console.log(error);
+            });
+        }
+        
+        //allows alphabets both upper and lower case and numbers
+        function AllowAlphaNumeric(e){
+            var a = e.charCode;
+            return ((a>=65 && a<=90) || (a>=97 && a<=122) || (a>=48 && a<=57) || (a==32));
+        }
+    </script>
+        
+    
+    <apex:slds />
+    <apex:pageMessages id="mainMsg" showDetail="false" rendered="true"/>
+    
+    <apex:form id="form" rendered="{!showForm}">
+        
+        <!-- <apex:actionFunction action="{!preparePayment}" name="preparePayment_JS" Rerender="statuses" status="Status" oncomplete="CallWebService_JS();"/>
+        <apex:actionFunction action="{!CallWebService}" name="CallWebService_JS" status="Status" reRender="statuses, msg"/> -->
+        
+        <apex:actionFunction action="{!checkCallTransfer}" name="CallCheckCallTransfer_JS" rerender="mainMsg,paymentInfoPanel,voxpayIFrameBlock" oncomplete="CallPostPayment_JS();"/>
+        <apex:actionFunction action="{!postPayment}" name="CallPostPayment_JS" rerender="mainMsg,paymentInfoPanel,voxpayIFrameBlock" oncomplete="CallSavePayment_JS();"/>
+        <apex:actionFunction action="{!savePayment}" name="CallSavePayment_JS" oncomplete="return false;"/>
+        <apex:actionFunction name="render_subscriptionPanel" rerender="paymentInfoPanel"/>
+        
+        <apex:pageblock mode="maindetail" id="VoxpayPageBlock">
+            
+            <apex:outputPanel layout="none" rendered="true" id="mainPanel">
+                
+                <!-- Select Payment Type -->
+                <apex:outputPanel layout="none" rendered="true" id="paymentTypePanel">
+                <apex:pageBlock title="Méthode de paiement" id="selectPaymentTypeBlock" rendered="{! (selectedPaymentType=='0')}">
+                    
+                    <div class="column" style="text-align: center;">
+                        <apex:selectList value="{!selectedPaymentType}" multiselect="false" size="1">
+                            <apex:selectOptions value="{!PaymentTypes}" />
+                        </apex:selectList>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:commandButton value="Suite" action="{!validatePaymentType}" rerender="mainMsg,paymentTypePanel,paymentInfoPanel,outputPaymentType" status=""/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:commandButton action="{!cancel}" value="Annuler" immediate="true"/>
+                    </div>
+                    
+                </apex:pageBlock>
+                </apex:outputPanel>
+                
+                
+                <!-- Enter Payment Info -->
+                <apex:outputPanel layout="none" rendered="true" id="paymentInfoPanel">
+                    <apex:pageBlock title="Informations" id="fillPaymentInfoBlock" rendered="{! (selectedPaymentType!='0' && !showVoxpayiFrame)}">
+                        
+                        <div class="params">
+                            
+                            <!-- 
+                            <apex:outputLabel >Récurrence</apex:outputLabel>
+                            <label class="switch">
+                                <apex:inputcheckbox value="{!oPaymentInfo.subscription}">
+                                    <span class="slider round"></span>
+                                    <apex:actionSupport event="onchange" rerender="paymentInfoPanel" />
+                                </apex:inputcheckbox>
+                            </label>
+                             -->
+                            <!-- 
+                            <apex:outputLabel >Récurrence</apex:outputLabel>
+                            <label class="slds-checkbox_toggle slds-grid">
+                                <input type="checkbox" onChange="render_subscriptionPanel();" name="checkbox-toggle-16" value="{! oPaymentInfo.subscription}" aria-describedby="checkbox-toggle-16" />
+                                <span id="checkbox-toggle-16" class="slds-checkbox_faux_container" aria-live="assertive">
+                                  <span class="slds-checkbox_faux"></span>
+                                  <span class="slds-checkbox_on">Enabled</span>
+                                  <span class="slds-checkbox_off">Disabled</span>
+                                </span>
+                            </label>
+                            
+                            <apex:outputLabel >Récurrence</apex:outputLabel>
+                            <div class="slds-form-element">
+                                <div class="slds-form-element__control">
+                                    <span class="slds-checkbox">
+                                        <apex:inputCheckbox styleclass="slds-input" onchange="render_result();" html-name="options" id="divsup" html-checked="" value="{! oPaymentInfo.subscription}"></apex:inputCheckbox>
+                                        <apex:outputLabel for="divsup" styleClass="slds-checkbox__label">
+                                            <span class="slds-checkbox--faux"></span>
+                                            <span class="slds-form-element__label">Checkbox Label</span>
+                                        </apex:outputLabel>
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <apex:outputLabel >Récurrence</apex:outputLabel>
+                            <div class="slds-form-element__row">
+                                <div class="slds-form-element">
+                                    <label class="slds-checkbox">
+                                        <apex:inputcheckbox id="isinstance" styleclass="slds-input" value="{!oPaymentInfo.subscription}" />
+                                            <span class="slds-checkbox--faux"></span>
+                                            <span class="slds-form-element__label">Are you Tier 3?</span>
+                                  </label>
+                               </div>
+                            </div>
+                            
+                            <apex:outputLabel >Récurrence</apex:outputLabel>
+                            <div class="slds-form-element slds-align--absolute-center">
+                                <label class="slds-checkbox">
+                                    <apex:inputCheckbox styleClass="slds-input" value="{!oPaymentInfo.subscription}"></apex:inputcheckbox>
+                                        <span class="slds-checkbox--faux"></span>             
+                                        <span class="slds-checkbox_on">Enabled</span>
+                                        <span class="slds-checkbox_off">Disabled</span>
+                                </label>
+                            </div>
+                             -->
+                            
+                            <apex:outputLabel >Paiement en n fois</apex:outputLabel>
+                            <apex:inputcheckbox value="{!oPaymentInfo.subscription}">
+                                <apex:actionSupport event="onchange" rerender="paymentInfoPanel" />
+                            </apex:inputcheckbox>
+                            
+                            <!-- 
+                            <apex:outputLabel >Récurrence</apex:outputLabel>
+                            <label class="slds-checkbox_toggle slds-grid">
+                                <input type="checkbox" onChange="" name="checkbox-toggle-16" value="checkbox-toggle-16" aria-describedby="checkbox-toggle-16" />
+                                <span id="checkbox-toggle-16" class="slds-checkbox_faux_container" aria-live="assertive">
+                                  <span class="slds-checkbox_faux"></span>
+                                  <span class="slds-checkbox_on">Enabled</span>
+                                  <span class="slds-checkbox_off">Disabled</span>
+                                </span>
+                            </label>
+                            -->
+                             
+                            <apex:outputLabel rendered="{!isServiceAccount}">Type de projet</apex:outputLabel>
+                            <apex:selectList rendered="{!isServiceAccount}" value="{!selectedProjectType}" multiselect="false" size="1">
+                                <apex:selectOptions value="{!optionsProjectTypes}" />
+                            </apex:selectList>
+                            
+                            <apex:outputLabel >Nom</apex:outputLabel>
+                            <apex:inputText value="{!oPaymentInfo.customer_lastname}" required="true" style="width:200px;"/>
+                            
+                            <apex:outputLabel >Prénom</apex:outputLabel>
+                            <apex:inputText value="{!oPaymentInfo.customer_firstname}" required="false" style="width:200px;"/>
+                            
+                            <apex:outputLabel >Email</apex:outputLabel>
+                            <apex:input type="email" value="{!oPaymentInfo.customer_email}" required="{!(selectedPaymentType=='6')}" style="width:200px;"/>
+                            
+                            <apex:outputLabel >Référence client</apex:outputLabel>
+                            <apex:outputText value="{!oPaymentInfo.customer_reference}" style="width:200px;"/>
+                            
+                            <apex:outputLabel >Téléphone</apex:outputLabel>
+                            <apex:input type="tel" value="{!oPaymentInfo.customer_phone}" required="{!(selectedPaymentType=='4')}" style="width:200px;"/>
+                            
+                            <apex:outputLabel >Montant</apex:outputLabel>
+                            <apex:input type="number" html-step="0.01" value="{!oPaymentInfo.amount}" required="true" style="width:200px;"/>
+                            
+                            <!-- Subscription fields -->
+                            <apex:outputPanel id="subscriptionFieldsPanel" layout="none" rendered="{! oPaymentInfo.subscription}">
+                                
+                                <apex:outputLabel >Montant récurrent</apex:outputLabel>
+                                <apex:input type="number" html-step="0.01" value="{!oPaymentInfo.interval_amount}" required="true" style="width:200px;"/>
+                                
+                                <apex:outputLabel >Périodicité de récurrence</apex:outputLabel>
+                                <apex:selectList value="{!oPaymentInfo.interval_type}" multiselect="false" size="1">
+                                    <apex:selectOptions value="{!IntervalTypes}" />
+                                </apex:selectList>
+                                
+                                <apex:outputLabel >Nombre de récurrences</apex:outputLabel>
+                                <apex:input type="number" html-step="0" value="{!oPaymentInfo.interval_count}" required="true" style="width:200px;"/>
+                            </apex:outputPanel>
+                            
+                            <apex:outputLabel >N° de facture</apex:outputLabel>
+                            <apex:inputText value="{!oPaymentInfo.orderId}" required="false" style="width:200px;"/>
+                            
+                            <apex:outputLabel >Références complémentaires</apex:outputLabel>
+                            <apex:inputText value="{!oPaymentInfo.returnContext}" onkeypress="return AllowAlphaNumeric(event)" required="false" style="width:200px;"/>
+                            
+                            <!-- This field would be visible to the customer, no need for it atm  
+                            <apex:outputLabel>Description</apex:outputLabel>
+                            <apex:inputText value="{!oPaymentInfo.short_description}" required="false" style="width:200px;"/>
+                             -->
+                            
+                        </div>
+                        <br/><br/>
+                        <div class="column" style="text-align: center;">
+                            
+                            <!--<apex:commandButton value="Valider" action="{!preparePayment}" onComplete="makeClickToCall('{!oPaymentInfo.cinematic_id}', '{!vxpSDA}');return false;" rerender="mainMsg,paymentTypePanel,paymentInfoPanel,outputPostPaymentResult,voxpayIFrameBlock" status="status"/>-->
+                            <!--<apex:commandButton value="Valider" action="{!preparePayment}" onComplete="makeClickToCall('{!oPaymentInfo.cinematic_id}', '{!vxpSDA}');return false;" rerender="hasErrorblock,mainMsg" status="status"/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<apex:commandButton value="Relancer le paiement" action="{!postPayment}" rerender="mainMsg,paymentInfoPanel,voxpayIFrameBlock"/>-->
+                            <!--&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <!--<apex:commandButton action="{!cancel}" value="Annuler" immediate="true"/>-->
+                            
+                            <apex:actionStatus id="status">
+                                <apex:facet name="stop">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="Valider" action="{!preparePayment}" onComplete="makeClickToCall('{!oPaymentInfo.cinematic_id}', '{!vxpSDA}');return false;" rerender="hasErrorblock,mainMsg" status="status"/>
+                                        <apex:commandButton value="Relancer le paiement" action="{!postPayment}" rerender="mainMsg,paymentInfoPanel,voxpayIFrameBlock"/>
+                                        <apex:commandButton action="{!cancel}" value="Annuler" immediate="true"/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                                <apex:facet name="start">
+                                    <apex:outputPanel >
+                                        <apex:commandButton value="Valider" disabled="true"/>
+                                        <apex:commandButton value="Relancer le paiement" disabled="true"/>
+                                        <apex:commandButton value="Cancel" action="{!cancel}" immediate="true" />
+                                        <img id="status" src="/img/loading.gif" alt="Loading..." title="Loading..."/>
+                                    </apex:outputPanel>
+                                </apex:facet>
+                            </apex:actionStatus>
+                        </div>
+                        
+                    </apex:pageBlock>
+                </apex:outputPanel>
+                
+                <apex:outputPanel title="Suivi du paiement" layout="block" rendered="{! showVoxpayiFrame}" id="voxpayIFrameBlock" style="width:50%;margin:0 auto;text-align: center;">
+                    <apex:iframe height="780px" width="1000px" src="{!embeddedURL}" scrolling="false" id="voxpayIFrame"/>
+                    <div style="text-align: center;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:commandButton action="{!cancel}" value="Revenir au compte" immediate="true"/>
+                    </div>
+                </apex:outputPanel>
+                
+            </apex:outputPanel>
+        </apex:pageblock>
+        
+    </apex:form>
+    
+    <!-- Panel used to refresh hasMessages variable from controller through rerendering -->
+    <apex:outPutPanel layout="block" id="hasErrorblock">
+        <script>
+            var hasMessages = '{!hasError}';
+            var fccApiEndpoint = '{!fccApiEndpoint}';
+        </script>
+    </apex:outPutPanel>
+    
+    
+</apex:page>

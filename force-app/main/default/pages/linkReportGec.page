@@ -1,0 +1,46 @@
+<apex:page standardController="Account">    
+  <table class="outer" width="100%" id="bodyTable" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><b>Liens personnalisés</b></td>
+        <td class="data2Col last" colspan="3">
+            <table class="customLinks" border="0" cellpadding="0" cellspacing="0">
+                <tr class="first">
+                    <td>
+                        <apex:outputLink value="{!URLFOR($Action.Account.All_Opportunities_Prescribed)}" target="_blank">
+                            Toutes les opportunités prescrites
+                        </apex:outputLink>
+                    </td>
+                    <td>
+                        <apex:outputLink value="{!URLFOR($Action.Account.Resultat_annees_precedentes_GeC_GeR,Account.Id)} " target="_blank" rendered="{!IF(BEGINS(Account.Activity_Domain__r.Name, 'GEC'), true, false)}">
+                            Résultat années précédentes GeC/GeR
+                        </apex:outputLink>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>
+                        <apex:outputLink value="{!URLFOR($Action.Account.Converted_Suspects)}" target="_blank">
+                            Suspects prescrits convertis
+                        </apex:outputLink>
+                    </td>
+                    <td>
+                        <apex:outputLink value="{!URLFOR($Action.Account.Resultat_cumul_calendaire_GeC_GeR,Account.Id)}" target="_blank" rendered="{!IF(BEGINS(Account.Activity_Domain__r.Name, 'GEC'), true, false)}">
+                            Résultat cumul calendaire GeC/GeR
+                        </apex:outputLink>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>
+                        <apex:outputLink value="{!URLFOR($Action.Account.Resultat_mois_en_cours_GeC_GeR,Account.Id)}" target="_blank" rendered="{!IF(BEGINS(Account.Activity_Domain__r.Name, 'GEC'), true, false)}">
+                                Résultat mois en cours GeC/GeR
+                        </apex:outputLink>
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+            </table>
+        </td>
+      </tr>
+  </table>
+</apex:page>

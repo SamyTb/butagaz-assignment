@@ -1,0 +1,9 @@
+<apex:page standardController="Contract" extensions="VFC_NewOpportunity" action="{!redirectFromContractToNewOpty}">
+
+    <apex:pageMessages />
+
+    <br />
+
+    <div style="margin-left: 20px;"><a href="/{!contract.Id}">{!$Label.Contract_OpportunityCreationError_BackMessage} : {!contract.Name}</a></div>
+
+</apex:page>

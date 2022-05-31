@@ -1,0 +1,5 @@
+<apex:page standardController="PEC_Article__c" extensions="VFC_PECArticles01" showHeader="true" sidebar="false" action="{!getPECPage}">
+
+	
+
+</apex:page>

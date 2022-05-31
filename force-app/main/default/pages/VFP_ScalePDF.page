@@ -1,0 +1,38 @@
+<apex:page standardController="Quote" language="fr" renderas="pdf" showHeader="false" standardStylesheets="false" extensions="VFC_ProcessDataForSignea">
+    
+    <!-- Fields used in controller -->
+    <div style="display: none;">
+        <apex:outputText value="{!Quote.Product_Scale__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Scale__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Product_Scale_Code__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Scale_Code__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Account.Activity_Domain_Simple__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Client_Type__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Account}"></apex:outputText>
+        <apex:outputText value="{!Quote.Account.Activity_Domain__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Activity_Domain_ID__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.VAT_code__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Market_type__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Project_Type__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.DO_Groupement__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.T_Pack__c}"></apex:outputText>
+    </div>
+    
+    
+    <apex:repeat value="{!Scales}" var="doc">
+        <div style="width:100%;">
+            <p align="center">
+                <apex:image url="/servlet/servlet.FileDownload?file={!doc.id}" style="height: 91%; width: 91%;"/>
+            </p>
+        </div>
+    </apex:repeat>
+    
+    
+    
+    <!--************************* Page de signature pour signature électronique *************************-->
+    
+    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+        <c:SignaturePDF nbSig="1"/>
+    </apex:outputPanel>
+    
+</apex:page>

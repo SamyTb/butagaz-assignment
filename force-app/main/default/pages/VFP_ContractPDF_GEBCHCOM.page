@@ -1,0 +1,319 @@
+<apex:page standardController="Quote"  showHeader="false" renderas="pdf" extensions="VFC_Quotelineitem_01">
+
+    <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+	
+	<div class="footerRight">
+		<p align="right">Code Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>      		
+	</div>    
+    <div class="footer">Réf.
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='CPV', '', 'none')}">CPV 2013</span>
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='TPV', '', 'none')}">TPV 2013</span>
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Cube', '', 'none')}">OAT 2013</span>
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Viseo', '', 'none')}">OAT 2013</span>
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='OAT remise immédiate sur BD/G', '', 'none')}">OAT 2013</span>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <p>BUTAGAZ Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+        <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+    </div>
+    
+    <!-- Document Header -->  
+        <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        
+    <apex:pageblock rendered="{!IF(Quote.Printable__c==0,'','none')}">  
+        <h1>Ce type de Challenge ne peut être imprimé<br/><br/></h1>
+    </apex:pageblock>
+    
+    <apex:pageblock rendered="{!IF(Quote.Printable__c==1,'','none')}"> 
+    <div>
+        <h1 style="display: {!IF(Quote.Client_Reenlistment__c=='CPV', '', 'none')}">
+              Challenge point de vente<br/><br/>Gaz en Bouteille</h1>
+        
+        <h1 style="display: {!IF(Quote.Client_Reenlistment__c=='TPV', '', 'none')}">
+              Challenge TOP point de vente<br/><br/>Gaz en Bouteille</h1>
+              
+        <h1 style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Cube', '', 'none')}">
+              Challenge Volumes point de vente - CUBE<br/><br/>Gaz en Bouteille</h1>
+              
+        <h1 style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Viseo', '', 'none')}">
+              Challenge Volumes point de vente - VISEO<br/><br/>Gaz en Bouteille</h1>     
+              
+        <h1 style="display: {!IF(Quote.Client_Reenlistment__c=='OAT remise immédiate sur BD/G', '', 'none')}">
+              Challenge Volumes point de vente - BD / G<br/><br/>Gaz en Bouteille</h1>
+                
+    </div>   
+    
+    <br/>
+    
+    <div>
+    <h3>ENTRE</h3>
+    
+        La Société BUTAGAZ, Société par Actions Simplifiée au capital de 195 225 000 €, inscrite au Registre du Commerce et des Sociétés de Nanterre sous
+        le numéro 402 960 397, dont le siège social est à Levallois-Perret (92594) – 47/53, rue Raspail ci après désignée « BUTAGAZ », qui a donné mandat à la société sus-désignée pour la représenter :
+        <br/><br/>
+        <apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/>
+        <br/>
+        <apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/>
+        <br/>
+        D’une part,
+
+    <h3>ET</h3>
+    
+        La société <span style="text-transform: uppercase;"> {!Quote.Opportunity.DO_NAme__c}</span> (Code client: {!Quote.Client_Code__c}), représentée par {!Quote.Contact.Salutation} {!Quote.Contact.FirstName} {!Quote.Contact.LastName}, <span style="display: {!IF(Quote.Contact.Quality__c!='', '', 'none')}">en sa qualité de {!Quote.Contact.Quality__c}, </span>dûment habilité(e) à l’effet des présentes,
+        ci-après désignée « Le Magasin »,
+        <br/><br/>
+        D’autre part
+
+    
+    </div>
+    
+    <div style="display: {!IF(AND(Quote.Opportunity.Account.Sub_Channel__c =='GD', Quote.Client_Reenlistment__c!='OAT remise immédiate sur BD/G', Quote.Client_Reenlistment__c!='OAT 50% de remise immédiate Cube', Quote.Client_Reenlistment__c!='OAT 50% de remise immédiate Viseo'),'', 'none')}">
+    
+        <br/>
+        <br/>
+        <h3>Il a été préalablement exposé ce qui suit :</h3>
+
+        <p>Le Magasin a mandaté la Centrale d’Achats {!Quote.Opportunity.Account.Parent.Name} afin de conclure en son nom et pour son compte, pour l’année
+        {!Quote.Year_of_creation__c}, avec la société BUTAGAZ, des « Conditions Générales de Vente BUTAGAZ {!Quote.Year_of_creation__c} » aux termes desquelles le Magasin s’est engagé à commercialiser les Bouteilles de Gaz Propane et Butane 13 Kg, VISEO (10 Kg), Cube (5-6 Kg) et 35 P.<br/>
+        
+        L’achat du butane et propane en bouteilles auprès de BUTAGAZ et sa commercialisation au détail auprès des consommateurs par le Magasin est ainsi régi
+        pour l’année {!Quote.Year_of_creation__c} par les Conditions Générales de Vente précitées ainsi que par le Contrat Revendeur Agréé conclu également
+        entre les Parties.<br/>
+
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='CPV','', 'none')}">Au terme des négociations des Conditions Générales BUTAGAZ {!Quote.Year_of_creation__c}, le Magasin dont l’évolution des ventes volumes {!Quote.Year_of_creation_minus_1__c} (tout emballage confondu)  par rapport à ceux de {!Quote.Year_of_creation_minus_2__c} est inférieure à l’évolution
+        moyenne des ventes nationales des bouteilles BUTAGAZ dans la Centrale d’Achats, a fait valoir sa volonté de développer la vente des produits BUTAGAZ.
+        </span>
+        
+        <span style="display: {!IF(Quote.Client_Reenlistment__c=='TPV','', 'none')}">Au terme des négociations des Conditions Générales BUTAGAZ {!Quote.Year_of_creation__c}, le Magasin dont l’évolution des ventes volumes de bouteilles BUTAGAZ (tout emballage confondu) du magasin étant supérieure à -2% pour l'année {!Quote.Year_of_creation_minus_1__c} par rapport à {!Quote.Year_of_creation_minus_2__c}, a fait valoir sa volonté de développer la vente de produits BUTAGAZ.
+        </span>
+        
+        </p>
+        <br/>
+        <h3>C’est dans ces conditions que les Parties ont convenu ce qui suit :</h3>
+        
+        <br/>
+        
+    </div>
+    
+    <div style="display: {!IF(Quote.Client_Reenlistment__c=='OAT remise immédiate sur BD/G' || Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Cube' || Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Viseo', '', 'none')}">   
+        <br/>
+        <br/>
+        <h3>Il a été préalablement exposé ce qui suit :</h3>
+
+        <p>Le Magasin a mandaté la Centrale d’Achats {!Quote.Opportunity.Account.Parent.Name} afin de conclure en son nom et pour son compte, pour l’année {!Quote.Year_of_creation__c}, avec la société BUTAGAZ, des « Conditions Générales de Vente BUTAGAZ {!Quote.Year_of_creation__c} – Grandes Surfaces Alimentaires » aux termes desquelles le Magasin s’est engagé à commercialiser les Bouteilles de Gaz Propane et Butane 13 Kg, VISEO (10 Kg), Cube (5-6 Kg) et 35 P.<br/>
+
+        L’achat du butane et propane en bouteilles auprès de BUTAGAZ et sa commercialisation au détail auprès des consommateurs par le Magasin est ainsi régi pour l’année {!Quote.Year_of_creation__c} par les Conditions Générales de Vente précitées ainsi que par le Contrat Revendeur Agréé conclu également entre les Parties.<br/>
+
+        Au terme des négociations des Conditions Générales Butagaz {!Quote.Year_of_creation__c}, le Magasin a fait part de sa volonté de développer la vente des produits BUTAGAZ.
+
+        </p>
+        <br/>
+        <h3>C’est dans ces conditions que les Parties ont convenu ce qui suit :</h3>
+        
+        <br/>
+        
+    </div>
+    
+    
+    <div>
+    
+        <h1>Article 1 – Développement des volumes de vente des bouteilles BUTAGAZ</h1>
+            <h2 style="display: {!IF(Quote.Client_Reenlistment__c!='OAT remise immédiate sur BD/G', '', 'none')}">1.1</h2>
+            
+                <p style="display: {!IF(AND(Quote.Client_Reenlistment__c!='OAT 50% de remise immédiate Cube',Quote.Client_Reenlistment__c!='OAT 50% de remise immédiate Viseo'), '', 'none')}">
+                Le Magasin a fait valoir auprès de BUTAGAZ sa volonté de défendre le pouvoir d’achat des consommateurs.<br/><br/>
+                A cette fin, le Magasin, libre de déterminer seul et sans contrainte sa politique de prix,  a précisé à BUTAGAZ vouloir décliner une
+                politique de prix bas et compétitifs, notamment sur le Marché du Gaz en Bouteilles afin de différencier certaines des marques dont elle
+                assure la distribution des produits. Le Magasin a déclaré avoir choisi, notamment, la marque BUTAGAZ pour développer les volumes de vente
+                de cette dernière.<br/><br/>
+                La Société BUTAGAZ a constaté que le magasin pratique une différence de prix public à la baisse sur le produit BUTAGAZ d’un minimum de
+                un euro (TTC) par rapport aux principales marques concurrentes sur le format de la bouteille 13 kg (butane et propane)  
+                Le magasin a expressément informé BUTAGAZ de sa volonté de poursuivre cette différenciation de prix.
+                </p>
+                
+                                
+                <p style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Cube', '', 'none')}">
+                Le Magasin a indiqué à BUTAGAZ vouloir favoriser les consignations de bouteilles 5-6 kg (CUBE) en mettant en place sur son point de vente une opération promotionnelle entre le {!DateDebutOffre} et le {!DateFinOffre}.<br/>
+                Le Magasin déclare que cette offre consistera à offrir à chaque consommateur souhaitant consigner une bouteille 5-6 kg (CUBE), la moitié du montant de la charge de gaz, immédiatement le jour de la consignation. Il est expressément précisé ici que le Magasin fixe seul et librement le prix de la charge de gaz facturé au consommateur.
+                </p>
+                
+                <p style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Viseo', '', 'none')}">
+                Le Magasin a indiqué à BUTAGAZ vouloir favoriser les consignations de bouteilles VISEO en mettant en place sur son point de vente une opération promotionnelle entre le {!DateDebutOffre} et le {!DateFinOffre}.<br/>
+                Le Magasin déclare que cette offre consistera à offrir à chaque consommateur souhaitant consigner une bouteille VISEO, la moitié du montant de la charge de gaz, immédiatement le jour de la consignation. Il est expressément précisé ici que le Magasin fixe seul et librement le prix de la charge de gaz facturé au consommateur.
+                </p>
+                                        
+            <div style="display: {!IF(Quote.Client_Reenlistment__c!='OAT remise immédiate sur BD/G', '', 'none')}">    
+                <h2>1.2</h2>
+                    <p style="display: {!IF(Quote.Client_Reenlistment__c=='CPV', '', 'none')}">
+                    Par ailleurs afin d’optimiser la rentabilité de la catégorie Gaz, le Magasin bénéficiera d’une offre promotionnelle d’une durée de
+                    <span style="font-weight:bold">{!Quote.Duree_offre_mois__c}</span> mois du {!DateDebutOffre} au {!DateFinOffre}, sur la consignation de la
+                    Bouteille BUTAGAZ 13 Kg butane à 1 euro. Dans ces conditions le magasin devra réaliser un nombre de consignations nettes (BD) à 1€ égal ou
+                    supérieur à 20 consignations nettes sur l’année {!Quote.Year_of_creation__c}.<br/>
+                    Les parties conviennent d’ores et déjà que si cette offre promotionnelle ne permettait pas de développer suffisamment le nombre de
+                    consignations, elles conviendraient de l’opportunité de son renouvellement. 
+                    Le magasin s’engage à mettre en avant les affiches promotionnelles fournies par BUTAGAZ.
+                    </p>
+                    
+                    <p style="display: {!IF(Quote.Client_Reenlistment__c=='TPV', '', 'none')}">
+                    Le magasin s’engage à mettre en avant les affiches promotionnelles fournies par Butagaz.
+                    </p>
+                    
+                    <p style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Cube', '', 'none')}">
+                    BUTAGAZ accepte de l’aider dans la communication de cette offre promotionnelle en lui fournissant les affiches publicitaires à installer sur le point de vente pour informer la clientèle du Magasin. <br/>
+
+                    Le Magasin reconnait expressément avoir vu le visuel de cette affiche et déclare que celle-ci lui convenait. Le Magasin s’engage à ne pas modifier cette affiche sans en avoir obtenu l’autorisation préalable et écrite de BUTAGAZ. Il est expressément indiqué que l’utilisation de cette affiche n’implique aucun transfert de droit de propriété au profit du Magasin tant sur les visuels que sur tout logo ou tout autre élément qui sont la propriété exclusive de BUTAGAZ.
+                    <br/><br/>
+                    En revanche, l’offre étant de la seule initiative du Magasin, il devra veiller à indiquer sur l’affiche :<br/>
+                    – les dates de la période promotionnelle qu’il aura déterminée, étant entendu qu’il est seul responsable en la matière, la responsabilité de BUTAGAZ ne pouvant être engagée si les règles promotionnelles sur ce point n’étaient pas respectées.<br/>
+                    – le montant de la charge de gaz avant promotion, librement déterminée par le Magasin et le montant promotionnel qui sera facturé au client.<br/>
+
+                    En outre, en fin de période promotionnelle, les Parties feront un bilan de cette offre et détermineront ainsi le nombre de consignations de bouteilles 5-6 kg (CUBE) réalisées par le Magasin en période promotionnelle.<br/>
+
+                    BUTAGAZ lui versera un avoir unitaire correspondant à 50% du prix d’achat de la charge hors promotion multiplié par le nombre de consignations réalisées sur le produit concerné sur la période promotionnelle. Cet avoir sera déclenché sur la facture d’achat de bouteilles BUTAGAZ intervenant après le bilan de la période promotionnelle.
+
+                    </p>
+                    
+                    <p style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Viseo', '', 'none')}">
+                    BUTAGAZ accepte de l’aider dans la communication de cette offre promotionnelle en lui fournissant les affiches publicitaires à installer sur le point de vente pour informer la clientèle du Magasin. <br/>
+
+                    Le Magasin reconnait expressément avoir vu le visuel de cette affiche et déclare que celle-ci lui convenait. Le Magasin s’engage à ne pas modifier cette affiche sans en avoir obtenu l’autorisation préalable et écrite de BUTAGAZ. Il est expressément indiqué que l’utilisation de cette affiche n’implique aucun transfert de droit de propriété au profit du Magasin tant sur les visuels que sur tout logo ou tout autre élément qui sont la propriété exclusive de BUTAGAZ.
+                    <br/><br/>
+                    En revanche, l’offre étant de la seule initiative du Magasin, il devra veiller à indiquer sur l’affiche :<br/>
+                    – les dates de la période promotionnelle qu’il aura déterminée, étant entendu qu’il est seul responsable en la matière, la responsabilité de BUTAGAZ ne pouvant être engagée si les règles promotionnelles sur ce point n’étaient pas respectées.<br/>
+                    – le montant de la charge de gaz avant promotion, librement déterminée par le Magasin et le montant promotionnel qui sera facturé au client.<br/>
+
+                    En outre, en fin de période promotionnelle, les Parties feront un bilan de cette offre et détermineront ainsi le nombre de consignations de bouteilles VISEO réalisées par le Magasin en période promotionnelle.<br/>
+
+                    BUTAGAZ lui versera un avoir unitaire correspondant à 50% du prix d’achat de la charge hors promotion multiplié par le nombre de consignations réalisées sur le produit concerné sur la période promotionnelle. Cet avoir sera déclenché sur la facture d’achat de bouteilles BUTAGAZ intervenant après le bilan de la période promotionnelle.
+
+                    </p>
+              
+            <div style="display: {!IF(Quote.Client_Reenlistment__c=='CPV' || Quote.Client_Reenlistment__c=='TPV','', 'none')}">  
+                <h2>1.3</h2>
+                    <p>Dans cette optique d'évolution des volumes BUTAGAZ, le Magasin  s'engage à maintenir ou ajuster à la hausse le nombre de casiers de stockage de bouteilles BUTAGAZ et pourra bénéficier à sa demande du "Concept Merchandising BUTAGAZ".<br/>
+                    La réalisation des actions décrites ci-dessus a pour objet de développer les ventes de la catégorie Gaz.
+                    </p>
+            </div>
+                    
+            </div>
+    </div>
+    
+    <div style="page-break-after:avoid;">
+        <div style="display: {!IF(Quote.Client_Reenlistment__c=='CPV','', 'none')}">  
+        <h1>Article 2 – Rémunération du développement des volumes de vente des bouteilles BUTAGAZ</h1>
+                <p>Dans ces conditions, le marché de la bouteille de Gaz étant en baisse, BUTAGAZ constatera courant Janvier-Février
+                {!Quote.Year_of_creation_plus_1__c}, les volumes effectués par le Magasin au vu des factures d’achats établies par BUTAGAZ du 1er janvier
+                au 31 décembre {!Quote.Year_of_creation__c}. <br/>
+                Si l’évolution des ventes des bouteilles de gaz BUTAGAZ (tout type de charges confondues) du Magasin en {!Quote.Year_of_creation__c} est
+                supérieure à -2% par rapport aux volumes de {!Quote.Year_of_creation_minus_1__c}, BUTAGAZ versera au Magasin une Remise de Fin d’Année additionnelle de <span style="font-weight:bold">0,50 Euro / UB</span> sur les volumes totaux annuels.<br/>
+                Cette Remise de Fin d’Année sera versée sous forme d’avoir auprès du Magasin sous réserve de la mise en œuvre cumulative des actions
+                décrites à l’article 1 ci dessus.
+                </p>
+        </div>
+        
+        <div style="display: {!IF(Quote.Client_Reenlistment__c=='TPV','', 'none')}">  
+        <h1>Article 2 – Rémunération du développement des volumes de vente des bouteilles BUTAGAZ</h1>
+                <p>Dans ces conditions, le marché de la bouteille de Gaz étant en baisse, BUTAGAZ constatera courant Janvier-Février
+                {!Quote.Year_of_creation_plus_1__c}, les volumes effectués par le Magasin au vu des factures d’achats établies par BUTAGAZ du 1er janvier
+                au 31 décembre {!Quote.Year_of_creation__c}. <br/>
+                Si l’évolution des ventes des bouteilles de gaz BUTAGAZ (tout type de charges confondues) du Magasin en {!Quote.Year_of_creation__c} est supérieure à 5% par rapport aux ventes de bouteilles
+                de {!Quote.Year_of_creation_minus_1__c}, BUTAGAZ versera au Magasin une Remise de Fin d’Année additionnelle de <span style="font-weight:bold">0,25 Euro / UB</span> sur les volumes totaux annuels.<br/>
+                Cette Remise de Fin d’Année sera versée sous forme d’avoir auprès du Magasin sous réserve de la mise en œuvre cumulative des actions
+                décrites à l’article 1 ci dessus.
+                </p>
+        </div>
+        
+        <div style="display: {!IF(Quote.Client_Reenlistment__c=='OAT remise immédiate sur BD/G', '', 'none')}">  
+        <h1>Article 2 – Rémunération du développement des volumes de vente des bouteilles BUTAGAZ</h1>
+                <p>Dans ces conditions, le marché de la bouteille de Gaz étant en baisse, BUTAGAZ constatera, le mois suivant l'opération promotionnelle, les volumes effectués par le Magasin au vu des factures d'achats établies par BUTAGAZ du {!DateDebutOffre} au {!DateFinOffre}.<br/>
+                Quel que soient les conditions obtenues, un avoir de <span style="font-weight:bold">0,40 Euro</span> sur les volumes de bouteilles 13 Kg Butane ou Propane BUTAGAZ réalisés du {!DateDebutOffre} au {!DateFinOffre} sera déclenché le mois suivant l'opération promotionnelle.<br/>
+                En complément, si les volumes de la période du {!DateDebutOffre} au {!DateFinOffre} sont supérieurs de 10% à ceux de l'année précédente sur la même période, alors BUTAGAZ versera au Magasin un avoir complémentaire de <span style="font-weight:bold">0,60 Euro / 13 Kg</span> sur les volumes de la période de référence.
+                </p>
+        </div>
+        
+        <div style="display: {!IF(Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Cube' || Quote.Client_Reenlistment__c=='OAT 50% de remise immédiate Viseo', '', 'none')}">  
+        <h1>Article 2 – Durée</h1>
+                <p>Le présent accord entre en vigueur pour l’année {!Quote.Year_of_creation__c}, du 1er janvier au 31 décembre {!Quote.Year_of_creation__c}.
+                </p>
+        </div>
+        
+    </div>
+    
+    <div style="display: {!IF(AND(Quote.Client_Reenlistment__c!='OAT 50% de remise immédiate Cube',Quote.Client_Reenlistment__c!='OAT 50% de remise immédiate Viseo'), '', 'none')}">
+    
+        <h1>Article 3 – Durée</h1>
+                <p>Le présent accord entre en vigueur pour l’année {!Quote.Year_of_creation__c}, du 1er janvier au 31 décembre {!Quote.Year_of_creation__c}.
+                </p>
+    
+    </div>
+    
+    <div  Style="page-break-inside:avoid">
+      
+            <div class="Signatures" Style=" page-break-inside:avoid">
+   
+                    <h1>Signatures</h1>
+                     
+                    <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+    
+                <div class="clear"></div>
+   
+     
+
+                <div class="ButagazSignature"  Style=" page-break-inside:avoid">
+                
+                     <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                  
+                     <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                    <div class="bigSpaceAfter"><p>Signature:</p></div>
+                     
+                     
+                          
+                     
+                    <div class="ButagazCachet"  Style=" page-break-inside:avoid">
+                    <p> Pour BUTAGAZ: votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                </div>  
+                    
+                    
+                <div class="ClientSignature"  Style=" page-break-inside:avoid">
+                 
+                 <p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+                  <br/>
+                  
+                  <br/>
+                  <p class="SpaceBefore">Date d’impression : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                  <br/>
+                  <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                  <br/>
+                  <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                  <br/>
+                   
+                  <p>Signature &nbsp;(1):</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                </div> 
+
+        
+            </div>
+     <div class="clear"/>  
+
+              </div>
+              
+    </apex:pageblock>   
+     
+     <apex:outputtext value="{!Quote.Date_debut_offre__c}" rendered="false"/>  
+     <apex:outputtext value="{!Quote.Date_fin_offre__c}" rendered="false"/>   
+    
+
+    
+
+</apex:page>

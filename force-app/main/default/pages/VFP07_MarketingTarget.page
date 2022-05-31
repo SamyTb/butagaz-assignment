@@ -1,0 +1,132 @@
+<apex:page standardcontroller="Campaign" extensions="VFC07_MarketingTarget" id="page" >
+	<apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    
+     <script type="text/javascript">
+      $.noConflict();
+
+	    function processSearchKeyDown(e){
+	        var code;
+	        if (!e) var e = window.event;
+	        if (e.keyCode) code = e.keyCode;
+	        else if (e.which) code = e.which;
+	        if (code == 13){
+	            //document.getElementById("{!$Component.form.QuotePageBlock.searchPageBlock.searchButton}").click();
+	            
+	            var target = e.target || e.srcElement;
+	            if (e.stopPropagation) {
+	              e.stopPropagation();
+	            }else{
+	              e.cancelBubble = true;
+	            }
+	            if(e.preventDefault){
+	              e.preventDefault();
+	            }else{
+	              e.returnValue= false;
+	            }
+	            target.blur();                
+	            //alert("{!$Component.form.QuotePageBlock.searchPageBlock.searchButton}");
+	        }
+	    }
+
+
+    </script>
+    
+	<apex:sectionheader title="Marketing selection" />
+    <apex:form id="form">
+        <apex:pageblock mode="maindetail"  id="CampaignPageBlock">
+            <apex:pageMessages showDetail="false"/>
+             	<apex:pageBlock title="Recherche" id="searchPageBlock">
+             		<apex:pageblockbuttons location="Top" >
+	                    <apex:actionstatus id="CampaignCancel">
+	                        <apex:facet name="start">
+	                            <apex:commandbutton value="Annuler" disabled="true"/>
+	                        </apex:facet>
+	                        <apex:facet name="stop">
+	                            <apex:commandbutton value="Annuler" action="{!cancel}"   />
+	                        </apex:facet>
+	                    </apex:actionstatus>   
+	                    <apex:actionstatus id="CampaignSaveStatus">
+	                        <apex:facet name="start">
+	                            <apex:commandbutton value="Add" disabled="true"/>
+	                        </apex:facet>
+	                        <apex:facet name="stop">
+	                            <apex:commandbutton value="Add" action="{!saveForm}"  />
+	                        </apex:facet>
+	                    </apex:actionstatus>
+                	</apex:pageblockbuttons>
+	                <apex:outputLabel for="searchText">Recherche des Comptes</apex:outputLabel>
+	                <apex:panelGrid columns="3" id="searchPanel">
+	                    <apex:inputText id="searchText" value="{!searchText}" onkeydown="return processSearchKeyDown(event)"/>
+	                    <apex:commandButton id="searchButton" value="Search" action="{!search}" rerender="CampaignPageBlock" status="modalStatus" />
+	                </apex:panelGrid>
+
+	                <apex:pageBlockTable value="{!lSearchAccount }" var="w" id="Selected_ACC">
+						<apex:column >
+							<apex:facet name="header">
+								<apex:inputCheckbox onclick="checkAll(this,'checkedone')"/>
+							</apex:facet>
+							<apex:inputCheckbox value="{!w.selected}" id="checkedone"/>
+						</apex:column>
+						<apex:column >
+							<apex:facet name="header">Name</apex:facet>
+							<apex:outputfield value="{!w.oAccount.name}"/>
+						</apex:column>
+					</apex:pageBlockTable>
+            	</apex:pageBlock>
+            </apex:pageBlock>
+    </apex:form>  
+     <div id="dialog-modal" title="opération en cours" style="display:none">
+            <div>
+                <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+                <p>L'action est en cours d'exécution. Veuillez patienter.</p>
+            </div>
+        </div>
+    
+        <script>
+          var $dialog;
+          var $validationOutputDialog;
+          jQuery(document).ready(function($) {
+                $(function() {
+                
+                $dialog =jQuery("#dialog-modal")
+                    .dialog({
+                        autoOpen: false,
+                        height: 150,
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false
+                });
+                
+                $validationOutputDialog =jQuery("#validationOutputBox")
+                    .dialog({
+                        autoOpen: false,
+                        modal: true,
+                        closeOnEscape: true,
+                        resizable: false,
+                        buttons: [
+                            {
+                                text: "Ok",
+                                click: function() { $(this).dialog("close");}
+                            }
+                        ] ,
+                        width: 450
+                });
+                
+            });
+          });
+          
+           function checkAll(cb,cbid)
+        {
+            var inputElem = document.getElementsByTagName("input");                     
+            for(var i=0; i<inputElem.length; i++)
+            {             
+                 if(inputElem[i].id.indexOf(cbid)!=-1){                                        
+                    inputElem[i].checked = cb.checked;
+                }
+            }
+        }
+
+    </script>
+</apex:page>

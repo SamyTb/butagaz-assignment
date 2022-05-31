@@ -1,0 +1,424 @@
+<apex:page standardcontroller="Quote" extensions="VFC06_ProductSelector" id="page" action="{!initializePage}" tabStyle="Quote">
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    
+    <style> 
+        .activeTab {background-color: #E5C130; font-weight:bold; color:white; background-image:none;  font-size:13px;} 
+        .inactiveTab { background-color: #EEEEEE; color:black; background-image:none; font-weight:normal;font-size:13px;} 
+        .smallActiveTab {background-color: #DDB929; font-weight:bold; color:white; background-image:none;  font-size:11px;} 
+        .smallInactiveTab { background-color: #EEEEEE; color:black; background-image:none; font-weight:normal;font-size:11px;} 
+        .tooltip {
+            border-bottom: 1px dotted #000000; color: #000000; outline: none;
+            cursor: help; text-decoration: none;
+            position: relative;
+        }
+        .tooltip span {
+            margin-left: -999em;
+            position: absolute;
+        }
+        .tooltip:hover span {
+            border-radius: 5px 5px; -moz-border-radius: 5px; -webkit-border-radius: 5px; 
+            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1); -webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1); -moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+            font-family: Calibri, Tahoma, Geneva, sans-serif;
+            position: absolute; left: 1em; top: 2em; z-index: 99;
+            margin-left: -200px; 
+            width: 250px;
+        }
+        .tooltip:hover img {
+            border: 0; 
+            margin: -210px 0 0 -55px;
+            float: left; position: absolute;
+        }
+        .tooltip:hover em {
+            font-family: Candara, Tahoma, Geneva, sans-serif; font-size: 1.2em; font-weight: bold;
+            display: block; padding: 0.2em 0 0.6em 0;
+        }
+        .classic { padding: 0.8em 1em; }
+        .custom { padding: 0.5em 0.8em 0.8em 2em; }
+        * html a:hover { background: transparent; }
+        .classic {background: #FFFFAA; border: 1px solid #FFAD33; }
+        .critical { background: #FFCCAA; border: 1px solid #FF3334; }
+        .help { background: #9FDAEE; border: 1px solid #2BB0D7; }
+        .info { background: #9FDAEE; border: 1px solid #2BB0D7; }
+        .warning { background: #FFFFAA; border: 1px solid #FFAD33; }
+
+    </style>
+     
+    <script type="text/javascript">
+      	$.noConflict();
+
+    	function processSearchKeyDown(e){
+	        var code;
+	        if (!e) var e = window.event;
+	        if (e.keyCode) code = e.keyCode;
+	        else if (e.which) code = e.which;
+	        if (code == 13){
+	            
+	            
+	            var target = e.target || e.srcElement;
+	            if (e.stopPropagation) {
+	              e.stopPropagation();
+	            }else{
+	              e.cancelBubble = true;
+	            }
+	            if(e.preventDefault){
+	              e.preventDefault();
+	            }else{
+	              e.returnValue= false;
+	            }
+	            target.blur();   
+	            
+	            var searchButton = document.getElementById('{!$Component.form.QuotePageBlock.searchPageBlock.searchBlockButtons.searchButton}');
+	            searchButton.click();
+	        }
+	    }
+		
+	    function startStatus(){
+	
+	        $dialog.dialog('open');
+	        // prevent the default action, e.g., following a link
+	        return false;
+	    }
+		
+	    function stopStatus(){
+	        $dialog.dialog('close');
+	        // prevent the default action, e.g., following a link
+	        return false;
+	    }
+        
+        /*jQuery(document).ready(function($) {
+			function initChange(){
+				$('.tankPlacing').change(function() {
+					console.log('Change');
+					var $this = $(this);
+					changeSelect($this);
+				})
+			}
+			
+			initChange();
+			
+			function onAddLine() {
+				alert('add');
+				initChange();
+	           	$( ".tankPlacing" ).each(function() {
+	           		changeSelect($(this));
+	           	})
+	        }
+			
+			function changeSelect($element) {
+				console.log($element.val());
+				var toDisable = ($element.val() === 'RDS') ? false : true;
+				$element.closest('tr').find('select.pumpingRequired').prop('disabled', toDisable);
+			}
+		})
+		
+		$("#QuotePageBlock").load(function($) {
+			alert('QuotePageBlock');
+		})*/
+        
+    </script>
+
+    <apex:sectionheader title="{!Quote.Name}" subtitle="{!$Label.pricing_subtitle_step1}"/>
+    <apex:pageMessages showDetail="false" rendered="{!NOT(showForm)}"/>
+    
+    <apex:form id="cancelform" rendered="{!NOT(showForm)}">
+        <apex:actionstatus id="QuoteCancel" >
+            <apex:facet name="start">
+                <apex:commandbutton value="{!$Label.pricing_cancel}" disabled="true"/>
+            </apex:facet>
+            <apex:facet name="stop">
+                <apex:commandbutton value="{!$Label.pricing_cancel}" action="{!cancel}"  status="modalStatus" />
+            </apex:facet>
+        </apex:actionstatus> 
+    </apex:form>       
+                 
+    <apex:form id="form" rendered="{!showForm}">
+        <apex:actionstatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"/>
+        <apex:pageblock mode="maindetail"  id="QuotePageBlock">
+            <apex:pageMessages showDetail="false"/>
+            
+            <apex:outputPanel layout="none" rendered="{!PTLsOK}" id="QuotePanel">
+                <apex:pageBlock title="{!$Label.pricing_selection}" id="selectBlock">
+                    <apex:pageblockbuttons location="Top" >
+
+                        <apex:actionstatus id="QuoteCancel">
+                            <apex:facet name="start">
+                                <apex:commandbutton value="{!$Label.pricing_cancel}" disabled="true"/>
+                            </apex:facet>
+                            <apex:facet name="stop">
+                                <apex:commandbutton value="{!$Label.pricing_cancel}" action="{!cancel}"  status="modalStatus" />
+                            </apex:facet>
+                        </apex:actionstatus>   
+                        
+                        <!-- FRECA0 20140818
+                        <apex:actionstatus id="QuoteCalculateStatus">
+                            <apex:facet name="start">
+                                <apex:commandbutton value="{!$Label.pricing_calculate_price}" disabled="true"/>
+                            </apex:facet>
+                            <apex:facet name="stop">
+                            <apex:commandbutton value="{!$Label.pricing_calculate_price}" action="{!Calculate}"  status="modalStatus" disabled="{!NOT(hasSelectedProducts)}" rendered="{!onlyShowMode == false}" rerender="QuotePageBlock">
+                                </apex:commandbutton>
+                            </apex:facet>
+                        </apex:actionstatus>
+                        -->
+
+                        <apex:actionstatus id="QuoteSaveStatus">
+                            <apex:facet name="start">
+                                <apex:commandbutton value="{!$Label.pricing_next}" disabled="true"/>
+                            </apex:facet>
+                            <apex:facet name="stop">
+                                <apex:commandbutton value="{!$Label.pricing_next}" onclick="startStatus();" disabled="{!OR(NOT(hasSelectedProducts))}" action="{!navigateToStep1Bis}" />
+                            </apex:facet>
+                        </apex:actionstatus>
+                    </apex:pageblockbuttons>
+                    <apex:pageBlockSection >
+                      <apex:outputField value="{!Quote.Client_Reenlistment__c}"/>
+                      <apex:outputField value="{!Quote.Scale__c}"/>
+                      <apex:outputField value="{!Quote.Product_Scale__c}"/>
+                      <apex:outputField value="{!Quote.DO_Groupement__c}"/>
+                      <apex:pageBlockSectionItem rendered="true"/>
+                      <apex:pageBlockSectionItem rendered="true"/>
+                    </apex:pageBlockSection>
+                    
+                    <apex:outputPanel rendered="{!AND(NOT(hasSelectedProducts), NOT(onlyShowMode))}">
+                        <apex:outputText value="{!$Label.pricing_startsearch}" />
+                    </apex:outputPanel>
+                    
+                    <apex:pageBlockTable value="{!lSelectedProducts}" var="selectedProduct" rendered="{!hasSelectedProducts}">
+                    	
+                    	<apex:column >
+                            <apex:commandbutton value="-" status="modalStatus" action="{!selectedProduct.remove}" rerender="QuotePageBlock" title="{!$Label.pricing_removeProduct}" disabled="{!onlyShowMode}"/>
+                        </apex:column>
+                        
+                    	<apex:column headerValue="{!$Label.pricing_status}" >
+                            <apex:image url="{!$Resource.GreenFlag}" rendered="{!selectedProduct.isValid}" />
+                            <apex:outputPanel rendered="{!NOT(selectedProduct.isValid)}" >
+                                <apex:repeat value="{!selectedProduct.lErrors}" var="err">
+                                    <apex:image url="{!$Resource.RedFlag}" rendered="{!NOT(selectedProduct.isValid)}" />&nbsp;<apex:outputText value="{!err}" />
+                                    <br/>
+                                </apex:repeat>
+                            </apex:outputPanel>
+                        </apex:column>
+                    	
+                        <apex:column value="{!selectedProduct.oEntry.Product2.ProductCode}" />
+                        <apex:column value="{!selectedProduct.oEntry.Product2.Name}" />
+                        <apex:column value="{!selectedProduct.oEntry.Product2.Family}" />
+                        <apex:column value="{!selectedProduct.oEntry.Product2.Sub_Type__c}"/>
+                        <apex:column value="{!selectedProduct.oEntry.Product2.Capacity__c}" />
+                        
+                        <apex:column headerValue="{!$Label.pricing_gerconsumption}" rendered="{!usesGerConsumption}">
+                            <apex:selectList value="{!selectedProduct.gerConsumption}" 
+                                             multiselect="false" size="1"
+                                             disabled="{!OR(NOT(selectedProduct.oEntry.Product2.UseGerConsumption__c), onlyShowMode)}">
+                                <apex:selectOptions value="{!gerConsumptionOptions}"/>
+                            </apex:selectList>  
+                        </apex:column>
+                    
+                        <apex:column headerValue="{!$Label.connectionType}" rendered="{!usesConnectionType}">
+                            <apex:selectList value="{!selectedProduct.connectionType}" 
+                                             multiselect="false" size="1"
+                                             disabled="{!OR(NOT(selectedProduct.oEntry.Product2.UseConnectionType__c), onlyShowMode)}">
+                                <apex:selectOptions value="{!connectionTypeOptions}"/>
+                            </apex:selectList>  
+                        </apex:column>
+                        
+                        <apex:column headerValue="{!$Label.bio_product}" rendered="{!isGEC}">
+                            <apex:selectList value="{!selectedProduct.bioProduct}" 
+                                             multiselect="false" size="1"
+                                             disabled="{!OR(NOT(isGECECOCFT) && NOT(selectedProduct.oEntry.Product2.Family=='Produit'), isGECECOCFT && NOT(selectedProduct.oEntry.Product2.Family=='Redevance'), onlyShowMode)}">
+                                <apex:selectOptions value="{!bioProductOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        
+                        <apex:column headerValue="{!$Label.mis_a_disposition}" rendered="{!isGEC}">
+                            <apex:selectList value="{!selectedProduct.misADisposition}" 
+                                             multiselect="false" size="1"
+                                             disabled="{!OR(NOT(selectedProduct.lineItem.IsTank__c),onlyShowMode)}">
+                                <apex:selectOptions value="{!misADispositionSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+ 
+                        <apex:column headerValue="{!$Label.mis_a_disposition}" rendered="{!isGEBCONS}">
+                            <apex:selectList value="{!selectedProduct.misADisposition}" 
+                                             multiselect="false" size="1"
+                                             disabled="{!onlyShowMode}">
+                                <apex:selectOptions value="{!misADispositionGEBSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        
+                        <apex:column headerValue="{!$Label.Type_de_placement_citerne}" rendered="{!OR(isGEC, isGERProprietaire, isGERUsager)}">
+                            <apex:selectList value="{!selectedProduct.tankPlacing}" 
+                                             multiselect="false" size="1"
+                                             styleClass="tankPlacing"
+                                             disabled="{!OR(NOT(selectedProduct.lineItem.IsTank__c),onlyShowMode)}">
+                                <apex:selectOptions value="{!tankPlacingSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        
+                        <apex:column headerValue="{!$Label.tankPumpingRequired}" rendered="{!isGEC}">
+                            <apex:selectList value="{!selectedProduct.tankPumpingRequired}" 
+                                             multiselect="false" size="1"
+                                             disabled="{!OR(NOT(selectedProduct.lineItem.IsTank__c),onlyShowMode)}">
+                                <apex:selectOptions value="{!tankPumpingRequiredSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        <!-- disabling management moved to a style class to be managed by JQuery so sfdc doesn't ignore the disabled field when syncing with controller -->
+                        <!-- disabled="{!OR(NOT(selectedProduct.lineItem.IsTank__c),NOT(selectedProduct.lineitem.Tank_Placing_Options__c == 'RDS'),onlyShowMode)}"> -->
+                        <!-- styleClass="pumpingRequired {!IF(OR(NOT(selectedProduct.lineItem.IsTank__c),NOT(selectedProduct.lineitem.Tank_Placing_Options__c == 'RDS'),onlyShowMode),'disabledSelect', '')}"> -->
+                        
+                        <apex:column headerValue="PTL" rendered="{!usesPTLs}">
+                            <apex:selectList id="ptl"
+                                             value="{!selectedProduct.quotePTLID}"
+                                             size="1"
+                                             title="Manager"
+                                             disabled="{!onlyShowMode}">
+                                <apex:selectOptions value="{!Ptls}"></apex:selectOptions>
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column headerValue="{!$Label.pricing_quantity}" >
+                            <apex:inputText value="{!selectedProduct.squantity}" disabled="{!OR(AND(NOT(usesQuantity), NOT(selectedProduct.oEntry.Product2.noSAP__c)), onlyShowMode)}"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+                 </apex:pageBlock>
+                     
+                 <apex:pageBlock title="{!$Label.pricing_search}" id="searchPageBlock" rendered="{!NOT(onlyShowMode)}">
+                    <apex:pageBlockTable value="{!searchClause}" var="clause">
+                        <apex:column headerValue="{!$Label.pricing_productCode}" >
+                            <apex:inputText id="productCode" value="{!clause.productCode}" onkeypress="processSearchKeyDown(event);"/>
+                        </apex:column>
+                        
+                        <apex:column headerValue="{!$Label.pricing_productName}" >
+                            <apex:inputText id="productName" value="{!clause.productName}" onkeypress="processSearchKeyDown(event);"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$Label.pricing_productFamily}" >
+                            <apex:selectList value="{!clause.familyName}" multiselect="false" size="1" required="false" onkeypress="processSearchKeyDown(event);">
+                                <apex:selectOptions value="{!familySelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column headerValue="{!$Label.subType}" >
+                            <apex:selectList value="{!clause.subTypeName}" multiselect="false" size="1" required="false" onkeypress="processSearchKeyDown(event);">
+                                <apex:selectOptions value="{!subTypeSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column headerValue="{!$Label.capacity}" title="(T)">
+                            <apex:inputText id="capacity" value="{!clause.capacity}" onkeypress="processSearchKeyDown(event);"/>
+                        </apex:column>
+                        <!--<apex:column headerValue="{!$Label.tankType}" >
+                            <apex:selectList value="{!clause.tankType}" multiselect="false" size="1" required="false" onkeypress="processSearchKeyDown(event);">
+                                <apex:selectOptions value="{!tankTypeSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column headerValue="{!$Label.tankProtection}" >
+                            <apex:selectList value="{!clause.tankProtection}" multiselect="false" size="1" required="false" onkeypress="processSearchKeyDown(event);">
+                                <apex:selectOptions value="{!tankProtectionSelectorOptions}"/>
+                            </apex:selectList>
+                        </apex:column>-->
+                        <apex:column headerValue="{!$Label.creationPurpose}" rendered="{!NOT(isGEBCONS)}">
+                            <apex:inputCheckbox id="isCrea" value="{!clause.isCrea}" onkeypress="processSearchKeyDown(event);"/>
+                        </apex:column>
+                        <apex:column headerValue="{!$Label.no_pack_product}" rendered="{!NOT(isGEBCONS)}">
+                            <apex:inputCheckbox id="isNotPack" value="{!clause.isNotPack}" onkeypress="processSearchKeyDown(event);"/>
+                        </apex:column>
+                    </apex:pageBlockTable>
+                    <apex:pageBlockButtons location="bottom" id="searchBlockButtons">
+                        <apex:commandButton id="searchButton" value="{!$Label.pricing_searchButt}" action="{!search}" rerender="resultsBlock" status="modalStatus" />
+                        <apex:commandButton id="clearButton" value="{!$Label.pricing_clearFiltersButt}" action="{!clearFilters}" rerender="resultsBlock" status="modalStatus"/>
+                    </apex:pageBlockButtons>
+
+                </apex:pageBlock>
+                
+                <apex:pageBlock title="{!$Label.pricing_results}" rendered="{!AND(NOT(hasAvailableProducts), NOT(onlyShowMode))}" id="noResultsBlock">
+                   <apex:outputText value="{!$Label.pricing_noresults_search}" />
+                </apex:pageBlock>
+                
+                <apex:pageBlock title="{!$Label.pricing_results}" rendered="{!AND(hasAvailableProducts, NOT(onlyShowMode))}" id="resultsBlock" >
+                    <apex:pageblockbuttons location="Top" >
+                         <apex:commandButton action="{!firstPage}" title="First" status="modalStatus" value="<<" disabled="{!NOT(hasPrevious)}" reRender="QuotePageBlock"/>
+                         <apex:commandButton action="{!previousPage}" title="Previous"  status="modalStatus" value="<" disabled="{!NOT(hasPrevious)}" reRender="QuotePageBlock"/>        
+
+                         <apex:outputText value="{!displayPageIndex}"/>
+                         <apex:outputLabel value="/" /> 
+                         <apex:outputText value="{!displayPageNumber}"/>
+
+                         <apex:commandButton action="{!nextPage}" title="Next" value=">" status="modalStatus" disabled="{!NOT(hasNext)}" reRender="QuotePageBlock"/>
+                         <apex:commandButton action="{!lastPage}" title="Last" value=">>" status="modalStatus" disabled="{!NOT(hasNext)}" reRender="QuotePageBlock"/>        
+                     </apex:pageblockbuttons> 
+                    <apex:pageBlockTable value="{!lAvailableProducts}" var="availableProduct" >
+                        <apex:column value="{!availableProduct.oEntry.Product2.ProductCode}" />
+                        <apex:column value="{!availableProduct.oEntry.Product2.Name}" />
+                        <apex:column value="{!availableProduct.oEntry.Product2.family}" />
+                        <apex:column value="{!availableProduct.oEntry.Product2.Sub_Type__c}"/>
+                        <apex:column value="{!availableProduct.oEntry.Product2.Capacity__c}" />
+                        <apex:column value="{!availableProduct.oEntry.Product2.Tank_Type__c}" />
+                        <apex:column value="{!availableProduct.oEntry.Product2.Tank_protection__c}" />
+                        <apex:column value="{!availableProduct.oEntry.Product2.is_crea__c}" />
+                        <apex:column >
+                            <apex:commandbutton value="+" status="modalStatus" action="{!availableProduct.add}" Oncomplete="" rerender="QuotePageBlock" title="{!$Label.pricing_addProduct}"/> <!-- Oncomplete="onAddLine();" -->
+                        </apex:column>
+                    </apex:pageBlockTable>
+                </apex:pageBlock>    
+            </apex:outputPanel>
+                
+            <apex:outputPanel layout="none"  rendered="{!NOT(PTLsOK)}" id="QuotePanelError">
+                <apex:pageBlock title="Erreur" id="error">
+                     <apex:pageBlockSection >
+                        <apex:outputLabel for="Error"><apex:outputText value="{!$Label.pricing_noPTLonOpty}" /></apex:outputLabel>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:outputPanel>
+        </apex:pageblock>
+    </apex:form>
+    
+        <div id="dialog-modal" title="{!$Label.pricing_operation_inprogress_message}" style="display:none">
+            <div>
+                <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+                <apex:outputText value="{!$Label.pricing_popup_message_wait}" />
+            </div>
+        </div>
+    
+	<script>
+		var $dialog;
+        var $validationOutputDialog;
+        jQuery(document).ready(function($) {
+			$(function() {
+			
+				$('.disabledSelect').prop('disabled', true);
+                
+                $dialog =jQuery("#dialog-modal")
+                    .dialog({
+                        autoOpen: false,
+                        height: 150,
+                        modal: true,
+                        closeOnEscape: false,
+                        resizable: false
+                });
+                
+                $validationOutputDialog =jQuery("#validationOutputBox")
+                    .dialog({
+                        autoOpen: false,
+                        modal: true,
+                        closeOnEscape: true,
+                        resizable: false,
+                        buttons: [
+                            {
+                                text: "Ok",
+                                click: function() { $(this).dialog("close");}
+                            }
+                        ] ,
+                        width: 450
+                });
+                
+            });
+		});
+        
+		function copyFieldValue(inputField,outputField){
+			outputField.value=inputField.value;
+		}
+		function displayValidationOutputBox(){
+			$validationOutputDialog.dialog('open');
+			return false;
+		}
+    
+    </script>
+</apex:page>

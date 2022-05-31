@@ -1,0 +1,616 @@
+<apex:page standardController="Project__c" renderAs="pdf" applyHtmlTag="false" language="fr" showHeader="false">
+	<html>
+	<head>
+        <!-- <apex:stylesheet value="{!$Resource.GDB_Invoice_CSS_Style}" /> -->
+        
+        <style type="text/css">             
+                body {
+                    font-family: "Arial", "Helvetica", sans-serif;
+    				font-size: 11px;
+                }
+                
+                @page {
+				    size: A4 portrait;
+				    margin-top: 0.5cm;
+				    margin-left: 1.2cm;
+				    margin-right: 1.2cm;
+				    margin-bottom: 0cm;
+				    @bottom-center {
+                        content: element(footer);
+                    }
+				}
+				#technicalsheet {
+				    position: absolute;
+				    height: 842px;
+				    width: 680px;
+				}
+				
+				.container {
+				    padding: 5px;
+				}
+                
+                #doc_info {
+				    position: absolute;
+				    top: 40px;
+					right: 0;
+					height: 120px;
+					width: 320px;
+					
+				    border: 1px solid #4472c4;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				    margin-top: 10px;
+				    margin-bottom: 15px;
+				    
+				    font-size: 12px;
+				    font-weight: bold;
+				}
+                #butagaz_info {
+				    position: absolute;
+				    top: 180px;
+				    float: left;
+				    border: 1px solid #4472c4;
+				    height: 170px;
+				    width: 300px;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				    margin-top: 20px;
+				}
+                #customer_info {
+				    position: absolute;
+				    top: 180px;
+				    /*float: right;*/
+				    margin-left: 360px;
+				    
+				    border: 1px solid #4472c4;
+				    height: 170px;
+				    width: 320px;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				    margin-top: 20px;
+				}
+				#worksite {
+				    position: absolute;
+				    top: 400px;
+				    float: left;
+				    border: 1px solid #4472c4;
+				    height: 100px;
+				    width: 300px;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				}
+				#technical_characteristics {
+				    position: absolute;
+				    top: 520px;
+				    float: left;
+				    border: 1px solid #4472c4;
+				    height: 480px;
+				    width: 100%;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				}
+				#tank_access_plan_text {
+				    position: absolute;
+				    float: left;
+				    border: 1px solid #4472c4;
+				    height: 110px;
+				    width: 100%;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				    margin-bottom: 20px;
+				}
+				#tank_access_plan {
+				    position: absolute;
+				    float: left;
+				    border: 1px solid #4472c4;
+				    height: 680px;
+				    width: 100%;
+				    -moz-border-radius: 5px;
+				    -webkit-border-radius: 5px;
+				    border-radius: 5px;
+				    margin-top: 20px;
+				}
+				
+				/*#worksite table {
+				    width: 100%;
+				}
+				#worksite table td,
+				#worksite table th {
+				    width: 50%;
+				    text-align: center;
+				}*/
+                
+                #technical_characteristics table {
+				    width: 100%;
+				    border-collapse: collapse;
+				}
+				#technical_characteristics table td,
+				#technical_characteristics table th {
+				    width: 50%;
+				    text-align: left;
+				    padding: 5px;
+				    border-bottom: 1px solid #ddd;
+				}
+				#technical_characteristics table tr {
+				    height: 14px;
+				    padding: 5px;
+				}
+				
+				#tank_access_plan_table table {
+				    width: 100%;
+				    display: table;
+				    border-collapse: collapse;
+				    border: 1px solid #4472c4;
+				}
+				#tank_access_plan_table table td {
+				    width: 14px;
+				    border: 1px solid #4472c4;
+				}
+				#tank_access_plan_table table tr {
+				    height: 14px;
+				    border: 1px solid #4472c4;
+				}
+				
+				#tank_access_plan_text .title,
+				#technical_characteristics .title,
+				#worksite .title,
+				#customer_info .title,
+				#butagaz_info .title {
+				    position: relative;
+				    background: #4472c4;
+				    color: #fff;
+				    padding: 12px;
+				    font-weight: bold;
+				    margin-bottom: 15px;
+				    height: 15px;
+				    font-size: 12px;
+				}                
+                
+				.footer {
+					display: block;
+					padding: 5px;
+					position: running(footer);
+					font-size: 6.5pt;
+					text-align: center;
+					position: fixed;
+    				bottom: 0;
+				}
+				
+				.padding15 {
+				    padding: 0 15px;
+				}
+        </style>
+    </head>
+	<!--************************* Service Technical Sheet *************************-->
+	
+	<body>
+		
+		<div id="technicalsheet">
+			<div class="footer">
+				L'énergie est notre avenir, économisons-la !
+		        <br/><br/>{!$Label.GDB_invoice_company_information}
+		    </div>
+			<apex:image url="{!$Resource.test}" width="180" height="75"/>
+            <br/>
+            <div id="doc_info">
+            	<div class="padding15">
+                 <p>Dossier technique : {!Project__c.Project_Type__c}</p>
+                 <p>N° de projet : {!Project__c.Name}</p>
+                 <p>Prestataire mandaté : {!Project__c.Subcontractor__r.Name}</p>
+                 <p>Date : {!DAY(TODAY())}/{!MONTH(TODAY())}/{!YEAR(TODAY())}</p>
+             </div>
+            </div>
+            <br/>
+			<div class="container">
+                <div id="butagaz_info">
+                	<div class="title">SOCIÉTÉ</div>
+                	<div class="padding15">
+	                    BUTAGAZ<br/>
+	                    47/53 rue Raspail<br/>
+	                    92300 Levallois Perret<br/>
+	                    Siret : 40296039700048<br/>
+	                    N° TVA : FR79 402 960 397
+	                    <br/><br/>
+	                    Affaire suivie par : {!Project__c.Owner.Name}<br/>
+	                    Téléphone : 09 69 32 70 97 (appel non surtaxé)
+	                </div>
+                </div>
+                <div id="customer_info">
+                	<div class="title">COORDONNÉES CLIENT</div>
+                	<div class="padding15">
+                		<apex:outputField value="{!Project__c.Customer_Account__r.Salutation}"/>&nbsp;{!Project__c.Customer_Account__r.LastName} {!Project__c.Customer_Account__r.FirstName}<br/>
+	                    {!Project__c.Account_Street_Number__c} {!Project__c.Account_Street_Type__c} {!Project__c.Account_Street_Name__c}<br/>
+	                    {!Project__c.Account_City_Postal_Code__c}
+	                    <br/><br/>
+	                    Téléphone : {!IF(Project__c.Customer_Account__r.Phone != '', Project__c.Customer_Account__r.Phone, Project__c.Customer_Account__r.Mobile_Phone_Number__c)}
+	                    <br/><br/>
+	                    Référence client : {!Project__c.Customer_Account__r.AccountNumber}<br/>
+                    </div>
+                </div>
+                <div id="worksite">
+                	<div class="title">ADRESSE DES TRAVAUX</div>
+                	<div class="padding15">
+                		{!Project__c.Project_Street_Number__c} {!Project__c.Project_Street_Type__c} {!Project__c.Project_Street_name__c}<br/>
+						{!Project__c.Project_City_Postal_Code__r.Name}
+                	</div>
+                </div>
+                <br/><br/><br/><br/>
+                
+                <!-- <div id="technical_characteristics" rendered="{!Project__c.Project_Type__c == 'Isolation Combles Perdus'}" > -->
+                <div id="technical_characteristics">
+                	<div class="title">CARACTÉRISTIQUES TECHNIQUES DU PROJET</div>
+                	<div class="padding15">
+
+						<!-- Isolation Combles Perdus -->
+                		<table id="tech_char_isolation" style="display:{!IF(Project__c.Project_Type__c == 'Isolation Combles Perdus', '', 'none')};">
+	                        <tr>
+	                            <td>
+	                            	Combles perdus&nbsp;:&nbsp;{!IF(Project__c.Lost_Roofs__c==true, 'Oui','Non')}<br/>
+	                            	Une personne rentre sous les combles&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Lost_Roofs_Accessibility__c}"/><br/>
+	                            	Moyen d'accéder aux combles&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Lost_Roofs_Way_Of_Access__c}"/><br/>
+	                            	Etat des combles&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Lost_Roofs_State__c}"/><br/>
+	                            	Surface des combles&nbsp;:&nbsp;
+	                            	<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Lost_Roofs_Surface__c}"/>
+									</apex:outputText>
+	                            </td>
+	                            <td>
+	                            	Type de logement&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Housing_Type__c}"/><br/>
+	                            	Logement chauffé&nbsp;:&nbsp;{!IF(Project__c.Heated_Housing__c==true, 'Oui','Non')}<br/>
+	                            	Logement de plus de 2 ans&nbsp;:&nbsp;{!IF(Project__c.Housing_Over_2_Years__c==true, 'Oui','Non')}<br/>
+	                            	&nbsp;<br/>
+	                            	&nbsp;
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>
+	                        		Ancienne laine minérale à enlever&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Old_Mineral_Wool_Roll_To_Remove__c}"/><br/>
+	                        		Surface de laine à enlever (en m²)&nbsp;:&nbsp;
+	                        		<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Surface_Of_Wool_To_Be_Removed__c}"/>
+									</apex:outputText>
+	                        	</td>
+	                            <td>
+	                            	Présence d'un conduit de cheminée&nbsp;:&nbsp;{!IF(Project__c.Chimney_Flues__c==true, 'Oui','Non')}<br/>
+	                            	Nombre de conduits de cheminée&nbsp;:&nbsp;
+	                            	<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Number_of_Chimney_Flues__c}"/>
+									</apex:outputText>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>
+	                        		Spots électriques intégrés au plancher&nbsp;:&nbsp;{!IF(Project__c.Electrical_Spots_In_The_Floor__c==true, 'Oui','Non')}<br/>
+	                        		Nbre de spots électriques intégrés au plancher&nbsp;:&nbsp;
+	                        		<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Number_of_Electrical_Spots_In_The_Floor__c}"/>
+									</apex:outputText>
+	                        	</td>
+	                            <td>
+	                            	Réhausse au niveau de la trappe&nbsp;:&nbsp;{!IF(Project__c.Raised_Hatch__c==true, 'Oui','Non')}<br/>
+	                            	Type de réhausse de trappe à prévoir&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Type_Of_Raised_Hatch__c}"/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>
+	                        		Présence d'un pare vapeur&nbsp;:&nbsp;{!IF(Project__c.Vapor_Barrier__c==true, 'Oui','Non')}<br/>
+	                        		Surface pare vapeur à larder (en m²)&nbsp;:&nbsp;
+	                        		<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Surface_Of_Vapor_Barrier__c}"/>
+									</apex:outputText>
+	                        	</td>
+	                            <td>
+	                            	Besoin de créer un chemin technique&nbsp;:&nbsp;{!IF(Project__c.Technical_Path_Needed__c==true, 'Oui','Non')}<br/>
+	                            	Surface chemin technique (en ml)&nbsp;:&nbsp;
+	                            	<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Technical_Path_Surface__c}"/>
+									</apex:outputText>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>Plage horaire souhaitée pour la VT&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Desired_Time_Range_For_The_Visit__c}"/></td>
+	                            <td></td>
+	                        </tr>
+	                        <tr>
+	                        	<td colspan="2">
+	                        		Commentaire&nbsp;:<br/>
+	                        		<apex:outputField value="{!Project__c.Comments__c}"/>
+	                        	</td>
+	                        </tr>
+	                    </table>
+	                    
+						<!-- Recyclage Cuve Fioul -->
+	                    <table id="tech_char_cuve_fioul" style="display:{!IF(Project__c.Project_Type__c == 'Recyclage cuve fioul', '', 'none')};">
+	                        <tr>
+	                            <td>
+	                            	Type de cuve (1) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Type_1__c}"/><br/>
+	                            	Format cuve (1) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Format_1__c}"/><br/>
+	                            	Capacité cuve (1) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Capacity_1__c}"/><br/>
+	                            	Quantité de produit restant cuve (1) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Quantity_Fuel_Oil_Remaining_in_Tank_1__c}"/><br/>
+	                            	Nature des travaux à réaliser cuve (1) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Work_To_Be_Done_on_Fuel_Oil_Tank_1__c}"/>
+	                            </td>
+	                            <td>
+	                            	Localisation cuve (1)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Location_of_the_Fuel_Oil_Tank_1__c}"/><br/>
+	                            	Dimension de la cuve en m (HxLxl) (1)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Fuel_Oil_Tank_1__c}"/><br/>
+	                            	Plaque trou d’homme accessible et démontable cuve (1)&nbsp;:&nbsp;{!IF(Project__c.Manhole_Plate_Fuel_Oil_Tank_1__c==true, 'Oui','Non')}<br/>
+	                            	Dimension du regard en cm (HxLxl) (1)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Fuel_Oil_Tank_Manhole_1__c}"/><br/>
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                            	Type de cuve (2) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Type_2__c}"/><br/>
+	                            	Format cuve (2) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Format_2__c}"/><br/>
+	                            	Capacité cuve (2) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Capacity_2__c}"/><br/>
+	                            	Quantité de produit restant cuve (2) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Quantity_Fuel_Oil_Remaining_in_Tank_2__c}"/><br/>
+	                            	Nature des travaux à réaliser cuve (2) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Work_To_Be_Done_on_Fuel_Oil_Tank_2__c}"/>
+	                            </td>
+	                            <td>
+	                            	Localisation cuve (2)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Location_of_the_Fuel_Oil_Tank_2__c}"/><br/>
+	                            	Dimension de la cuve en m (HxLxl) (2)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Fuel_Oil_Tank_2__c}"/><br/>
+	                            	Plaque trou d’homme accessible et démontable cuve (2)&nbsp;:&nbsp;{!IF(Project__c.Manhole_Plate_Fuel_Oil_Tank_2__c==true, 'Oui','Non')}<br/>
+	                            	Dimension du regard en cm (HxLxl) (2)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Fuel_Oil_Tank_Manhole_2__c}"/><br/>
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                            	Type de cuve (3) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Type_3__c}"/><br/>
+	                            	Format cuve (3) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Format_3__c}"/><br/>
+	                            	Capacité cuve (3) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Fuel_Oil_Tank_Capacity_3__c}"/><br/>
+	                            	Quantité de produit restant cuve (3) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Quantity_Fuel_Oil_Remaining_in_Tank_3__c}"/><br/>
+	                            	Nature des travaux à réaliser cuve (3) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Work_To_Be_Done_on_Fuel_Oil_Tank_3__c}"/>
+	                            </td>
+	                            <td>
+	                            	Localisation cuve (3)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Location_of_the_Fuel_Oil_Tank_3__c}"/><br/>
+	                            	Dimension de la cuve en m (HxLxl) (3)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Fuel_Oil_Tank_3__c}"/><br/>
+	                            	Plaque trou d’homme accessible et démontable cuve (3)&nbsp;:&nbsp;{!IF(Project__c.Manhole_Plate_Fuel_Oil_Tank_3__c==true, 'Oui','Non')}<br/>
+	                            	Dimension du regard en cm (HxLxl) (3)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Fuel_Oil_Tank_Manhole_3__c}"/><br/>
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>
+	                        		Mur de rétention à casser&nbsp;:&nbsp;{!IF(Project__c.Retention_Wall_To_Break__c==true, 'Oui','Non')}<br/>
+	                        		Dimension du mur de rétention (HxL)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Size_of_the_Retention_Wall__c}"/>
+	                        	</td>
+	                            <td>
+	                            	Tuyauterie à couper&nbsp;:&nbsp;{!IF(Project__c.Piping_To_Cut__c==true, 'Oui','Non')}
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>
+	                        		<!-- Distance du camion à la cuve (en m)&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Distance_From_Truck_To_Tank__c}"/><br/> -->
+	                        		Distance du camion à la cuve (en m)&nbsp;:&nbsp;
+	                            	<apex:outputText value="{0,number,#,##0}">
+										<apex:param value="{!Project__c.Distance_From_Truck_To_Tank__c}"/>
+									</apex:outputText><br/>
+	                        		Accessible pour un camion de 19T&nbsp;:&nbsp;{!IF(Project__c.Accessible_for_a_19_Ton_Truck__c==true, 'Oui','Non')}
+	                        	</td>
+	                            <td>
+	                            	Obstacle sur le parcours camion –> cuve&nbsp;:&nbsp;{!IF(Project__c.Obstacle_Between_Truck_And_Tank__c==true, 'Oui','Non')}<br/>
+	                            	Zone de stationnement véhicule&nbsp;:&nbsp;<apex:outputField value="{!Project__c.Vehicle_Parking_Area__c}"/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td>
+	                        		Point d’eau à proximité de la cuve&nbsp;:&nbsp;{!IF(Project__c.Water_Point_Near_Tank__c==true, 'Oui','Non')}
+	                        	</td>
+	                            <td>
+	                            	Prise de courant 220V à proximité de la cuve&nbsp;:&nbsp;{!IF(Project__c.X220V_Plug_Near_Tank__c==true, 'Oui','Non')}
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                        	<td colspan="2">
+	                        		Commentaire&nbsp;:<br/>
+	                        		<apex:outputField value="{!Project__c.Comments__c}"/>
+	                        	</td>
+	                        </tr>
+	                    </table>
+						
+						<!-- Chauffage Installation Materiel -->
+						<table id="tech_char_chauffage_install" style="display:{!IF(Project__c.Project_Type__c == 'Chauffage Installation Materiel', '', 'none')};">
+	                        <tr>
+	                            <td>
+	                            	Type de logement &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Housing_Type__c}"/><br/>
+	                            	Surface (en m²) &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Heated_Surface__c}"/><br/>
+	                            	Nombre de personnes &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Number_of_people__c}"/><br/>
+	                            	Type de client &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Client_Type__c}"/><br/>
+	                            	Type de résidence &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Type_of_residence__c}"/>
+	                            </td>
+	                            <td>
+	                            	Age du bâtiment &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Building_Age__c}"/><br/>
+	                            	Mode de chauffage actuel &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Current_Heating_Mode__c}"/>
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                            	Produit &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Product__c}"/>
+	                            </td>
+	                            <td>
+	                            	Raccordé au gaz &nbsp;:&nbsp;{!IF(Project__c.Connected_to_gas__c==true, 'Oui','Non')}<br/>
+	                            	Espace extérieur disponible pour le module extérieur &nbsp;:&nbsp;{!IF(Project__c.Outdoor_Space_Available_For_Module__c==true, 'Oui','Non')}<br/>
+	                            	<!--Système de chauffage existant et fonctionnel &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Quantity_Fuel_Oil_Remaining_in_Tank_2__c}"/><br/>-->
+	                            	Radiateurs fonctionnels &nbsp;:&nbsp;{!IF(Project__c.Functional_Radiators__c==true, 'Oui','Non')}
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                        <tr>
+	                            <td>
+	                            	Tranche de revenu fiscal de référence &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Tax_Income_Bracket__c}"/><br/>
+	                            	Motivation du projet &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Project_Motivation__c}"/><br/>
+	                            	Echéance du projet &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Project_Deadline__c}"/><br/>
+	                            </td>
+	                            <td>
+									Client disponible dans les 30 jours pour rdv à domicile &nbsp;:&nbsp;{!IF(Project__c.Available_Within_30_Days__c==true, 'Oui','Non')}<br/>
+	                            	Heure de joignabilité &nbsp;:&nbsp;<apex:outputField value="{!Project__c.Reachability_Hour__c}"/><br/>
+	                            	<br/>
+	                            </td>
+	                        </tr>
+	                    </table>
+                	</div>
+                </div>
+                
+                
+                
+                <!--************************* Tank access plan *************************-->
+				<apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF(Project__c.Project_Type__c == 'Recyclage cuve fioul',true,false)}">
+					<br/><br/><br/><br/>
+					<div id="tank_access_plan_text">
+						<div class="title">PLAN D’ACCES CUVE FIOUL​</div>
+						<div class="padding15">
+							Dessiner un plan du lieu de stationnement du camion (indiquer si sur voie publique ou voie privée)​
+							<br/>
+							Dessiner le chemin d’accès du camion à la cuve fioul (noter les obstacles et la distance)​
+							<br/>
+							Indiquer le point électrique et point d’eau
+		               		<br/>
+		                </div>
+		            </div>
+		            
+		            <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+		            
+		            <div id="tank_access_plan">
+		               	<!-- <div class="padding15"> -->
+		               		<table id="tank_access_plan_table" border="1" style="border-collapse:collapse; border-style:solid; border-color:#4472c4">
+		                        <tr style="border-color:#4472c4">
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                        <tr style="border-color:#4472c4">
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                            <td width="68px" height="68px" style="border-width:1px; border-color:#4472c4"></td>
+		                        </tr>
+		                    </table>
+		                    
+		               	<!-- </div> -->
+		            </div>
+		            
+				</apex:outputPanel>
+                
+            </div>
+		</div>
+		
+	</body>
+	</html>
+</apex:page>

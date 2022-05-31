@@ -1,0 +1,106 @@
+<apex:component >
+
+<!-- Attribute definitions -->
+<apex:attribute name="nbSig" description="Number of signature blocks."
+        type="Integer" required="true"/>
+<apex:attribute name="withdrawalText" description="Display withdrawal text or not."
+        type="Boolean" required="false" default="true"/>
+
+
+<!-- Component definition -->
+<html>
+    <head>
+        <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+
+            <style type="text/css" media="all">
+            
+            </style>
+    </head>
+</html>
+
+<!--************************* Page de signature *************************-->
+<body>
+<div id="containerSignaturePDF" >
+
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    <div>
+        <h1>Signatures du document</h1>
+    </div>         
+    <br/>
+    
+    <p>Les pavés ci-dessous contiennent votre signature électronique ainsi que celle de Butagaz. Vous avez accepté le principe de cette signature électronique, et reconnu sa validité au même titre que la signature papier. <apex:outputText rendered="{!withdrawalText}">&nbsp;La signature de ce document contractuel ne vaut cependant pas signature du bon de rétractation : pour valoir rétractation, le bon doit être renvoyé à l'adresse indiquée.</apex:outputText></p>
+    <br/><br/><br/><br/><br/>
+
+    <!-- Add a line break if the previous sentence is not displayed so that the absolute position stays the same -->
+    <apex:outputText rendered="{!NOT(withdrawalText)}"><br/><br/></apex:outputText>
+
+    <!-- 1 signature block -->
+    <apex:outputPanel Style="page-break-inside: avoid;" layout="block" rendered="{!IF(nbSig==1,true,false)}">
+        
+        <table align="center" width="95%" page-break-inside="avoid">
+                
+                <tr>
+                    <td style="height: 5px; width: 30%; padding: 2pt;">
+                    </td>
+                    <td style="height: 5px; width: 25%; padding: 2pt;">
+                        <p align="center" style="font-weight:bold;">Signature Client</p><br/>
+                    </td>
+                    <td style="height: 5px; width: 30%; padding: 2pt;">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="height: 150px; width: 30%; padding: 2pt; border-width:0px;">
+                    </td>
+                    <td style="height: 150px; width: 25%; padding: 2pt; border-width:1px; border-style:solid;">
+                    </td>
+                    <td style="height: 150px; width: 30%; padding: 2pt; border-width:0px;">
+                    </td>
+                </tr>
+        </table>
+        
+    </apex:outputPanel>
+    
+    <!-- 3 signature blocks -->
+    <apex:outputPanel Style="page-break-inside: avoid;" layout="block" rendered="{!IF(nbSig==3,true,false)}">
+        
+        <table align="center" width="95%" page-break-inside="avoid">
+                
+                <tr>
+                    <td style="height: 5px; width: 25%; padding: 2pt;">
+                        <p align="center" style="font-weight:bold;">Signature Client</p><br/>
+                    </td>
+                    <td style="height: 5px; width: 5%; padding: 2pt;">
+                    </td>
+                    <td style="height: 5px; width: 25%; padding: 2pt;">
+                        <p align="center" style="font-weight:bold;">Signature Butagaz</p><br/>
+                    </td>
+                    <td style="height: 5px; width: 5%; padding: 2pt;">
+                    </td>
+                    <td style="height: 5px; width: 25%; padding: 2pt;">
+                        <p align="center" style="font-weight:bold;"> </p><br/>
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td style="height: 150px; width: 25%; padding: 2pt; border-width:1px; border-style:solid;">
+                    </td>
+                    <td style="height: 150px; width: 5%; padding: 2pt; border-width:0px;">
+                    </td>
+                    <td style="height: 150px; width: 25%; padding: 2pt; border-width:1px; border-style:solid;">
+                    </td>
+                    <td style="height: 150px; width: 5%; padding: 2pt; border-width:0px;">
+                    </td>
+                    <td style="height: 150px; width: 25%; padding: 2pt; border-width:1px; border-style:solid;">
+                    </td>
+                </tr>
+        </table>
+        
+    </apex:outputPanel>
+    
+    
+</div>    
+<!--************************* END Page de signature *************************-->
+</body>
+</apex:component>

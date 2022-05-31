@@ -1,0 +1,5 @@
+<apex:page controller="VFC_Latitude_RunTest_01" title="Latitude Run Test" >
+    <flow:interview name="LAT_Test" finishLocation="{!URLFOR($Page.VFP_Latitude_Testing_01)}">
+        <apex:param name="batchName" value="{!batchId}"/>
+    </flow:interview>
+</apex:page>

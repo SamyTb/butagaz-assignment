@@ -1,0 +1,161 @@
+<apex:page standardController="CUSAGE__c" showHeader="false" renderas="pdf" extensions="VFC_CommandesUsages">
+
+    <apex:stylesheet value="{!$Resource.PEC_Style}"/> 
+    <apex:form >
+        <!-- Document Header -->
+        <div class="header">
+            <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        </div>
+        
+        <!-- Document Footer
+        <div class="footer">
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX </p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z </p>
+        </div>  
+        -->  
+         <!-- Document Title-->   
+         <div >
+            <h1 style="line-height: 30px;">COMMANDE USAGES</h1>                
+         </div>  
+        
+        <!-- Contract Section-->   
+        <table>
+        	<tr>
+        		<td width="68%"><apex:outputField value="{!CUSAGE__c.name}"/></td>
+        		<td>Date de la Commande :&nbsp;<apex:outputField value="{!CUSAGE__c.Date_de_Commande__c}"/></td>
+        	</tr>  
+        	<tr>
+        		<td colspan="2">
+        			<p class="spaceBefore"> 
+        		 		Commande Client :&nbsp;<apex:outputField value="{!CUSAGE__c.N_commande_client__c}"/>
+        		 	</p>
+        		 </td>	                        
+        	</tr>      	
+        	<tr>
+        		<td>
+        			<p class="spaceBefore">
+        				Nom du Client :&nbsp;<apex:outputField value="{!CUSAGE__c.Account__r.Name}"/>
+        			</p>
+        		</td>
+        		<td>Code Client :&nbsp;<apex:outputField value="{!CUSAGE__c.Account__r.ExternalID__c}"/></td>
+        	</tr>    
+        	<tr>
+        		<td colspan="2"> 
+		            <p class="spaceBefore">Adresse :&nbsp;                  
+		            	 {!IF(CUSAGE__c.Account__r.Street_Number__c!=null,CUSAGE__c.Account__r.Street_Number__c,CUSAGE__c.Account__r.Street_N__c&' '&CUSAGE__c.Account__r.Street_type__c&' '&CUSAGE__c.Account__r.Street_name__c )}, &nbsp;
+		            	 
+		            	 {!IF(CUSAGE__c.Account__r.City_Postal_Code__r.name!=null,CUSAGE__c.Account__r.City_Postal_Code__r.name,CUSAGE__c.Account__r.City__c&' '&CUSAGE__c.Account__r.Postal_Code__c )}.
+		             </p>        		
+        		</td>
+        	</tr>
+	     </table>
+	                 
+            <br/>          
+        <!-- Articles Usages--> 
+      
+        <h2 class="ButagazTableHeader; spaceBefore">{!$Label.Usages_Products}</h2>
+        <table class="ButagazTable" >   
+            <thead>           
+                <tr>
+                    <th>{!$ObjectType.CUSAGE_Article__c.Fields.Name.label}</th>  
+                    <th>{!$ObjectType.CUSAGE_Article__c.Fields.Gencode__c.label}</th>                   
+                    <th>{!$ObjectType.CUSAGE_Article__c.Fields.Quantite__c.label}</th>                  
+                    <th>Prix Unitaire en € HT</th>         
+                    <th>{!$ObjectType.CUSAGE_Article__c.Fields.Total_Article__c.label} en € HT</th>                 
+                </tr>
+            </thead>
+            <tbody>
+                <apex:repeat value="{!ListUsagesInstalles}" var="line">
+                    <tr>
+                        <td style="width:20% !important;">{!line.Article__r.Name}</td>     
+                        <td class="number" >{!line.Gencode__c}</td> 
+                        <td class="number" >{!line.Quantite__c}</td>                      
+                       <td class="currency">{!line.Prix_unitaire__c}</td>                  
+                        <td class="currency">{!line.Total_Article__c}</td>
+                    </tr>
+                </apex:repeat>
+            </tbody >
+            <tbody>
+                <tr>
+                    <th colspan="4" style="background-color: #FFFFFF;width:10pt;"></th>
+                </tr>               
+                <tr>
+                    <th style="font-size: 8pt;">Total :</th>
+                    <th style="background-color: #FFFFFF;"/>
+                    <th style="background-color: #FFFFFF;">
+                        {!oCUSAGE.Total_Quantite__c}
+                        <apex:inputHidden value="{!CUSAGE__c.Total_Quantite__c}"/>                           
+                    </th>  
+                    <th style="background-color: #FFFFFF;"/>
+                    <th style="background-color: #FFFFFF;">
+                        {!oCUSAGE.Total_Prix__c} €
+                        <apex:inputHidden value="{!CUSAGE__c.Total_Prix__c}"/>
+                    </th>  
+                </tr>
+            </tbody>    
+        </table>
+
+ 		<h2>COMMANDE USAGES</h2>
+ 		<p class="spaceBefore">Ce document sera nul si raturé.</p>
+   		
+
+   		<div class="contractSection" Style="page-break-inside:avoid">     
+   			<div class="Signatures">  
+               	<h1>Signatures</h1>
+                   <BR/><BR/>  
+               	<div class="clear"></div>
+
+               	<div class="ButagazSignature">                
+                    <p class="nospace">Votre Contact :&nbsp; {!CUSAGE__c.CreatedBy.Name}</p>
+                 		<br/>                  
+                 		<br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>	                    
+                    <div class="bigSpaceAfter"><p>Signature :&nbsp;</p></div>
+
+                       <p>&nbsp;</p> 
+					   <p>&nbsp;</p>
+					   <p>&nbsp;</p>
+                    	<div class="ButagazCachet">
+                    		<p> Pour Butagaz: votre Distributeur Régional:</p>
+                    		<br/>
+                      		<p><apex:outputtext escape="False" value="  {!CUSAGE__c.Account__r.T_Mandataire_Address__c}"/></p>
+                      		<br/>
+                   			<p><apex:outputfield value=" {!CUSAGE__c.Account__r.T_Mandataire_RCS__c}"/></p>                    
+                    	</div>
+               	</div>  
+                   
+                   
+               	<div class="ClientSignature">                 
+                		<p class=" nospace "> Client Signataire :&nbsp; <apex:outputField value="{!CUSAGE__c.Contact__r.Salutation}"/> &nbsp; <apex:outputField value="{!CUSAGE__c.Contact__r.name}"/></p>
+                 		<br/>                  
+                 		<br/>
+                    <p class="SpaceBefore">Date d’impression de la Commande :&nbsp;<apex:outputtext value="{!TodayDate}"/> </p>
+                  	<br/>
+                  	<p class="SpaceBefore">Date de Signature :&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                  	<br/>
+                  	<p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                  	<br/>
+					<div class="bigSpaceAfter"><p>Signature &nbsp;(1):</p></div>                   			
+               
+                       <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                       <p>&nbsp;</p>
+                   	<div class="ButagazCachet">
+                   		<p>Cachet commercial Client</p>
+                   		<br/>
+                     		<p>&nbsp;</p>
+                     		<br/>
+                  			<p>&nbsp;</p>                    
+                   	</div>                        
+               	</div> 
+               	               
+           	</div>
+          		<div class="clear"/>
+       	</div> 
+
+    </apex:form>
+</apex:page>

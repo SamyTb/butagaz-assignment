@@ -1,0 +1,5 @@
+<apex:page standardController="Quote"  showHeader="false" renderas="pdf" extensions="VFC_Quotelineitem_01">
+
+test
+
+</apex:page>

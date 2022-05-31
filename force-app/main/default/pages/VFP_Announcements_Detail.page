@@ -1,0 +1,12 @@
+<apex:page standardController="Announcement__c" extensions="VFC_Announcements_Detail" showheader="false" action="{!recordAnnouncementSeen}">
+    <apex:pageBlock title="{!Announcement__c.Name}" rendered="{!announcementExists}">
+        <apex:outputText value="{0}" escape="false">
+            <apex:param value="{!Announcement__c.Body__c}"/>
+        </apex:outputText>
+    </apex:pageBlock>
+    <apex:pageBlock title="Cette annonce n'existe pas !" rendered="{!NOT(announcementExists)}">
+        <apex:outputText >
+            Il n'y a pas d'annonce avec cet ID !
+        </apex:outputText>
+    </apex:pageBlock>
+</apex:page>

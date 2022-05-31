@@ -1,0 +1,269 @@
+<apex:page standardController="Quote" showHeader="false" renderas="pdf" extensions="VFC_Quotelineitem_01">
+
+<div id="containerAVENANTGECDOMECOECO"> 
+
+<div class="footerRight">
+        <p align="right">Référence Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>              
+</div>
+
+<div class="footer">
+            <!-- <p Style="display:{!IF(Quote.Market_type__c=='DOM','','None')}"> {!$Label.Avenant_Octroi_DOM}</p> -->
+            <p Style="display:{!IF(Quote.Market_type__c=='DOM','','None')}"> {!$Label.Contract_Ref_GECDOM_IDEO_SOLO}{!IF(isSE=='true', ' SE','')}</p>
+            <!-- <p Style="display:{!IF(Quote.Market_type__c=='PRO','','None')}"> {!$Label.Avenant_Octroi_PRO}</p> -->
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX</p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z</p>
+</div>
+
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    <div Style="display:{!IF(Quote.Market_Type__c=='DOM','','None')}">
+        <h1>Avenant au Contrat Domestique de fourniture de gaz propane en citerne et prestations d’entretien
+                        <br/>Modification des conditions commerciales</h1>
+    
+    </div>  
+    
+    <div Style="display:{!IF(Quote.Market_Type__c=='PRO','','None')}">
+        <h1>Avenant au Contrat Professionnel de fourniture de gaz propane en citerne et prestations d’entretien
+                        <br/>Modification des conditions commerciales</h1>
+    
+    </div>          
+    <br/>
+    
+    <!-- Entre le Client et Butagaz -->
+    <div class="contractSection">
+          <p align="justify">Les présentes conditions ont été négociées entre le CLIENT et Butagaz. {!IF(isSE!='true','Le résultat de leurs négociations a ensuite été redigé sur ordinateur sur le présent document puis imprimé pour relecture 
+          et signature par le CLIENT.','')} Le CLIENT déclare qu’il accepte l’intégralité des conditions précisées aux présentes.</p>
+     </div>
+   
+    <div class="contractSection">
+            <h1>Client signataire</h1>
+            <table border="0" width="95%">
+                    
+                    <tr><td colspan="3">
+                    <span class="value">Référence Client:&nbsp;<Apex:outputField value="{!Quote.Client_Code__c}"/></span>
+                   <br/>
+                      <span class="value">Nom et Prénom:&nbsp;<Apex:outputField value="{!Quote.Opportunity.Account.Salutation}"/>&nbsp;  {!Quote.Opportunity.Account.Name}</span>
+                    </td></tr>
+                    
+                    <tr><td colspan="3">
+                      <span class="field">Adresse: </span>
+                      <span class="value">{!Quote.Opportunity.DO_Street_n__c}&nbsp;&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> {!Quote.Opportunity.DO_Street_name__c}</span>
+                     </td></tr>
+                    
+                    <tr><td colspan="3">
+                        <!-- IF a Postal code and a city are filled THEN display it-->
+                        <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+                                          value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+                        <!-- ELSE display City_Postal_Code__r.Name -->
+                        <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" 
+                                          value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br />
+                       
+                    </td></tr>
+                    <tr><td colspan="3"><br /></td></tr>   
+                   <tr>
+                        <td><span class="field">Téléphone domicile : </span><span class="value">{!Quote.Opportunity.DO_Phone__c}</span></td>
+                        
+                        <td><span class="field">{!IF(Quote.Opportunity.DO_Phone_Restriction__c=='R', 'Liste Rouge:  Oui', 'Liste Rouge: Non')}</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="field">T&eacute;l&eacute;phone portable : </span><span class="value">{!Quote.Contact_Mobile_Phone__c}</span></td>
+                        <td><span class="field">T&eacute;l&eacute;phone travail : </span><span class="value">{!Quote.Opportunity.DO_Work_Phone_Number__c}</span></td>
+                        
+                    </tr>
+                    <br/><br/>
+                    <tr><td colspan="3"><span class="field">
+                    
+                       <!-- Pas d'email -->
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == TRUE}" 
+                    value="Pas d'e-mail"></apex:outputtext>  
+                    
+                      <!-- Email Principal --> 
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email__c != '' }" 
+                    value="E-mail principal : {!Quote.Opportunity.DO_Email__c}"></apex:outputtext> <br/>
+                    <br/>
+                    
+                    <!-- Email complémentaire --> 
+                    <apex:outputtext rendered="{!Quote.Opportunity.DO_Email_2__c!= '' }" 
+                    value="E-mail complémentaire : {!Quote.Opportunity.DO_Email_2__c}"></apex:outputtext> <br/>
+                    
+                     <p><br/>Vous avez choisi de recevoir par e-mail, SMS et courrier, des informations, des offres et des bons plans : </p>  <br/>
+                    
+                 <p align="justify" style="display:{!IF((Quote.Opportunity.Account.Optin_1__c == true || Quote.Opportunity.Account.Optin_2__c = true)  ,'','None')}">
+                 
+                    <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!Quote.Opportunity.Account.Optin_1__c=true  || Quote.Opportunity.Account.Optin_2__c=true }"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les produits et services en lien avec le gaz en citerne Butagaz"/>
+                   </p> 
+                   <p align="justify" style="display:{!IF((Quote.Opportunity.Account.Optin_1__c == false && Quote.Opportunity.Account.Optin_2__c = false)  ,'','None')}">
+                 
+                    <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Opportunity.Account.Optin_1__c=false && Quote.Opportunity.Account.Optin_2__c=false}"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les produits et services en lien avec le gaz en citerne Butagaz"/>
+                        
+                   </p> 
+                   
+                    <p align="justify" style="display: {!IF( Quote.Opportunity.Account.Optin_Partenaires__c == true ,'','None')}">
+                        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!Quote.Opportunity.Account.Optin_Partenaires__c = true}"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les autres produits et services du Groupe Butagaz *"/> 
+                    </p>
+                    
+                    <p align="justify" style="display: {!IF( Quote.Opportunity.Account.Optin_Partenaires__c == false ,'','None')}">
+                        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Opportunity.Account.Optin_Partenaires__c = false}"/>
+                        &nbsp;
+                        <apex:outputtext value="Sur les autres produits et services du Groupe Butagaz *"/> 
+                    </p>
+                    <br/>
+                    <p>{!$Label.VFP_ALL_CPV_GroupeBTZ}</p>
+                    <br/>
+                    <p>
+                    <b><p>{!$Label.VFP_ALL_CPV_ChoixClient}</p></b>
+                    </p>
+                    </span>       
+                </td></tr>
+                <!--MLC 20180914 DEMAT -->
+                <br/><br/>
+                <tr><td colspan="3">
+                    <span style="font-weight:bold">
+                             
+               <!-- Email 1 renseigné  et email 2 vide  et DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c ==''   )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+              
+                <!--les emails sont renseignés et les DEMAT sont cochés  OK --> 
+                  <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c !='')  && (Quote.Opportunity.DEMAT1__c== TRUE && Quote.Opportunity.DEMAT2__c== TRUE)}" 
+                  value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+               
+                <!--les emails sont renseignés et l'un des DEMAT est coché OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c !='')  && (Quote.Opportunity.DEMAT1__c== FALSE || Quote.Opportunity.DEMAT2__c== FALSE)}" 
+                  value="Vous acceptez d’être informés par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+                  
+                <!-- Email 1 renseigné  et email 2 vide  et DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c ==''  && Quote.Opportunity.DEMAT1__c== TRUE )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+                  
+                <!-- Email 1 renseigné  et email 2 vide  et pas DEMAT 1 coché  OK --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c!='' && Quote.Opportunity.DO_Email_2__c ==''  && Quote.Opportunity.DEMAT1__c== FALSE)}" 
+                 value="Vous acceptez d’être informés par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+                  
+                <!-- Email 2 renseigné  et email 1 vide  et DEMAT 2 coché   --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c !=''  && Quote.Opportunity.DEMAT2__c== TRUE )}" 
+                 value="Vous ne souhaitez pas consulter uniquement vos factures dans votre Espace Client et préférez les recevoir en format papier. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext> 
+                  
+                <!-- Email 2 renseigné  et email 2 vide  et DEMAT 2 pas  coché   --> 
+                 <apex:outputtext rendered="{!(Quote.Opportunity.DO_Email__c=='' && Quote.Opportunity.DO_Email_2__c !=''  && Quote.Opportunity.DEMAT2__c== FALSE)}" 
+                 value="Vous acceptez d’être informés par e-mail de la disponibilité de votre facture et de la consulter uniquement dans votre Espace Client sécurisé. Si vous changez d’avis, contactez votre Distributeur ou rendez-vous dans votre Espace Client. "></apex:outputtext>     
+             
+             </span>
+                </td></tr>
+                
+            </table>
+    </div>
+    
+    <!-- Insert CGU_SignatureElectroniquePDF if electronic signature  -->
+    <c:CGU_SignatureElectroniquePDF rendered="{!IF(isSE=='true',true,false)}"/>
+    
+    <!-- 3. Le prix du gaz et des prestations associées -->
+    <div class="contractSection">
+        <h1> Nouvelles Conditions</h1>
+    
+        <p align="justify"><strong>PREAMBULE</strong></p><br/> 
+        
+        <p align="justify">Le client a souscrit auprès de Butagaz un contrat de fourniture de gaz en citerne avec une offre « Ecoconfortique » (ci-après dénommé « le Contrat »).</p><br/>
+        
+        <p align="justify">Cette offre permet au Client de régler le gaz et les prestations associées sous forme de mensualités tout compris. Les mensualités ont été calculées sur une estimation de la consommation du Client au moment de la signature du Contrat, sur la base des informations fournies par le Client.</p><br/>
+        
+        <p align="justify">Suite à la souscription, le Client a souhaité faire évoluer ces mensualités, pour les ajuster au plus proche de sa consommation réelle.</p><br/>
+        
+        <p align="justify">En conséquence, les Parties ont décidé d’établir le présent avenant (ci-après dénommé « l’Avenant ») afin d’apporter au Contrat les modifications telles que convenues ci-dessous.</p><br/>
+        
+        <p align="justify"><strong>IL A ETE CONVENU CE QUI SUIT :</strong></p><br/> 
+
+        <p align="justify"><strong>ARTICLE 1 : NOUVELLE MENSUALITE</strong></p><br/> 
+        
+        <p align="justify">A partir de la signature de l’Avenant, et en accord avec le Client, il a été décidé de prendre en compte une consommation de {!Quote.Sum_PTL_Consumption__c} kWh / an.</p><br/> 
+        
+        <p align="justify">La nouvelle Mensualité Pack Ecoconfortique convenue entre le Client et Butagaz est de &nbsp; <apex:outputText value="{!NewPriceECOTTC}"/> € TTC / mois.</p><br/><br/> 
+        
+        <p align="justify"><strong>ARTICLE 2 : DATE ANNIVERSAIRE</strong></p><br/> 
+        
+        <p align="justify">La date anniversaire prise en compte dans le Contrat pour la réévaluation du prix (article 6.3 des Conditions Générales de Vente) est désormais la date de signature du présent Avenant.</p><br/><br/> 
+
+        <p align="justify"><strong>ARTICLE 3 : BILAN</strong></p><br/> 
+        
+        <p align="justify">Un bilan est fait entre les Parties à la date de signature de l’Avenant, pour tenir compte du changement de date anniversaire, en fonction de la consommation du Client sur l’année précédente ou la période précédente ainsi que de l’évolution des prix à la consommation, selon la formule prévue à l’article 6.3 du Contrat.</p><br/> 
+ 
+        <p align="justify">Cette régularisation sera fate le 1er jeudi du mois suivant la date d’entrée en vigueur de l’Avenant.</p><br/><br/>
+
+        <p align="justify"><strong>ARTICLE 4 : DISPOSITIONS DIVERSES</strong></p><br/> 
+        
+        <p align="justify">Toutes les autres clauses, charges et conditions du Contrat demeurent inchangées et pleinement applicables.</p><br/> 
+               
+         </div>
+    
+    <div class="contractSection" Style="page-break-inside:avoid">
+      
+            <div class="Signatures">
+   
+               <h1>{!IF(isSE!='true', 'Signatures','Acceptation des conditions')}</h1>
+                      <p>Toutes les autres clauses et conditions du contrat de fourniture gaz propane en citerne non modifiées par le présent
+                        avenant gardent leur plein et entier effet.
+                        Le CLIENT déclare par ailleurs avoir connaissance du caractère évolutif, pendant toute la durée du contrat, des barèmes
+                            qui lui ont été communiqués.</p>
+
+                        <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+    
+                <div class="clear"></div>
+
+                <div class="ButagazSignature">
+                
+                     <p class="nospace">Votre Contact : {!Quote.CreatedBy.Name}</p>
+                     <!--<p class="nospace">e-mail&nbsp;: {!Quote.CreatedBy.Email}</p>-->
+                     <p class="nospace">&nbsp;</p>
+                     <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                     <div class="bigSpaceAfter" style="display: {!IF(isSE!='true','','None')}"><p>Signature :</p></div>
+                     
+                    <div class="ButagazCachet">
+                    <p> Pour Butagaz : votre Distributeur Régional:</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="{!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                </div>  
+                    
+                <div class="ClientSignature">
+                 
+                  <p class=" nospace "> Client Signataire : {!Quote.Opportunity.DO_NAme__c}</p>
+                  <br/>
+                  
+                  <div style="display: {!IF(isSE!='true','','None')}">
+                      <br/>
+                      <p class="SpaceBefore">Date d’impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                      <br/>
+                      <p class="SpaceBefore">Date de Signature :&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                      <br/>
+                      <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                      <br/>
+                       
+                      <p>Signature(1) :</p>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>                  
+                              <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                  </div>
+                  <div style="display: {!IF(isSE=='true','','None')}">
+                      <p>Document signé électroniquement.</p>
+                  </div>
+                </div> 
+                
+            </div>
+           <div class="clear"/>
+        </div> 
+            
+</div> 
+
+</apex:page>

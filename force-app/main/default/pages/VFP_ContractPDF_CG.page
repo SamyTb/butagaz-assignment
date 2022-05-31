@@ -1,0 +1,392 @@
+<apex:page standardController="Quote"  showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<!--<apex:pageBlock rendered="{!Quote.Activity_Domain_Opportunity__c=='GER - Gaz en réseau' && Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Account.Market_Type__c=='PRO' &&Quote.Technical_inspections_required__c=' À la carte'}"> -->
+<apex:pageBlock rendered="true">
+    CG
+    <!-- Document Header -->  
+     <apex:pageBlockSection >
+            <td Style="font-size: 18px; font-family:Verdana;"><b>BUTAGAZ services à la carte</b></td>
+     </apex:pageBlockSection>
+    <br/>
+
+
+    <apex:pageBlockSection rendered="{!Quote.Activity_Domain_Opportunity__c='GEC - Gaz en citerne'}">
+        <table Style="background-color: #66CCFF">
+            <tr>
+                <td Style="font-size: 18px; font-family:Verdana;"><b>Avenant au contrat de fourniture de gaz</b></td>
+            </tr>
+            <tr>
+                <td Style="font-size: 24px; font-family:Verdana align:center"><b>Prestations de service relatives à un réseau canalisé privé</b></td>
+            </tr>
+        </table>         
+    </apex:pageBlockSection>
+    <br/>
+    <apex:pageBlockSection >     
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="Entre les soussignées :"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="La société BUTAGAZ, Société par Actions Simplifiée au capital de 11 086 500 €, dont le siège social est sis à Levallois-Perret (92594 Cedex), rue Raspail aux numéros 47/53, immatriculée au RCS de Nanterre sous le numéro 542 095 575,"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="Représentée par M ____,  en sa qualité de _____, dûment habilité pour les présentes,"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="Ci-après dénommée « BUTAGAZ »"/><br/>
+        
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="D’une part,"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="Et:"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="La Société: '&Quote.Opportunity.Account.Name&', Société ___________,au capital de …………… €, dont le siège social est sis à ..... ,"/><br/>
+        
+                <apex:outputtext Style="font-size: 12px; font-family:Verdana" value="{!Quote.Opportunity.Account.Street_name__c}"></apex:outputtext> &nbsp;
+                <apex:outputtext Style="font-size: 12px; font-family:Verdana" value="{!Quote.Opportunity.Account.Street_N__c}"></apex:outputtext> <br  />
+                <apex:outputtext Style="font-size: 12px; font-family:Verdana" rendered="{!Quote.Opportunity.Account.Postal_Code__c !=null && Quote.Opportunity.Account.City__c != ''}" value="{!Quote.Opportunity.Account.Postal_Code__c&' '&Quote.Opportunity.Account.City__c}"></apex:outputtext>
+                <apex:outputtext Style="font-size: 12px; font-family:Verdana" rendered="{!Quote.Opportunity.Account.Postal_Code__c == null && Quote.Opportunity.Account.City__c == ''}" value="{!Quote.Opportunity.Account.City_Postal_Code__r.Name}"></apex:outputtext><br  />
+                <apex:outputtext Style="font-size: 12px; font-family:Verdana" value="{!Quote.Opportunity.Account.Country__c}"></apex:outputtext> <br  /><br  />
+        
+        
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value=" Immatriculée au RCS de ........sous le numéro:'&Quote.Opportunity.Account.Code_SIRET__c&','}"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="{! 'Représentée par, M '&Quote.Contact.FirstName& ' '&Quote.Contact.LastName&',  en sa qualité de _______, ayant tous pouvoirs à cet effet, '}"/><br/>
+        <apex:outputtext Style="text-align: right; font-size: 12px; font-weight:900; font-style:normal; font-family:Verdana" value="Ci-après dénommée « CLIENT »"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="D'autre part,"/><br/>
+        <apex:outputtext Style="text-align: right; font-size: 13px; font-weight:900; font-style:normal; font-family:Verdana" value="Ensembles, dénommées ci-après « les Parties aux présentes » ;"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="IL A ETE, PREALABLEMENT AUX PRESENTES, RAPPELE ET EXPOSE CE QUI SUIT :"/><br/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="{! 'Le CLIENT et BUTAGAZ ont signé un accord en date du '&TEXT(TODAY())&' pour la fourniture en GPL d’un ou plusieurs réseau(x) canalisé(s) privé(s).'}"/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="Le CLIENT est propriétaire ou est mandaté par le propriétaire du(des) réseau(x), qui a le statut d’opérateur de réseau au sens de l’arrêté du 13 juillet 2000. A ce titre, le propriétaire est soumis à un certain nombre d’obligations dont le but est de garantir la sécurité des usagers du gaz, c’est pourquoi il a choisi de confier la réalisation de prestations de services relatives à ce(s) réseau(x), à un prestataire qualifié."/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="De son côté, la société BUTAGAZ est spécialisée dans ce type de prestations ; elle bénéficie notamment de l’agrément ministériel relatif aux missions d’opérateur de réseaux publics, et est donc en mesure de proposer un panel de services à la carte qui répond aux exigences légales et réglementaires. Les parties se sont donc rapprochées et ont convenu ensemble ci-après les conditions et les modalités de leur accord, constituant un avenant au contrat de fourniture sus-visé."/><br/>
+        <apex:outputtext styleClass="line" Style="font-weight:bold;" value="CECI EXPOSE, IL EST CONVENU ET ARRETE CE QUI SUIT"/><br/>
+    
+    
+    </apex:pageBlockSection>
+    <apex:pageBlockSection >
+        <table title="Table des matières">
+            <tr>
+                TABLE DES MATIERES des CONDITIONS GENERALES
+            </tr>
+            <tr>
+                <td>TITRE 1 GENERALITES</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td> ARTICLE 1 – DEFINITIONS</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 2 – OBJET</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 3 – CONDITIONS PREALABLES</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>3.1. Certificats et attestation de conformité</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>3.2. Cartographie du réseau</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>3.3. Diagnostic préalable du Réseau canalisé</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>TITRE II – LES PRESTATIONS AU CHOIX</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 4 – MISE A JOUR DE LA CARTOGRAPHIE</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 5 – L’ENTRETIEN ET/OU LA MAINTENANCE</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>5.1. L’entretien</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>5.2. La maintenance</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 6 – LA GESTION DES INTERVENTIONS DE SECURITE</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>TITRE II - OBLIGATIONS GENERALES DU CLIENT</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 6 –  OBLIGATION DE RENSEIGNEMENT PREALABLE</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 7 –  INFORMATION PREALABLE DES CANDIDATS</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 8 – TRANSFERT DES DROITS ET OBLIGATIONS AUX ACQUEREURS</td>
+                <td>7</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 9 – ASSURANCES ET RESPONSABILITES</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 10 – DUREE</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>ARTICLE 11 – FORCE OBLIGATOIRE DE L’ACCORD INITIAL</td>
+                <td>8</td>
+            </tr>
+        </table>
+    </apex:pageBlockSection>
+    
+    <apex:pageBlocksection Title="TITRE I GENERALITES">
+        <apex:outputtext Style="font-size: 13px; font-style:bold; font-family:Verdana" value="ARTICLE 1 – DEFINITIONS COMPLEMENTAIRES"/><br/>
+        <apex:outputtext styleClass="line" value="Aux fins des présentes, les termes et expressions suivantes peuvent s’entendre au singulier ou au pluriel et correspondent respectivement aux significations ci-après :"/><br/>
+        <apex:outputtext styleClass="line" value="Le terme « Candidat(s) à l’acquisition » correspond pour chaque site, aux candidat(s) à la propriété de tout ou partie du(des) terrain(s) et/ou des biens immobiliers qui y seront édifiés, c’est à dire :"/><br/>
+        <apex:outputtext styleClass="line" value="- toute personne intéressée par l’acquisition de chaque îlot de propriété,"/><br/>
+        <apex:outputtext styleClass="line" value="- ou toute personne intéressée par l’acquisition d’une ou plusieurs Parcelles de terrain,"/><br/>
+        <apex:outputtext styleClass="line" value="- ou toute personne intéressée par l’acquisition de biens immobiliers qui y seront édifiés."/><br/>
+
+        <apex:outputtext styleClass="line" value="Le terme « Candidat(s) à la jouissance » correspond pour chaque site, aux candidat(s) à la jouissance de tout ou partie du(des) terrain(s) et/ou des biens immobiliers qui y seront édifiés, c’est à dire :"/><br/>
+        <apex:outputtext styleClass="line" value="- tout locataire (ou assimilé) de chaque terrain,"/><br/>
+        <apex:outputtext styleClass="line" value="- ou tout locataire (ou assimilé) d’une ou plusieurs Parcelles de terrain,"/><br/>
+        <apex:outputtext styleClass="line" value="- ou tout locataire (ou assimilé) des biens immobiliers qui y seront édifiés,"/><br/>
+
+        <apex:outputtext styleClass="line" value="Le terme « Candidat(s) » correspond aux éventuels Candidat(s) à l’acquisition et aux éventuels Candidat(s) à la jouissance, tels que définis ci-dessus."/><br/>
+        <apex:outputtext styleClass="line" value="Le terme « Contrat » correspond à l’accord contractuel de fourniture de gaz tel que visé au préambule, qui comprend les conditions générales, les conditions particulières, toutes les annexes, ainsi que tout avenant écrit pouvant venir le compléter ou le modifier, notamment le présent avenant."/><br/>
+        <apex:outputtext styleClass="line" value="Le terme «  ensemble immobilier » correspond aux biens immobiliers, objet du projet de construction ou de rénovation sur chaque site."/><br/>
+        <apex:outputtext styleClass="line" value="Le terme « Propriétaire du(des) Terrain(s) » désigne le CLIENT lui-même s’il est propriétaire du(des) terrain(s) objet du Contrat ou bien son mandant propriétaire de celui-ci(ceux-ci) au jour du Contrat."/><br/>
+
+        <apex:outputtext styleClass="line" value="Le terme « Raccordement » correspond pour chaque Site, à la partie de branchement située entre la canalisation principale ou secondaire et l’organe de coupure mentionné à l’article 1er de l’arrêté du 2 août 1977 ou l’organe de coupure générale des installations non soumises aux dispositions dudit arrêté."/><br/>
+
+        <apex:outputtext styleClass="line" value="Le terme « Terrain(s) » ou « Site(s) » peut correspondre à :"/><br/>
+        <apex:outputtext styleClass="line" value="-un(des) îlot(s) de propriété,  c’est à dire une ou plusieurs unités foncières. Le cas échéant le(s) plan(s) cadastral(aux) correspondant est(sont) annexé(s) ci-après (annexe 1) ;"/><br/>
+        <apex:outputtext styleClass="line" value="-un(des) terrain(s) loti(s), c’est à dire à un(des) îlot(s) de propriété qui a(ont), préalablement au Contrat, fait l’objet d’une division « en propriété » ou « en jouissance », donnant naissance à plusieurs parcelles (ci-après « parcelle(s) »). Le cas échéant le(s) plan(s) cadastral(aux) correspondant, faisant apparaître les parcelles, est annexé ci-après (annexe 1)."/><br/>
+        <apex:outputtext styleClass="line" value="La précision du type de Terrain ou de Site est donnée dans chaque jeu de conditions particulières correspondant."/><br/>
+        <apex:outputtext styleClass="line" value="L’expression « Travaux de Voies et Réseaux Divers », ci-après « Travaux de V.R.D. », correspond aux travaux préalables effectués pour installer des dessertes communes variées (énergie, communication, eau…) et dont la réalisation est également nécessaire pour implanter un réseau canalisé de distribution de gaz."/><br/>
+
+        <apex:outputtext styleClass="line" value="Le terme « Usager(s) » correspond aux personnes qui occuperont les locaux présents sur le(s) site(s) desservi(s) et qui utiliseront donc l’installation de distribution collective de gaz propane. Ces personnes sont le Propriétaire du(des) Terrain(s) et/ou les acquéreurs de parcelles ou les propriétaires ou les locataires (ou assimilés) des locaux desservis en gaz qui seront édifiés sur le(s) Site(s)."/><br/>
+        
+        
+        
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 2 – OBJET"/><br/>
+        <apex:outputtext styleClass="line" value="Le CLIENT confie par les présentes à BUTAGAZ la réalisation d’une ou plusieurs des prestations de service ci-après définies, relatives au(x) Réseau(x) canalisé(s) de desserte en gaz propane, du(des) Site(s) ci-après énumérés, dont les plans figurent en annexe 1 au Contrat et les détails figurent aux conditions particulières :"/><br/>
+        <apex:outputtext styleClass="line" value="-    Nom du site ________________"/><br/>
+        <apex:outputtext styleClass="line" value="Adresse ________________"/><br/>
+        <apex:outputtext styleClass="line" value="________________________"/><br/>
+        
+        <apex:pageBlockTable styleClass="line" value="{!quoteLineItems}" var="line" border="2" width="100%">
+            <apex:facet name="header">Adresse et contact du Point Livré:</apex:facet>
+            <apex:column value="{!line.Quote_PTL__r.Opportunity_PTL__r.PTL__c}" width="10%">
+                <apex:facet name="header">PTL</apex:facet>
+            </apex:column>
+            <apex:column value="{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Street_name__c}" width="10%">
+                <apex:facet name="header">Adresse 1</apex:facet>
+            </apex:column>
+            <apex:column value="{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_Street_number__c}" width="10%">
+                <apex:facet name="header">Numero</apex:facet>
+            </apex:column>
+            <apex:column value="{!line.Quote_PTL__r.Opportunity_PTL__r.PTL_City_Postal_Code__r.Name}" width="10%">
+                <apex:facet name="header">Code postal et Commune</apex:facet>
+            </apex:column>
+        </apex:pageBlockTable>
+         
+        <br/><br/>
+        <apex:outputtext styleClass="line" value="BUTAGAZ peut proposer au CLIENT de choisir parmi les prestations suivantes :"/><br/>
+        <apex:outputtext styleClass="line" value="•    L’établissement d’une Cartographie conforme"/><br/>
+        <apex:outputtext styleClass="line" value="•    La mise à jour de la Cartographie"/><br/>
+        <apex:outputtext styleClass="line" value="•    L’entretien"/><br/>
+        <apex:outputtext styleClass="line" value="•    La maintenance"/><br/>
+        <apex:outputtext styleClass="line" value="•    La gestion des interventions de sécurité"/><br/>
+        <apex:outputtext styleClass="line" value="BUTAGAZ accepte cette mission dans les termes et conditions ci-après précisés, dans le respect des exigences de qualité et de sécurité imposées par la Législation en vigueur, notamment l’arrêté du 13 juillet 2000."/><br/>
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 3 – CONDITIONS PREALABLES"/><br/>
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="3.1. Certificats et attestation de conformité"/><br/>
+        <apex:outputtext styleClass="line" value="Avant le début de toute exécution du présent avenant, le CLIENT doit fournir à BUTAGAZ une attestation de conformité du Réseau canalisé tout comme les certificats prévus aux conditions générales du Contrat (Article 3.1. des Conditions Générales), à moins que le CLIENT ne les ait déjà remis à BUTAGAZ."/><br/>
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="3.2. Cartographie du réseau"/><br/>
+        <apex:outputtext styleClass="line" value="Avant le début de toute exécution du présent avenant, le CLIENT doit également fournir à BUTAGAZ, une cartographie du réseau qui répond aux exigences posées par les dispositions légales, réglementaires et les normes professionnelles en vigueur."/><br/>
+
+        <apex:outputtext styleClass="line" value="Dans le cas d’une cartographie initiale non-suffisamment renseignée, BUTAGAZ procédera aux frais du CLIENT, à l’établissement d’une nouvelle cartographie selon un modèle prédéfini par les normes professionnelles et les exigences de sécurité posées par le service technique de BUTAGAZ."/><br/>
+
+        <apex:outputtext styleClass="line" value="Pendant la durée du Contrat, si le CLIENT modifie de quelque manière que ce soit le Réseau canalisé, il s’engage à fournir sans délai à BUTAGAZ une cartographie mise à jour du réseau. S’il le souhaite, il peut faire appel à BUTAGAZ pour établir cette mise à jour, dans les conditions fixées infra."/><br/>
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="3.3. Diagnostic préalable du Réseau canalisé"/><br/>
+        <apex:outputtext styleClass="line" value="Si le service technique de BUTAGAZ l’estime nécessaire, notamment compte tenu de la configuration ou de l’ancienneté du réseau, BUTAGAZ effectue un diagnostic préalable du réseau canalisé en place, qui portera notamment sur les points suivants :"/><br/>
+
+        <apex:outputtext styleClass="line" value="-    Etat général des coffrets, notamment de détente,"/><br/>
+        <apex:outputtext styleClass="line" value="-    Recherche de fuite au niveau des raccords apparents,"/><br/>
+        <apex:outputtext styleClass="line" value="-    Vérification de l’accès aux organes de coupure,"/><br/>
+        <apex:outputtext styleClass="line" value="-    Conformité des organes de coupure."/><br/>
+
+        <apex:outputtext styleClass="line" value="Si le diagnostic révèle des points non conformes aux spécifications minimum de sécurité imposées par les dispositions légales, réglementaires et les normes professionnelles en vigueur, ou si la vétusté du réseau en place ne permet pas de garantir le respect desdites dispositions, le CLIENT doit procéder aux réparations et/ou modifications requises par le service technique de BUTAGAZ. Si le CLIENT ne procède pas à ces réparations ou modifications, le présent avenant sera réputé nul et non avenu, sans qu’aucune indemnité ne soit due au CLIENT à quelque titre que ce soit."/><br/>
+
+        <apex:outputtext styleClass="line" value="Lorsque le contrat entre effectivement en vigueur entre les parties et que toutes les conditions sont remplies, cette prestation est offerte par BUTAGAZ au CLIENT. Si le contrat n’entre pas en vigueur du fait du CLIENT, BUTAGAZ facturera le coût du diagnostic au CLIENT conformément aux conditions financières précisées ci-après."/><br/>
+
+    </apex:pageBlocksection>
+    
+    <apex:pageBlocksection Title="TITRE II – LES PRESTATIONS AU CHOIX">
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 4 – CARTOGRAPHIE"/><br/>
+
+        <apex:outputtext styleClass="line" value="L’établissement d’une Cartographie conforme ou la mise à jour de la cartographie du(des) Réseau(x) au fur et à mesure de ses(leurs) évolutions, peut être effectué(e) par BUTAGAZ dès lors que le CLIENT lui fournit tous les documents nécessaires, relatifs à toute modification intervenue sur le(s) réseau(x)."/><br/>
+        <apex:outputtext styleClass="line" value="Le prix correspondant est fonction de l’ampleur de chaque réseau correspondant (longueur, nombre de raccordements, nombre de clients)."/><br/>
+        <apex:outputtext styleClass="line" value="Le prix de l’établissement de la cartographie conforme est précisé ci-après dans les conditions financières."/><br/>
+        <apex:outputtext styleClass="line" value="Le prix correspondant à une mise à jour de la cartographie dépendra de l’ampleur et du type de la modification intervenue sur le(s) réseau(x). Il sera donc précisé sur devis, au moment opportun, et la prestation ne sera effectuée qu’après acceptation expresse du CLIENT."/><br/>
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 5 – L’ENTRETIEN ET/OU LA MAINTENANCE"/><br/>
+        <apex:outputtext styleClass="line" value="Ces prestations correspondent au minimum exigé par l’arrêté du 13 juillet 2000 pour tout Réseau canalisé."/><br/>
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="5.1. L’entretien"/><br/>
+        <apex:outputtext styleClass="line" value="Il a pour but de réduire les risques de panne et de maintenir dans le temps le niveau de performance du Réseau concerné. Cette prestation consiste en une visite périodique de contrôle du Réseau concerné, portant sur les points visés par la réglementation et les normes professionnels en vigueur (cahier des charges de l’Association Française du Gaz « RSDG 14 »)."/><br/>
+        <apex:outputtext styleClass="line" value="BUTAGAZ organise les visites de contrôle périodiques et missionnent des techniciens agréés par ses services, qui réalisent notamment :"/><br/>
+        <apex:outputtext styleClass="line" value="-recherche de fuites périodique,"/><br/>
+        <apex:outputtext styleClass="line" value="-manœuvre des robinets,"/><br/>
+        <apex:outputtext styleClass="line" value="-repérage des différents constituants du réseau."/><br/>
+        <apex:outputtext styleClass="line" value="Suite à ces visites, un compte rendu est rédigé et envoyé au client."/><br/>
+        <apex:outputtext styleClass="line" value="L’entretien ne couvre pas le remplacement de matériel défectueux, ni la réparation d’une partie quelconque du réseau canalisé, ni les frais de main d’œuvre ou les travaux nécessaires (terrassement, remblaiement) correspondants."/><br/>
+        <apex:outputtext styleClass="line" value="Le prix de l’entretien est précisé ci-après dans les conditions financières."/><br/>
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="5.2. La maintenance"/><br/>
+        <apex:outputtext styleClass="line" value="Il s’agit ici de la remise en état du Réseau concerné à la suite d’une défaillance. Cette prestation comprend les opérations de réparation ou d’échange de pièces défectueuses."/><br/>
+        <apex:outputtext styleClass="line" value="La maintenance est réalisée sur devis, après acceptation du CLIENT."/><br/>
+
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 6 – LA GESTION DES INTERVENTIONS DE SECURITE"/><br/>
+        <apex:outputtext styleClass="line" value="BUTAGAZ assure la gestion de toutes interventions nécessaires sur chaque Réseau conformément aux règles de sécurité imposées par les lois, les règlements et les normes professionnelles en vigueur."/><br/>
+        <apex:outputtext styleClass="line" value="BUTAGAZ met à disposition des Usagers un numéro d’urgence accessible 24h/24h et 7 jours/ 7 jours, en cas de panne ou de problème de sécurité. Ce numéro est le suivant : 0811 900 065 (0,15 €TTC/la minute)."/><br/>
+        <apex:outputtext styleClass="line" value="Le centre d’appel est chargé d’effectuer un diagnostic à distance du problème signalé puis, lorsque les circonstances l’exigent, de missionner un technicien chargé de mettre les personnes et les biens hors de danger puis de faire un compte-rendu à BUTAGAZ sur l’incident."/><br/>
+        <apex:outputtext styleClass="line" value="Suivant les cas, l’intervention d’urgence peut être suivie d’une opération de maintenance, en sus."/><br/>
+        <apex:outputtext styleClass="line" value="Le coût de la gestion des interventions d’urgence est précisé ci-après."/><br/>
+    </apex:pageBlocksection>
+    
+    <apex:pageBlocksection Title="TITRE III – CHOIX DU CLIENT ET CONDITIONS FINANCIERES">
+        
+        <div class="line" style="font-size:13px;">
+            
+            <!--apex:pageBlockSection rendered="{!Question=true}"--><br/><!--Print the sentence WITH values -->
+                Oui,? L’établissement d’une Cartographie conforme <br/>
+                Selon l’ampleur du réseau, le prix proposé est ______ € HT <br/>
+            <!--/apex:pageBlockSection-->
+            
+            <!--apex:pageBlockSection rendered="{!Question=false}"--><br/><!--Print the sentence without values -->
+                Non,? L’établissement d’une Cartographie conforme <br/>
+                Selon l’ampleur du réseau, le prix proposé est ______ € HT <br/>
+            <!--/apex:pageBlockSection--> 
+            
+            <!--apex:pageBlockSection rendered="{!Question=true}"--><br/><!--Print the sentence WITH values -->
+                Oui,? La mise à jour de la Cartographie <br/>
+                (sur devis en fonction des modifications intervenues) <br/>
+            <!--/apex:pageBlockSection-->
+            <!--apex:pageBlockSection rendered="{!Question=false}"--><br/><!--Print the sentence without values -->
+                Non,? La mise à jour de la Cartographie <br/>
+                (sur devis en fonction des modifications intervenues <br/>
+            <!--/apex:pageBlockSection-->
+            
+            
+            <!--apex:pageBlockSection rendered="{!Question=true}"--><br/><!--Print the sentence WITH values -->
+                Oui,? L’entretien <br/>
+                Le prix de l’entretien s’élève à ______€ HT / compteur. <br/>
+            <!--/apex:pageBlockSection-->
+            <!--apex:pageBlockSection rendered="{!Question=false}"--><br/><!--Print the sentence without values -->
+                Non,? L’entretien <br/>
+                Le prix de l’entretien s’élève à ______€ HT / compteur. <br/>
+            <!--/apex:pageBlockSection-->
+            
+            
+            <!--apex:pageBlockSection rendered="{Question=true}"--><br/><!--Print the sentence WITH values -->
+                Oui,? La maintenance <br/>
+                (sur devis en fonction de la réparation à effectuer) <br/>
+            <!--/apex:pageBlockSection-->
+            <!--apex:pageBlockSection rendered="{Question=false}"--><br/><!--Print the sentence without values -->
+                Non,? La maintenance <br/>
+                (sur devis en fonction de la réparation à effectuer) <br/>
+            <!--/apex:pageBlockSection-->
+            
+            
+            <!--apex:pageBlockSection rendered="{!Question=true}"--><br/><!--Print the sentence WITH values -->
+                'Oui, La gestion des interventions de sécurité <br/>
+                Le prix de la gestion des interventions de sécurité s’élève à  _____ € HT / compteur. <br/>
+            <!--/apex:pageBlockSection-->
+            <!--apex:pageBlockSection rendered="{!Question=false}"--><br/><!--Print the sentence without values -->
+                Non,? La gestion des interventions de sécurité <br/>
+                Le prix de la gestion des interventions de sécurité s’élève à  _____ € HT / compteur. <br/>
+            <!--/apex:pageBlockSection-->
+        </div>
+    </apex:pageBlocksection>
+    
+    <apex:pageBlocksection Title="TITRE IV - OBLIGATIONS GENERALES DU CLIENT">
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 6 –  OBLIGATION DE RENSEIGNEMENT PREALABLE"/><br/>
+        <apex:outputtext styleClass="line" value="Le CLIENT s’engage à remettre à BUTAGAZ, tous plans et documents relatifs au(x) Réseau(x), notamment :"/><br/>
+        <apex:outputtext styleClass="line" value="-un plan sur lequel figurent les routes et zones publiques situées à proximité de chaque Site ainsi que toutes les voies privées alentours,"/><br/>
+        <apex:outputtext styleClass="line" value="-un plan cadastral décrivant précisément chaque Site, et les différentes Parcelles le cas échéant,"/><br/>
+        <apex:outputtext styleClass="line" value="-éventuellement un plan du(des) projet(s) d’Ensemble(s) immobilier(s) (lorsque les locaux desservis par le réseau ne sont pas encore construits ou sont en cours de construction ou de rénovation),"/><br/>
+        <apex:outputtext styleClass="line" value="-un plan des installations techniques en sous-sol à l’échelle adaptée pour chaque Site,"/><br/>
+        <apex:outputtext styleClass="line" value="-tout document relatif à une modification ou une extension intervenue sur le(s) réseau(x) canalisé(s)."/><br/>
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 7 –  INFORMATION PREALABLE DES CANDIDATS"/><br/>
+        <apex:outputtext styleClass="line" value="Que les locaux desservis par le(s) réseau(x) correspondant(s) ne soient pas encore construits ou soient en cours de construction (cas n°1), ou que les locaux soient déjà édifiés (cas n°2), le CLIENT s’engage à informer, par tous moyens utiles, les candidats à la propriété ou à la jouissance des locaux, de l’existence du Contrat, notamment du présent avenant, entre lui et BUTAGAZ."/><br/>
+        <apex:outputtext styleClass="line" value="Dans le cas n°1, il annexe à cette fin le Contrat au cahier des charges de chaque Ensemble immobilier concerné, ainsi qu’aux statuts du(des) groupement(s) des futurs propriétaires des biens immobiliers, qu’il est en principe chargé de rédiger au moment de la demande du permis de construire ou du permis de lotir."/><br/>
+        <apex:outputtext styleClass="line" value="Pour chaque Site, le CLIENT s’engage expressément à insérer ou à faire insérer dans le règlement de co-propriété, le cas échéant, comme dans les statuts du groupement des propriétaires (notamment dans la partie concernant les équipements collectifs et les VRD), la clause suivante :"/><br/>
+        <apex:outputtext styleClass="line" value="« Un contrat a été souscrit par le CLIENT concernant des prestations de services relatives à l’équipement collectif permettant la desserte en gaz propane de l’ensemble immobilier, telles qu’imposés par la loi et la réglementation. Un exemplaire de ce contrat est annexé aux présentes. Sans préjudice de ses droits, le groupement des propriétaires reprend expressément à sa charge pour le compte des propriétaires, les droits et engagements qui en découlent. »"/><br/>
+        <apex:outputtext styleClass="line" value="Le CLIENT transmettra le règlement de co-propriété le cas échéant ou son projet, tout comme les statuts du groupement des propriétaires, le cas échéant, ou le projet de statuts, à tout candidat à la propriété, et il veillera à ce que cette transmission soit régulièrement effectuée par le Notaire auxdits candidats, au plus tard au moment de l’acte notarié."/><br/>
+        <apex:outputtext styleClass="line" value="Dans le cas n°2, le CLIENT et les acquéreurs transmettront également le règlement de co-propriété, tout comme les statuts du groupement des propriétaires, le cas échéant, à tout candidat à la jouissance. Le CLIENT et les acquéreurs, veilleront à ce que qu’une note soit adressée à chaque candidat à la jouissance précisant l’existence d’un contrat entre BUTAGAZ et le CLIENT, et les obligations qui en découlent."/><br/>
+        <apex:outputtext styleClass="line" value="Le CLIENT transmettra à BUTAGAZ toute information concernant les candidats (état civil complet, coordonnées complètes) dès leur prise de possession ou de jouissance. BUTAGAZ sera ainsi en mesure de prendre contact avec chacun d’eux pour réaliser à bien les prestations objet du Contrat."/><br/>
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 8 – TRANSFERT DES DROITS ET OBLIGATIONS AUX ACQUEREURS"/><br/>
+        <apex:outputtext styleClass="line" value="Pour chaque Site, la revente des Parcelles et/ou des biens immobiliers – au quel cas, le cahier des charges de l’ensemble immobilier ou du Terrain, ainsi que le règlement de co-propriété, le cas échéant, qui comportent le Contrat en annexe, ont été obligatoirement présentés par le CLIENT et le Notaire aux candidats concernés avant la signature de tout contrat de vente - emporte automatiquement transfert des droits et des obligations qui découlent du Contrat, concernant les prestations relatives à l’installation collective alimentant les Parcelles ou les biens immobiliers acquis. Sont expressément exclus du transfert toutes les obligations stipulées par le CLIENT pour lui-même dans le cadre de son activité."/><br/>
+        <apex:outputtext styleClass="line" value="Ce transfert est opéré pour chaque acquéreur, conformément aux dispositions en vigueur en matière de co-propriété ou proportionnellement à sa quote-part de charges par rapport à l’ensemble de l’Îlot de propriété et/ou des biens immobiliers, et pour la durée du Contrat qui reste à courir."/><br/>
+        <apex:outputtext styleClass="line" value="En outre, l’équipement dont il est question dans le Contrat est un équipement collectif. Les droits et obligations issus du Contrat transférés à chaque acquisition de biens immobiliers situés sur le site, sont par conséquent, également transférés au groupement des propriétaires, qui en a la charge."/><br/>
+        <apex:outputtext styleClass="line" value="Dans l’hypothèse où les locaux desservis par le(s) réseau(x) correspondant(s) ne sont pas encore construits ou sont en cours de construction, le CLIENT s’engage expressément à faire confirmer par le groupement des propriétaires, dès sa constitution effective, et au maximum dans les deux mois après la première acquisition d’une Parcelle et/ou d’un bien immobilier, que le groupement a bien eu connaissance des droits et engagements issus du Contrat qui lui sont transférés. Pour ce faire, il veille à ce que le représentant du groupement ou son mandataire remplisse le document annexé ci-après (annexe 1A) et le renvoie à BUTAGAZ."/><br/>
+
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 9 – ASSURANCES ET RESPONSABILITES"/><br/>
+        <apex:outputtext styleClass="line" value="Pour chaque Site, le CLIENT, ainsi que les acquéreurs de Parcelles et/ou de biens immobiliers le cas échéant, sont propriétaires du Réseau correspondant et ils ont la garde et la conservation du Stockage. Ils doivent par conséquent souscrire une assurance en responsabilité civile auprès d’une compagnie de leur choix, (ou faire étendre la couverture dont il dispose déjà par l’ajout d’une clause), en considération des risques liés à la propriété et à la garde de la chose, conformément au droit commun."/><br/>
+
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 10 – DUREE"/><br/>
+        <apex:outputtext styleClass="line" value="Le présent avenant est conclu pour la durée du Contrat restant à courir à sa date de signature."/><br/>
+
+
+        <apex:outputtext styleClass="line" Style="font-size:13px;" value="ARTICLE 11 – FORCE OBLIGATOIRE DE L’ACCORD INITIAL"/><br/>
+        <apex:outputtext styleClass="line" value="Toutes les autres clauses et annexes de l’accord de fourniture susmentionné dans le préambule, qui ne sont pas modifiées par le présent avenant, demeurent applicables, et gardent leur pleine et entière validité."/><br/>
+        </apex:pageBlocksection>
+        <br/><br/><br/><br/>
+    <apex:pageBlocksection >
+        <table border="0" cellspacing="1" cellpadding="1" width="100%" id="table" allign="left">
+        <tr>   
+            <td Style="font-size: 14px; font-family:Verdana;">
+                <apex:outputtext styleClass="line" value="Pour Butagaz SAS"/>
+                <apex:outputtext styleClass="line" value="DRB"/><br/>      
+                <apex:outputtext Style="padding:0px; font-style:bold; font-size: 12px; font-family:Verdana" value="{! 'M '&Quote.CreatedBy.Name}"/><br/>
+                <apex:outputtext Style="padding:0px; font-style:bold; font-size: 12px; font-family:Verdana" value="(Nom du Commercial)"/><br/>
+            </td >
+            <td></td>
+            <td Style="font-size: 14px; font-family:Verdana;"> 
+                <apex:outputtext styleClass="line" value="Le Client {!Quote.Contact.FirstName& ' '&Quote.Contact.LastName}"/>
+                <apex:outputtext styleClass="line" value="M "/>
+                <apex:outputtext styleClass="line" value="_____________"/>
+                <apex:outputtext styleClass="line" value="(Nom et qualité du Signataire)"/><br/>
+            </td>
+        </tr>
+        <tr>   
+            <td></td>
+            <td></td>
+            <td Style="font-size: 14px; font-family:Verdana;">
+                <apex:outputtext styleClass="line" value="qui reconnaît avoir pris connaissance des "/><br/>
+                <apex:outputtext styleClass="line" value="présentes conditions générales, qu’il accepte expressément."/>
+            </td>                     
+        </tr>
+        
+        <tr>   
+            <td Style="font-size: 14px; font-family:Verdana;">
+                <apex:outputtext styleClass="line" value="Signature + Cachet Commercial"/>
+            </td>
+            <td></td>
+            <td Style="font-size: 14px; font-family:Verdana;">
+                <apex:outputtext styleClass="line" value="Signature + Cachet du CLIENT"/>
+            </td>
+        </tr>
+    </table>
+    <br/><br/>
+    </apex:pageBlocksection>
+    
+    </apex:pageBlock>
+</apex:page>

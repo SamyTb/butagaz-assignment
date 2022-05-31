@@ -1,0 +1,745 @@
+<apex:page standardController="Quote" language="fr" renderas="pdf" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<html>
+    <head>
+        <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+
+            <style type="text/css" media="all">
+
+            
+
+            
+            #containerGECDOMPROP    {display: {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'
+                                                        && Quote.Opportunity.Project_Market_Type__c=='DOM'
+                                                        && Quote.Opportunity.RecordType.Name=='GEC DOM'   
+                                                        && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                        && Quote.Opportunity.Direct_Client__c=false 
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                        && Quote.Client_Reenlistment__c=='Contract'
+                                                        
+                                                        
+                                                    , '', 'none')}; 
+            }
+            
+            #containerGECDOMLOC     {display:       {!  IF(
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            
+                                                            && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'  
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM'
+                                                            && Quote.Opportunity.Client_Type__c=='Renter' 
+                                                            && Quote.Opportunity.RecordType.Name=='GEC LOCATAIRE'
+                                                            && Quote.Opportunity.Direct_Client__c==false   
+                                                            && AND(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz')   
+                                                            && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration'  
+                                                            && Quote.Client_Reenlistment__c=='Contract'
+                                                            
+                                                
+                                                , '', 'none')}; 
+                                }
+
+
+            
+            /*#containerGECPRO    {display:         {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        && Quote.Client_Reenlistment__c=='Contract' 
+                                                        && Quote.Opportunity.Client_Type__c=='Owner'
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne' 
+                                                        && Quote.Opportunity.Direct_Client__c==false
+                                                        && Quote.Opportunity.Project_Market_Type__c=='PRO'
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        && OR(NOT(Quote.Opportunity.Project_market_subtype__c=='Hôtel/Restauration'),
+                                                               Quote.Product_Scale__c == 'V1GR',
+                                                               Quote.Product_Scale__c == 'V1PRO')  
+                                                        && OR(NOT(Quote.Opportunity.Project_market_subtype__c=='Collectivité/Administration'),
+                                                               Quote.DO_Groupement__r.AccountNumber == 'G1G41SUNA0',
+                                                               Quote.DO_Groupement__r.AccountNumber == 'G1G41LAHC0',
+                                                               Quote.DO_Groupement__r.AccountNumber == 'G1G43SCED0',
+                                                               Quote.DO_Groupement__r.AccountNumber == 'G1G71SCED0',
+                                                               Quote.DO_Groupement__r.AccountNumber == 'G1G32SCED0',
+                                                               Quote.Product_Scale__c == 'V1GR',
+                                                               Quote.Product_Scale__c == 'V1PRO'
+                                                             ) 
+
+                                                    , '', 'none')};
+            }*/
+
+            #containerGECPRO    {display:           {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        && Quote.Client_Reenlistment__c=='Contract' 
+                                                        && Quote.Opportunity.Client_Type__c=='Owner'
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne' 
+                                                        && Quote.Opportunity.Direct_Client__c==false
+                                                        && Quote.Opportunity.Project_Market_Type__c=='PRO'
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        
+                                                    , '', 'none')};
+            }
+            
+            #containerGECPROLOC    {display:        {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        && Quote.Client_Reenlistment__c=='Contract'
+                                                        && Quote.Opportunity.Client_Type__c=='Renter' 
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne' 
+                                                        && Quote.Opportunity.Direct_Client__c=false 
+                                                        && Quote.Opportunity.Project_Market_Type__c=='PRO'
+                                                             
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        
+                                                    , '', 'none')};
+            }            
+            
+            
+            
+            #containerCONTRACTGrosVrac {display:    {!IF(
+                                                         Quote.T_LAT_Approved__c 
+                                                         && Quote.IsSyncing 
+                                                         && Quote.Direct_Client__c=='Gros Vrac' 
+                                                         , '', 'none')};
+            }
+            
+            #containerGPLC {display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Activity_Domain_Opportunity__c=='GPLc - Gepel' &&  OR(Quote.Opportunity.Client_Type__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz'), '', 'none')};
+            }
+            
+            
+            /*#containerGECCHR {display:  {!IF
+                                         
+                                         (OR
+                                           (
+                                            Quote.T_LAT_Approved__c 
+                                            && Quote.IsSyncing 
+                                            && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne' 
+                                            && Quote.Opportunity.Project_Market_Type__c=='PRO'
+                                            && Quote.Opportunity.Client_Type__c=='Owner'
+                                            && Quote.Client_Reenlistment__c=='Contract'
+                                            && AND(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz') 
+                                            && Quote.Opportunity.Direct_Client__c==false 
+                                            && Quote.Opportunity.Project_market_subtype__c=='Hôtel/Restauration' 
+                                            && NOT(OR(Quote.Product_Scale__c == 'V1GR', Quote.Product_Scale__c == 'V1PRO'))
+                                            
+                                            ,     
+                                             
+                                            Quote.T_LAT_Approved__c
+                                            && Quote.IsSyncing 
+                                            && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne' 
+                                            && Quote.Opportunity.Project_Market_Type__c=='PRO'
+                                            && Quote.Opportunity.Client_Type__c=='Renter'
+                                            && Quote.Client_Reenlistment__c=='Contract'
+                                            && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')
+                                            && Quote.Opportunity.Direct_Client__c==false 
+                                            && Quote.Opportunity.Project_market_subtype__c=='Hôtel/Restauration'                                              
+                                            && NOT(OR(Quote.Product_Scale__c == 'V1GR', Quote.Product_Scale__c == 'V1PRO'))
+                                            
+                                           )  
+                                         ,'', 'none')};
+            }*/
+            
+            
+            #containerPrecienergigaz {display: {!IF(    Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        && OR(Quote.Opportunity.Client_SubType__c=='Energigaz',Quote.Opportunity.Client_SubType__c=='Précigaz')  
+                                                        && Quote.Opportunity.Client_SubType__c!='Renter'
+                                                         && Quote.Opportunity.Direct_Client__c=false
+                                                       
+                                                        , '', 'none')};
+            }
+            
+      
+            #containerGERUSAGER {display: {!IF(Quote.T_LAT_Approved__c 
+                                                && Quote.IsSyncing 
+                                                && Quote.Opportunity.Client_Type__c=='Consumer'
+                                                && Quote.Activity_Domain_Opportunity__c=='GER - Gaz en réseau'
+                                                && Quote.Opportunity.Direct_Client__c=false 
+                                                 && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                , '', 'none')};
+            }
+
+
+            
+            #containerServicesALaCarte {display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Technical_inspections_required__c='à la carte' && Quote.Client_Reenlistment__c=='Avenant', '', 'none')};
+            }
+            
+            /*#containerGECPROPackColl    {display:       {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        && Quote.Client_Reenlistment__c=='Contract' 
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne' 
+                                                        && Quote.Opportunity.Direct_Client__c==false 
+                                                        && Quote.Opportunity.Project_Market_Type__c=='PRO' 
+                                                        && Quote.Opportunity.Client_Type__c=='Owner'       
+                                                        && Quote.Opportunity.Project_market_subtype__c=='Collectivité/Administration'
+                                                        && NOT(OR(
+                                                                Quote.DO_Groupement__r.AccountNumber == 'G1G41SUNA0',
+                                                                Quote.DO_Groupement__r.AccountNumber == 'G1G41LAHC0',
+                                                                Quote.DO_Groupement__r.AccountNumber == 'G1G43SCED0',
+                                                                Quote.DO_Groupement__r.AccountNumber == 'G1G71SCED0',
+                                                                Quote.DO_Groupement__r.AccountNumber == 'G1G32SCED0'
+                                                           ) )
+                                                        && OR(Quote.Product_Scale__c == 'V1PRP3', Quote.Product_Scale__c == 'V1GRP3')
+                                                               
+                                                        , '', 'none')};
+            }*/
+            
+            
+                
+            #containerGECDOMIDEOSOLOCP    {display: {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing                  
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'   
+                                                        && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                        && Quote.Opportunity.Direct_Client__c=false 
+                                                        && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                        && Quote.Client_Reenlistment__c=='Contract'
+                                                        && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM SOLO',Quote.Opportunity.RecordType.Name=='GEC DOM IDEO') 
+
+                                                    , '', 'none')}; 
+            }
+             
+             
+             #containerGECDOMECOCFTCP    {display: {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'   
+                                                        && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                        && Quote.Opportunity.Direct_Client__c=false 
+                                                        && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                        && Quote.Client_Reenlistment__c=='Contract'
+                                                        &&  Quote.Opportunity.RecordType.Name=='GEC DOM ECOCFT' 
+														&& Quote.Opportunity.Project_Sub_Type__c!='V48'
+                                                    , '', 'none')}; 
+            }
+             
+             
+             
+             
+             
+               #containerGECDOMIDEOLOC     {display:       {!  IF(
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            
+                                                            && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'  
+                                                            && Quote.Opportunity.Client_Type__c=='Renter' 
+                                                            && Quote.Opportunity.Direct_Client__c==false   
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                            && AND(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz')   
+                                                            && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration'  
+                                                            && Quote.Client_Reenlistment__c=='Contract'
+                                                            && OR(Quote.Opportunity.RecordType.Name=='GEC DOM LOC IDEO SOLO',Quote.Opportunity.RecordType.Name=='GEC DOM LOC OPTIMO')
+                                                
+                                                , '', 'none')}; 
+                                }
+        
+             
+                        
+            <!-- This condition will show one  vfp page being th pack confort and Liberte, the difference between LIBerte and confort is  two text block within the document, one rendered for V1LIB and other block of text run for V1PK-->
+            
+            #PackConfort   {display: 
+                                                 {!IF (
+                                                        Quote.T_LAT_Approved__c
+                                                        && Quote.IsSyncing 
+                                                        && OR(Quote.Product_Scale__c=='V1PK',Quote.Product_Scale__c=='V1LIB')
+                                                         
+                                                        && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                        && AND ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO') 
+                                                        && Quote.Opportunity.Client_Type__c=='Owner'
+                                                        &&
+                                                            AND(Quote.Opportunity.Project_Type__c=='FIDE',Quote.Client_Reenlistment__c=='Avenant')
+                                                        , '', 'none')};
+                                                }
+            
+          
+             #containerAVENANTOCTROIREMISE {display: {!IF(
+                                                         Quote.T_LAT_Approved__c
+                                                         && Quote.IsSyncing 
+                                                         && Quote.Client_Reenlistment__c=='Commercial offer'
+                                                         && Quote.Opportunity.Account.Activity_Domain__r.Name!='GEB - Gaz en bouteille'
+                                                         && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')
+                                                         && AND ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO') 
+                                                         ,'','none')};
+                                           }
+            
+
+            
+            #containerPaiement10Fois  {display: {!IF(
+                                                       OR(
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            && OR(Quote.Payment_spread__c=='ZM10',Quote.Payment_spread__c=='ZF10')
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                            && OR ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM ECOCFT',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO')
+                                                            && OR (Quote.Product_Scale__c=='V1LIB',Quote.Product_Scale__c=='V1PK')
+                                                            
+                                                            ,
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            && OR(Quote.Payment_spread__c=='ZM10',Quote.Payment_spread__c=='ZF10')
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Renter'
+                                                            && Quote.Opportunity.RecordType.Name=='GEC LOCATAIRE'
+                                                            && OR ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM ECOCFT',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO')
+                                                        
+                                                             && OR (Quote.Product_Scale__c=='V1LIB',Quote.Product_Scale__c=='V1PK',Quote.Product_Scale__c=='V1GR')
+                                                          )
+                                                    
+                                                    , '', 'none')};
+            }
+            
+            
+            #containerPaiement10FoisV1DOM  {display: {!IF(
+                                                       OR(
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            && Quote.Payment_spread__c=='ZF10'
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                            && Quote.Opportunity.RecordType.Name=='GEC DOM'
+                                                            && Quote.Product_Scale__c=='V1DOM'
+                                                            
+                                                            ,
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            && Quote.Payment_spread__c=='ZF10'
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Renter'
+                                                            && Quote.Opportunity.RecordType.Name=='GEC LOCATAIRE'
+                                                            && OR ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM ECOCFT',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO')
+
+                                                            && Quote.Product_Scale__c=='V1DOM'
+                                                          )
+                                                    
+                                                    , '', 'none')};
+            }
+            
+            #containerPaiement2Fois      {display: {!IF
+                                                        
+                                                       (OR(
+                                                       
+                                                              Quote.T_LAT_Approved__c 
+                                                           && Quote.IsSyncing
+                                                           && OR(Quote.Payment_spread__c=='ZM02',Quote.Payment_spread__c=='ZF02') 
+                                                           && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                           && Quote.Opportunity.Project_Sub_Type__c!='MDS'
+                                                       
+                                                       ,
+                                                       
+                                                              Quote.T_LAT_Approved__c
+                                                           && Quote.IsSyncing  
+                                                           && OR(Quote.Payment_spread__c=='ZM02',Quote.Payment_spread__c=='ZF02')
+                                                           && Quote.Opportunity.Client_Type__c=='Renter'
+                                                           
+                                                       )
+                                                       
+                                                       , '', 'none')};
+                                                       
+            }
+            
+            #containerPaiement3Fois      {display: {!IF(
+                                                       OR(
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            
+
+                                                            && OR(Quote.Payment_spread__c=='ZM03',Quote.Payment_spread__c=='ZF03')
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                            && Quote.Opportunity.RecordType.Name=='GEC DOM'
+                                                            && OR ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM ECOCFT',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO')
+                                                            && OR (Quote.Product_Scale__c=='V1LIB',Quote.Product_Scale__c=='V1PK')  
+                                                            ,
+                                                             Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            && OR(Quote.Payment_spread__c=='ZM03',Quote.Payment_spread__c=='ZF03')
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Renter'
+                                                            && Quote.Opportunity.RecordType.Name=='GEC LOCATAIRE'
+                                                           
+                                                             && OR (Quote.Product_Scale__c=='V1LIB',Quote.Product_Scale__c=='V1PK',Quote.Product_Scale__c=='V1GR')
+                                                          )
+                                                    
+                                                    , '', 'none')};
+            }
+            
+            
+             #containerPaiement3FoisV1DOM      {display: {!IF(
+                                                       OR(
+                                                            Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            
+
+                                                            && Quote.Payment_spread__c=='ZF03'
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                            && Quote.Opportunity.RecordType.Name=='GEC DOM'
+                                                            && Quote.Product_Scale__c=='V1DOM'
+                                                            
+                                                            ,
+                                                             Quote.T_LAT_Approved__c 
+                                                            && Quote.IsSyncing 
+                                                            && OR(Quote.Payment_spread__c=='ZM03',Quote.Payment_spread__c=='ZF03')
+                                                            && Quote.Opportunity.Project_Market_Type__c=='DOM' 
+                                                            && Quote.Opportunity.Client_Type__c=='Renter'
+                                                            && Quote.Opportunity.RecordType.Name=='GEC LOCATAIRE'
+                                                            && OR ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM ECOCFT',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO')
+
+
+                                                            && Quote.Product_Scale__c=='V1DOM'
+                                                          )
+                                                    
+                                                    , '', 'none')};
+            }
+            
+
+            #containerPaiment6fois    {display: {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing 
+                                                        
+                                                        && Quote.est_Pack_Maison_Neuve__c==1 
+                                                        && Quote.PMN_Payment_Spread__c=='ZF06'
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'   
+                                                        && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                        && Quote.Opportunity.Direct_Client__c=false 
+                                                        && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                        && Quote.Client_Reenlistment__c=='Contract'
+                                                        && Quote.Opportunity.RecordType.Name=='GEC LOCATAIRE'
+                                                        && OR ( Quote.Opportunity.RecordType.Name!='GEC DOM SOLO',Quote.Opportunity.RecordType.Name!='GEC DOM IDEO',Quote.Opportunity.RecordType.Name!='GEC DOM ECOCFT',Quote.Opportunity.RecordType.Name!='GEC DOM OPTIMO') 
+                                                    , '', 'none')}; 
+            }
+            
+            
+      
+          #containerContratGECDOMIDEOSOLO   {display: {!IF(
+          
+                                                OR(
+                                                          Quote.T_LAT_Approved__c 
+                                                       && Quote.IsSyncing 
+                                                       
+                                                       && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'   
+                                                       && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                       && Quote.Opportunity.Direct_Client__c=false 
+                                                       && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                       && OR(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                       && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                      
+                                                       && OR (Quote.Payment_spread__c=='ZL03',Quote.Payment_spread__c=='ZL06',Quote.Payment_spread__c=='ZL10',Quote.Payment_spread__c=='ZK03',Quote.Payment_spread__c=='ZK06',Quote.Payment_spread__c=='ZK10' )
+                                                       && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM SOLO',Quote.Opportunity.RecordType.Name=='GEC DOM IDEO' ,Quote.Opportunity.RecordType.Name=='GEC DOM OPTIMO') 
+
+                                                    , 
+                                                          Quote.T_LAT_Approved__c 
+                                                       && Quote.IsSyncing 
+                                                    
+                                                       && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'   
+                                                       && Quote.Opportunity.Client_Type__c=='Renter' 
+                                                       && Quote.Opportunity.Direct_Client__c=false 
+                                                       && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                       && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                       && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                       
+                                                       && OR (Quote.Payment_spread__c=='ZL03',Quote.Payment_spread__c=='ZK03' )
+                                                       && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM LOC IDEO SOLO') 
+                                                    
+                                                    )
+                                                        
+                                            , '', 'none')}; 
+            }
+
+            <!--
+            #containerDossiers {!IF(Quote.T_LAT_Approved__c &&Quote.IsSyncing && OR(Quote.=='ZM03',Quote.Payment_spread__c=='ZM03') , '', 'none')};
+            }-->
+            
+            
+            #containerNOPRINT {display: {!IF(Quote.T_LAT_Approved__c=false,'','none')};
+            }
+            #containerNOPRINT2 {display: {!IF(Quote.IsSyncing=false,'','none')};
+            }
+            
+            #containerGEBRE{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEB - Gaz en bouteille' && Quote.Opportunity.Client_Type__c=='RE' && OR(Quote.Opportunity.Project_Type__c='CREA', Quote.Opportunity.Project_Type__c='SUCC', Quote.Opportunity.Project_Type__c='EXTE'), '', 'none')}; 
+            }             
+
+            #containerAvenantGEBRE{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEB - Gaz en bouteille' && Quote.Opportunity.Client_Type__c=='RE' && Quote.Opportunity.Project_Type__c='FIDE', '', 'none')}; 
+            }
+                       
+            #containerGEBPRO{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEB - Gaz en bouteille' && Quote.Opportunity.Client_Type__c!='RE', '', 'none')}; 
+            }             
+            
+            #containerGECDOMButabox{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' && Quote.Opportunity.Project_market_type__c=='DOM' && Quote.IsButabox__c , '', 'none')}; 
+            }
+            
+            
+            /*#containerAvenantGECPROPackColl{
+              <!--display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' && Quote.Opportunity.Project_market_type__c=='PRO' && Quote.Opportunity.Project_market_subtype__c=='Collectivité/Administration' && Quote.Opportunity.Project_Type__c=='FIDE' && Quote.Client_Reenlistment__c!='Contract', '', 'none')};--> 
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' && Quote.Opportunity.Project_market_type__c=='PRO' && Quote.Opportunity.Project_market_subtype__c=='Collectivité/Administration' && Quote.Opportunity.Project_Type__c=='FIDE' && Quote.Client_Reenlistment__c=='Avenant', '', 'none')};
+            }*/
+            
+            
+            #containerAVENANTGECDOMIDEOSOLO{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' && Quote.Opportunity.Project_market_type__c=='DOM'  && Quote.Opportunity.Project_Type__c=='FIDE'   && Quote.Client_Reenlistment__c!='Contract'  && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM SOLO',Quote.Opportunity.RecordType.Name=='GEC DOM IDEO',Quote.Opportunity.RecordType.Name=='GEC DOM OPTIMO') , '', 'none')}; 
+            }
+            
+            /*FLA*/
+       		#containerAVENANTGECDOMECOECO{	         
+                display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing && Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' && Quote.Opportunity.Project_market_type__c=='DOM'  && 
+                 Quote.Opportunity.Project_Type__c=='FIDE'   && Quote.Client_Reenlistment__c=='Contract'  && Quote.Opportunity.RecordType.Name=='GEC DOM ECOCFT' && 
+                 Quote.Opportunity.Project_Sub_Type__c=='V48', '', 'none')}; 
+            }
+                
+            #containerGECDOMOPTIMOCP    {display: {!IF(
+                                                        Quote.T_LAT_Approved__c 
+                                                        && Quote.IsSyncing                  
+                                                        && Quote.Activity_Domain_Opportunity__c=='GEC - Gaz en citerne'   
+                                                        && Quote.Opportunity.Client_Type__c=='Owner' 
+                                                        && Quote.Opportunity.Direct_Client__c=false 
+                                                        && Quote.Opportunity.Project_Market_Type__c=='DOM'  
+                                                        && AND(Quote.Opportunity.Client_SubType__c!='Energigaz',Quote.Opportunity.Client_SubType__c!='Précigaz')  
+                                                        && Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+                                                        && Quote.Client_Reenlistment__c=='Contract'
+                                                        && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM OPTIMO') 
+
+                                                    , '', 'none')}; 
+            }
+            
+            
+                @page {
+                    @top-center {
+                        content: element(header);
+                    }
+                    @bottom-left {
+                        content: element(footer);
+                    }   
+                }
+                
+                <!--div.header {
+                    padding: 10px;
+                    position: running(header);
+                }-->
+
+                div.footer {                
+                    display: block;             
+                    padding: 5px;               
+                    position: running(footer);          
+                } 
+                
+                div.break { page-break-before: auto; } > 
+
+                
+                
+                .titre1{
+                    background-color: #8db3e2; 
+                    font-family:Verdana; 
+                    text-align:center;
+                    display:inline-block; 
+                    font-weight:bold; 
+                    margin:0 auto;
+                    padding:5px 15px 5px 15px; 
+                    border:1px solid #000; 
+                    width:95%; 
+                } 
+
+                .titre2{
+                    background-color: #c6d9f1; 
+                    font-family:Verdana; 
+                    font-size: 18px; 
+                    text-align:center; 
+                    display:inline-block; 
+                    font-weight:bold; 
+                    margin:0 auto;
+                    margin-top: 15px;
+                    margin-bottom: 15px;
+                    padding:1px 15px 1px 15px; 
+                    border:1px solid #000; 
+                    width:95%;
+                } 
+                <!--.field{
+                    font-size: 14px; 
+                    font-style:italic; 
+                    font-weight: bold;
+                    font-family:Verdana
+                } -->
+
+                .value{
+                    font-size: 14px; 
+                    font-family:Verdana
+                }
+                .line{
+                    font-size: 12px; 
+                    font-style:normal; 
+                    font-family:Verdana;
+                }
+                
+        </style>
+    </head>
+
+    <body>
+        
+         <!--************************* GEC PRO ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GECPRO"/>
+        <apex:include pageName="VFP_ContractPDF_GECPROLOC"/>
+        <!--<apex:include pageName="VFP_ContractPDF_GECPROCOLL"/>-->
+        <!--************************* END GEC PRO ACTIVITY DOMAIN *************************--> 
+
+        <!--************************* GEC DOM ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GECDOMPROP"/>
+        <apex:include pageName="VFP_ContratGECDOMIDEOSOLO_CP"/>
+        <apex:include pageName="VFP_ContratGECDOMECOCFT_CP"/>
+        
+        <apex:include pageName="VFP_ContratGECDOMOPTIMO_CP"/>
+        <apex:include pageName="VFP_AvenantPDF_GECDOM_IDEOSOLO"/>
+        <apex:include pageName="VFP_ContractPDF_GECDOMIDEOLOC"/>
+        <apex:include pageName="VFP_ContractPDF_GECDOMIDEOSOLO"/>
+
+        <!--GECDOMIDEOSOLOCP
+        GECDOMIDEOSOLO-->
+        <!-- FLA -->
+        <apex:include pageName="VFP_AvenantPDF_GECDOM_ECOECO"/>
+    
+       
+        <!--************************* END GEC DOM ACTIVITY DOMAIN *************************-->
+
+        <!--************************* GEC DOM ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GECDOMLOC"/>
+        <!--************************* END GEC DOM ACTIVITY DOMAIN *************************-->
+
+
+        <!--************************* Gros Vrac GV ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GrosVrac"/>
+        <!--************************* End Gros Vrac GV ACTIVITY DOMAIN **********************-->
+
+
+        <!--************************* GPLc ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GPLc"/>
+        <!--************************* END GPLc ACTIVITY DOMAIN *************************-->
+
+
+        <!--************************* CHR ACTIVITY DOMAIN *************************-->
+        <!-- <apex:include pageName="VFP_ContractPDF_CHR"/> --> <!-- Erwan : 20180619 : No more specific document for CHR, included in VFP_ContractPDF_GECPRO page -->
+        <!--************************* END CHR ACTIVITY DOMAIN *************************-->
+        
+        <!--************************* GER ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GER"/> 
+        <!--************************* END GER ACTIVITY DOMAIN *************************-->
+        
+
+
+        <!--************************* GER USAGER ACTIVITY DOMAIN *************************-->
+        <apex:include pageName="VFP_ContractPDF_GER_Usager"/>
+        <!--************************* END GER USAGER ACTIVITY DOMAIN *************************-->
+        
+        
+        
+
+        <apex:include pageName="QUOTE_CONTRACT_NOT_APPROVED"/>
+        <apex:include pageName="QUOTE_NOT_SYNCING"/>
+        <apex:include pageName="VFP_AvenantPDF_ServiceALaCarte"/>
+        <apex:include pageName="VFP_AvenantPDF_PackConfort_Liberte"/>
+        <apex:include pageName="VFP_AvenantPDF_Octroi_Remise"/>
+        <apex:include pageName="VFP_AvenantPDF_Paiement3Fois"/>
+        <apex:include pageName="VFP_AvenantPDF_Paiement10Fois"/>
+        
+        <apex:include pageName="VFP_AvenantPDF_Paiement3Fois_V1DOM"/>
+        <apex:include pageName="VFP_AvenantPDF_Paiement10Fois_V1DOM"/>
+        
+        <apex:include pageName="VFP_AvenantPDF_Paiement2Fois"/>
+        <apex:include pageName="VFP_AvenantPDF_Paiement6Fois"/>
+
+        <apex:include pageName="VFP_ContractPDF_GEBRECondPart"/>
+        <apex:include pageName="VFP_AvenantPDF_GEBRE"/>
+        <apex:include pageName="VFP_ContractPDF_GEBPROCondPart"/>       
+        <apex:include pageName="VFP_AvenantPDF_GECDOM_Butabox"/>
+        <!--<apex:include pageName="VFP_AvenantPDF_PackCollectivite"/>-->
+        
+        
+        
+        <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+            <c:SignaturePDF nbSig="3"  withdrawalText="{!$CurrentPage.parameters.withdrawalText}"/>
+        </apex:outputPanel>
+        
+        
+    <!-- trick to query specific fields in Quote -->
+  <div style="display: none;">
+        <apex:outputText value="{!Quote.Customer_Owned_Tanks__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.ExpirationDate}"></apex:outputText>
+        <apex:outputText value="{!Quote.Total_Estimated_for_Contract_GV__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.T_Total_Estimated_Consumption_Year__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.GV_Majoration_Transport_Totale__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Frais_Service_and_Marges__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.TALON__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Date_de_cotation__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Platt_s_20__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Transport_Ref_bulletin__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.DO_Country__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.DO_Phone__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.DO_Phone_Restriction__c  }"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.DO_Mobile_Phone_Number__c  }"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.DO_Work_Phone_Number__c  }"></apex:outputText>
+        <apex:outputText value="{!Quote.Contact_Role_del__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Contact.HomePhone}"></apex:outputText>
+        <apex:outputText value="{!Quote.Contact.HasOptedOutOfEmail}"></apex:outputText>
+        <apex:outputText value="{!Quote.CreatedBy.Phone}"></apex:outputText>
+        <apex:outputText value="{!Quote.CreatedBy.Email}"></apex:outputText>
+        <apex:outputText value="{!Quote.Contact.LastName}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Contact.FirstName}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Contact.MobilePhone}"></apex:outputText>  
+        <apex:outputText value="{!Quote.Contact.Phone}"></apex:outputText>  
+        <apex:outputText value="{!Quote.Contact.Email}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Opportunity.Street_number_project__c}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Opportunity.Street_name_project__c}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Opportunity.Installation_date__c}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Rollup_Total_Commercial_Rebate_TTC__c}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Rollup_Total_Cyclical_Rebate_TTC__c}"></apex:outputText> 
+     
+        <apex:outputText value="{!Quote.Opportunity.Existing_PTL__r.Name}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Existing_PTL__c}"></apex:outputText>
+        <apex:outputText value="{! Quote.Index_CNL__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.End_of_Contract_Charges__c}"></apex:outputText>
+        <apex:outputText value="{! Quote.T_Facilipro_count_products_del__c}"></apex:outputText> 
+        <apex:outputText value="{! Quote.T_LAT_ALL_ALL_ALL_ProductRCom_HT_REAL__c}"></apex:outputText>
+           
+        <apex:outputText value="{! Quote.T_LAT_ALL_ALL_ALL_ProductRConj_HT_REAL__c}"></apex:outputText>
+        <apex:outputText value="{! Quote.T_LAT_ALL_ALL_ALL_RCE_HT_REAL__c }"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.Street_name__c}"></apex:outputText> 
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.City_Postal_Code__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.City_Postal_Code__r.Name}"></apex:outputText>
+
+
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.Account_DO__r.Name}"></apex:outputText>
+        <apex:outputText value="  {!Quote.Opportunity.Network_owner__r.Account_DO__r.Street_N__c}"></apex:outputText>   
+        <apex:outputText value="  {!Quote.Opportunity.Network_owner__r.Account_DO__r.Street_name__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.Account_DO__r.City_Postal_Code__r.Name}"></apex:outputText>
+                       
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.Account_DO__r.Phone}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Network_owner__r.Account_DO__r.Street_type__c}"></apex:outputText>
+        <apex:outputText value="{!Quote.Opportunity.Client_SubType__c}}"></apex:outputText>
+        <apex:outputText value="{!Quote.Cout_transport_HT__c}}"></apex:outputText>
+
+       
+  </div>
+
+
+
+
+
+<div class="clear"></div>
+
+
+
+    </body>
+</html>
+</apex:page>

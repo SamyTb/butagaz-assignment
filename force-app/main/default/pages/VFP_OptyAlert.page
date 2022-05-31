@@ -1,0 +1,16 @@
+<apex:page standardcontroller="Opportunity" id="page">
+	
+	<apex:stylesheet value="{!$Resource.css_alert}"/>
+	<apex:stylesheet value="{!$Resource.info24}"/>
+	
+	<apex:form rendered="{!Opportunity.Account.Bailleur__c == True}">
+		
+			<warning>
+				<img src="{!$Resource.info24}" border="0"/>
+				&nbsp;
+				<apex:outputText value="{!$Label.Bailleur_Account}"/>
+			</warning>
+		
+	</apex:form>
+	
+</apex:page>

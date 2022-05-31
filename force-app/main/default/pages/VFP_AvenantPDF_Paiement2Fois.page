@@ -1,0 +1,290 @@
+<apex:page standardController="Quote" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<!--************************* OPTION: Paiement 2 fois Pack CHR *************************-->
+<div id="containerPaiement2Fois" Style="page-break-before:always">
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    <div>
+        <h1>Avenant au contrat pour la fourniture de gaz en citerne<br/>Option « Paiement 2 fois »</h1>
+    </div>         
+    <br/>
+    
+    <!-- Entre le Client et Butagaz -->
+    <div class="contractSection">
+        <h1>Entre le Client et Butagaz</h1>
+        
+        <p style="display:{!if(Quote.Client_Reenlistment__c =='Commercial offer','','None')  }">
+           <!--
+           <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Shipping_Condition__c=='02'}"/>
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!NOT(Quote.Shipping_Condition__c=='02')}"/>
+            -->
+           
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Payment_spread__c=='ZM02' && isSE!='true'  }"/>
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!NOT(Quote.Payment_spread__c=='ZM02') && isSE!='true' }"/>
+          
+            &nbsp;
+            <apex:outputtext rendered="{!Quote.Payment_spread__c=='ZM02' || isSE!='true' }" 
+            value="Vous avez signé un contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien Butagaz, et vous souhaitez régler vos dépenses de gaz en plusieurs fois.
+            Avec l'Option « Paiement 2 fois », Butagaz vous offre la possibilité d'échelonner le paiement de vos livraisons de gaz, en 2 fois."/>
+            
+        </p><br/>
+        
+        
+         <p style="display:{!if(Quote.Client_Reenlistment__c =='Commercial offer','','None')  }">
+        <!--  
+        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Shipping_Condition__c=='04'}"/>
+        <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!NOT(Quote.Shipping_Condition__c=='04')}"/>
+        -->
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_checked.png')}" rendered="{!Quote.Payment_spread__c=='ZF02' && isSE!='true' }"/>
+            <apex:image url="{!URLFOR($Resource.checkbox_images, 'checkbox_unchecked.png')}" rendered="{!NOT(Quote.Payment_spread__c=='ZF02') && isSE!='true'  }"/>
+            &nbsp;
+            <apex:outputtext rendered="{!Quote.Payment_spread__c=='ZF02' ||  isSE!='true' }" 
+            value="Vous avez signé un contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien Butagaz, et vous souhaitez régler vos dépenses de gaz en plusieurs fois.
+            Avec l'Option « Paiement 2 fois sans frais », Butagaz vous offre la possibilité d'échelonner le paiement de vos livraisons de gaz, en 2 fois."/>
+            
+       
+       </p>
+       <p style="display:{!if(Quote.Client_Reenlistment__c =='Contract','','None')}">
+ 
+            Vous avez signé un contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien Butagaz, et vous souhaitez régler vos dépenses de gaz en plusieurs fois. Avec l'Option « Paiement 2 fois », Butagaz vous offre la possibilité d'échelonner le paiement de vos livraisons de gaz, en 2 fois.
+       
+        </p>
+    </div>
+
+    <!-- Les conditions de l'Option « Paiement 2 fois » -->
+    <div class="contractSection">
+        <h1>Les conditions de l'Option « Paiement 2 fois »</h1>
+        
+        <p align="justify">Cette offre concerne exclusivement le paiement des factures de gaz propane, dans le cadre de votre contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien.</p>
+        <p align="justify">Elle s'appliquera à chaque livraison de gaz sauf renonciation à la présente offre selon les modalités ci-dessous.</p>
+    </div>
+    
+    <!-- Ouverture de l'Option « Paiement 2 fois » -->
+    <div class="contractSection">
+        <h1>Ouverture de l'Option « Paiement 2 fois »</h1>
+        
+        <p>Butagaz se réserve de donner son accord après étude de votre dossier.</p>
+    </div>
+
+    <!-- coût de l'option « Paiement 2 fois » et modalités de paiement -->
+    <div class="contractSection">
+        <h1>Coût de l'option « Paiement 2 fois » et modalités de paiement</h1>
+        
+        <p>(1) Le Coût de cette Option est actuellement :</p>
+        <p align="justify"><span class="field">- pour l'Option « Paiement 2 fois »</span>, de 14,08 € HT à la tonne de gaz livrée : cette majoration sera appliquée directement au prix figurant sur votre facture : prix applicable à la livraison + 14,08 € HT / tonne, au prorata en fonction des quantités livrées,</p>
+        <p align="justify"><span class="field">- pour l'Option « Paiement 2 fois sans frais »</span>, aucuns frais ne vous sera facturé en plus de votre facture de gaz propane ; cette Option étant en effet gratuite.</p><br/>
+        <p align="justify">Quelle que soit l'Option « Paiement 2 fois » choisie, le coût de l'Option pourra être revu par Butagaz, laquelle vous préviendra par courrier de toute modification : vous serez alors libre de refuser le nouveau tarif en exerçant votre faculté de renonciation à l'Option choisie « Paiement 2 fois » par courrier dans un délai de 15 jours après réception du courrier vous informant de la modification.</p><br/>
+        <p align="justify">(2) Les prélèvements sur votre compte bancaire ou postal commenceront le 8 du mois suivant votre livraison, et se succèderont tous les 8 des mois suivants. Vous joindrez au présent avenant une demande de prélèvement accompagnant vos coordonnées bancaires ou postales. En cas de modification de votre domiciliation bancaire ou postale, vous nous communiquerez vos nouvelles coordonnées un mois à l'avance.</p><br/>
+        <p align="justify">(3) Vous recevez une facture par courrier avec le montant des échéances prélevées, lequel sera égal à la valeur de votre facture de gaz propane divisée en 2 mensualités égales.</p><br/>
+        <p align="justify">(4) En cas de prélèvement rejeté, vous perdez de plein droit le bénéfice de l'Option « Paiement 2 fois » 15 jours après une mise en demeure restée infructueuse et les sommes restant dues deviendront immédiatement exigibles, sans mise en demeure. Les livraisons suivantes devront être réglées au comptant sans escompte à réception de facture.</p><br/>
+        <p align="justify">(5) A aucun moment le solde des sommes à régler à Butagaz, y compris les échéances de l'Option « Paiement 2 fois » à venir, ne peut dépasser 2000 € HT. Si, par exemple, une livraison fait dépasser ce solde, Butagaz se réserve le droit de vous demander de régler au comptant les sommes excédant ce solde de 2000 € HT.</p>
+    </div>
+    
+    <!-- Faculté de renonciation à tout moment à l'Option « Paiement 2 fois » -->
+    <div class="contractSection">
+        <h1>Faculté de renonciation à tout moment à l'Option « Paiement 2 fois »</h1>
+        
+        <p align="justify">Vous pouvez renoncer à l'Option « Paiement 2 fois » à tout moment par courrier avec accusé de réception, et moyennant un préavis de un mois.</p>
+        <p align="justify">A partir de ce moment, vous réglerez vos prochaines livraisons au comptant conformément au contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien Butagaz. Les échéances de l'Option « Paiement 2 fois » concernant les livraisons déjà opérées seront prélevées conformément au présent avenant jusqu'à parfait paiement.</p>
+    </div>  
+
+    <!-- Durée -->
+    <div class="contractSection">
+        <h1>Durée</h1>
+        
+        <p align="justify">La facilité de paiement de l'Option « Paiement 2 fois » est accordée pour la durée de votre contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien Butagaz.</p>
+    </div>
+    
+    <!-- Conditions de résiliation de l'Option « Paiement 2 fois » -->
+    <div class="contractSection">
+        <h1>Conditions de résiliation de l'Option « Paiement 2 fois »</h1>
+        
+        <p align="justify">a) A votre initiative à tout moment sous réserve de respecter un préavis de 30 jours ouvrables avant le 30 du mois, notifié par courrier recommandé avec accusé de réception à BUTAGAZ.</p><br/>
+        <p align="justify">b) Par BUTAGAZ, à tout moment sous réserve de respecter un préavis de un mois notifié par courrier avec accusé de réception.</p><br/>
+        <p align="justify">c) De plein droit et sans préavis de part ou d'autre :</p>
+        <p>
+        <!-- - En cas de suppression par le CLIENT de son autorisation de prélèvement automatique,<br/>-->
+        - En cas de suppression par le CLIENT de son mandat de prélèvement SEPA  automatique,
+        - En cas de rejet d'un prélèvement non régularisé 15 jours après une mise en demeure,<br/>
+        - En cas de résiliation du contrat de fourniture de gaz en citerne BUTAGAZ.<br/>
+        </p>
+        <p align="justify">
+        - En cas de changement de Pack dans le cadre de son contrat de fourniture de gaz propane en citerne, quel qu'en soient les motifs, le présent avenant sera résilié de plein droit à la date du changement de Pack. De nouvelles modalités de paiement pourront être proposées par BUTAGAZ au CLIENT aux conditions indiquées dans le contrat de fourniture de gaz du CLIENT.
+        </p>
+    </div>
+    
+    <!-- Conséquences de la résiliation -->
+    <div class="contractSection" style=" page-break-inside: avoid" >
+        <h1>Conséquences de la résiliation</h1>
+        
+        <p align="justify">En cas de résiliation de l'Option « Paiement 2 fois », pour quelque raison que ce soit, un arrêté de compte sera dressé par Butagaz.</p>
+        <p align="justify">Si le solde est débiteur, le CLIENT dispose d'un délai de 15 jours à compter de la date de réception de l'arrêté de compte, pour le régler.</p>
+        <p align="justify">En cas de solde créditeur, celui-ci sera remboursé au CLIENT dans un délai maximum de 15 jours après réception de l'arrêté de compte par le CLIENT.</p>
+        <p>La livraison suivant sera réglée au comptant.</p>
+        <p align="justify">En cas de résiliation de l'Option « Paiement 2 fois » conformément au présent avenant et avant l'exécution du premier prélèvement relatif à une livraison, Butagaz ne vous facturera pas le forfait de 14,08 € HT à la tonne de gaz livré.</p>   
+        <p align="justify">La résiliation de l'Option « Paiement 2 fois » ou la renonciation à l'Option « Paiement 2 fois » n'entraîne pas la résiliation du contrat de fourniture, lequel s'exécutera au comptant.</p>
+    </div>
+
+    <!-- Contentieux -->
+ 
+    
+  <div style="page-break-inside:avoid">
+  
+       <div class="contractSection">
+        <h1>Contentieux</h1>
+        
+        <p align="justify">Suivant l'article R312-35 du Code de la consommation :</p>
+        <p align="justify">Le tribunal d'instance connaît des litiges nés de l'application des dispositions du présent chapitre. Les actions en paiement engagées devant lui à l'occasion de la défaillance de l'emprunteur doivent être formées dans les deux ans de l'événement qui leur a donné naissance à peine de forclusion. Cet événement est caractérisé par :
+                            -le non-paiement des sommes dues à la suite de la résiliation du contrat ou de son terme ;
+                            -ou le premier incident de paiement non régularisé ;
+                            -ou le dépassement non régularisé du montant total du crédit consenti dans le cadre d'un contrat de crédit renouvelable ;
+                            -ou le dépassement, au sens du 13° de l'article L. 311-1, non régularisé à l'issue du délai prévu à l'article L. 312-93. 
+                            Lorsque les modalités de règlement des échéances impayées ont fait l'objet d'un réaménagement ou d'un rééchelonnement, le point de départ du délai de forclusion est le premier incident non régularisé intervenu après le premier aménagement ou rééchelonnement conclu entre les intéressés ou après adoption du plan conventionnel de redressement prévu à l'article L. 732-1 ou après décision de la commission imposant les mesures prévues à l'article L. 733-1 ou la décision du juge de l'exécution homologuant les mesures prévues à l'article L. 733-7.
+                            </p>
+    </div>
+    
+    <!-- Autres clauses -->
+    <div class="contractSection">
+        <p align="justify"><span class="field">Toutes les autres clauses et conditions du contrat professionnel de fourniture de gaz propane en citerne et prestation d'entretien non modifiées par le présent avenant gardent leur plein et entier effet.</span></p>
+    </div>  
+    
+    <br/>
+        <div>
+
+                <div class="ButagazSignature">
+                
+                     <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                     <p class="nospace">&nbsp;</p>
+                     <p class="nospace">&nbsp;</p>
+                   <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                     <div class="bigSpaceAfter" style="display: {!IF(isSE!='true','','None')}"><p>Signature :</p></div>
+                     
+                          
+                     
+                    <div class="ButagazCachet">
+                    <p> Pour Butagaz: votre Distributeur :</p>
+                    <br/>
+                      <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                      <br/>
+                    <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                    </div>
+                                
+         
+          
+                </div>
+                <br/>
+                
+                <div class="ClientSignature">
+                 
+                 <p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+                  <br/>
+                  <div style="display: {!IF(isSE!='true','','None')}">
+                        <p class="SpaceBefore">Date d'impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+                        <br/>
+                        <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                        <br/>
+                        <p class="SpaceBefore"> (si différente de la date d'impression)</p>
+                        <br/>
+                        
+                        <p>Signature(1) :</p>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>                  
+                              <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                    </div>
+                    <div style="display: {!IF(isSE=='true','','None')}">
+                        <p>Document signé électroniquement.</p>
+                    </div>
+                </div> 
+                <br/> 
+                
+            </div> 
+           </div>  
+             
+    
+    <div class="contractSection" Style=" page-break-before: always">       
+        <p align="center"><span class="smallNote">Conformément à la législation en vigueur vous avez la possibilité de renoncer à cette option dans un délai de 14 jours.</span></p>
+    </div>
+    
+    <div style="height:20px; border-top:1px dashed #000000; margin-top:20px;"/>
+
+    <!-- Bordereau de rétractation -->
+    <div class="contractSection">
+        <h1>Bordereau de rétractation</h1>
+        
+        <table border="0" width="95%">  
+            <tr>
+                <td width="40%">
+                    <apex:outputtext styleClass="line" value="A renvoyer de préférence par lettre recommandée dans le délai
+                    de 14 jours à compter de la signature du présent avenant à l'adresse
+                    de votre Distributeur :"/>
+                    <br/>
+                    
+                    <br/>
+                    <br/> 
+                    <br/>  
+                </td>
+                <td width="10%">&nbsp;</td>
+                <td width="50%" rowspan="5">
+                    <table class="ButagazTableWithBorder" width="100%" >
+                        <tr>
+                            <td padding="18pt">&nbsp;
+                            <apex:outputfield Value="{!Quote.Opportunity.Project_Mandataire__c}"/>
+                            <br/> 
+                            <br/> 
+                                             
+                    
+                            
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+        </table>
+    </div>
+    
+    <div>
+        <table border="0" width="95%">
+            <tr><td colspan="3"><span class="field">Code client Butagaz: </span><span class="value">{!Quote.Opportunity.DO_AccountNumber__c}</span></td></tr>
+            <tr><td colspan="3"><span class="field">Nom et prénom du CLIENT: </span><span class="value">{!Quote.Opportunity.DO_NAme__c}</span></td></tr>
+            <tr><td colspan="3"><span class="field">Adresse: </span><span class="value">{!Quote.Opportunity.DO_Street_n__c}&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> {!Quote.Opportunity.DO_Street_name__c}</span></td></tr>
+            <tr><td colspan="3">
+                <!-- IF a Postal code and a city are filled THEN display it-->
+                <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+                <!-- ELSE display City_Postal_Code__r.Name -->
+                <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br />
+                
+            </td></tr>
+        </table>
+    </div>  
+    
+    <br/>
+    <div>
+        <p align="justify"><apex:outputtext value="Je déclare renoncer à l'Option de Butagaz « Paiement 2 fois » pour le règlement de mes fournitures en gaz que j'avais acceptée  le __/__/____"/></p>
+    </div>
+    <br/>
+    <div>
+        <p align="justify">
+            <apex:outputtext styleClass="line" value="Date: __/__/____"/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            
+        </p>
+        <p>et Signature&nbsp;:(1)</p>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>
+                          <br/>                  
+                          <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+    </div>
+</div>    
+<!--************************* END OPTION: Paiement 2 fois Pack CHR *************************-->
+
+</apex:page>

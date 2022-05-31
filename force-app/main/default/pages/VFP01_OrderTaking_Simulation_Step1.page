@@ -1,0 +1,175 @@
+<apex:page standardController="Order__c" extensions="VFC01_OrderTaking_Simulation" tabStyle="Order__c" wizard="false" >
+    
+    <apex:stylesheet value="{!URLFOR($Resource.JQueryUI, 'css/ui-lightness/jquery-ui-1.8.16.custom.css')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-1.6.2.min.js')}"/>
+    <apex:includescript value="{!URLFOR($Resource.JQueryUI, 'js/jquery-ui-1.8.16.custom.min.js')}"/>
+    
+  <script type="text/javascript">
+        function confirmCancel() {
+            var isCancel = confirm("{!$Label.popup_message_quit}");
+            if (isCancel) return true;
+            return false;
+        }
+        
+        function startStatus(){
+        
+            $dialog.dialog('open');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+        
+        function stopStatus(){
+            $dialog.dialog('close');
+            // prevent the default action, e.g., following a link
+            return false;
+        }
+        
+        function controllingEnterPress(e){
+            var code;
+            if (!e) var e = window.event;
+            if (e.keyCode) code = e.keyCode;
+            else if (e.which) code = e.which;
+            if(code == 13){
+                var target = e.target || e.srcElement;
+                if (e.stopPropagation) {
+                  e.stopPropagation();
+                }else{
+                  e.cancelBubble = true;
+                }
+                if(e.preventDefault){
+                  e.preventDefault();
+                }else{
+                  e.returnValue= false;
+                }
+                target.blur();                
+            }
+        }
+        
+  </script>
+  
+  <apex:sectionHeader title="{!VpageTitle}" subtitle="{!$Label.simulation_step1}"/>     
+      <apex:pageMessages rendered="{!NOT(VsucessControl)}"/>  
+      <apex:form rendered="{!VsucessControl}">
+      <apex:pageBlock title="{!VpageTitle}"  id="simulationStep">              
+              
+              <apex:pageMessages showDetail="false"/>
+              
+              <apex:pageBlockSection >
+                  <apex:outputText label="{!$Label.current_user}" value="{!userCRM}"/>
+                  <apex:pageBlockSectionItem rendered="true"/>
+                  <apex:outputField value="{!order.Name}"/>                  
+              </apex:pageBlockSection>
+              <apex:pageBlockSection title="{!$Label.account_section_name}" id="accountSection"> 
+                          <apex:outputField value="{!contract.Account.AccountNumber}"/> 
+                          <apex:outputField value="{!contract.Mandataire__r.Name}"/> 
+                          <apex:outputField value="{!contract.Account.Name}"/>                 
+                          <apex:outputField value="{!contract.Account.Sensible_Client__c}"/> 
+                          <!-- <apex:outputField label="Point d\'expédition/MDT" value="{!contract.PTL__r.Code_division__c}" /> -->
+                          <apex:outputField value="{!order.Dispatching_point__c}"/>
+                          <apex:outputField value="{!contract.PTL__r.Code_division_value__c}" /> 
+                          <apex:outputField value="{!order.Command_center__c}"/>
+                          <apex:pageBlockSectionItem rendered="true"/>
+                          <apex:inputField value="{!contract.Account.Phone}"/>
+                          <apex:inputField value="{!contract.Account.Email__c}"/>
+                          <apex:inputField value="{!contract.Account.Work_Phone_Number__c}"/>
+                          <apex:inputField value="{!contract.Account.Email_2__c}"/>
+                          <apex:inputField value="{!contract.Account.Mobile_Phone_Number__c}"/>
+                          <apex:inputField value="{!contract.Account.No_E_mail__c}"/>
+                          <script>twistSection(document.getElementById("{!$Component.accountSection}").childNodes[0].childNodes[0]);</script> 
+              </apex:pageBlockSection>
+                       
+              <apex:pageBlockSection title="PTL" id="ptlSection" >                     
+                           <apex:outputField value="{!contract.PTL__r.Name}"/>
+                           <apex:outputField value="{!contract.PTL__r.Activity_Domain__r.Name}"/>
+                           <apex:outputField value="{!contract.PTL__r.Address__c}"/>
+                           <apex:outputField value="{!contract.PTL__r.Code_branche__c}"/>
+                           <apex:outputField value="{!contract.PTL__r.Code_branche_value__c}"/>
+                           <apex:outputField value="{!contract.Equipement__r.Article__r.Name}"/>
+                           <apex:outputField label="{!$Label.product_label}" value="{!contract.Product__r.Name}"/>
+                           <apex:outputField value="{!contract.Equipement__r.Capacity_Tank__c}"/> 
+                           <apex:inputField value="{!contract.PTL__r.Phone__c}"/> 
+                           <apex:pageBlockSectionItem rendered="true"/>
+                           <apex:inputField value="{!contract.PTL__r.Work_Phone_Number__c}"/>
+                           <apex:pageBlockSectionItem rendered="true"/>
+                           <apex:inputField value="{!contract.PTL__r.Mobile_Phone_Number__c}"/>
+                           <apex:pageBlockSectionItem rendered="true"/>
+                           <script>twistSection(document.getElementById("{!$Component.ptlSection}").childNodes[0].childNodes[0]); </script>                 
+              </apex:pageBlockSection>
+                           
+
+              <apex:outputPanel >
+                           <apex:actionStatus id="modalStatus" onstart="startStatus();" onstop="stopStatus();"> 
+                               <apex:facet name="start">
+                                   <apex:pageBlockSection title="{!$Label.order_section_name}" >
+                                        <apex:outputText value="{!VmessageInfo}"/> 
+                                   </apex:pageBlockSection>
+                               </apex:facet>
+                               <apex:facet name="stop">
+                                   <apex:outputPanel >
+                                        <apex:pageBlockSection title="{!$Label.order_section_name}">
+                                           <apex:outputText label="{!$Label.break_count}" value="{!breakCount}"/>
+                                           <apex:outputText label="{!$Label.last_break_date}" value="{!lastBreakDate}"/>
+                                           <apex:outputText label="{!$Label.autonomy}" value="{!autonomy}"/>
+                                           <apex:outputText label="{!$Label.calculated_autonomy}" value="{!autonomyCalculated}"/>
+                                           <apex:inputText value="{!order.Meter_Before_Delivery__c}" onkeypress="controllingEnterPress(event);">
+                                                <apex:actionSupport status="modalStatus" action="{!clearData}" event="onchange" reRender="simulationStep">
+                                                   <apex:param name="changeInputData" value="gauge" assignTo="{!VchangeFrom}" />
+                                               </apex:actionSupport>
+                                           </apex:inputText>
+                                           <apex:inputField value="{!order.Breakdown__c}"/>
+                                           <apex:inputText label="{!$Label.quantity} {!quantity_uom}" value="{!quantity}" onkeypress="controllingEnterPress(event);">
+                                               <apex:actionSupport status="modalStatus" action="{!clearData}" event="onchange" reRender="simulationStep">
+                                                   <apex:param name="changeInputData" value="quantity" assignTo="{!VchangeFrom}" />
+                                               </apex:actionSupport>
+                                           </apex:inputText> 
+                                           <apex:inputText label="{!$Label.amount} TTC {!amount_currency}" value="{!amount}" onkeypress="controllingEnterPress(event);">
+                                               <apex:actionSupport status="modalStatus" action="{!clearData}" event="onchange" reRender="simulationStep">
+                                                   <apex:param name="changeInputData" value="amount" assignTo="{!VchangeFrom}" />
+                                               </apex:actionSupport>
+                                           </apex:inputText> 
+                                        </apex:pageBlockSection>
+                                        <apex:pageBlockSection title="{!$Label.delivery_section_name}">
+                                           <apex:outputText label="{!$Label.shipping_conditions}" value="{!detailsController.conditionLivraison}"/>                                               
+                                           <apex:outputText label="{!$Label.first_proposed_date}" value="{!firstDateLivraisonProposed}"/>
+                                        </apex:pageBlockSection>
+                                   </apex:outputPanel>  
+                                </apex:facet>
+                           </apex:actionStatus>           
+                 </apex:outputPanel> 
+                 
+                 <apex:pageBlockButtons > 
+                       <apex:commandButton value="{!$Label.annuler_button} {!typeOperationLabel}" disabled="false" action="{!cancelButt}" onclick="if(!confirmCancel())return false;" immediate="true" /> 
+                       <apex:commandButton value="{!$Label.simulate_button}" disabled="false" action="{!simulateButt}" rendered="{!VsimulateButtonVisible}" reRender="simulationStep" status="modalStatus" title="{!$Label.sapcall_simulation_message}"/>
+                       <apex:commandButton value="{!$Label.continue_button}" disabled="false" action="{!continueButt}" rendered="{!VcontinueButtonVisible}" title="{!$Label.next_step_message}"/>
+                       <apex:commandButton value="Sauvegarder données du compte et du PTL" disabled="false" action="{!saveAccountAndPTL}" rerender="simulationStep, accountSection, ptlSection"  status="modalStatus"/>
+                 </apex:pageBlockButtons>
+      </apex:pageBlock>
+      </apex:form>
+      
+      <div id="dialog-modal" title="{!$Label.operation_inprogress_message}" style="display:none">
+        <div>
+            <CENTER><apex:image value="{!$Resource.AjaxLoader}"/></CENTER>
+            <apex:outputText value="{!$Label.popup_message_wait}" /> 
+        </div>
+      </div>
+    
+        <script>
+              var $dialog;
+              jQuery(document).ready(function($) {
+                    $(function() {
+                    
+                    $dialog =jQuery("#dialog-modal")
+                        .dialog({
+                            autoOpen: false,
+                            height: 150,
+                            modal: true,
+                            closeOnEscape: false,
+                            resizable: false,
+                    });
+    
+                });
+              });      
+      
+         </script>
+</apex:page>

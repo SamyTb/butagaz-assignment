@@ -1,0 +1,88 @@
+<apex:component >
+
+<!-- Attribute definitions -->
+
+
+<!-- Component definition -->
+<!-- <html>
+    <head>
+        <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+
+            <style type="text/css" media="all">
+            
+            </style>
+    </head>
+</html> -->
+
+<!--************************* CGU Signature Electronique *************************-->
+<!-- <body> -->
+<div id="containerCGU_SignatureElectroniquePDF" >
+    
+    <div class="contractSection">
+        <!--<h1>Préalable : conditions d'utilisation du service de signature électronique</h1>-->
+        <h1>Conditions d'utilisation du service de signature électronique</h1>
+        <br/>
+        
+        <p align="justify">Le présent document est signé par voie électronique. La signature électronique consiste en un procédé fiable d’identification garantissant un lien avec l’acte auquel elle s’attache. Elle a la même valeur que la signature papier. L’ensemble des éléments rassemblés sur le portail sécurisé pour la signature constitue le fichier de preuve. Ce fichier sera archivé dans un coffre-fort électronique sécurisé.</p><br/>
+
+        <p align="justify">Le service de signature électronique peut être amené à évoluer dans le temps, notamment en fonction des avancées technologiques. Butagaz ne saurait être tenu responsable des modifications, évolutions ou remplacements, quelle que soit leur cause.</p><br/>
+
+        <p align="justify">Conformément à l’article 1356 du Code civil, le client et Butagaz souhaitent par les présentes fixer les règles de preuve qui leur seront applicables. Ainsi, Butagaz et le client s’engagent à accepter qu’en cas de litige, le fichier de preuve soit valablement produit devant le Tribunal, par l’une ou l’autre des parties, aux fins de prouver les faits et les engagements rapportés dans ledit fichier. A cet effet, le client et Butagaz acceptent que le client manifeste son consentement via un service de signature électronique. Le client et Butagaz reconnaissent que la signature électronique fondée sur un certificat à usage unique vaut preuve au même titre que la signature manuscrite. L’apposition de la signature électronique a pour effet d’exprimer le consentement du client pour tous les éléments contenus dans la plateforme.</p><br/>
+
+        <p align="justify">Vous garantissez à Butagaz que tous les éléments que vous transmettez sont valables au moment de leur transmission. La taille des pièces jointes ne devra pas excéder 5Mo.</p><br/>
+
+
+
+        <!-- 20170816 - Erwan : Simplification des CGU SE
+        <p align="justify" style="font-style: italic;">La présente section s’applique seulement aux clients ayant signé leur contrat par le biais du service de signature électronique SIGNEA.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.	Cadre</p><br/>
+        <p align="justify">La signature électronique consiste en un procédé fiable d’identification garantissant un lien avec l’acte auquel elle s’attache. Elle a la même valeur que la signature papier. Lorsque vous choisissez la signature électronique, vous recevez un email contenant un lien vers une page qui vous permettra notamment de consulter votre contrat, les barèmes applicables, ainsi que les éventuels avenants. Vous pourrez choisir la durée de votre contrat. Vous signez ces documents en apposant un code unique qui vous est transmis confidentiellement par SMS sur votre mobile. L’ensemble des éléments rassemblés pour cette signature constitue le fichier de preuve. Ce fichier sera archivé dans un coffre-fort électronique sécurisé.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.	Objet</p><br/>
+        <p align="justify">Les présentes conditions générales d’utilisation du service de signature électronique sont applicables à la fourniture du service de souscription en ligne d’un contrat de fourniture de gaz en citerne au moyen de la signature électronique pour les clients qui souhaitent avoir recours à ce service et disposent des moyens techniques nécessaires.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.	Acceptation</p><br/>
+        <p align="justify">L’utilisation de la signature électronique est subordonnée à votre acceptation des présentes conditions générales. A cet effet, vous avez reçu un mail contenant un lien hypertexte donnant accès une plateforme sécurisée où se trouvent tous vos documents contractuels, et notamment les présentes conditions générales, les conditions particulières, et les barèmes applicables. Vous vous engagez à les lire attentivement, et à fournir les pièces demandées pour la constitution du fichier de preuve. La totalité des éléments que vous déposerez <span style="color: red">ne devra pas excéder 5Mo</span>. Pour réduire la taille de vos fichiers, vous pourrez utiliser un logiciel disponible gratuitement sur Internet. Vous signerez électroniquement en validant l’authentification via le code secret reçu par SMS.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.	Accès et utilisation du service</p><br/>
+        <p align="justify">Afin de bénéficier du service de signature électronique, vous devez disposer des moyens techniques nécessaires : </p><br/>
+        <p align="justify">- ordinateur, tablette ou smartphone</p><br/>
+        <p align="justify">- accès à Internet</p><br/>
+        <p align="justify">- adresse de messagerie électronique valide</p><br/>
+        <p align="justify">- numéro de téléphone mobile valide</p><br/>
+        
+        <p align="justify">Vous vous engagez à conserver votre numéro de dossier afin que nous puissions donner suite à toute demande de communication de pièces, ainsi qu’à conserver votre contrat, sous la forme électronique ou papier, dans des conditions de nature à en garantir l’intégrité.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.	Responsabilité</p><br/>
+        <p align="justify">Butagaz ne saurait être responsable de tout dommage quel qu’il soit causé par votre faute, sur les personnes ou les biens. En particulier, Butagaz ne pourra pas être tenu responsable en cas de défaillance d’accès au service, de perte de vos identifiants personnels, et/ou de contamination par un virus, et de façon générale pour tout dommage indirect qui pourrait résulter de l’utilisation du service. Pour l’application de la présente clause, le dommage indirect s’entend comme celui ne résultant pas exclusivement et directement de la défaillance du service.  De même, en cas de survenance d’un évènement imprévisible et insurmontable, et généralement pour tout cas de force majeure, la responsabilité de Butagaz ne saurait être engagée.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.	Evolution du service</p><br/>
+        <p align="justify">Le service de signature électronique peut être amené à évoluer dans le temps, notamment en fonction des avancées technologiques. Butagaz ne saurait être tenu responsable des modifications, évolutions ou remplacements, quelle que soit leur cause.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.	Sécurité des informations</p><br/>
+        <p align="justify">Il est rappelé qu’Internet n’est pas un réseau sécurisé, et que le secret des correspondances sur ce réseau ne peut ainsi pas être garanti. Il appartient à chaque usager de prendre toutes les mesures appropriées pour protéger ses données et logiciels d’éventuels virus.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.	Constitution et conservation d’une preuve électronique</p><br/>
+        <p align="justify">Butagaz utilise le service SIGNEA de DOCAPOST, filiale du groupe LA POSTE, selon le procédé suivant : </p><br/>
+        <p align="justify">- Constitution d’un ensemble contractuel signé par l’apposition d’une signature électronique</p><br/>
+        <p align="justify">- Horodatage de l’ensemble réuni dans un document original</p><br/>
+        <p align="justify">- Création, transmission et archivage du fichier de preuve</p><br/>
+        <p align="justify">Le fichier de preuve garantit le lien entre l’acte et ses signataires. Il est conservé pendant au moins dix ans à compter de la date de la signature.</p><br/>
+        
+        <p align="justify">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.	Convention de preuve</p><br/>
+        <p align="justify">Conformément au nouvel article 1356 du Code civil, applicable au 1er octobre 2016, le client et Butagaz souhaitent par les présentes fixer les règles de preuve qui leur seront applicables. Ainsi, Butagaz et le client s’engagent à accepter qu’en cas de litige, le fichier de preuve soit valablement produit devant le Tribunal, par l’une ou l’autre des parties, aux fins de prouver les faits et les engagements rapportés dans ledit fichier.</p><br/>
+        
+        <p align="justify">A cet effet, le client et Butagaz acceptent que le client manifeste son consentement via un service de signature électronique, selon les modalités décrites à l’article 1 « Cadre ».</p><br/>
+        
+        <p align="justify">Vous garantissez à Butagaz que tous les éléments que vous transmettez (copie de pièce d’identité, copie du bail si vous êtes locataire, copie de l’acte de vente si vous êtes nouvel acquéreur, mandat SEPA si vous avez choisi le prélèvement automatique, et votre RIB) sont valables au moment de leur transmission.</p><br/>
+        
+        <p align="justify">Le client et Butagaz reconnaissent que la signature électronique fondée sur un certificat à usage unique vaut preuve au même titre que la signature manuscrite. L’apposition de la signature électronique a pour effet d’exprimer le consentement du client pour tous les éléments contenus dans la plateforme, à l’exception du bordereau de rétractation, qui devra être renvoyé à l’adresse indiquée pour valoir rétractation.</p><br/>
+        -->
+        
+    </div>
+    
+</div>    
+<!--************************* END CGU Signature Electronique *************************-->
+<!-- </body> -->
+</apex:component>

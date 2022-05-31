@@ -1,0 +1,122 @@
+<apex:page standardController="Quote" language="fr" renderas="pdf" showHeader="false" extensions="VFC_Quotelineitem_01" standardStylesheets="false">
+ 
+
+<html>
+<head>
+
+     <apex:stylesheet value="{!$Resource.Quote_Staging_Style}"/>
+     
+     <style type="text/css" media="all">
+     
+        
+            #containerGECPRO {
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing   &&Quote.Opportunity.Client_SubType__c!='Energigaz' &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Project_market_type__c=='PRO', '', 'none')}; 
+            }
+            
+            #containerGECDOM {
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' &&Quote.Opportunity.Client_SubType__c!='Energigaz' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Project_market_type__c=='DOM' &&Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration' 
+              &&Quote.Opportunity.RecordType.Name=='GEC DOM' , '', 'none')}; 
+            }
+            
+            
+            #containerGECDOM_IDEOSOLO{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' &&Quote.Opportunity.Client_SubType__c!='Energigaz' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Project_market_type__c=='DOM' &&Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration'
+              && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM IDEO', Quote.Opportunity.RecordType.Name=='GEC DOM SOLO'), '', 'none')}; 
+            }
+            
+            
+             #containerGECDOM_ECOCFT{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' &&Quote.Opportunity.Client_SubType__c!='Energigaz' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Project_market_type__c=='DOM' &&Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration'
+              && Quote.Opportunity.RecordType.Name=='GEC DOM ECOCFT', '', 'none')}; 
+            }
+            
+           
+            
+            #containerGrosVrac {
+              display: {!IF(Quote.T_LAT_Approved__c &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne'&& Quote.IsSyncing &&Quote.Direct_Client__c=='Gros Vrac', '', 'none')};
+            }
+            
+            #containerGER {
+              display: {!IF(
+              OR(Quote.T_LAT_Approved__c && Quote.IsSyncing 
+              &&Quote.Activity_Domain_Opportunity__c=='GER - Gaz en réseau',
+              
+              Quote.T_LAT_Approved__c && Quote.IsSyncing
+              &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne'
+              &&Quote.Opportunity.Client_SubType__c=='Energigaz'
+              
+              ), '', 'none')};
+            }
+            #containerGPLC {
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Activity_Domain_Opportunity__c=='GPLc - Gepel', '', 'none')};
+            } 
+            
+            /*
+            #containerQUOTEGECCHR {display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' && OR(Quote.Opportunity.Client_SubType__c!='Energigaz', Quote.Opportunity.Client_SubType__c!='Précigaz') && Quote.Opportunity.Direct_Client__c==false && Quote.Opportunity.Project_market_subtype__c=='Hôtel/Restauration', '', 'none')};
+            }
+            */
+            
+            #containerNOPRINT {display: {!IF(Quote.T_LAT_Approved__c=false,'','none')};
+            }
+            #containerNOPRINT2 {display: {!IF(Quote.IsSyncing=false,'','none')};
+            }            
+                       
+            #containerGEBPRO{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEB - Gaz en bouteille' &&Quote.Opportunity.Client_Type__c!='RE', '', 'none')}; 
+            }   
+            
+            #containerGECDOM_OPTIMO{
+              display: {!IF(Quote.T_LAT_Approved__c && Quote.IsSyncing &&Quote.Opportunity.Account.Activity_Domain__r.Name=='GEC - Gaz en citerne' &&Quote.Opportunity.Client_SubType__c!='Energigaz' &&Quote.Opportunity.Direct_Client__c==false &&Quote.Opportunity.Project_market_type__c=='DOM' &&Quote.Opportunity.Project_market_subtype__c!='Hôtel/Restauration'
+              && OR ( Quote.Opportunity.RecordType.Name=='GEC DOM OPTIMO'), '', 'none')}; 
+            }            
+                       
+                            
+    </style>
+</head>
+
+
+<body>
+    <!-- trick to query specific fields in Quote -->
+  <div style="display: none;">
+    <apex:outputText value="{!Quote.Customer_Owned_Tanks__c}"></apex:outputText>
+    <apex:outputText value="{!Quote.ExpirationDate}"></apex:outputText>
+    <apex:outputText value="{!Quote.Total_Estimated_for_Contract_GV__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.T_Total_Estimated_Consumption_Year__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.GV_Majoration_Transport_Totale__c }"></apex:outputText>
+   <apex:outputText value="{!Quote.Frais_Service_and_Marges__c}"></apex:outputText>
+    <apex:outputText value="{!Quote.TALON__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Date_de_cotation__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Platt_s_20__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Transport_Ref_bulletin__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Contact.Quality__c}"></apex:outputText>
+    <apex:outputText value="{!Quote.Rollup_Total_Cyclical_Rebate_TTC__c}"></apex:outputText> 
+    <apex:outputText value="{!Quote.Rollup_Total_Commercial_Rebate_TTC__c}"></apex:outputText>  
+     <apex:outputText value="{!Quote.Technical_inspections_required__c}"></apex:outputText>
+     <apex:outputText value="{!Quote.Billing_audit_compliance__c}"></apex:outputText>
+    <apex:outputText value="{!Quote.Billing_facility_records_book__c}"></apex:outputText>
+    <apex:outputText value="{!Quote.Invoicing_of_preventive_maintenance__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Billing_services_to_emergency__c }"></apex:outputText>
+     <apex:outputText value="{!Quote.Billing_of_other_presentations__c }"></apex:outputText>
+     <apex:outputText value="{!Quote.Biling_for_connection__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Contribution_by_meter__c }"></apex:outputText>
+     <apex:outputText value="{!Quote.Opportunity.Number_of_meters__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.T_LAT_ALL_ALL_ALL_RCE_HT_REAL__c }"></apex:outputText>
+    <apex:outputText value="{!Quote.Market_type__c}"></apex:outputText>
+  </div>
+
+<apex:include pageName="QuoteGER"/>
+<apex:include pageName="QuoteGECPRO"/>
+<apex:include pageName="QuoteGECDOM"/>
+<apex:include pageName="QuoteGECDOM_IDEOSOLO"/>
+<apex:include pageName="QuoteGECDOM_ECOCFT"/>
+<apex:include pageName="QuoteGECGrosVrac"/>
+<apex:include pageName="QuoteGPLc"/>
+<!-- <apex:include pageName="QuoteCHR"/> -->
+<apex:include pageName="QuoteGEBPRO"/>
+<apex:include pageName="QUOTE_CONTRACT_NOT_APPROVED"/>
+<apex:include pageName="QUOTE_NOT_SYNCING"/>
+<apex:include pageName="QuoteGECDOM_OPTIMO"/>
+<div class="clear"></div>
+</body>
+</html>
+</apex:page>

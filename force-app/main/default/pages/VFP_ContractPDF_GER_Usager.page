@@ -1,0 +1,515 @@
+<apex:page standardController="Quote"  language="fr" showHeader="false" extensions="VFC_Quotelineitem_01">
+
+<!--************************* GER USAGER *************************-->
+
+<Div id="containerGERUSAGER" >
+
+	<div class="footerRight">
+		<p align="right">Code Client&nbsp;: {!Quote.Client_Code__c}&nbsp;/&nbsp;Numéro Devis&nbsp;: {!Quote.QuoteNumber}&nbsp;</p>     		
+    </div> 
+	
+    <!-- Document Header -->  
+    <apex:image url="{!$Resource.test}" width="180" height="75"/>
+    
+    <div>
+    
+    	<h1>  Annexe 1:  Modalités de facturation et de paiement choisies par l'Usager </h1>
+    
+    	<h3> Avant de compléter les informations ci-après, veuillez lire attentivement les éléments rappelés ci-dessous, issus des conditions générales du contrat cadre qui sont applicables à votre logement. </h3>
+
+        <h2> Modalités de Facturation et de paiement:</h2>
+        
+        
+        <p class="spaceBefore">
+            Sauf disposition contraire, l&rsquo;Usager doit payer ses factures selon les modalit&eacute;s de paiement d&eacute;finies &agrave; l&rsquo;article 4 de la CAI.&nbsp;A la date convenue, et &agrave; d&eacute;faut de paiement, BUTAGAZ est autoris&eacute;e &agrave; suspendre la fourniture du gaz 15 jours apr&egrave;s l&#39;envoi d&rsquo;une mise en demeure rest&eacute;e sans effet, sans que cela dispense l&rsquo;Usager de s&#39;acquitter de sa facture. Dans une telle hypoth&egrave;se, des frais de fermeture et de remise en service du compteur lui seront factur&eacute;s suivant les prix pr&eacute;vus &agrave; cet effet dans le bar&egrave;me RS. En outre, BUTAGAZ appliquera des frais administratifs et des p&eacute;nalit&eacute;s de retard dont le montant r&eacute;sultera de l&#39;application d&#39;un taux d&#39;int&eacute;r&ecirc;t &eacute;gal &agrave; une fois et demie le taux d&#39;int&eacute;r&ecirc;t l&eacute;gal.</p>
+        <h2>
+            <b>- Facturation annuelle</b></h2>
+        <p class="spaceBefore">
+            S&rsquo;agissant de la facturation annuelle, elle est &eacute;labor&eacute;e d&rsquo;avance dans les 15 jours environ &agrave; compter de la r&eacute;ception par BUTAGAZ de la Confirmation d&rsquo;Abonnement Individuel de l&rsquo;Usager. Elle comprend l&rsquo;abonnement du compteur pour douze mois ainsi que le montant correspondant aux quantit&eacute;s de consommation estim&eacute;es. Une facture d&rsquo;ajustement (trop per&ccedil;u par BUTAGAZ ou dette de l&rsquo;Usager) est ensuite &eacute;labor&eacute;e en consid&eacute;ration des quantit&eacute;s de Produit r&eacute;ellement consomm&eacute;es.</p>
+        <p class="spaceBefore">
+            L&rsquo;Usager paye par pr&eacute;l&egrave;vement mensuel automatique selon un &eacute;ch&eacute;ancier sur 10 mois qui lui est alors transmis au pr&eacute;alable. Dans un tel cas, les dix &eacute;ch&eacute;ances mensuelles sont identiques. Au moment de la facture d&rsquo;ajustement (le 9<span class="s1"><sup>&egrave;me</sup></span> ou 10<span class="s1"><sup>&egrave;me</sup></span> mois), si un solde appara&icirc;t en faveur de BUTAGAZ, l&rsquo;Usager sera pr&eacute;lev&eacute; le 11<span class="s1"><sup>&egrave;me</sup></span> mois &agrave; hauteur maximum du montant de l&rsquo;&eacute;ch&eacute;ance mensuelle habituelle&nbsp;; si un solde demeure en faveur de BUTAGAZ, la totalit&eacute; restant due sera pr&eacute;lev&eacute;e le 12<span class="s1"><sup>&egrave;me</sup></span> mois. Si un solde appara&icirc;t en faveur de l&rsquo;Usager, BUTAGAZ le rembourse sous 15 jours ouvr&eacute;s.</p>
+        <h2>
+            <b>- Facturation bimestrielle</b></h2>
+        <p class="spaceBefore">
+            S&rsquo;agissant de la facturation bimestrielle, les frais d&rsquo;acc&egrave;s individuel &agrave; l&rsquo;&eacute;nergie, le d&eacute;p&ocirc;t de garantie et la premi&egrave;re &eacute;ch&eacute;ance de l&rsquo;abonnement relatifs au compteur, seront factur&eacute;s dans un d&eacute;lai de 15 jours environ &agrave; compter de la r&eacute;ception par BUTAGAZ de la Confirmation d&rsquo;Abonnement Individuel de l&rsquo;Usager.</p>
+        <p class="spaceBefore">
+            Ensuite, chaque facture comporte en principe le montant correspondant &agrave; l&rsquo;&eacute;ch&eacute;ance de l&rsquo;abonnement du compteur et le montant relatif &agrave; la fourniture de gaz, ce dernier r&eacute;sultant &agrave; la fois du prix du Produit par r&eacute;f&eacute;rence &agrave; la p&eacute;riode de consommation concern&eacute;e, et des quantit&eacute;s estim&eacute;es ou relev&eacute;es. Les Usagers ont la possibilit&eacute; d&rsquo;adresser un &laquo;&nbsp;Relev&eacute; confiance&nbsp;&raquo; &agrave; BUTAGAZ pour d&eacute;clarer leur consommation et &ecirc;tre factur&eacute;s sur cette base, entre les op&eacute;rations de relev&eacute;s physiques effectu&eacute;es par BUTAGAZ.</p>
+        <p class="spaceBefore">
+            Dans le cadre de la facturation bimestrielle, le paiement des factures sera&nbsp; effectu&eacute; par d&eacute;faut par pr&eacute;l&egrave;vement automatique bimestriel.</p>
+  
+    </div>         
+    
+    <br/>
+
+    <!-- Client Signataire -->
+ 
+    <div class="contractSection" STYLE="page-break-inside:avoid">
+		
+        <h1>VOS COORDONNEES</h1>
+
+ 			<table border="0" width="95%">
+   
+            	<tr><td colspan="3">         
+                   
+                      <span class="value"><STRONG>   Nom et Prénom:</STRONG>&nbsp;<Apex:outputField value="{!Quote.Contact.Salutation}"/>&nbsp;  {!Quote.Contact.FirstName}&nbsp; {!Quote.Contact.LastName}
+                      
+                      </span><br/>
+                      <span class="field"> </span><br/>
+                </td></tr>
+                    
+                <tr><td>
+                    <span class="field"> <STRONG>Adresse: </STRONG></span><br/>
+	                <span class="value">{!Quote.Opportunity.DO_Street_N__c}&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>,&nbsp; <Apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; {!Quote.Opportunity.DO_Street_name__c}</span>                   
+	            </td></tr>
+	            <tr><td colspan="3">
+	                 <span class="value"><apex:outputtext rendered="{!Quote.Opportunity.DO_Lieu_dit__c !=null && Quote.Opportunity.DO_Lieu_dit__c!= ''}" value="{!'Lieu-dit'&' '&Quote.Opportunity.DO_Lieu_dit__c}"/></span>
+	            </td></tr>                
+	            <tr><td colspan="3">
+	                <!-- IF a Postal code and a city are filled THEN display it-->
+	                <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+	                              value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+	                <!-- ELSE display City_Postal_Code__r.Name -->
+	                <apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" 
+	                              value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext> <br />
+	                
+                </td></tr>
+
+                <tr><td colspan="3"><br /></td></tr>   
+                   
+               	<tr>
+                	<td><span class="field">Téléphone domicile : </span><span class="value">{!Quote.Opportunity.DO_Phone__c}</span></td>
+                       
+                    <td><span class="field">{!IF(Quote.Opportunity.DO_Phone_Restriction__c=='R', 'Liste Rouge:  Oui', 'Liste Rouge: Non')}</span></td>
+                </tr>
+                <tr>
+                    <td><span class="field">T&eacute;l&eacute;phone portable : </span><span class="value">{!Quote.Contact_Mobile_Phone__c}</span></td>
+                    <td><span class="field">T&eacute;l&eacute;phone travail : </span><span class="value">{!Quote.Opportunity.DO_Work_Phone_Number__c}</span></td>
+                </tr>
+                <!--    <tr><td colspan="3"><span class="field">E-mail : </span><span class="value">{!Quote.Contact__c}</span></td></tr>
+                    <tr><td colspan="3">
+                        <span class="value">
+                            {!IF(Quote.Opportunity.DO_Optin_1__c=false, 
+                              'Oui, je souhaite être informé(e) des nouveautés BUTAGAZ par e-mail.', 
+                              'Non, je ne souhaite pas être informé(e) des nouveautés BUTAGAZ par e-mail.')}
+                         </span>                 
+                    </td></tr>
+                --> 
+                <tr><td colspan="3"><span class="field">E-mail : <!--  </span><span class="value">{!Quote.Contact__c}--></span>
+	                <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == FALSE}" 
+	                value="{!Quote.Opportunity.DO_Email__c}"></apex:outputtext> 
+	                 <apex:outputtext rendered="{!Quote.Opportunity.DO_No_E_mail__c == TRUE}" 
+	                value="Pas d'email"></apex:outputtext>        
+          		</td></tr>
+				<tr><td colspan="3">
+				    <span class="value">
+				        <!-- {!IF(Quote.Opportunity.DO_Optin_1__c, 
+				          'Non, je ne souhaite pas être informé(e) des nouveautés BUTAGAZ par e-mail.', 
+				          'Oui, je souhaite être informé(e) des nouveautés BUTAGAZ par e-mail.')} -->
+				        <p>En concluant un contrat de fourniture de gaz propane avec BUTAGAZ, vous acceptez de recevoir des informations et des offres, sauf si vous vous y opposez en écrivant à votre Distributeur Régional ou dans votre Espace Client sur Butagaz.fr.</p>
+				     </span>                 
+				</td></tr>
+                    
+            </table>
+       
+            <p Class="spaceBefore">Batiment: &nbsp; <apex:outputfield value="{!QUOTE.Opportunity.Housing_type__c}"/></p>                                    
+            <p Class="spaceBefore">Escalier: &nbsp;{!IF(Quote.opportunity.Starecase__c,'Oui','Non')}</p>  
+            <p Class="spaceBefore">Etage: &nbsp;{!Quote.Opportunity.Level_in_the_building__c}</P>        
+
+	</div>
+
+    <div class="contractSection">
+        <h2>Propriétaire</h2>
+           <Table class="ButagazTable" >
+	           <tr>
+	              <th>Nom et Prénom</th>
+	              <th>Adresse</th>
+	              <th>Code postal et Commune</th>
+	              
+	              <th>Téléphone</th>
+	           </tr>
+	         
+	           <tr>
+	                <td>{!Quote.Opportunity.Network_owner__r.Account_DO__r.Name}</td>
+	                
+	                <td>{!Quote.Opportunity.Network_owner__r.Account_DO__r.Street_N__c},{!Quote.Opportunity.Network_owner__r.Account_DO__r.Street_Type__c}&nbsp;{!Quote.Opportunity.Network_owner__r.Account_DO__r.Street_name__c}</td>
+	                <td>{!Quote.Opportunity.Network_owner__r.Account_DO__r.City_Postal_Code__r.Name}</td>
+	               
+	                <td>{!Quote.Opportunity.Network_owner__r.Account_DO__r.Phone}</td>
+	           </tr>
+                   
+           </table>    
+               
+    </div>
+
+  
+    <div class="contractSection">       
+ 
+    	<h2>Adresse du Point Livré</h2>
+ 
+        <Table class="ButagazTable" >
+        	<tr>
+	            <th>Point Livré</th>
+	              
+	            <th>Adresse</th>
+          	</tr>
+                
+            <tr> 
+                <td>{!Quote.Opportunity.Network_owner__r.Name}</td>
+              
+                <td>{!Quote.Opportunity.Network_owner__r.Street_number__c}   &nbsp;    <Apex:outputField value="{!Quote.Opportunity.Network_owner__r.Street_type__c}"/>    &nbsp;    {!Quote.Opportunity.Network_owner__r.Street_name__c } <br/>
+                
+                <apex:Outputtext escape="false" rendered="{!Quote.Opportunity.Network_owner__r.City_Postal_Code__c = NULL}" value=" {!Quote.Opportunity.Network_owner__r.Postal_code__c & ' &nbsp; ' &Quote.Opportunity.Network_owner__r.City__c}"/>
+                
+                <!-- when above is not filled out:-->
+                <apex:Outputtext rendered="{!Quote.Opportunity.Network_owner__r.City_Postal_Code__c <> NULL}"  value="{!Quote.Opportunity.Network_owner__r.City_Postal_Code__r.Name}"/>
+                
+                </td>
+          	</tr>
+        </table>
+ 		<br/> 
+    </div>       
+ 	
+ 	<div class="contractSection" style="page-break-inside:avoid">
+    	<div>      
+	        <h2> Fourniture du gaz </h2>
+	         
+	        <p>Le client souscrit la tranche suivante de consommation individuelle:  </p>
+	    	<br/>
+	    
+		    <p>Tranche:&nbsp; <Apex:outputField value="{!Quote.Ger_Consumption__c}"/> </p>
+		    
+		    <p Class="spaceBefore"> En fonction de cette tranche de consommation, les prix sont ceux précisés ci-dessous.  </p>
+		
+		    <p Class="spaceBefore"> Les barèmes sont consultables sur le site internet : www.butagaz.fr. L'Usager peut également 
+		        demander à Butagaz de lui adresser le barèmes de référence mis à jour. </p>
+		  
+		  	<br/>
+	          
+		    <h2> Tarification </h2>
+		    
+		    <table class="ButagazTable">
+		        <tr>
+		          
+		        	<th>Article(s)</th>
+			        <th> Quantité</th>
+			        <th class="smallWidth">Unité de facturation</th>
+			        <th> Tranche</th>
+			       
+			        <th> Prix barème EURO TTC </th>
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle EUR TTC</th>
+			        
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};">Remise Commerciale  EUR TTC</th>
+			        
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conjoncturelle EURO TTC</th>
+			        
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">Remise Conj. (Mois)</th>          
+			               
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">Remise Commerciale Exceptionnelle Groupement EURO TTC</th>
+			        
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};">Remise Commerciale Groupement EURO TTC</th>
+			       
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Conj. Groupement EURO TTC</th>
+			      
+			        <th class="smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};">Remise Groupement Conj. (Mois)</th>
+		    
+		        </tr>
+		        <apex:repeat value="{!Pricing2}" var="line">
+		        <tr>
+		            
+		            <td >{!line.pricebookentry.Name}</td>
+		            <td class="smallWidth">{!line.Quantity}</td>
+		            <td class="smallWidth">{!line.F_Quantity_Unit__c}</td>
+		            <td class="smallWidth">{!line.GER_Consumption__c}</td> 
+		            
+		            <td class="number;smallWidth"  >{!IF(line.Price_List_TTC__c=0,'',TEXT(ROUND(line.Price_List_TTC__c,2)))}</td>
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_TTC__c=0,'',TEXT(ROUND(line.RCE_Rebate_TTC__c,2)))}</td>
+		                        <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityRCERebate, 'table-cell', 'none')};" >{!IF(line.RCE_Rebate_TTC__c=0,'',TEXT(ROUND(line.RCE_Rebate_TTC__c,2)))}</td>
+		
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Commercial_Rebate_TTC__c=0,'',TEXT(ROUND(line.Commercial_Rebate_TTC__c,2)))}</td>
+		                        
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_TTC__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_TTC__c,2)))}</td>
+		                        
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityCyclicalRebate, 'table-cell', 'none')};">{!IF(line.Cyclical_Rebate_Months__c=0,'',TEXT(ROUND(line.Cyclical_Rebate_Months__c,2)))}</td>
+		            
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupementRebate, 'table-cell', 'none')};">{!IF(line.Group_RCE_Rebate_TTC__c=0,'',TEXT(ROUND(line.Group_RCE_Rebate_TTC__c,2)))}</td>
+		                        
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCommercialRebate, 'table-cell', 'none')};" >{!IF(line.Group_Commercial_Rebate_TTC__c=0,'',TEXT(ROUND(line.Group_Commercial_Rebate_TTC__c,2)))}</td>
+		                        
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_TTC__c=0,'',TEXT(line.Group_Cyclical_Rebate_TTC__c))}</td>
+		                        
+		            <td class="number;smallWidth" style="display:{!if(pricingQuoteVisibilityGroupCyclicalRebate, 'table-cell', 'none')};" >{!IF(line.Group_Cyclical_Rebate_lenght_in_months__c=0,'',TEXT(line.Group_Cyclical_Rebate_lenght_in_months__c))}</td>
+		        
+		        </tr>
+		        </apex:repeat>
+		    </table> 
+		    
+		    <br/>
+			<table class="ButagazTable">
+				<tr>
+					<th colspan="2"> Les Barèmes de référence:</th>
+				</tr>
+				<tr>
+					<td>Barème Produit: </td>
+					
+					<td> <apex:outputfield value="{!Quote.Product_Scale__c}"/></td>
+				</tr>
+				<tr>
+					<td>Barème Services: </td>
+					<td> RS</td>
+				</tr>
+			</table>
+           
+		</div>
+
+		<div class="bigSpaceAfter"><p>&nbsp;</p></div>
+		            
+		<div style="page-break-inside:avoid">
+		   <h2>Periodicité facturation et modalités de paiement:&nbsp;</h2>
+		  
+		   <p Class="spaceBefore"> Modalités de Paiement:&nbsp; <apex:outputfield value="{!Quote.Opportunity.Client_SubType__c}"/></p>
+		  
+		   <p Class="spaceBefore"> Numéro du compteur:&nbsp; {!Quote.Opportunity.Meter_number__c}</p>
+		    
+		   <p Class="spaceBefore"> <apex:outputText escape="false"  value="Date du relevé:&nbsp;{0,date,dd.MM.yyyy}">
+		                           		<apex:param value="{!Quote.Opportunity.Placing_date_of_meter__c}" />
+		                           </apex:outputText></p>
+		
+		   <p Class="spaceBefore"> Relevé du compteur: &nbsp; {!Quote.Opportunity.departing_index__c}</p>
+		
+		</div>
+		      
+	</div> 
+    <br/>
+   	
+   	<div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div>
+   	<!--
+	<div style="page-break-inside:avoid;page-break-after:always">
+	
+		<table class="ButagazTable" >
+	 		<th style="font-size:14px;"> 
+	 
+	    Merci de completer le coupon reponse ci-après et le renvoyer sous huit jours accompagné d'un exemplaire de la  confirmation
+	      de l'abonnement individuelle à:<br/><br/>
+	      Logigaz NORD  prestataire pour le compte de Butagaz<br/>55 rue Sully CS 50229<br/>80047 AMIENS CEDEX 1
+	      
+	      	</th>
+	 	</table>     
+	     
+	   	<h3>Compléter l'autorisation de prélèvement ci-dessous et nous la retourner accompagnée d'un RIB (relevé d'identité bancaire) </h3>
+	</div>
+   	-->
+   	
+   	
+	<div style="page-break-inside: avoid;">
+			
+		<p align="justify"><h1>NOUVEAU MANDAT DE PRELEVEMENT SEPA</h1></p>
+		<br/>
+	 	<p align="left"><STRONG>QU’EST-CE-QUE LE SEPA ?</STRONG></p>
+	 	<br/>
+	 	<p align="left">Le <STRONG>SEPA</STRONG> (Single Euro Payments Area) est l’acronyme anglais du nouvel espace de paiement en euros unifié mis en place par les banques en réponse à la demande de la Commission Européenne pour harmoniser et <STRONG>sécuriser</STRONG> les paiements en euro.</p>
+	 	<br/>
+	 	<p align="left"><STRONG>COMMENT ÇA MARCHE ?</STRONG></p>
+	 	<br/>
+	 	<p align="left">Le Mandat de Prélèvement SEPA remplace les formulaires d’autorisation de prélèvement actuels. Il s'appuie sur un <STRONG>formulaire unique</STRONG> de mandat, mis à disposition par le créancier et complété et signé par le débiteur, contenant une double autorisation : l’une donnée au créancier de présenter des demandes de prélèvements sur le compte désigné du débiteur, la seconde donnée à la banque du débiteur l’autorisant à débiter ledit compte.</p>
+	 	<br/>
+	 	<p align="left">Ce mandat est <STRONG>obligatoire</STRONG> depuis le 1er février 2014.</p>
+	 	<br/>
+	 	<p align="left"><span style="color: red">LE SEPA, C’EST DONC PLUS SIMPLE, PLUS SUR ET PLUS PRATIQUE !</span></p>
+		<br/>
+		<p align="left">Merci de compléter le coupon réponse ci-après et le renvoyer sous huit jours accompagné d'un exemplaire de la confirmation de l'abonnement individuelle à:</p>
+		<br/>
+		<p align="left">Logigaz NORD  prestataire pour le compte de Butagaz</p>
+		<p align="left">55, rue Sully CS 50229</p>
+		<p align="left">80047 AMIENS CEDEX 1</p>
+	 	<br/>
+		<p align="center"> - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - </p>
+		<br/>
+   		
+   		
+   		<table align="left" width="98%" page-break-inside="avoid">
+				<tr>
+					<td style="font-size:14pt; font-weight:bold; vertical-align:top;">
+						<p align="left"><span style="font-size:14pt; font-weight:bold;">MANDAT DE PRELEVEMENT SEPA</span></p>
+						<h3>Type de mandat : CORE</h3>
+						<h3>Nature du prélèvement : récurrent / répétitif</h3>
+					</td>
+					<td style="width: 30%;text-align:right;">
+						<apex:image url="{!$Resource.test}" width="180" height="75"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="font-size:7pt; height: 20px; padding: 2pt;">
+						&nbsp;</td>
+				</tr>
+	   	</table>
+	   	<br/><br/>
+   		<!--  
+	    <p align="left"><span style="font-size:14pt; font-weight:bold;">MANDAT DE PRELEVEMENT SEPA</span></p>
+		<h3>Type de mandat : CORE</h3>
+		<h3>Nature du prélèvement : récurrent / répétitif</h3>
+	   	-->
+	   	<table align="left" width="98%" page-break-inside="avoid">
+				<tr>
+					<td style="font-size:7pt; height: 20px; padding: 2pt; font-weight:bold;">
+						BIC: &nbsp;&nbsp;&nbsp;|___|___|___|___|___|___|___|___|___|___|___|</td>
+				</tr>
+				<tr>
+					<td style="font-size:4pt; height: 10px; padding: 2pt;">
+						&nbsp;</td>
+				</tr>
+				<tr>
+					<td style="font-size:7pt; height: 20px; padding: 2pt; font-weight:bold;">
+						IBAN:&nbsp;&nbsp;|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|___|</td>
+				</tr>
+				<tr>
+					<td style="font-size:4pt; height: 10px; padding: 2pt;">
+						&nbsp;</td>
+				</tr>
+				<tr border="1" >
+					<td style="height: 20px; padding: 2pt; font-weight:bold;">
+						Identifiant créancier SEPA : FR27ZZZ100404</td>
+				</tr>
+				<tr>
+					<td style="font-size:4pt; height: 10px; padding: 2pt;">
+						&nbsp;</td>
+				</tr>
+	   	</table>
+   		<p align="justify">&nbsp;</p>
+   		
+   		<table style="border-width:1px; border-style:solid;" align="left" width="98%" page-break-inside="avoid">
+				<tr>
+					<td style="height: 20px; padding: 2pt; border-width:1px; border-style:solid;">
+						<p align="left" style="font-weight:bold;">Adresse</p><br/>
+						<apex:outputfield value="{!Quote.Contact.Salutation}"/>&nbsp;  {!Quote.Contact.FirstName}&nbsp; {!Quote.Contact.LastName}<br/>
+						<apex:outputfield value="{!Quote.Opportunity.DO_Street_N__c}"/>&nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Number_extention__c}"/>&nbsp; <apex:outputField value="{!Quote.Opportunity.DO_Street_type__c}"/> &nbsp; <apex:outputfield value="{!Quote.Opportunity.DO_Street_name__c}"/><br/>
+						<apex:outputfield value="{!Quote.Opportunity.DO_Lieu_dit__c}"/><br/>
+						
+						<!-- IF a Postal code and a city are filled THEN display it-->
+						<apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c !=null && Quote.Opportunity.DO_City__c != ''}" 
+									  value="{!Quote.Opportunity.DO_Postal_Code__c&' '&Quote.Opportunity.DO_City__c}"></apex:outputtext>
+						<!-- ELSE display City_Postal_Code__r.Name -->
+						<apex:outputtext rendered="{!Quote.Opportunity.DO_Postal_Code__c == null && Quote.Opportunity.DO_City__c == ''}" 
+									  value="{!Quote.Opportunity.DO_City_Postal_Code__r.Name}"></apex:outputtext><br/>
+					</td>
+					<td style="height: 20px; width: 30%; padding: 2pt; border-width:1px; border-style:solid;">
+						<p align="left" style="font-weight:bold;">Butagaz</p><br/>
+						47-53 rue Raspail<br/>
+						<br/>
+						92300 LEVALLOIS PERRET<br/>
+						FRANCE<br/>
+					</td>
+				</tr>
+	   	</table>
+	   	
+	   	
+	   	<table align="left" width="98%" page-break-inside="avoid" border="0">
+	   		<tr>
+				<td colspan="2" style="height: 40px; padding: 2pt;" border="0">
+					Les Parties conviennent d’un commun accord d’appliquer le délai de paiement expressément convenu entre elles dans le contrat qui les lie.
+				</td>
+			</tr>
+	   	</table>
+   		
+   		<table align="left" width="98%" page-break-inside="avoid" border="0">
+				<tr border="0" >
+					<td style="height: 20px; padding: 2pt; font-weight:bold;" border="0">
+						Référence unique du mandat : |___|___|___|___|___|___|___|___|___|___|</td>
+					<td style="height: 20px; width: 30%; padding: 2pt; font-weight:bold;" border="0">
+						<b>A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;, LE</b></td>
+				</tr>
+				<tr border="0" >
+					<td style="height: 20px; padding: 2pt; font-weight:bold;" border="0">
+						&nbsp;</td>
+					<td style="height: 20px; width: 30%; padding: 2pt;" border="0">
+						Signature :</td>
+				</tr>
+				
+				<tr border="0" >
+					<td style="font-size:7pt; height: 50px; padding: 2pt;" border="0">
+						En signant ce formulaire de mandat, vous autorisez (A) Butagaz à envoyer des instructions à votre banque pour débiter votre compte, et (B) votre banque à débiter votre compte conformément aux instructions de Butagaz. Vous bénéficiez du droit d'être remboursé par votre banque selon les conditions décrites dans la convention que vous avez passée avec elle. Une demande de remboursement doit être présentée dans les 8 semaines suivant la date de débit de votre compte pour un prélèvement autorisé, sans tarder et au plus tard dans les 13 mois en cas de prélèvement non autorisé.
+						<br/>
+                 		<br/>
+                 		Note : Vos droits concernant le présent mandat sont expliqués dans un document que vous pouvez obtenir auprès de votre banque.
+					</td>
+					<td style="height: 50px; width: 30%; padding: 2pt; border-width:1px; border-style:solid;">
+						&nbsp;</td>
+				</tr>
+				
+				<div class ="ClientSignature" Style=" page-break-inside:avoid">
+				
+				</div>
+	   	</table>
+   		
+	</div>
+    
+	
+        
+        
+        
+    <div class="contractSection" style="page-break-inside: avoid;page-break-after:always"></div>
+           
+    <div class="clear"></div>
+      
+   	<div Style="page-break-inside: avoid">
+     
+       	<div class="Signatures" Style=" page-break-inside:avoid">
+  
+        	<h1>Signatures</h1>
+            <p>Le client reconnaît avoir pris connaissance des Conditions Générales du contrat qui font partie intégrante du contrat remis ce jour et en avoir accepté l’intégralité des clauses.</p>
+            <p>Il en est de même des autres documents listés en sommaire et des barèmes en vigueur à la signature du contrat.</p>
+            <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+   
+            <div class="clear"></div>
+
+            <div class="ButagazSignature" Style=" page-break-inside:avoid">
+            
+                <p class="nospace">Votre Contact: {!Quote.CreatedBy.Name}</p>
+                <p class="nospace">&nbsp;</p>
+                <p class="nospace">&nbsp;</p>
+                <div class="bigSpaceAfter"><p>&nbsp;</p></div>
+                <div class="bigSpaceAfter"><p>Signature:</p></div>
+        
+                <div class="ButagazCachet">
+                  <p> Pour Butagaz: votre Distributeur Régional:</p>
+                  <br/>
+                  <p><apex:outputtext escape="False" value="  {!Quote.Opportunity.Project_Mandataire__c}"/></p>
+                  <br/>
+                  <p><apex:outputfield value=" {!Quote.Opportunity.T_Mandatiare_details__c}"/></p>                    
+                </div>
+                            
+            </div>
+            
+            <div class="ClientSignature" Style=" page-break-inside:avoid"> 
+             
+            	<p class=" nospace "> Client Signataire: {!Quote.Opportunity.DO_NAme__c}</p>
+	            <br/>
+	            
+	            <br/>
+	            <p class="SpaceBefore">Date d’impression du contrat : &nbsp; &nbsp; <apex:outputtext value="{!PrettyDate}"/> </p>
+	            <br/>
+	            <p class="SpaceBefore">Date de Signature:&nbsp;&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+	            <br/>
+	            <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+	            <br/>
+	            <br/>
+	            <p>Signature &nbsp;(1):</p>
+	                    <br/>
+	                    <br/>
+	                    <br/>
+	                    <br/>
+	                    <br/>
+	                    <br/>
+	                    <br/>                  
+	                    <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+            </div> 
+		</div>
+        <div class="clear"/>
+             
+   	</div>
+
+	<div class="clear"/>
+	
+	
+</div>	
+
+</apex:page>

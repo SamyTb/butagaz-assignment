@@ -1,0 +1,213 @@
+<apex:page standardController="CDS__c" showHeader="false" renderas="pdf" extensions="VFC_ControleDesStocks01">
+
+    <apex:stylesheet value="{!$Resource.PEC_Style}"/>                               
+    <apex:form >
+        <!-- Document Header -->
+        <div class="header">
+            <apex:image url="{!$Resource.test}" width="180" height="75"/>
+        </div>
+        
+        <!-- Document Footer -->
+        <div class="footer">
+            <p>Butagaz Siège : 47-53 rue Raspail ---92594 LEVALLOIS PERRET CEDEX </p>
+            <p>Société par Actions Simplifiée au capital de 195 225 000€ --- Siret 402 960 397 00048 - RCS Nanterre 402960397 - APE 4671Z </p>
+        </div>  
+         
+         <!-- Document Title-->   
+         <div >
+            <h1 style="line-height: 30px;margin: 0pt 0 0pt 0;">CONTRÔLE DES STOCKS EN CLIENTELE</h1>                
+         </div>  
+        
+         <!-- Contract Section-->   
+         <table>
+            <tr>
+                <td width="60%"><apex:outputField value="{!CDS__c.name}"/></td>
+                <td>Date du Contrôle des Stocks :&nbsp;<apex:outputField value="{!CDS__c.CDS_Date__c}"/></td>
+            </tr>           
+            <tr>
+                <td>
+                    <p class="spaceBefore">
+                        Nom du Client :&nbsp;<apex:outputField value="{!CDS__c.Account__r.Name}"/>
+                    </p>
+                </td>
+                <td>Référence Client :&nbsp;<apex:outputField value="{!CDS__c.Account__r.ExternalID__c}"/></td>
+            </tr>    
+            <tr>
+                <td colspan="2"> 
+               <p class="spaceBefore">Adresse :&nbsp;                  
+                 {!IF(CDS__c.Account__r.Street_Number__c!=null,CDS__c.Account__r.Street_Number__c,CDS__c.Account__r.Street_N__c&' '&CDS__c.Account__r.Street_type__c&' '&CDS__c.Account__r.Street_name__c )}, &nbsp;
+                 
+                 {!IF(CDS__c.Account__r.City_Postal_Code__r.name!=null,CDS__c.Account__r.City_Postal_Code__r.name,CDS__c.Account__r.City__c&' '&CDS__c.Account__r.Postal_Code__c )}.
+                </p>                
+                </td>
+            </tr>
+        </table>    
+        <br/>        
+        
+        <!-- Articles Section--> 
+        <!-- Bottles -->
+        <apex:pageblock rendered="{!RenderBouteillesInstalles}" tabStyle="Item__c"> 
+            <h2 class="ButagazTableHeader; spaceBefore">{!$Label.Bottles}</h2>
+            <table class="ButagazTable">
+                <tr>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Name.label}</th>            
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Stock_PEC__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Stock_effectif__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Valeur_Consignation__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Valeur_Deconsignation__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Stock_Reel__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Resultat_CDS__c.label}</th>             
+                </tr>
+                <apex:repeat value="{!ListBouteillesInstalles}" var="line">
+                    <tr>
+                        <td style="width:30% !important;">{!line.Article__r.Name} ({!line.Article__r.Code_Article__c})</td>              
+                        <td style="text-align: center!important;">{!line.Stock_PEC__c}</td>
+                        <td style="text-align: center!important;">{!line.Stock_effectif__c}</td>
+                        <td style="text-align: center!important;">{!line.Valeur_Consignation__c}</td>
+                        <td style="text-align: center!important;">{!line.Valeur_Deconsignation__c}</td>   
+                        <td style="text-align: center!important;">{!line.Stock_Reel__c}</td>                   
+                        <td style="text-align: center!important;">{!line.Resultat_CDS__c}</td>                     
+                        
+                    </tr>
+                </apex:repeat>
+            </table>      
+        </apex:pageblock>
+        
+        <apex:pageblock rendered="{!RenderCasiersInstalles}" tabStyle="Item__c">
+            <!-- Casier -->
+            <h2 class="ButagazTableHeader; spaceBefore">{!$Label.Racks}</h2>
+            <table class="ButagazTable">
+                <tr>
+                    <th>Type de casier</th>            
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Stock_PEC__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Stock_effectif__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Stock_Reel__c.label}</th>
+                    <th>{!$ObjectType.CDS_Article__c.Fields.Resultat_CDS__c.label}</th>             
+                </tr>
+                <apex:repeat value="{!ListCasiersInstalles}" var="line">
+                    <tr>
+                        <td style="width:30% !important;">{!line.Article__r.Code_Article__c}</td>              
+                        <td style="text-align: center!important;">{!line.Stock_PEC__c}</td>
+                        <td style="text-align: center!important;">{!line.Stock_effectif__c}</td>
+                        <td style="text-align: center!important;">{!line.Stock_Reel__c}</td>                   
+                        <td style="text-align: center!important;">{!line.Resultat_CDS__c}</td>                     
+                        
+                    </tr>
+                </apex:repeat>
+            </table>        
+        </apex:pageblock>
+        
+        <apex:pageblock rendered="{!CDS__c.Observations__c!= null}">
+            <!-- Observations Section-->
+            <BR/>
+            <table class="ButagazTable">
+                    <tr>
+                        <th style="text-align: left;font-size: 9pt;font-weight: bold;">OBSERVATIONS</th>         
+                    </tr>
+                    <tr>
+                        <td><apex:outputfield value="{!CDS__c.Observations__c}" label="" /></td>  
+                    </tr>
+            </table>
+        </apex:pageblock>
+        
+        <h2>CONTRÔLE DES STOCKS EN CLIENTELE</h2>
+        <p class="spaceBefore">Ce document sera nul si raturé.</p>
+
+        <!--<div class="contractSection" Style="page-break-inside:avoid"  >-->
+        <!--<div class="contractSection" Style="page-break-inside:avoid" layout="block" style="display:{!if($CurrentPage.parameters.isSE!='true',"block","none")};">-->
+        <div class="contractSection" layout="block" style="page-break-inside:avoid; display:{!if(isSE!='true',"block","none")};">
+            <div class="Signatures">
+                <h1>Signatures</h1>
+                <!--<h1>{!IF(isSE!='true', 'Signatures', 'Acceptation des conditions')}</h1>-->
+                   <BR/><BR/>  
+                <div class="clear"></div>
+
+                <div class="ButagazSignature">                
+                    <p class="nospace">Votre Contact :&nbsp; {!CDS__c.CreatedBy.Name}</p>
+                        <br/>                  
+                        <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>
+                    <p class="SpaceBefore">&nbsp;</p>
+                    <br/>                       
+                    <!--<div style="display: {!IF(isSE!='true','','None')}" class="bigSpaceAfter"><p>Signature :&nbsp;</p></div>-->
+                    <div class="bigSpaceAfter"><p>Signature :&nbsp;</p></div>
+
+                       <p>&nbsp;</p> 
+                       <p>&nbsp;</p>
+                       <p>&nbsp;</p>
+                        <div class="ButagazCachet">
+                            <p> Pour Butagaz: votre Distributeur:</p>
+                            <br/>
+                            <p><apex:outputtext escape="False" value="{!CDS__c.Account__r.T_Mandataire_Address__c}"/></p>
+                            <br/>
+                            <p><apex:outputfield value="{!CDS__c.Account__r.T_Mandataire_RCS__c}"/></p>                    
+                        </div>
+                </div>  
+                   
+                   
+                <div class="ClientSignature">                 
+                    <p class=" nospace "> Client Signataire :&nbsp; <apex:outputField value="{!CDS__c.Contact__r.Salutation}"/> &nbsp; <apex:outputField value="{!CDS__c.Contact__r.name}"/></p>
+                    <br/>                  
+                    <br/>
+                    <!--<div style="display: {!IF(isSE!='true','','None')}">-->
+                        <p class="SpaceBefore">Date d’impression du Contrôle des Stocks :&nbsp; <apex:outputtext value="{!TodayDate}"/> </p>
+                        <br/>
+                        <p class="SpaceBefore">Date de Signature :&nbsp; <apex:outputtext value="__/__/____"/>  </p>
+                        <br/>
+                        <p class="SpaceBefore"> (si différente de la date d’impression)</p>
+                        <br/>
+                        <div class="bigSpaceAfter"><p>Signature &nbsp;(1):</p></div>                            
+                   
+                           <p> (1) Signature à faire précéder de la mention manuscrite «lu et approuvé»</p>
+                           <p>&nbsp;</p>
+                        <div class="ButagazCachet">
+                            <p>Cachet commercial Client</p>
+                            <br/>
+                                <p>&nbsp;</p>
+                                <br/>
+                                <p>&nbsp;</p>                    
+                        </div>
+                    <!--</div>
+                    <div style="display: {!IF(isSE=='true','','None')}">
+                        <p>Document signé électroniquement.</p>
+                    </div>-->
+                </div> 
+                               
+            </div>
+                <div class="clear"/>
+        </div>          
+     
+        <apex:inputHidden value="{!CDS__c.Status__c}"/>
+
+        <!--************************* Page de CGU pour signature électronique *************************-->
+        <div class="contractSection" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+            <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.displayCGUSE=='true',true,false)}">
+                <c:CGU_SignatureElectroniquePDF />
+            </apex:outputPanel>
+            <apex:outputPanel layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+                <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+                <p class="nospace">Votre Contact :&nbsp; {!CDS__c.CreatedBy.Name}</p>
+                <div class="ButagazSignature">
+                    <div class="ButagazCachet">
+                        <p>Pour Butagaz: votre Distributeur:</p>
+                        <br/>
+                        <p><apex:outputtext escape="False" value="{!CDS__c.Account__r.T_Mandataire_Address__c}"/></p>
+                        <br/>
+                        <p><apex:outputfield value="{!CDS__c.Account__r.T_Mandataire_RCS__c}"/></p>                    
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </div>
+
+    </apex:form>
+
+
+    <!--************************* Page de signature pour signature électronique *************************-->
+    <apex:outputPanel Style="page-break-before:always;" layout="block" rendered="{!IF($CurrentPage.parameters.isSE=='true',true,false)}">
+        <c:SignaturePDF nbSig="{!$CurrentPage.parameters.nbSig}" withdrawalText="{!$CurrentPage.parameters.withdrawalText}"/>
+    </apex:outputPanel>
+        
+</apex:page>
